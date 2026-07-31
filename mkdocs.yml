@@ -1,0 +1,123 @@
+site_name: Open Data & AI Governance Kit
+site_description: >-
+  A free, open collection of board-ready data and AI governance templates —
+  frameworks, policies, operating model, registers, and EU AI Act readiness.
+site_url: https://lsdeva.github.io/governance-kit/
+repo_url: https://github.com/lsdeva/governance-kit
+repo_name: lsdeva/governance-kit
+edit_uri: edit/main/docs/
+copyright: >-
+  Content licensed under
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> —
+  free to use, adapt, and share with attribution.
+
+theme:
+  name: material
+  language: en
+  icon:
+    logo: material/scale-balance
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.action.edit
+    - content.code.copy
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - def_list
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/lsdeva/governance-kit
+  generator: false
+
+nav:
+  - Home: index.md
+  - Get started: getting-started.md
+  - Frameworks:
+      - Overview: frameworks/index.md
+      - Data Governance Framework: frameworks/data-governance-framework.md
+      - AI Governance Framework: frameworks/ai-governance-framework.md
+      - Governance Charter: frameworks/governance-charter.md
+      - Maturity Assessment: frameworks/maturity-assessment.md
+  - Policies & Standards:
+      - Overview: policies/index.md
+      - Data Governance Policy: policies/data-governance-policy.md
+      - Data Quality Standard: policies/data-quality-standard.md
+      - Data Classification & Handling: policies/data-classification-policy.md
+      - Acceptable AI Use Policy: policies/acceptable-ai-use-policy.md
+      - AI Development & Deployment Standard: policies/ai-development-standard.md
+      - Third-Party AI Risk Policy: policies/third-party-ai-risk-policy.md
+  - Operating Model:
+      - Overview: operating-model/index.md
+      - RACI Matrix: operating-model/raci.md
+      - Committee Charter (ToR): operating-model/committee-charter.md
+      - Roles & Responsibilities: operating-model/roles-responsibilities.md
+      - Decision Rights & Escalation: operating-model/decision-rights.md
+  - Registers:
+      - Overview: registers/index.md
+      - Data Asset Register: registers/data-asset-register.md
+      - AI System Inventory: registers/ai-system-inventory.md
+      - Risk Register: registers/risk-register.md
+      - Issue & Incident Log: registers/incident-log.md
+      - Processing & DPIA Log: registers/processing-dpia-log.md
+  - Risk & Control:
+      - Overview: risk/index.md
+      - AI Risk Assessment: risk/ai-risk-assessment.md
+      - Model Card / Model Risk Doc: risk/model-card.md
+      - Control Library & Assurance Map: risk/control-library.md
+  - Board & Reporting:
+      - Overview: board/index.md
+      - Board Pack Template: board/board-pack.md
+      - KPI / KRI Dashboard: board/kpi-dashboard.md
+  - EU AI Act:
+      - Overview: eu-ai-act/index.md
+      - Readiness Checklist (25-point): eu-ai-act/readiness-checklist.md
+      - Timeline (2026 Digital Omnibus): eu-ai-act/timeline.md
+  - Contributing: contributing.md
+  - About: about.md

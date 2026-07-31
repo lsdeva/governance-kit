@@ -1,0 +1,4 @@
+# Upper bound is deliberate: MkDocs 2.0 / Material 10 are announced as
+# backward-incompatible (plugins and theme overrides break, no migration path).
+# Bump these only after verifying `mkdocs build --strict` still passes.
+mkdocs-material>=9.5,<10

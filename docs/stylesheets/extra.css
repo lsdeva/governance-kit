@@ -1,0 +1,48 @@
+/* Landing hero */
+.hero {
+  padding: 2.5rem 0 1rem;
+}
+.hero h1 {
+  font-weight: 700;
+  margin-bottom: .3rem;
+}
+.hero p.tagline {
+  font-size: 1.15rem;
+  color: var(--md-default-fg-color--light);
+  max-width: 46rem;
+}
+
+/* Template card grid (works with attr_list + md_in_html) */
+.grid.cards > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.grid.cards > ul > li {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: .5rem;
+  padding: 1rem 1.1rem;
+  list-style: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+
+/* Status pills for template pages */
+.pill {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: .1rem .5rem;
+  border-radius: 1rem;
+  letter-spacing: .02em;
+}
+.pill.ready   { background: #e6f4ea; color: #1e7d34; }
+.pill.draft   { background: #fdf0e3; color: #a25b12; }
+.pill.stub    { background: #eceff1; color: #546e7a; }
+
+[data-md-color-scheme="slate"] .pill.ready { background:#12351c; color:#8fe0a3; }
+[data-md-color-scheme="slate"] .pill.draft { background:#3a2a12; color:#f0c088; }
+[data-md-color-scheme="slate"] .pill.stub  { background:#263238; color:#b0bec5; }
