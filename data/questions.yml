@@ -1,0 +1,715 @@
+# The assessment question bank — single source of truth for BOTH the /assess/
+# questionnaire AND the published EU AI Act readiness checklist page.
+#
+# Q01-Q25 are the 25 checklist points, in order. Q26-Q40 extend coverage so that
+# every role has a meaningful set of questions rather than two or three.
+#
+# Fields:
+#   id          - stable ID. Never renumber; answers are stored against these.
+#   text        - the question, phrased as a statement the user rates.
+#   help        - plain English. What "yes" actually requires. Written so a
+#                 non-specialist can answer honestly rather than optimistically.
+#   category    - Inventory | Risk | Documentation | Oversight | Transparency |
+#                 Third-party | Literacy
+#   applies_to  - role ids from data/roles.yml. Drives the questionnaire filter.
+#   weight      - 1-5 severity: the consequence of this being absent.
+#                 5 = regulatory or board-level exposure
+#                 4 = material control gap
+#                 3 = important, time-bound
+#                 2 = good practice
+#                 1 = hygiene
+#   templates   - template ids that close this gap. Deep-linked in the report.
+#   obligation  - the EU AI Act (or GDPR) hook. `ref` shows in regulator view.
+#   checklist   - if present, this question is point N on the published
+#                 25-point checklist and appears there in that order.
+
+# ---------------------------------------------------------------------------
+# 1. Scope & governance
+# ---------------------------------------------------------------------------
+
+- id: Q01
+  checklist: 1
+  text: We have a named executive owner accountable for AI Act compliance.
+  help: >-
+    One person, by name, not a committee and not "the CTO's team". If something
+    went wrong tomorrow, this is who the board would call. If two people would
+    both say "not me", answer No.
+  category: Oversight
+  applies_to: [exec-sponsor, governance-lead, legal-dpo, internal-audit]
+  weight: 5
+  templates: [governance-charter, roles-responsibilities, raci]
+  obligation:
+    ref: Art. 3, Art. 26
+    label: Accountability for provider / deployer duties
+    detail: >-
+      Obligations attach to the organisation, but supervisors expect a named
+      accountable person who can answer for them.
+
+- id: Q02
+  checklist: 2
+  text: AI governance is a standing agenda item at a committee that minutes its decisions.
+  help: >-
+    A recurring forum with terms of reference, a quorum, and written minutes.
+    Ad-hoc conversations, however senior, do not count — the evidence is the
+    minute, not the meeting.
+  category: Oversight
+  applies_to: [exec-sponsor, governance-lead, internal-audit]
+  weight: 4
+  templates: [committee-charter, board-pack]
+  obligation:
+    ref: Art. 26
+    label: Organisational governance arrangements
+    detail: >-
+      Demonstrable oversight is what turns a written policy into an operating
+      control.
+
+- id: Q03
+  checklist: 3
+  text: We know which role we play for each system — provider, deployer, importer, or distributor.
+  help: >-
+    Build it yourself and put your name on it, you are likely a provider. Use
+    someone else's tool, you are likely a deployer. The obligations differ
+    sharply, and you can be both for different systems. Fine-tuning or
+    rebranding a third-party model can make you a provider.
+  category: Inventory
+  applies_to: [legal-dpo, governance-lead, product-owner, ml-data-science]
+  weight: 5
+  templates: [ai-system-inventory, ai-governance-framework]
+  obligation:
+    ref: Art. 2, Art. 25
+    label: Operator role determination
+    detail: >-
+      Every other obligation depends on which role you occupy for that system.
+
+- id: Q04
+  checklist: 4
+  text: We have assessed which parts of the Act apply given our EU market exposure.
+  help: >-
+    The Act reaches you if you place a system on the EU market, or if its output
+    is used in the EU — regardless of where you are established. Being outside
+    the EU is not by itself an exemption.
+  category: Inventory
+  applies_to: [legal-dpo, governance-lead, exec-sponsor]
+  weight: 4
+  templates: [ai-governance-framework, governance-charter]
+  obligation:
+    ref: Art. 2
+    label: Territorial scope
+    detail: >-
+      Extra-territorial reach catches output used in the EU, not only EU
+      establishment.
+
+# ---------------------------------------------------------------------------
+# 2. Inventory & classification
+# ---------------------------------------------------------------------------
+
+- id: Q05
+  checklist: 5
+  text: Every AI system in use or development is captured in a central inventory.
+  help: >-
+    One list, owned by a named person, covering built, bought, and embedded AI —
+    including AI features switched on inside SaaS you already licence. If you
+    cannot say where the list lives, answer No.
+  category: Inventory
+  applies_to: [governance-lead, ml-data-science, security, internal-audit, product-owner]
+  weight: 5
+  templates: [ai-system-inventory, data-asset-register]
+  obligation:
+    ref: Art. 26
+    label: Knowing what you operate
+    detail: >-
+      You cannot comply for systems you cannot list. Inventory underpins every
+      other obligation.
+
+- id: Q06
+  checklist: 6
+  text: Each system is classified by risk tier — prohibited, high-risk, limited, or minimal.
+  help: >-
+    Classification is a decision with a date and an owner, recorded against the
+    system. "We think most of ours are low risk" is not a classification.
+  category: Inventory
+  applies_to: [governance-lead, legal-dpo, ml-data-science, product-owner]
+  weight: 5
+  templates: [ai-system-inventory, ai-risk-assessment, ai-governance-framework]
+  obligation:
+    ref: Art. 6, Annex III
+    label: Risk classification
+    detail: >-
+      The tier determines which obligations apply and by when.
+
+- id: Q07
+  checklist: 7
+  text: General-purpose AI models we build or integrate are identified, with their obligations mapped.
+  help: >-
+    Covers foundation models you train and, more commonly, commercial LLMs you
+    build on. Integrating GPAI into a product can pull you into provider duties
+    for the resulting system.
+  category: Inventory
+  applies_to: [ml-data-science, legal-dpo, governance-lead, security]
+  weight: 4
+  templates: [ai-system-inventory, third-party-ai-risk-policy, ai-development-standard]
+  obligation:
+    ref: Art. 51-55
+    label: GPAI obligations
+    detail: >-
+      GPAI carries its own documentation, copyright, and systemic-risk duties.
+
+- id: Q08
+  checklist: 8
+  text: The inventory records purpose, data sources, model or vendor, and lifecycle stage.
+  help: >-
+    A list of system names is not an inventory. The test: could you answer a
+    regulator's "what does it do, on what data, from whom, and is it live?"
+    without going to ask around.
+  category: Inventory
+  applies_to: [governance-lead, ml-data-science, security]
+  weight: 3
+  templates: [ai-system-inventory, data-asset-register, model-card]
+  obligation:
+    ref: Art. 11, Annex IV
+    label: Technical documentation inputs
+    detail: >-
+      These fields are the minimum feed into Annex IV technical documentation.
+
+# ---------------------------------------------------------------------------
+# 3. Prohibited practices
+# ---------------------------------------------------------------------------
+
+- id: Q09
+  checklist: 9
+  text: We have confirmed that no system performs a prohibited practice.
+  help: >-
+    Social scoring, manipulative or exploitative techniques, untargeted scraping
+    of facial images, emotion inference in workplaces or schools, and most
+    real-time remote biometric identification in public. This needed to be true
+    from February 2025.
+  category: Risk
+  applies_to: [legal-dpo, governance-lead, product-owner, ml-data-science, exec-sponsor]
+  weight: 5
+  templates: [acceptable-ai-use-policy, ai-risk-assessment, ai-governance-framework]
+  obligation:
+    ref: Art. 5
+    label: Prohibited practices
+    detail: >-
+      In force since 2 February 2025 and carrying the highest penalty tier.
+      There is no transition period left to rely on.
+
+- id: Q10
+  checklist: 10
+  text: We screen new use cases against the prohibited list before development starts.
+  help: >-
+    A gate at intake, not a review at launch. The point is to stop work before
+    money is spent, so it must sit early enough that someone can still say no.
+  category: Risk
+  applies_to: [governance-lead, product-owner, ml-data-science, legal-dpo]
+  weight: 4
+  templates: [acceptable-ai-use-policy, ai-development-standard, decision-rights]
+  obligation:
+    ref: Art. 5
+    label: Preventive screening
+    detail: >-
+      Catching a prohibited use at launch means the cost is already sunk.
+
+# ---------------------------------------------------------------------------
+# 4. High-risk obligations
+# ---------------------------------------------------------------------------
+
+- id: Q11
+  checklist: 11
+  text: High-risk systems have a documented risk management process across the lifecycle.
+  help: >-
+    Continuous, not a one-off sign-off: identify, evaluate, mitigate, then keep
+    checking once the system is live and its inputs drift.
+  category: Risk
+  applies_to: [governance-lead, ml-data-science, security, internal-audit]
+  weight: 5
+  templates: [ai-risk-assessment, risk-register, control-library]
+  obligation:
+    ref: Art. 9
+    label: Risk management system
+    detail: >-
+      A continuous, documented process running the whole system lifecycle.
+
+- id: Q12
+  checklist: 12
+  text: Data governance for training, validation, and test data addresses relevance, representativeness, and bias.
+  help: >-
+    Do you know where training data came from, whether you may lawfully use it,
+    who it does and does not represent, and what you did when you found a skew?
+  category: Documentation
+  applies_to: [ml-data-science, legal-dpo, governance-lead]
+  weight: 5
+  templates: [data-governance-framework, data-governance-policy, data-quality-standard, model-card]
+  obligation:
+    ref: Art. 10
+    label: Data and data governance
+    detail: >-
+      Training data quality is an explicit, testable high-risk obligation.
+
+- id: Q13
+  checklist: 13
+  text: Technical documentation is maintained and current for each high-risk system.
+  help: >-
+    Annex IV sets out what it must contain. The failure mode is not absence but
+    staleness — documentation written at launch and never touched again.
+  category: Documentation
+  applies_to: [ml-data-science, governance-lead, internal-audit]
+  weight: 4
+  templates: [model-card, ai-development-standard]
+  obligation:
+    ref: Art. 11, Annex IV
+    label: Technical documentation
+    detail: >-
+      Must exist before market placement and stay current afterwards.
+
+- id: Q14
+  checklist: 14
+  text: Systems automatically log events sufficient for traceability.
+  help: >-
+    Machine-generated logs, retained long enough to reconstruct what a system did
+    and why on a given date. Application logs often do not capture the model
+    inputs and outputs that actually matter here.
+  category: Documentation
+  applies_to: [ml-data-science, security, internal-audit]
+  weight: 4
+  templates: [ai-development-standard, control-library, incident-log]
+  obligation:
+    ref: Art. 12
+    label: Record-keeping
+    detail: >-
+      Automatic logging over the system lifetime, sufficient to trace behaviour.
+
+- id: Q15
+  checklist: 15
+  text: Human oversight measures are designed in and genuinely operable by real people.
+  help: >-
+    The honest test: can the named human actually understand the output, and do
+    they have the authority, time, and confidence to override it? A reviewer
+    approving 400 decisions an hour is not oversight.
+  category: Oversight
+  applies_to: [product-owner, governance-lead, ml-data-science, people-hr]
+  weight: 5
+  templates: [ai-governance-framework, decision-rights, ai-risk-assessment]
+  obligation:
+    ref: Art. 14
+    label: Human oversight
+    detail: >-
+      Oversight must be effective in practice, not merely present in the design
+      document.
+
+- id: Q16
+  checklist: 16
+  text: Systems meet expected accuracy, robustness, and cybersecurity levels, with evidence.
+  help: >-
+    Declared metrics with test results behind them, including behaviour under
+    adversarial input and on edge cases. "It performed well in testing" without
+    numbers is a No.
+  category: Risk
+  applies_to: [ml-data-science, security, internal-audit]
+  weight: 4
+  templates: [ai-development-standard, model-card, control-library]
+  obligation:
+    ref: Art. 15
+    label: Accuracy, robustness and cybersecurity
+    detail: >-
+      Appropriate levels declared and evidenced across the lifecycle.
+
+- id: Q17
+  checklist: 17
+  text: A conformity assessment route is identified and planned before the applicable deadline.
+  help: >-
+    Know whether your route is self-assessment or a notified body, and how long
+    it takes. Notified-body capacity is finite and the queue will not be shorter
+    closer to the deadline.
+  category: Documentation
+  applies_to: [legal-dpo, governance-lead, product-owner]
+  weight: 3
+  templates: [ai-governance-framework, control-library]
+  obligation:
+    ref: Art. 43
+    label: Conformity assessment
+    detail: >-
+      Annex III high-risk obligations apply from December 2027; Annex I from
+      August 2028.
+
+- id: Q18
+  checklist: 18
+  text: Post-market monitoring and a serious-incident reporting process exist.
+  help: >-
+    Someone watches live performance, and there is a defined path — with a clock
+    on it — for reporting serious incidents to the relevant authority.
+  category: Oversight
+  applies_to: [governance-lead, ml-data-science, security, product-owner]
+  weight: 4
+  templates: [incident-log, control-library, kpi-dashboard]
+  obligation:
+    ref: Art. 72, Art. 73
+    label: Post-market monitoring and incident reporting
+    detail: >-
+      Serious incidents carry short reporting deadlines once identified.
+
+# ---------------------------------------------------------------------------
+# 5. Transparency
+# ---------------------------------------------------------------------------
+
+- id: Q19
+  checklist: 19
+  text: People are told when they are interacting with an AI system.
+  help: >-
+    Clear at the point of interaction, not buried in terms of service. Applies to
+    chatbots and AI-driven assistants unless it is obvious to a reasonable person.
+  category: Transparency
+  applies_to: [product-owner, legal-dpo, governance-lead]
+  weight: 4
+  templates: [acceptable-ai-use-policy, ai-governance-framework]
+  obligation:
+    ref: Art. 50
+    label: Transparency to natural persons
+    detail: >-
+      Applies from August 2026, with a grace period running to December 2026.
+
+- id: Q20
+  checklist: 20
+  text: AI-generated or manipulated content is marked or watermarked.
+  help: >-
+    Synthetic audio, image, video, and text intended to inform the public must be
+    machine-readably marked. This includes marketing material your teams generate.
+  category: Transparency
+  applies_to: [product-owner, ml-data-science, legal-dpo]
+  weight: 3
+  templates: [acceptable-ai-use-policy, ai-development-standard]
+  obligation:
+    ref: Art. 50(2)
+    label: Marking of synthetic content
+    detail: >-
+      Machine-readable marking of AI-generated or manipulated content.
+
+- id: Q21
+  checklist: 21
+  text: Emotion recognition or biometric categorisation, if used, is disclosed to affected people.
+  help: >-
+    If you use neither, answer Not applicable. Note that emotion inference in
+    workplaces and education is prohibited outright, not merely restricted.
+  category: Transparency
+  applies_to: [legal-dpo, people-hr, product-owner, security]
+  weight: 3
+  templates: [acceptable-ai-use-policy, processing-dpia-log]
+  obligation:
+    ref: Art. 50(3), Art. 5
+    label: Emotion recognition disclosure
+    detail: >-
+      Disclosure duty where permitted; outright prohibition in workplace and
+      education contexts.
+
+# ---------------------------------------------------------------------------
+# 6. GPAI, third parties & data protection
+# ---------------------------------------------------------------------------
+
+- id: Q22
+  checklist: 22
+  text: For GPAI we use, we hold provider documentation and understand training-data transparency expectations.
+  help: >-
+    Do you actually have the model documentation from your vendor, or do you just
+    assume it exists? "It is on their website" only counts if someone has read it
+    and filed it.
+  category: Third-party
+  applies_to: [ml-data-science, legal-dpo, security, governance-lead]
+  weight: 3
+  templates: [third-party-ai-risk-policy, ai-system-inventory]
+  obligation:
+    ref: Art. 53
+    label: GPAI provider documentation
+    detail: >-
+      Downstream deployers rely on provider documentation to meet their own
+      duties.
+
+- id: Q23
+  checklist: 23
+  text: Vendor contracts flow down AI Act obligations and evidence rights.
+  help: >-
+    Right to obtain documentation, to be told about material model changes, and
+    to audit or receive assurance. Standard SaaS terms almost never include these
+    unless you asked.
+  category: Third-party
+  applies_to: [legal-dpo, security, governance-lead, product-owner]
+  weight: 4
+  templates: [third-party-ai-risk-policy, control-library]
+  obligation:
+    ref: Art. 25, Art. 26
+    label: Contractual flow-down
+    detail: >-
+      You remain accountable for systems you deploy but did not build.
+
+- id: Q24
+  checklist: 24
+  text: Where personal data is involved, a DPIA or equivalent assessment is completed and linked.
+  help: >-
+    AI Act compliance does not discharge GDPR. High-risk AI touching personal
+    data will almost always need a DPIA, and the two assessments should reference
+    each other rather than sit in separate drawers.
+  category: Documentation
+  applies_to: [legal-dpo, governance-lead, ml-data-science]
+  weight: 5
+  templates: [processing-dpia-log, data-classification-policy, ai-risk-assessment]
+  obligation:
+    ref: GDPR Art. 35; AI Act Art. 27
+    label: DPIA / fundamental rights impact assessment
+    detail: >-
+      GDPR duties run in parallel, and certain deployers owe a fundamental rights
+      impact assessment.
+
+# ---------------------------------------------------------------------------
+# 7. Skills & culture
+# ---------------------------------------------------------------------------
+
+- id: Q25
+  checklist: 25
+  text: Staff who build, buy, or operate AI have AI literacy appropriate to their role.
+  help: >-
+    A live obligation since February 2025, and one of the few that applies to
+    everyone regardless of risk tier. Proportionate to role: a procurement lead
+    needs different literacy from an ML engineer.
+  category: Literacy
+  applies_to: [people-hr, governance-lead, exec-sponsor, product-owner]
+  weight: 4
+  templates: [acceptable-ai-use-policy, roles-responsibilities, governance-charter]
+  obligation:
+    ref: Art. 4
+    label: AI literacy
+    detail: >-
+      In force since 2 February 2025 and applicable across the organisation.
+
+# ---------------------------------------------------------------------------
+# Extended questions (not on the published 25-point checklist)
+# ---------------------------------------------------------------------------
+
+- id: Q26
+  text: A current data governance framework defines ownership of data domains.
+  help: >-
+    Named owners for each significant data domain, not just a platform team who
+    happen to host the tables.
+  category: Oversight
+  applies_to: [governance-lead, ml-data-science, internal-audit]
+  weight: 3
+  templates: [data-governance-framework, roles-responsibilities, data-asset-register]
+  obligation:
+    ref: Art. 10
+    label: Data governance foundation
+    detail: >-
+      AI data quality obligations rest on ordinary data governance underneath.
+
+- id: Q27
+  text: Data is classified by sensitivity, with handling rules for each class.
+  help: >-
+    People need to know what they may paste into an external AI tool. Without a
+    classification scheme, that judgement gets made individually and badly.
+  category: Documentation
+  applies_to: [security, legal-dpo, governance-lead]
+  weight: 4
+  templates: [data-classification-policy, acceptable-ai-use-policy]
+  obligation:
+    ref: GDPR Art. 5, Art. 32
+    label: Data classification and handling
+    detail: >-
+      Underpins both confidentiality controls and lawful AI input.
+
+- id: Q28
+  text: We measure data quality against defined dimensions and thresholds.
+  help: >-
+    Completeness, accuracy, timeliness, consistency, validity, uniqueness — with
+    thresholds and a named owner who acts when one is breached.
+  category: Documentation
+  applies_to: [ml-data-science, governance-lead]
+  weight: 3
+  templates: [data-quality-standard, data-asset-register, kpi-dashboard]
+  obligation:
+    ref: Art. 10(3)
+    label: Data quality
+    detail: >-
+      Training and test data must be relevant, representative, and to the extent
+      possible free of errors.
+
+- id: Q29
+  text: A risk register captures AI and data risks with owners and treatment plans.
+  help: >-
+    Risks with named owners, agreed treatments, and review dates — not a
+    spreadsheet last updated at the previous audit.
+  category: Risk
+  applies_to: [governance-lead, internal-audit, exec-sponsor, security]
+  weight: 4
+  templates: [risk-register, ai-risk-assessment, board-pack]
+  obligation:
+    ref: Art. 9
+    label: Risk register
+    detail: >-
+      The operational record of the Art. 9 risk management system.
+
+- id: Q30
+  text: There is a defined process for logging and responding to AI incidents.
+  help: >-
+    People know what counts as an AI incident, where to report it, and what
+    happens next. Test it: could a support engineer name the process?
+  category: Oversight
+  applies_to: [security, governance-lead, product-owner, ml-data-science]
+  weight: 4
+  templates: [incident-log, control-library]
+  obligation:
+    ref: Art. 73
+    label: Incident management
+    detail: >-
+      Serious incidents must reach the authority within short, defined windows.
+
+- id: Q31
+  text: Decision rights and escalation paths are documented and understood.
+  help: >-
+    Who can approve a high-risk deployment, who can halt one, and what happens
+    when two functions disagree. The real test is whether it has survived a live
+    disagreement.
+  category: Oversight
+  applies_to: [governance-lead, exec-sponsor, product-owner]
+  weight: 3
+  templates: [decision-rights, raci, committee-charter]
+  obligation:
+    ref: Art. 26
+    label: Deployer governance
+    detail: >-
+      Unclear escalation is the most common reason controls fail in practice.
+
+- id: Q32
+  text: A RACI or equivalent makes governance responsibilities explicit.
+  help: >-
+    Each significant activity has exactly one accountable party. Two accountable
+    parties means nobody is.
+  category: Oversight
+  applies_to: [governance-lead, internal-audit, people-hr]
+  weight: 3
+  templates: [raci, roles-responsibilities]
+  obligation:
+    ref: Art. 26
+    label: Allocation of responsibilities
+    detail: >-
+      Documented accountability is the first thing assurance looks for.
+
+- id: Q33
+  text: Model documentation exists for material models, covering intended use and limitations.
+  help: >-
+    A model card or equivalent: what it is for, what it should not be used for,
+    how it performs across groups, and its known failure modes.
+  category: Documentation
+  applies_to: [ml-data-science, internal-audit, product-owner]
+  weight: 4
+  templates: [model-card, ai-development-standard]
+  obligation:
+    ref: Art. 11, Art. 13
+    label: Model documentation
+    detail: >-
+      Feeds both technical documentation and deployer instructions for use.
+
+- id: Q34
+  text: Controls are mapped to obligations, with named owners and assurance evidence.
+  help: >-
+    A control library that links each obligation to the control that satisfies
+    it, who owns it, and how you would evidence it operating.
+  category: Documentation
+  applies_to: [internal-audit, governance-lead, security]
+  weight: 3
+  templates: [control-library, risk-register]
+  obligation:
+    ref: Art. 17
+    label: Quality management system
+    detail: >-
+      Providers of high-risk systems need a documented quality management system.
+
+- id: Q35
+  text: Internal Audit or an equivalent independent function reviews AI governance.
+  help: >-
+    Independent of the people who built and run the systems. A second-line review
+    is valuable but is not the same as independent assurance.
+  category: Oversight
+  applies_to: [internal-audit, exec-sponsor, governance-lead]
+  weight: 3
+  templates: [control-library, committee-charter]
+  obligation:
+    ref: Art. 17
+    label: Independent assurance
+    detail: >-
+      Boards increasingly expect third-line coverage of AI risk.
+
+- id: Q36
+  text: The board receives regular, structured reporting on AI and data governance.
+  help: >-
+    A recurring pack with risk posture, movement since last time, and explicit
+    decisions being asked for — not an occasional verbal update.
+  category: Oversight
+  applies_to: [exec-sponsor, governance-lead, internal-audit]
+  weight: 4
+  templates: [board-pack, kpi-dashboard]
+  obligation:
+    ref: Art. 26
+    label: Board oversight
+    detail: >-
+      Demonstrable board engagement is a common supervisory expectation.
+
+- id: Q37
+  text: We track KPIs and KRIs that show whether governance is actually working.
+  help: >-
+    Coverage, quality, incident, and readiness measures with a trend. Activity
+    counts such as "policies published" tell you nothing about effectiveness.
+  category: Oversight
+  applies_to: [governance-lead, exec-sponsor]
+  weight: 2
+  templates: [kpi-dashboard, board-pack]
+  obligation:
+    ref: Art. 72
+    label: Monitoring effectiveness
+    detail: >-
+      Post-market monitoring needs measures, not anecdotes.
+
+- id: Q38
+  text: AI used in recruitment, performance, or other employment decisions is identified and governed.
+  help: >-
+    CV screening, interview scoring, performance ranking, and workforce
+    allocation are Annex III high-risk uses. Answer Not applicable only if you
+    are certain no such tool is in use anywhere, including inside your HR SaaS.
+  category: Risk
+  applies_to: [people-hr, legal-dpo, governance-lead]
+  weight: 5
+  templates: [ai-system-inventory, ai-risk-assessment, processing-dpia-log]
+  obligation:
+    ref: Annex III(4)
+    label: Employment and worker management
+    detail: >-
+      Employment-related AI is expressly high-risk under Annex III.
+
+- id: Q39
+  text: Staff have clear, current guidance on acceptable use of AI tools at work.
+  help: >-
+    Practical and specific: which tools are approved, what may never be pasted
+    into them, and who to ask. If people are quietly using unapproved tools, the
+    guidance has already failed.
+  category: Literacy
+  applies_to: [people-hr, security, governance-lead, product-owner]
+  weight: 4
+  templates: [acceptable-ai-use-policy, data-classification-policy]
+  obligation:
+    ref: Art. 4
+    label: AI literacy in practice
+    detail: >-
+      Literacy obligations are met through usable guidance, not a policy nobody
+      reads.
+
+- id: Q40
+  text: Security controls cover model and training-data specific threats.
+  help: >-
+    Prompt injection, training-data poisoning, model extraction, and unintended
+    disclosure through outputs. Conventional application security does not cover
+    these by default.
+  category: Risk
+  applies_to: [security, ml-data-science]
+  weight: 4
+  templates: [ai-development-standard, control-library, third-party-ai-risk-policy]
+  obligation:
+    ref: Art. 15
+    label: Cybersecurity of AI systems
+    detail: >-
+      Art. 15 expects resilience against AI-specific attack classes.

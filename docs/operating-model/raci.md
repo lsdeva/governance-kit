@@ -1,58 +1,99 @@
-# RACI Matrix — Data & AI Governance
+<!-- GENERATED FILE — DO NOT EDIT.
+     Source: data/templates.yml
+     Regenerate with: python tools/build_content.py -->
+
+
+# RACI Matrix
 
 <span class="pill ready">Ready</span>
 
-**Purpose.** Remove ambiguity about who does what. A RACI assigns, for each
-governance activity, who is **R**esponsible (does the work), **A**ccountable
-(owns the outcome — exactly one per activity), **C**onsulted (gives input), and
-**I**nformed (kept in the loop).
+**Purpose.** Removes ambiguity about who does what. For every significant governance activity it names exactly one accountable party, so decisions have an owner and gaps become visible before they become incidents.
 
-**When to use it.** Ratify alongside your framework and committee terms of
-reference; revisit whenever roles or the operating model change.
+**When to use it.** Agree it when you stand up the operating model, and revisit whenever roles change or an escalation reveals that nobody owned something.
 
-**How to use it.** Rename the columns to match your actual roles, then walk each
-row with the people involved until every activity has exactly one **A**. Argument
-during this exercise is the point — it surfaces the gaps.
+**How to use it.** Fill it in a room with the actual people, not in a document sent round for comment — the value is in the argument about who is accountable. Enforce one A per row. If two functions both claim accountability, you have found a problem worth resolving now rather than during an incident.
+
+!!! tip "Closes assessment gaps"
+    This template addresses **Q01**, **Q31**, **Q32** in the [readiness assessment](../assess/index.md).
 
 ---
 
 ## The template
 
-Legend: **R** Responsible · **A** Accountable · **C** Consulted · **I** Informed
+### Legend
 
-| Activity | Board / ARC | Gov. Committee | AI/Data Owner | Model/Product Team | Risk & Compliance | Legal / DPO | Internal Audit |
-|---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-| Set risk appetite | **A** | R | C | I | C | C | I |
-| Approve governance framework | A | **R** | C | I | C | C | I |
-| Maintain AI system inventory | I | A | R | R | C | I | I |
-| Classify AI system risk tier | I | A | R | C | C | C | I |
-| Screen for prohibited practices | I | A | R | C | C | **C** | I |
-| Approve high-risk deployment | I | **A** | R | C | C | C | I |
-| Conduct AI risk assessment | I | I | A | R | C | C | I |
-| Maintain technical documentation | I | I | A | **R** | I | I | I |
-| Ensure human oversight in operation | I | I | **A** | R | C | I | I |
-| Monitor models in production | I | I | A | R | C | I | I |
-| Manage third-party / vendor AI risk | I | A | R | C | C | **C** | I |
-| Complete DPIA / privacy assessment | I | I | C | R | C | **A** | I |
-| Report to the board | **A** | R | C | I | C | C | I |
-| Provide independent assurance | I | I | I | I | C | C | **A** |
-| Manage AI incidents | I | A | R | R | C | C | I |
-| Deliver AI literacy / training | I | A | R | C | C | C | I |
+| Letter | Meaning |
+|---|---|
+| **R** | Responsible — does the work |
+| **A** | Accountable — answerable for the outcome (**exactly one per row**) |
+| **C** | Consulted — input sought before the decision |
+| **I** | Informed — told after the decision |
 
-!!! tip "The one-A rule"
-    Each row must have **exactly one A**. Two A's means shared accountability,
-    which in practice means no accountability. If you can't agree who the single
-    A is, that's a decision-rights problem — resolve it in the
-    [Decision Rights & Escalation](decision-rights.md) model.
+### Matrix
+
+Columns are illustrative roles. Replace with your own.
+
+| Activity | Board | Committee | Gov Lead | Data Owner | AI Owner | ML Team | Legal/DPO | Security | Audit |
+|---|---|---|---|---|---|---|---|---|---|
+| **Strategy & mandate** | | | | | | | | | |
+| Approve governance charter | **A** | R | R | C | C | I | C | C | I |
+| Set risk appetite | **A** | R | C | C | C | I | C | C | I |
+| Approve frameworks & policies | I | **A** | R | C | C | C | C | C | I |
+| **Inventory & classification** | | | | | | | | | |
+| Maintain AI inventory | I | I | **A** | C | R | R | I | C | I |
+| Classify AI system risk tier | I | C | **A** | C | R | C | C | C | I |
+| Maintain data asset register | I | I | **A** | R | I | C | C | C | I |
+| **Risk** | | | | | | | | | |
+| Screen for prohibited practices | I | C | **A** | I | R | R | C | I | I |
+| Complete AI risk assessment | I | C | C | C | **A** | R | C | C | I |
+| Accept residual risk (high-risk) | I | **A** | R | C | C | I | C | C | I |
+| Maintain risk register | I | C | **A** | R | R | C | C | C | I |
+| **Build & deploy** | | | | | | | | | |
+| Approve data for training | I | I | C | **A** | C | R | C | C | I |
+| Produce model documentation | I | I | C | I | **A** | R | C | I | I |
+| Approve deployment (high-risk) | I | **A** | R | C | R | C | C | C | I |
+| Design human oversight | I | C | C | I | **A** | R | C | I | I |
+| **Third party** | | | | | | | | | |
+| Assess vendor AI risk | I | I | C | C | C | C | C | **A** | I |
+| Negotiate AI contract terms | I | I | C | C | C | I | **A** | R | I |
+| **Operate** | | | | | | | | | |
+| Monitor performance & drift | I | I | C | I | **A** | R | I | C | I |
+| Manage AI incidents | I | C | R | C | R | R | C | **A** | I |
+| Report serious incident to authority | I | C | R | I | C | I | **A** | C | I |
+| **Assurance** | | | | | | | | | |
+| Report to board | **A** | R | R | I | I | I | C | C | C |
+| Independent assurance | I | C | I | I | I | I | I | I | **A** |
+
+### Validation
+
+Before you sign it off, check:
+
+- [ ] Every row has **exactly one A**. Two means nobody.
+- [ ] Nobody is A on so many rows that it is not credible.
+- [ ] Every A has the authority and budget to actually deliver.
+- [ ] Rows with many Cs are reviewed — over-consultation is how decisions
+      stall.
+- [ ] Each named role has a real person behind it today.
+
+!!! tip "The test that matters"
+    Pick a row and ask the person marked A to describe what they would do if
+    it went wrong tomorrow. If they cannot, the matrix is aspirational.
 
 ---
 
 ## Adaptation notes
 
-- **Fewer roles?** Merge columns (e.g. Risk & Compliance + Legal) but preserve
-  the single-A discipline per row.
-- **Product-led org:** you may split "Model/Product Team" into data science,
-  engineering, and product — add columns and re-walk the rows.
-- **Regulated firms:** keep Internal Audit strictly to assurance (I on delivery
-  activities, A only on independent assurance) to preserve three-lines
-  independence.
+- **Small organisations:** Collapse to four columns — Exec, Governance Lead, Delivery, Independent review. One person may hold several, which is fine as long as the accountability split is conscious and written down.
+- **Three lines of defence:** Keep first line (own and manage), second line (challenge and advise), and third line (assure) strictly separated in the A column. The same function should never both perform and assure an activity.
+- **Federated / multi-entity:** Add a column per entity, or produce one matrix per entity with a shared group-level row set, so local accountability is explicit.
+
+## Related
+
+- [Roles & Responsibilities](roles-responsibilities.md) — <span class="pill ready">Ready</span>
+- [Decision Rights & Escalation](decision-rights.md) — <span class="pill ready">Ready</span>
+- [Committee Charter (Terms of Reference)](committee-charter.md) — <span class="pill ready">Ready</span>
+
+!!! warning "Not legal advice"
+    These templates are a head start, not a substitute for professional
+    judgement. Adapt them to your jurisdiction, sector, and risk appetite, and
+    have qualified counsel review anything material before you rely on it.

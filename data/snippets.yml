@@ -1,0 +1,40 @@
+# Blocks that appear on many pages. Defined ONCE here and injected by
+# tools/build_content.py. Edit the disclaimer here and every page updates.
+#
+# Previously these were copy-pasted: 22 of 25 pages carried a byte-identical
+# "How to use it" paragraph and adaptation block. That is what this file exists
+# to prevent.
+
+not_legal_advice: |
+  !!! warning "Not legal advice"
+      These templates are a head start, not a substitute for professional
+      judgement. Adapt them to your jurisdiction, sector, and risk appetite, and
+      have qualified counsel review anything material before you rely on it.
+
+stub_invite: |
+  !!! note "Contributions welcome"
+      This page is a **stub** — the structure is right but it needs fleshing out.
+      See [Contributing]({contributing}) if you can help complete it.
+
+draft_note: |
+  !!! note "Draft"
+      This page is usable but has not had a full review pass. Corrections and
+      improvements are welcome — see [Contributing]({contributing}).
+
+status_legend: |
+  <span class="pill ready">Ready</span> fully drafted &nbsp;·&nbsp;
+  <span class="pill draft">Draft</span> usable, needs review &nbsp;·&nbsp;
+  <span class="pill stub">Stub</span> outline only, contributions welcome
+
+page_structure: |
+  - **Purpose** — what the artefact is for.
+  - **When to use it** — the trigger and cadence.
+  - **How to use it** — practical steps to adapt it.
+  - **The template** — the reusable content itself, ready to copy.
+  - **Adaptation notes** — sector, size, and jurisdiction tweaks.
+
+assess_callout: |
+  !!! tip "Not sure where you stand?"
+      Take the [role-based assessment]({assess}) — answer questions relevant to
+      your role and get a report showing which of these templates close your
+      biggest gaps. Everything stays in your browser.

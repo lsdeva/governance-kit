@@ -1,35 +1,129 @@
+<!-- GENERATED FILE — DO NOT EDIT.
+     Source: data/templates.yml
+     Regenerate with: python tools/build_content.py -->
+
+
 # Roles & Responsibilities
 
-<span class="pill draft">Draft</span>
+<span class="pill ready">Ready</span>
 
-**Purpose.** Define data owners, stewards, custodians, and AI-accountable roles — what each is on the hook for.
+**Purpose.** Defines each governance role in enough detail that it can be put in a job description, recruited for, and assessed against — rather than assumed.
 
-**When to use it.** Alongside the RACI; review on reorganisation.
+**When to use it.** Alongside the RACI, when appointing people into roles, and during onboarding.
 
-**How to use it.** Copy the structure below, replace the bracketed placeholders,
-and ratify it through your governance committee. Keep it proportionate to your
-size and risk.
+**How to use it.** For each role, name a real person and confirm they know they hold it. The most common finding in a first governance audit is a role defined on paper that its supposed holder has never heard of.
 
-!!! note "Contributions welcome"
-    This page is a **draft** — the structure is set but it needs fleshing out. See [Contributing](../contributing.md) to help complete it.
+!!! tip "Closes assessment gaps"
+    This template addresses **Q01**, **Q25**, **Q26**, **Q32** in the [readiness assessment](../assess/index.md).
 
 ---
 
 ## The template
 
-| Role | Accountable for |
-|---|---|
-| Data Owner | Business accountability for a data domain |
-| Data Steward | Day-to-day quality, definitions, issues |
-| Data Custodian | Technical storage, access, security |
-| AI Accountable Owner | Outcomes & compliance of a specific AI system |
-| Model Team | Building and operating within standards |
+### Data roles
+
+#### Data Owner
+
+**Accountable for** a data domain's definitions, quality, access, and risk.
+
+- Approves access to the domain, particularly Restricted data.
+- Sets and monitors quality thresholds per [Data Quality Standard](../policies/data-quality-standard.md).
+- Accepts or escalates risk relating to the domain.
+- Approves use of the domain's data for AI training.
+
+**Typically held by:** the senior business leader who owns the process the
+data comes from — not IT, and not the team who happens to store it.
+
+#### Data Steward
+
+**Responsible for** day-to-day custody of a domain.
+
+- Maintains business definitions and the data catalogue entry.
+- Monitors quality and triages issues.
+- First point of contact for questions about the data's meaning.
+
+#### Data Custodian
+
+**Responsible for** technical operation: storage, backup, access enforcement,
+encryption, and monitoring. Usually sits in engineering or platform.
+
+### AI roles
+
+#### AI Accountable Owner (per system)
+
+**Accountable for** one AI system's outcomes and compliance across its whole
+lifecycle.
+
+- Ensures classification, assessment, and documentation are complete.
+- Signs off deployment and material change.
+- Owns monitoring, incidents, and eventual retirement.
+- **Answerable if the system causes harm.**
+
+!!! warning "This role cannot be a committee"
+    Every AI system needs one named human. If your answer to "who is
+    accountable for this system?" is a team name, you do not yet have an
+    accountable owner.
+
+#### Model Developer / ML Engineer
+
+**Responsible for** building within [AI Development & Deployment Standard](../policies/ai-development-standard.md): documenting
+data, evaluating performance and bias, producing the [Model Card / Model Risk Documentation](../risk/model-card.md), and
+raising risks they discover rather than routing around them.
+
+#### Product Owner
+
+**Responsible for** the use case: whether the system should exist, how it
+affects users, transparency to those users, and designing oversight that
+works in the real workflow.
+
+### Governance & assurance roles
+
+#### Governance Lead
+
+**Accountable for** the programme: maintaining frameworks and registers,
+running the committee, reporting, and driving remediation. The role that
+makes governance an operating function rather than a document set.
+
+#### Legal / DPO
+
+**Responsible for** lawfulness: regulatory interpretation, DPIAs, lawful
+basis, contracts, and the independence to say no. Note that a DPO's statutory
+independence limits how far they can also own delivery.
+
+#### Security
+
+**Responsible for** protecting systems and data, including AI-specific
+threats — see [Control Library & Assurance Map](../risk/control-library.md).
+
+#### Internal Audit
+
+**Accountable for** independent assurance. Must not have designed or operated
+the controls being assured.
+
+### Appointment record
+
+| Role | Holder | Appointed | Deputy | Confirmed aware |
+|---|---|---|---|---|
+| Governance Lead | [name] | [date] | [name] | [ ] |
+| Data Owner — [domain] | [name] | [date] | [name] | [ ] |
+| AI Accountable Owner — [system] | [name] | [date] | [name] | [ ] |
 
 ---
 
 ## Adaptation notes
 
-- **Small organisations:** keep the fields but reduce the cadence and merge roles.
-- **Regulated sectors:** align terminology and controls to your supervisory
-  expectations and to the [EU AI Act readiness checklist](../eu-ai-act/readiness-checklist.md).
-- **Non-EU:** swap regulatory references for your local regime; the structure holds.
+- **Small organisations:** One person may hold several roles. The only combination to avoid is someone assuring their own work — keep independent review genuinely independent, even if that means an external reviewer once a year.
+- **Regulated financial services:** Map these to your senior management regime responsibilities, and check whether any of them must be held by a certified or approved person.
+- **Where a statutory DPO exists:** The DPO advises and monitors; they should not also own the processing decisions they oversee, as that compromises the independence the role requires.
+
+## Related
+
+- [RACI Matrix](raci.md) — <span class="pill ready">Ready</span>
+- [Decision Rights & Escalation](decision-rights.md) — <span class="pill ready">Ready</span>
+- [Committee Charter (Terms of Reference)](committee-charter.md) — <span class="pill ready">Ready</span>
+- [Governance Charter](../frameworks/governance-charter.md) — <span class="pill draft">Draft</span>
+
+!!! warning "Not legal advice"
+    These templates are a head start, not a substitute for professional
+    judgement. Adapt them to your jurisdiction, sector, and risk appetite, and
+    have qualified counsel review anything material before you rely on it.

@@ -1,0 +1,19 @@
+{#-
+  Override of Material's partials/source.html.
+
+  Identical to the stock partial except that `data-md-component="source"` is
+  removed. That attribute is what makes Material's JS call api.github.com for
+  star/fork counts on every page view — an external request that would send
+  visitor data to GitHub and breaks this site's "no external calls" promise.
+
+  The repository link and icon still work; only the stats fetch is gone.
+-#}
+<a href="{{ config.repo_url }}" title="{{ lang.t('source') }}" class="md-source">
+  <div class="md-source__icon md-icon">
+    {% set icon = config.theme.icon.repo or "fontawesome/brands/git-alt" %}
+    {% include ".icons/" ~ icon ~ ".svg" %}
+  </div>
+  <div class="md-source__repository">
+    {{ config.repo_name }}
+  </div>
+</a>

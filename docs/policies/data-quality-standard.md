@@ -1,35 +1,103 @@
+<!-- GENERATED FILE — DO NOT EDIT.
+     Source: data/templates.yml
+     Regenerate with: python tools/build_content.py -->
+
+
 # Data Quality Standard
 
-<span class="pill stub">Stub</span>
+<span class="pill ready">Ready</span>
 
-**Purpose.** Define data quality dimensions, measurement, thresholds, and accountability.
+**Purpose.** Defines what "good enough" data means in measurable terms — the dimensions, how they are measured, the thresholds that apply, and who acts when a threshold is breached.
 
-**When to use it.** Alongside the data governance policy; review annually.
+**When to use it.** Alongside the data governance policy, and specifically before any dataset is used to train or evaluate a model. Review thresholds annually.
 
-**How to use it.** Copy the structure below, replace the bracketed placeholders,
-and ratify it through your governance committee. Keep it proportionate to your
-size and risk.
+**How to use it.** Do not attempt all six dimensions across the whole estate at once. Pick your two or three highest-value domains, set thresholds, and measure those until the process is real — then extend. A standard measured nowhere is worse than no standard, because it implies assurance you do not have.
 
-!!! note "Contributions welcome"
-    This page is a **stub** — the structure is set but it needs fleshing out. See [Contributing](../contributing.md) to help complete it.
+!!! tip "Closes assessment gaps"
+    This template addresses **Q12**, **Q28** in the [readiness assessment](../assess/index.md).
 
 ---
 
 ## The template
 
-**1. Purpose** — why this policy exists.
-**2. Scope** — who and what it covers.
-**3. Policy statements** — the mandatory requirements (numbered).
-**4. Roles & responsibilities** — who enforces and complies.
-**5. Exceptions** — how to request one and who approves.
-**6. Related documents** — frameworks, standards, registers.
-**7. Review** — owner, cadence, version history.
+### 1. Quality dimensions
+
+| Dimension | Question it answers | Example measure |
+|---|---|---|
+| **Completeness** | Is the expected data present? | % of mandatory fields populated |
+| **Accuracy** | Does it reflect the real world? | % matching a verified source |
+| **Timeliness** | Is it current enough to use? | Age at point of use vs. requirement |
+| **Consistency** | Does it agree across systems? | % of records matching across systems |
+| **Validity** | Does it conform to its rules? | % passing format / range rules |
+| **Uniqueness** | Are there duplicates? | % duplicate records |
+
+### 2. Thresholds
+
+Thresholds are set per domain by the Data Owner, based on use. Data feeding
+a regulatory return or a high-risk AI system needs tighter thresholds than
+data feeding an internal dashboard.
+
+| Domain | Dimension | Threshold | Measure | Frequency | Owner |
+|---|---|---|---|---|---|
+| Customer | Completeness | ≥ 98% | [rule] | Daily | [role] |
+| Customer | Uniqueness | ≥ 99% | [rule] | Weekly | [role] |
+| [domain] | [dimension] | | | | |
+
+### 3. Quality for AI training data
+
+Additional requirements where data trains, validates, or tests a model — this
+is the Art. 10 obligation in practice:
+
+| Requirement | What it means | Evidence |
+|---|---|---|
+| **Relevance** | The data suits the stated purpose. | Documented rationale in the [Model Card / Model Risk Documentation](../risk/model-card.md) |
+| **Representativeness** | It reflects the population the system will act on. | Distribution analysis vs. target population |
+| **Bias examination** | Known skews are identified and addressed. | Bias assessment; mitigation record |
+| **Provenance** | Source and licence are known and lawful. | Entry in [Data Asset Register](../registers/data-asset-register.md) |
+| **Split integrity** | Train/validation/test do not leak into each other. | Split methodology documented |
+
+!!! warning "Representativeness is not a percentage"
+    A dataset can be 99% complete and still unrepresentative of the people
+    the system will affect. Completeness measures the data you collected;
+    representativeness asks who is missing from it entirely.
+
+### 4. Measurement & reporting
+
+Scores are produced **[frequency]**, published to **[location]**, and
+summarised in [KPI / KRI Dashboard](../board/kpi-dashboard.md). Trend matters more than absolute level.
+
+### 5. Breach handling
+
+| Severity | Definition | Response | Timeframe |
+|---|---|---|---|
+| Critical | Regulatory or high-risk AI impact | Escalate to committee; consider suspending use | [24h] |
+| Major | Material business impact | Owner-led remediation plan | [5 days] |
+| Minor | Limited impact | Backlog for next cycle | [30 days] |
+
+Breaches are recorded in the [Issue & Incident Log](../registers/incident-log.md).
+
+### 6. Review
+
+| Version | Date | Owner | Approved by |
+|---|---|---|---|
+| 0.1 | [date] | [role] | [committee] |
 
 ---
 
 ## Adaptation notes
 
-- **Small organisations:** keep the fields but reduce the cadence and merge roles.
-- **Regulated sectors:** align terminology and controls to your supervisory
-  expectations and to the [EU AI Act readiness checklist](../eu-ai-act/readiness-checklist.md).
-- **Non-EU:** swap regulatory references for your local regime; the structure holds.
+- **Small organisations:** Measure completeness and validity only, on your two most important domains. That covers most real-world failures at a fraction of the cost.
+- **Regulated financial services:** Align with BCBS 239 and make lineage evidence explicit — supervisors ask to trace a reported figure back to source.
+- **ML-heavy organisations:** Section 3 is the section that matters. Automate representativeness and drift checks into the training pipeline so the evidence is a by-product rather than a project.
+
+## Related
+
+- [Data Governance Policy](data-governance-policy.md) — <span class="pill ready">Ready</span>
+- [Data Asset Register](../registers/data-asset-register.md) — <span class="pill ready">Ready</span>
+- [Model Card / Model Risk Documentation](../risk/model-card.md) — <span class="pill ready">Ready</span>
+- [KPI / KRI Dashboard](../board/kpi-dashboard.md) — <span class="pill ready">Ready</span>
+
+!!! warning "Not legal advice"
+    These templates are a head start, not a substitute for professional
+    judgement. Adapt them to your jurisdiction, sector, and risk appetite, and
+    have qualified counsel review anything material before you rely on it.

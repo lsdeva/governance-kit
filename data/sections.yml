@@ -1,0 +1,65 @@
+# Sections of the kit. Order here drives the order of the site navigation
+# and the cards on the landing page.
+#
+# Fields:
+#   id      - short slug, matches the folder name under docs/
+#   title   - display name
+#   icon    - Material icon used on the landing page cards
+#   blurb   - one or two sentences for the section index page and cards
+#   nav     - label used in mkdocs.yml navigation
+
+- id: frameworks
+  title: Frameworks
+  nav: Frameworks
+  icon: material/file-tree
+  blurb: >-
+    The operating backbone: what "good" looks like, who is accountable, and how
+    the pieces of your governance programme fit together.
+
+- id: policies
+  title: Policies & Standards
+  nav: Policies & Standards
+  icon: material/book-lock
+  blurb: >-
+    The rules people have to follow. Frameworks say how you govern; policies say
+    what is and is not allowed, and standards say how to meet them.
+
+- id: operating-model
+  title: Operating Model
+  nav: Operating Model
+  icon: material/account-group
+  blurb: >-
+    Who does what, who decides, and what happens when people disagree. Governance
+    fails far more often on unclear accountability than on missing documents.
+
+- id: registers
+  title: Registers
+  nav: Registers
+  icon: material/clipboard-list
+  blurb: >-
+    The living records. Registers are the evidence that governance is operating
+    rather than merely documented — and the first thing a regulator asks for.
+
+- id: risk
+  title: Risk & Control
+  nav: Risk & Control
+  icon: material/shield-check
+  blurb: >-
+    Assessing what could go wrong, documenting what you built, and evidencing the
+    controls that keep it in check.
+
+- id: board
+  title: Board & Reporting
+  nav: Board & Reporting
+  icon: material/presentation
+  blurb: >-
+    Making governance visible to the people accountable for it. If the board
+    cannot see it, it will not be resourced.
+
+- id: eu-ai-act
+  title: EU AI Act
+  nav: EU AI Act
+  icon: material/gavel
+  blurb: >-
+    Readiness against the EU AI Act, reflecting the 2026 Digital Omnibus dates —
+    the timely hook that brings most people to this kit.

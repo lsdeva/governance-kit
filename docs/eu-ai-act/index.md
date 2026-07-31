@@ -1,27 +1,18 @@
+<!-- GENERATED FILE — DO NOT EDIT.
+     Source: data/sections.yml + templates.yml
+     Regenerate with: python tools/build_content.py -->
+
+
 # EU AI Act
 
-The part most governance packs skip. This section gives you a **timeline** you
-can plan against and a **25-point readiness checklist** to find out where you
-stand today — both reflecting the 2026 Digital Omnibus changes.
+Readiness against the EU AI Act, reflecting the 2026 Digital Omnibus dates — the timely hook that brings most people to this kit.
 
-<div class="grid cards" markdown>
+| Template | Status | Purpose |
+|---|---|---|
+| [EU AI Act — 25-point readiness checklist](readiness-checklist.md) | <span class="pill ready">Ready</span> | A fast self-assessment of where your organisation stands against the EU AI Act. Work through it, mark what is true today, and treat every unticked box… |
+| [EU AI Act timeline (2026 Digital Omnibus)](timeline.md) | <span class="pill ready">Ready</span> | The dates that actually bind you, reflecting the 2026 Digital Omnibus amendments — what is already in force, what was deferred, and what to work… |
 
-- :material-clipboard-check:{ .lg } **[Readiness checklist](readiness-checklist.md)**
-
-    ---
-
-    25 points across scope, inventory, prohibited practices, high-risk
-    obligations, transparency, third parties, and AI literacy. Score yourself
-    and turn gaps into a backlog.
-
-- :material-timeline-clock:{ .lg } **[Timeline](timeline.md)**
-
-    ---
-
-    Every key date, what the Digital Omnibus moved (and didn't), and how to
-    sequence your programme against the deferred high-risk deadlines.
-
-</div>
-
-!!! warning "Not legal advice"
-    Adapt to your circumstances and confirm against official EU sources.
+!!! tip "Not sure where you stand?"
+    Take the [role-based assessment](../assess/index.md) — answer questions relevant to
+    your role and get a report showing which of these templates close your
+    biggest gaps. Everything stays in your browser.

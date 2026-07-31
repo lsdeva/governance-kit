@@ -1,36 +1,96 @@
+<!-- GENERATED FILE — DO NOT EDIT.
+     Source: data/templates.yml
+     Regenerate with: python tools/build_content.py -->
+
+
 # Issue & Incident Log
 
-<span class="pill stub">Stub</span>
+<span class="pill ready">Ready</span>
 
-**Purpose.** Track issues and incidents: description, severity, root cause, remediation, and any reporting obligations.
+**Purpose.** The record of what went wrong, what you did, and what changed as a result. It is both a management tool and the evidence base for serious-incident reporting duties.
 
-**When to use it.** Whenever an issue or incident arises.
+**When to use it.** From day one. You need the route defined before the first incident, not during it.
 
-**How to use it.** Copy the structure below, replace the bracketed placeholders,
-and ratify it through your governance committee. Keep it proportionate to your
-size and risk.
+**How to use it.** Define severity and the reporting clock in advance, and make reporting easy and blameless. The failure mode is not a bad log — it is people not reporting at all because they fear the consequences.
 
-!!! note "Contributions welcome"
-    This page is a **stub** — the structure is set but it needs fleshing out. See [Contributing](../contributing.md) to help complete it.
+!!! tip "Closes assessment gaps"
+    This template addresses **Q14**, **Q18**, **Q30** in the [readiness assessment](../assess/index.md).
 
 ---
 
 ## The template
 
-| Field | Example |
-|---|---|
-| ID | [unique ref] |
-| Name | [asset / risk name] |
-| Owner | [role / person] |
-| Description | [what it is] |
-| Rating / status | [e.g. High / Open] |
-| Last reviewed | [date] |
+### Severity
+
+| Severity | Definition | Response | Notify |
+|---|---|---|---|
+| **S1 Critical** | Harm to people, regulatory breach, or major data loss | Immediate; incident lead appointed | Committee **immediately**; Board; regulator assessment within **[24h]** |
+| **S2 Major** | Material impact; significant risk | Within [4h] | Committee within [24h] |
+| **S3 Moderate** | Contained impact | Within [1 working day] | Governance Lead |
+| **S4 Minor** | Negligible | Next cycle | Logged only |
+
+!!! danger "The serious-incident clock"
+    Under Art. 73 the reporting window for serious incidents is short and
+    starts when you establish the link between the system and the incident —
+    not when you finish investigating. Assess reportability **early and in
+    parallel** with fixing it.
+
+### The log
+
+| ID | Date | Title | System | Severity | Type | Reported by | Owner | Personal data? | Reportable? | Status | Closed |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| INC-001 | [date] | Model returned biased ranking | AI-004 | S2 | Fairness | [name] | [name] | Yes | Under assessment | Open | |
+| INC-002 | [date] | Confidential doc pasted into public LLM | — | S2 | Data leak | [name] | [name] | Yes | Yes — DPA | Closed | [date] |
+
+### Incident types
+
+Fairness / bias · Accuracy or drift · Data leak · Unauthorised use ·
+Security (injection, poisoning, extraction) · Availability · Transparency
+failure · Oversight failure · Third-party / vendor · Regulatory
+
+### Record for each incident
+
+1. **What happened** — factual, no blame.
+2. **When** — occurred, detected, reported. The gap between occurred and
+   detected is itself a finding.
+3. **Impact** — who and what was affected, how many people.
+4. **Immediate action** — including whether the system was suspended.
+5. **Root cause** — the real one, not the proximate one.
+6. **Reportability assessment** — with the reasoning and the date decided.
+7. **Remediation** — actions, owners, dates.
+8. **Lessons** — what changed so it does not recur.
+
+### Post-incident review
+
+For S1 and S2, hold a blameless review within **[10 working days]**. Ask:
+
+- Could we have prevented it? Which control failed or was missing?
+- Could we have detected it sooner?
+- Did the escalation path work as written?
+- What changes in policy, control, or design follow?
+- **Does anything here change the [Risk Register](risk-register.md)?**
+
+### Trends
+
+Review quarterly for pattern: repeat causes, systems appearing often, and
+detection times getting longer. Report to committee via [KPI / KRI Dashboard](../board/kpi-dashboard.md).
 
 ---
 
 ## Adaptation notes
 
-- **Small organisations:** keep the fields but reduce the cadence and merge roles.
-- **Regulated sectors:** align terminology and controls to your supervisory
-  expectations and to the [EU AI Act readiness checklist](../eu-ai-act/readiness-checklist.md).
-- **Non-EU:** swap regulatory references for your local regime; the structure holds.
+- **Small organisations:** Use your existing incident process and add the AI-specific fields — system, reportability, personal data. A separate AI process will not be remembered under pressure.
+- **Regulated sectors:** Map severity to your existing operational incident taxonomy and regulatory reporting triggers, so one incident does not get two incompatible severities.
+- **Consumer-facing services:** Add a customer communication field: what was said, by whom, and when. It is usually the part that gets scrutinised afterwards.
+
+## Related
+
+- [Risk Register](risk-register.md) — <span class="pill ready">Ready</span>
+- [Control Library & Assurance Map](../risk/control-library.md) — <span class="pill ready">Ready</span>
+- [AI System Inventory](ai-system-inventory.md) — <span class="pill ready">Ready</span>
+- [Decision Rights & Escalation](../operating-model/decision-rights.md) — <span class="pill ready">Ready</span>
+
+!!! warning "Not legal advice"
+    These templates are a head start, not a substitute for professional
+    judgement. Adapt them to your jurisdiction, sector, and risk appetite, and
+    have qualified counsel review anything material before you rely on it.

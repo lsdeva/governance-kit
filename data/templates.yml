@@ -1,0 +1,2775 @@
+# The 25 templates — single source of truth for page content, navigation,
+# section index pages, status pills, and the "which template fixes this gap"
+# links in the assessment report.
+#
+# Fields:
+#   id            - stable slug. Referenced by questions.yml `templates`.
+#   title         - page H1 and nav label
+#   nav           - shorter label for the site navigation (optional)
+#   section       - id from data/sections.yml
+#   path          - path under docs/ (kept identical to the original site so no
+#                   inbound links break)
+#   status        - ready | draft | stub
+#   purpose       - what it is for (1-3 sentences)
+#   when_to_use   - trigger and cadence
+#   how_to_use    - practical steps, SPECIFIC to this template
+#   body          - the template itself, in Markdown
+#   adaptation    - list of {context, note}, specific to this template
+#   related       - other template ids
+#
+# Links inside `body` use {{id}} placeholders resolved by the build script to
+# correct relative paths, so moving a page cannot produce a broken link.
+
+# ===========================================================================
+# FRAMEWORKS
+# ===========================================================================
+
+- id: data-governance-framework
+  title: Data Governance Framework
+  section: frameworks
+  path: frameworks/data-governance-framework.md
+  status: ready
+  purpose: >-
+    The reference that defines how your organisation governs data: what data you
+    hold, who owns it, what quality is expected, and how decisions about it are
+    made. It is the foundation the AI governance work sits on — most AI failures
+    trace back to a data problem nobody owned.
+  when_to_use: >-
+    Adopt once, then review annually or when your data estate, regulatory
+    exposure, or operating model changes materially.
+  how_to_use: >-
+    Start from section 3 (domains and ownership) rather than the top — naming
+    owners is the hardest part and everything else depends on it. Get the domain
+    list agreed before you write policy statements, or you will write rules
+    nobody has agreed to enforce.
+  body: |
+    ### 1. Purpose & scope
+
+    This framework sets out how **[Organisation]** governs data across its
+    lifecycle — creation, storage, use, sharing, retention, and disposal. It
+    applies to all data the organisation holds or processes, in all systems,
+    including data held by third parties on our behalf.
+
+    ### 2. Principles
+
+    - **Ownership** — every significant data domain has one named accountable owner.
+    - **Fitness for purpose** — quality is defined by what the data is used for,
+      not in the abstract.
+    - **Lawfulness** — we can point to a lawful basis for every processing activity.
+    - **Minimisation** — we hold what we need, for as long as we need it.
+    - **Transparency** — definitions, lineage, and quality are discoverable.
+    - **Security by classification** — handling follows sensitivity (see
+      {{data-classification-policy}}).
+    - **Proportionality** — control effort scales with value and risk.
+
+    ### 3. Data domains & ownership
+
+    The estate is divided into domains, each with a named owner accountable for
+    its definitions, quality, and access decisions.
+
+    | Domain | Owner (role) | Steward | Systems of record | Classification |
+    |---|---|---|---|---|
+    | Customer | [role] | [name] | [system] | Confidential |
+    | Employee | [role] | [name] | [system] | Confidential |
+    | Financial | [role] | [name] | [system] | Restricted |
+    | Product / operational | [role] | [name] | [system] | Internal |
+    | [add domains] | | | | |
+
+    Domains are recorded in the {{data-asset-register}}.
+
+    ### 4. Roles
+
+    | Role | Accountable for |
+    |---|---|
+    | **Data Owner** | Business accountability for a domain: definitions, access, quality targets, acceptance of risk. |
+    | **Data Steward** | Day-to-day custody: definitions maintained, quality monitored, issues triaged. |
+    | **Data Custodian** | Technical operation: storage, backup, access enforcement, security controls. |
+    | **Consumers** | Using data within its stated purpose and classification. |
+    | **Data Governance Committee** | Owns this framework; arbitrates cross-domain disputes. |
+
+    Full detail in {{roles-responsibilities}} and {{raci}}.
+
+    ### 5. Data quality
+
+    Quality is measured against defined dimensions with thresholds per domain —
+    see {{data-quality-standard}}. Owners are accountable for their domain's
+    scores; breaches raise an issue in the {{incident-log}}.
+
+    ### 6. Lifecycle & retention
+
+    | Stage | Control |
+    |---|---|
+    | Create / acquire | Lawful basis confirmed; classified; registered. |
+    | Store | Held in an approved system with controls matching classification. |
+    | Use | Within stated purpose; secondary use re-assessed. |
+    | Share | Agreement in place; recipient obligations flowed down. |
+    | Retain | Per the retention schedule — **[reference]**. |
+    | Dispose | Verifiable deletion; disposal recorded. |
+
+    ### 7. How this connects to AI
+
+    AI systems inherit the governance of the data they consume. Before a system
+    enters development, its data sources must be registered, classified, and
+    confirmed lawful for that purpose. See {{ai-governance-framework}} and
+    {{ai-development-standard}}.
+
+    ### 8. Compliance & exceptions
+
+    Exceptions are requested from the data owner, recorded with an expiry date,
+    and reported to the committee. Persistent exceptions indicate the rule is
+    wrong — fix the rule.
+
+    ### 9. Review
+
+    | Version | Date | Author | Approved by | Next review |
+    |---|---|---|---|---|
+    | 0.1 | [date] | [name] | [committee] | [date] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Collapse owner, steward, and custodian into one or two people, but keep
+        the domain list — knowing what you hold matters more than the role split.
+    - context: Regulated financial services
+      note: >-
+        Map domains to BCBS 239 risk data aggregation principles and align the
+        quality dimensions with existing regulatory reporting controls.
+    - context: Public sector
+      note: >-
+        Add a transparency and FOI dimension: openness by default, with
+        classification as the exception rather than the reverse.
+    - context: Data-mesh operating models
+      note: >-
+        Domain ownership maps naturally onto data products. Keep this framework
+        as the federated policy layer and let domains own their own quality SLOs.
+  related: [data-governance-policy, data-quality-standard, data-asset-register, ai-governance-framework]
+
+- id: ai-governance-framework
+  title: AI Governance Framework
+  section: frameworks
+  path: frameworks/ai-governance-framework.md
+  status: ready
+  purpose: >-
+    A single reference that defines how your organisation governs AI across its
+    lifecycle — who is accountable, what principles apply, how risk is tiered and
+    controlled, and how it connects to data governance and the EU AI Act. It is
+    the document you hand to a board, a regulator, or a new hire to explain "how
+    we do AI here".
+  when_to_use: >-
+    Adopt it once, then review at least annually and whenever regulation, your
+    risk appetite, or your AI footprint changes materially.
+  how_to_use: >-
+    Fill the bracketed placeholders, delete what does not apply, and ratify it
+    through your governance committee. Keep it short enough that people actually
+    read it — push detail down into the policies and standards it references.
+  body: |
+    ### 1. Purpose & scope
+
+    This framework sets out how **[Organisation]** governs the design,
+    procurement, development, deployment, and retirement of AI systems. It
+    applies to **all** AI systems — built, bought, or embedded — used in or on
+    behalf of the organisation, including general-purpose AI and AI features
+    inside third-party products.
+
+    ### 2. Principles
+
+    - **Accountability** — a named human is accountable for every AI system.
+    - **Lawfulness & fairness** — systems comply with applicable law and do not
+      produce unjustified discriminatory outcomes.
+    - **Transparency** — people are told when they interact with AI, and decisions
+      can be explained proportionate to their impact.
+    - **Human oversight** — meaningful human control exists over consequential
+      decisions.
+    - **Safety, security & robustness** — systems are tested, monitored, and
+      secured across their lifecycle.
+    - **Privacy & data governance** — data used by AI is governed, minimised, and
+      lawful (see {{data-governance-framework}}).
+    - **Proportionality** — controls scale with risk; low-risk innovation is not
+      over-burdened.
+
+    ### 3. Governance structure
+
+    | Body / role | Mandate |
+    |---|---|
+    | **Board / Audit & Risk Committee** | Sets risk appetite; receives assurance. |
+    | **AI / Data Governance Committee** | Owns this framework; approves high-risk use; resolves escalations. See {{committee-charter}}. |
+    | **AI accountable owner (per system)** | Accountable for a specific system's compliance and outcomes. |
+    | **Model / product teams** | Build and operate within standards. |
+    | **Second line (Risk / Compliance / Legal / DPO)** | Independent challenge and advice. |
+    | **Third line (Internal Audit)** | Independent assurance. |
+
+    Detailed responsibilities are in {{raci}} and {{roles-responsibilities}}.
+
+    ### 4. Risk tiering
+
+    Every AI system is classified before deployment. Tiers align with the EU AI
+    Act — see {{eu-ai-act-readiness-checklist}}.
+
+    | Tier | Definition | Governance response |
+    |---|---|---|
+    | **Prohibited** | Practices banned under Art. 5 | Do not build or deploy. Screen at intake. |
+    | **High-risk** | Annex I / III systems | Full controls: risk management, data governance, technical documentation, human oversight, conformity assessment, post-market monitoring. |
+    | **Limited** | Transparency-triggering (chatbots, synthetic media) | Disclosure and labelling controls. |
+    | **Minimal** | Everything else | Baseline standards; light-touch. |
+
+    Classification is a recorded decision with a date and an owner, held in the
+    {{ai-system-inventory}}. Re-classify on material change of purpose.
+
+    ### 5. Lifecycle controls
+
+    | Stage | Required before proceeding |
+    |---|---|
+    | **Ideation** | Screened against prohibited practices; risk tier assigned; entered in the inventory. |
+    | **Development** | Data sources lawful and registered; {{ai-risk-assessment}} started; evaluation plan agreed. |
+    | **Pre-deployment** | Assessment complete; {{model-card}} written; human oversight designed; accountable owner signs off. |
+    | **Operation** | Monitoring live; logs retained; incidents routed to {{incident-log}}. |
+    | **Retirement** | Decommissioned cleanly; records retained per schedule; inventory updated. |
+
+    ### 6. Policies & standards under this framework
+
+    - {{acceptable-ai-use-policy}}
+    - {{ai-development-standard}}
+    - {{third-party-ai-risk-policy}}
+    - {{ai-risk-assessment}} and {{model-card}}
+
+    ### 7. Reporting & assurance
+
+    The committee reports to the board at least **[quarterly]** using
+    {{board-pack}} and tracks health via {{kpi-dashboard}}. Internal Audit
+    provides independent assurance on a risk-based cycle.
+
+    ### 8. Review
+
+    Owner: **[role]**. Cadence: **[annually / on material change]**.
+
+    | Version | Date | Author | Approved by |
+    |---|---|---|---|
+    | 0.1 | [date] | [name] | [committee] |
+  adaptation:
+    - context: Regulated financial services
+      note: >-
+        Map this framework to your model risk management standard (SR 11-7 style
+        expectations) and to operational resilience obligations. Make the
+        second/third-line split explicit and align tiering with model materiality.
+    - context: Small organisations
+      note: >-
+        Collapse the committee and accountable-owner roles, but never remove the
+        "named accountable human" principle — it is the one control that cannot
+        be delegated to a process.
+    - context: Non-EU
+      note: >-
+        Keep the risk-tiering logic and swap the EU AI Act references for your
+        local regime (NIST AI RMF, ISO/IEC 42001). The structure holds; only the
+        obligation names change.
+    - context: Heavy GPAI / vendor use
+      note: >-
+        If you mostly buy rather than build, thin out section 5 and expand
+        {{third-party-ai-risk-policy}} — your controls are contractual and
+        assurance-based rather than engineering ones.
+  related: [data-governance-framework, acceptable-ai-use-policy, ai-development-standard, ai-system-inventory]
+
+- id: governance-charter
+  title: Governance Charter
+  section: frameworks
+  path: frameworks/governance-charter.md
+  status: draft
+  purpose: >-
+    A short, board-approved mandate that establishes the governance programme:
+    why it exists, what authority it has, what it covers, and how success is
+    measured. It is what you point to when someone asks "who says so?".
+  when_to_use: >-
+    Write it at the start of the programme and have it formally approved.
+    Refresh when scope, sponsorship, or mandate changes.
+  how_to_use: >-
+    Keep it to two pages. The charter grants authority; it does not describe
+    process. If you find yourself writing procedure, that belongs in the
+    frameworks or the committee terms of reference instead.
+  body: |
+    ### 1. Mandate
+
+    The **[Data & AI Governance Programme]** is established by **[the Board /
+    Executive Committee]** on **[date]** to ensure that **[Organisation]**
+    manages its data and AI assets lawfully, safely, and in line with its stated
+    risk appetite.
+
+    ### 2. Why this exists
+
+    **[Two or three sentences: the specific driver. Regulatory exposure, a board
+    concern, an incident, an AI adoption push. Be concrete — a charter that
+    could belong to any organisation will be ignored by this one.]**
+
+    ### 3. Scope
+
+    **In scope:** all data held or processed by the organisation; all AI systems
+    built, bought, or embedded; all business units and geographies **[amend]**.
+
+    **Out of scope:** **[be explicit — e.g. security operations, covered by the
+    existing security programme]**.
+
+    ### 4. Authority
+
+    The programme, through its committee, is authorised to:
+
+    - Set mandatory standards for data and AI within scope.
+    - Require registration and classification of any AI system.
+    - **Halt or require remediation** of a system presenting unacceptable risk.
+    - Require evidence of compliance from any team or vendor.
+    - Escalate unresolved matters directly to **[the Board / Audit & Risk]**.
+
+    !!! note "The halt right matters"
+        A programme that cannot stop anything is advisory. If the authority to
+        halt is not granted here, expect controls to be optional in practice.
+
+    ### 5. Sponsorship & accountability
+
+    | Role | Holder | Accountability |
+    |---|---|---|
+    | Executive Sponsor | [name] | Board-level accountability; resourcing. |
+    | Programme Owner | [name] | Delivery of the programme. |
+    | Committee Chair | [name] | Decision-making forum. |
+
+    ### 6. Objectives & measures
+
+    | Objective | Measure | Target | By |
+    |---|---|---|---|
+    | Complete AI inventory | % systems registered | 100% | [date] |
+    | Risk classification | % classified | 100% | [date] |
+    | Policy adoption | % staff attested | [90%] | [date] |
+    | Board visibility | Reports delivered | [4]/year | Ongoing |
+
+    ### 7. Resourcing
+
+    **[Named roles and FTE commitment. A charter without resourcing is a
+    statement of intent, not a mandate.]**
+
+    ### 8. Review & approval
+
+    | Version | Date | Approved by |
+    |---|---|---|
+    | 1.0 | [date] | [board / exco] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        One page is enough. The essential clauses are authority (section 4) and
+        named sponsorship (section 5) — the rest can be inherited from the
+        frameworks.
+    - context: Group structures
+      note: >-
+        State clearly whether the charter binds subsidiaries directly or requires
+        local adoption. Ambiguity here surfaces during the first cross-entity
+        incident, at the worst possible moment.
+    - context: Public sector
+      note: >-
+        Reference the statutory basis for the mandate and any duties owed to
+        citizens; add a public transparency objective to section 6.
+  related: [committee-charter, roles-responsibilities, ai-governance-framework, board-pack]
+
+- id: maturity-assessment
+  title: Maturity Assessment
+  section: frameworks
+  path: frameworks/maturity-assessment.md
+  status: ready
+  purpose: >-
+    A structured baseline of how capable your governance actually is today,
+    across the dimensions that matter, so you can prioritise honestly and show
+    movement over time.
+  when_to_use: >-
+    At programme start, then every six to twelve months. Also useful immediately
+    after an incident, when appetite for investment is briefly high.
+  how_to_use: >-
+    Score each dimension 0–4 against the descriptors, evidencing every score with
+    something you could show an auditor. Score what is true, not what is
+    intended — an optimistic baseline destroys the credibility of every later
+    improvement you report.
+  body: |
+    ### Maturity levels
+
+    | Level | Name | Description |
+    |---|---|---|
+    | **0** | Absent | Nothing in place. |
+    | **1** | Initial | Ad hoc, individual effort, undocumented. |
+    | **2** | Developing | Documented but inconsistently applied. |
+    | **3** | Defined | Standardised, applied consistently, evidenced. |
+    | **4** | Managed | Measured, reviewed, and improved on evidence. |
+
+    ### Assessment
+
+    Score each dimension. Record evidence — a score without evidence is an
+    opinion.
+
+    | # | Dimension | Score (0–4) | Evidence | Target | Owner |
+    |---|---|---|---|---|---|
+    | 1 | Governance mandate & sponsorship | | | | |
+    | 2 | Committee & decision rights | | | | |
+    | 3 | Roles & accountability (RACI) | | | | |
+    | 4 | Policy & standards coverage | | | | |
+    | 5 | Data ownership & domains | | | | |
+    | 6 | Data quality management | | | | |
+    | 7 | Data classification & handling | | | | |
+    | 8 | AI inventory & classification | | | | |
+    | 9 | AI risk assessment process | | | | |
+    | 10 | Model documentation | | | | |
+    | 11 | Human oversight design | | | | |
+    | 12 | Third-party / vendor AI risk | | | | |
+    | 13 | Incident management | | | | |
+    | 14 | Control library & assurance | | | | |
+    | 15 | Board reporting | | | | |
+    | 16 | AI literacy & training | | | | |
+    | 17 | Regulatory readiness (EU AI Act) | | | | |
+
+    ### Interpreting the result
+
+    | Average | Posture | What to do next |
+    |---|---|---|
+    | **0.0–1.0** | Early | Establish mandate, inventory, and prohibited-practice screening before anything else. |
+    | **1.1–2.0** | Developing | Close policy and documentation gaps; stand up the committee properly. |
+    | **2.1–3.0** | Established | Shift from writing documents to evidencing that controls operate. |
+    | **3.1–4.0** | Advanced | Focus on measurement, independent assurance, and continuous improvement. |
+
+    ### Heat map
+
+    Plot dimension against score to show the board where the thin ice is. The
+    pattern usually matters more than the average: a 3.5 average hiding a 0 on
+    inventory is worse than a flat 2.
+
+    ### Re-assessment
+
+    | Date | Average | Movement | Notes |
+    |---|---|---|---|
+    | [date] | | Baseline | |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Drop dimensions 14 and 15 if you have no formal assurance function or
+        board, and score the remaining 15. Do not score dimensions you have no
+        realistic path to improving.
+    - context: Regulated sectors
+      note: >-
+        Add dimensions for model validation independence and regulatory reporting
+        accuracy, and align the level descriptors with your supervisor's own
+        maturity language where one exists.
+    - context: Using this with the assessment tool
+      note: >-
+        The role-based assessment scores obligation coverage; this scores
+        organisational capability. They answer different questions — run both,
+        and expect capability to lag coverage.
+  related: [governance-charter, control-library, kpi-dashboard, board-pack]
+
+# ===========================================================================
+# POLICIES & STANDARDS
+# ===========================================================================
+
+- id: data-governance-policy
+  title: Data Governance Policy
+  section: policies
+  path: policies/data-governance-policy.md
+  status: ready
+  purpose: >-
+    The mandatory rules for handling data. Where the framework explains how
+    governance works, this policy states what people must and must not do, in
+    language you can hold someone to.
+  when_to_use: >-
+    Adopt alongside the data governance framework. Review annually, and reissue
+    with attestation whenever the obligations change materially.
+  how_to_use: >-
+    Write every statement so a breach is observable — "must be registered before
+    first use" can be checked, "should be managed appropriately" cannot. Number
+    the statements so audit findings and exceptions can cite them precisely.
+  body: |
+    ### 1. Purpose
+
+    This policy sets the mandatory requirements for the management of data at
+    **[Organisation]**. It gives effect to {{data-governance-framework}}.
+
+    ### 2. Scope
+
+    Applies to all staff, contractors, and third parties processing data on
+    behalf of the organisation, in all systems and locations.
+
+    ### 3. Policy statements
+
+    **Ownership**
+
+    1. Every data domain **must** have a named Data Owner recorded in the
+       {{data-asset-register}}.
+    2. Data assets of material significance **must** be registered before first
+       production use.
+
+    **Classification & handling**
+
+    3. All data **must** be classified per {{data-classification-policy}}.
+    4. Data **must** be handled in line with the controls for its classification,
+       including when used as input to any AI tool.
+    5. Restricted or Confidential data **must not** be entered into any AI
+       service that has not been approved for that classification.
+
+    **Lawfulness**
+
+    6. A lawful basis **must** be identified and recorded before personal data is
+       processed, and recorded in the {{processing-dpia-log}}.
+    7. Secondary use of personal data **must** be assessed for compatibility
+       before it proceeds.
+
+    **Quality**
+
+    8. Data Owners **must** define quality thresholds for their domain per
+       {{data-quality-standard}}.
+    9. Quality breaches **must** be logged and remediated within the agreed
+       timeframe.
+
+    **Access**
+
+    10. Access **must** be granted on least privilege and reviewed at least
+        **[annually]**.
+    11. Access to Restricted data **must** be approved by the Data Owner.
+
+    **Retention & disposal**
+
+    12. Data **must not** be retained beyond the period in the retention
+        schedule.
+    13. Disposal **must** be verifiable and recorded.
+
+    ### 4. Roles & responsibilities
+
+    See {{roles-responsibilities}}. In summary: Owners are accountable, Stewards
+    operate, Custodians enforce technically, and every user complies.
+
+    ### 5. Exceptions
+
+    Requested from the Data Owner, approved by **[the committee]**, recorded with
+    a **mandatory expiry date**, and reported at each committee meeting. An
+    exception without an expiry is a silent policy change.
+
+    ### 6. Compliance
+
+    Breaches are handled under **[the disciplinary / supplier management
+    process]**. Material breaches are reported to **[the committee]** and logged
+    in the {{incident-log}}.
+
+    ### 7. Review
+
+    | Version | Date | Owner | Approved by | Next review |
+    |---|---|---|---|---|
+    | 0.1 | [date] | [role] | [committee] | [date] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Statements 1–7 and 12 are the irreducible core. Add the rest as you grow
+        rather than publishing rules you cannot enforce.
+    - context: Regulated sectors
+      note: >-
+        Cross-reference each statement to the supervisory requirement it
+        satisfies, so audit can trace obligation to control in one hop.
+    - context: Heavy SaaS estates
+      note: >-
+        Statement 5 is the one that gets breached most. Pair it with an approved
+        tool list people can actually find, or it becomes shelf-ware.
+  related: [data-governance-framework, data-classification-policy, data-quality-standard, processing-dpia-log]
+
+- id: data-quality-standard
+  title: Data Quality Standard
+  section: policies
+  path: policies/data-quality-standard.md
+  status: ready
+  purpose: >-
+    Defines what "good enough" data means in measurable terms — the dimensions,
+    how they are measured, the thresholds that apply, and who acts when a
+    threshold is breached.
+  when_to_use: >-
+    Alongside the data governance policy, and specifically before any dataset is
+    used to train or evaluate a model. Review thresholds annually.
+  how_to_use: >-
+    Do not attempt all six dimensions across the whole estate at once. Pick your
+    two or three highest-value domains, set thresholds, and measure those until
+    the process is real — then extend. A standard measured nowhere is worse than
+    no standard, because it implies assurance you do not have.
+  body: |
+    ### 1. Quality dimensions
+
+    | Dimension | Question it answers | Example measure |
+    |---|---|---|
+    | **Completeness** | Is the expected data present? | % of mandatory fields populated |
+    | **Accuracy** | Does it reflect the real world? | % matching a verified source |
+    | **Timeliness** | Is it current enough to use? | Age at point of use vs. requirement |
+    | **Consistency** | Does it agree across systems? | % of records matching across systems |
+    | **Validity** | Does it conform to its rules? | % passing format / range rules |
+    | **Uniqueness** | Are there duplicates? | % duplicate records |
+
+    ### 2. Thresholds
+
+    Thresholds are set per domain by the Data Owner, based on use. Data feeding
+    a regulatory return or a high-risk AI system needs tighter thresholds than
+    data feeding an internal dashboard.
+
+    | Domain | Dimension | Threshold | Measure | Frequency | Owner |
+    |---|---|---|---|---|---|
+    | Customer | Completeness | ≥ 98% | [rule] | Daily | [role] |
+    | Customer | Uniqueness | ≥ 99% | [rule] | Weekly | [role] |
+    | [domain] | [dimension] | | | | |
+
+    ### 3. Quality for AI training data
+
+    Additional requirements where data trains, validates, or tests a model — this
+    is the Art. 10 obligation in practice:
+
+    | Requirement | What it means | Evidence |
+    |---|---|---|
+    | **Relevance** | The data suits the stated purpose. | Documented rationale in the {{model-card}} |
+    | **Representativeness** | It reflects the population the system will act on. | Distribution analysis vs. target population |
+    | **Bias examination** | Known skews are identified and addressed. | Bias assessment; mitigation record |
+    | **Provenance** | Source and licence are known and lawful. | Entry in {{data-asset-register}} |
+    | **Split integrity** | Train/validation/test do not leak into each other. | Split methodology documented |
+
+    !!! warning "Representativeness is not a percentage"
+        A dataset can be 99% complete and still unrepresentative of the people
+        the system will affect. Completeness measures the data you collected;
+        representativeness asks who is missing from it entirely.
+
+    ### 4. Measurement & reporting
+
+    Scores are produced **[frequency]**, published to **[location]**, and
+    summarised in {{kpi-dashboard}}. Trend matters more than absolute level.
+
+    ### 5. Breach handling
+
+    | Severity | Definition | Response | Timeframe |
+    |---|---|---|---|
+    | Critical | Regulatory or high-risk AI impact | Escalate to committee; consider suspending use | [24h] |
+    | Major | Material business impact | Owner-led remediation plan | [5 days] |
+    | Minor | Limited impact | Backlog for next cycle | [30 days] |
+
+    Breaches are recorded in the {{incident-log}}.
+
+    ### 6. Review
+
+    | Version | Date | Owner | Approved by |
+    |---|---|---|---|
+    | 0.1 | [date] | [role] | [committee] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Measure completeness and validity only, on your two most important
+        domains. That covers most real-world failures at a fraction of the cost.
+    - context: Regulated financial services
+      note: >-
+        Align with BCBS 239 and make lineage evidence explicit — supervisors ask
+        to trace a reported figure back to source.
+    - context: ML-heavy organisations
+      note: >-
+        Section 3 is the section that matters. Automate representativeness and
+        drift checks into the training pipeline so the evidence is a by-product
+        rather than a project.
+  related: [data-governance-policy, data-asset-register, model-card, kpi-dashboard]
+
+- id: data-classification-policy
+  title: Data Classification & Handling Policy
+  nav: Data Classification & Handling
+  section: policies
+  path: policies/data-classification-policy.md
+  status: ready
+  purpose: >-
+    Defines the sensitivity tiers your data falls into and the handling rules for
+    each — including the rules that decide what may be pasted into an AI tool.
+  when_to_use: >-
+    Early. Classification underpins access control, AI input rules, and most
+    security decisions. Review annually.
+  how_to_use: >-
+    Use four tiers at most; every tier beyond that is one people will not
+    remember. The AI handling row in section 2 is the part staff will actually
+    look up — make sure it names specific approved tools, not a category.
+  body: |
+    ### 1. Classification tiers
+
+    | Tier | Definition | Examples | Impact if disclosed |
+    |---|---|---|---|
+    | **Public** | Approved for public release. | Published marketing, annual report | None |
+    | **Internal** | Routine business data. | Internal comms, non-sensitive analytics | Minor |
+    | **Confidential** | Sensitive business or personal data. | Customer records, employee data, contracts | Significant |
+    | **Restricted** | Most sensitive; severe impact. | Special category data, credentials, M&A, security detail | Severe |
+
+    ### 2. Handling rules
+
+    | Control | Public | Internal | Confidential | Restricted |
+    |---|---|---|---|---|
+    | Storage | Any approved | Approved systems | Approved + access control | Approved + encryption + logging |
+    | Access | Open | All staff | Role-based, owner-approved | Named individuals, owner-approved |
+    | Sharing externally | Free | NDA | Contract + DPA | Owner + Legal approval |
+    | Email | Permitted | Permitted | Encrypted | Not permitted — secure transfer only |
+    | **AI tool input** | **Permitted** | **Approved tools only** | **Approved enterprise tools with no-training guarantee** | **Prohibited unless explicitly approved for that system** |
+    | Retention | Per schedule | Per schedule | Per schedule + review | Per schedule + documented review |
+    | Disposal | Standard | Standard | Verified | Verified + certificate |
+
+    !!! danger "The AI row is the one that gets breached"
+        Staff paste customer data into public chatbots because it is convenient
+        and the rule was not to hand. Publish this row separately, name the
+        approved tools, and put it where people work.
+
+    ### 3. Applying a classification
+
+    1. The Data Owner assigns the classification at creation or acquisition.
+    2. Where a dataset holds mixed tiers, **the highest tier applies to the whole
+       set** unless it is separated.
+    3. Classification is recorded in the {{data-asset-register}}.
+    4. Derived data — including model outputs and embeddings — inherits the
+       classification of its most sensitive input unless a documented assessment
+       lowers it.
+
+    !!! note "Derived data inherits"
+        Embeddings and model outputs derived from Confidential data are
+        Confidential. This is routinely missed, and it is how sensitive data ends
+        up in an unprotected vector store.
+
+    ### 4. Special category & regulated data
+
+    Special category personal data, criminal offence data, children's data, and
+    payment card data carry additional requirements — see
+    {{processing-dpia-log}}. Default these to **Restricted** unless assessed
+    otherwise.
+
+    ### 5. Labelling
+
+    Where the platform supports it, apply the label in the tool. Where it does
+    not, record classification in the register. **[Specify your labelling
+    mechanism.]**
+
+    ### 6. Review
+
+    | Version | Date | Owner | Approved by |
+    |---|---|---|---|
+    | 0.1 | [date] | [role] | [committee] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Three tiers — Public, Internal, Confidential — is usually enough. Keep
+        the AI input row regardless; it is the highest-value line in the policy.
+    - context: Existing security classification
+      note: >-
+        Do not create a competing scheme. Map onto what security already uses and
+        add only the AI handling row.
+    - context: Public sector
+      note: >-
+        Align to your national scheme (e.g. OFFICIAL / SECRET) rather than these
+        labels, and add the FOI disclosure consideration to each tier.
+  related: [data-governance-policy, acceptable-ai-use-policy, data-asset-register, processing-dpia-log]
+
+- id: acceptable-ai-use-policy
+  title: Acceptable AI Use Policy
+  section: policies
+  path: policies/acceptable-ai-use-policy.md
+  status: ready
+  purpose: >-
+    The staff-facing rules for using AI at work: what is encouraged, what needs
+    approval, and what is never allowed. This is the most-read document in the
+    kit, and usually the one that prevents the most damage.
+  when_to_use: >-
+    As early as possible — staff are already using AI tools whether or not you
+    have a policy. Review at least twice a year while the tool landscape moves.
+  how_to_use: >-
+    Write it for the whole workforce, not for specialists: one page, plain
+    language, specific tool names. Pair it with a genuinely usable approved-tool
+    list. A policy that only says "seek approval" without saying from whom, and
+    how long it takes, produces shadow AI rather than compliance.
+  body: |
+    ### 1. Purpose
+
+    This policy sets out how people at **[Organisation]** may and may not use AI
+    tools. It applies to everyone — employees, contractors, and anyone acting on
+    our behalf — and to all AI tools, whether we provide them or not.
+
+    ### 2. The short version
+
+    !!! tip "If you read nothing else"
+        **You are accountable for anything you produce with AI, exactly as if you
+        had written it yourself.** Check it before it goes out. Never put
+        Confidential or Restricted information into a tool that has not been
+        approved for it. Tell people when they are dealing with AI output that
+        affects them.
+
+    ### 3. Approved tools
+
+    | Tool | Approved for | Maximum data classification | Owner |
+    |---|---|---|---|
+    | [Tool A] | [General drafting, summarising] | Internal | [role] |
+    | [Tool B] | [Coding assistance] | Confidential | [role] |
+    | [Tool C] | [Customer-facing] | [Restricted — with controls] | [role] |
+
+    Tools not on this list are **not approved**. To request one, contact
+    **[route]** — expected turnaround **[5 working days]**.
+
+    ### 4. Always prohibited
+
+    You **must not** use AI to:
+
+    1. Perform any practice prohibited by the EU AI Act — social scoring,
+       manipulative techniques, untargeted scraping of facial images, emotion
+       inference in the workplace, or unlawful biometric categorisation.
+    2. Make a final decision that materially affects a person — hiring, firing,
+       promotion, credit, pricing, or access to a service — **without meaningful
+       human review**.
+    3. Enter Restricted data into any tool not explicitly approved for it.
+    4. Generate content that impersonates a real person or organisation.
+    5. Circumvent a control, or produce material you know to be misleading.
+
+    ### 5. Requires approval before you proceed
+
+    | Situation | Approve with |
+    |---|---|
+    | New AI tool, or new use of an existing one | [Governance / IT] |
+    | AI affecting customers or the public | [Committee] |
+    | AI in HR, recruitment, or performance decisions | [HR + Legal] — Annex III high-risk |
+    | AI processing special category personal data | [DPO] |
+    | Building or fine-tuning a model | [Governance] — see {{ai-development-standard}} |
+
+    ### 6. Your responsibilities when using AI
+
+    - **Verify output.** AI is confidently wrong. You own what you send.
+    - **Protect data.** Check the classification before you paste — see
+      {{data-classification-policy}}.
+    - **Be transparent.** Tell people when they are interacting with AI, and
+      disclose AI-generated content where it could mislead.
+    - **Watch for bias.** If output looks skewed against a group, stop and report
+      it.
+    - **Report problems** to **[route]** — they go in the {{incident-log}}.
+
+    ### 7. What we encourage
+
+    This policy exists to make safe AI use easy, not to discourage it. Drafting,
+    summarising, research, code assistance, and analysis on Internal data using
+    approved tools need no special permission. **If in doubt, ask — asking is
+    never the wrong answer.**
+
+    ### 8. Breaches
+
+    Handled under **[the disciplinary process]**. Self-reported mistakes are
+    treated far more leniently than concealed ones — we would rather know.
+
+    ### 9. Review
+
+    | Version | Date | Owner | Approved by |
+    |---|---|---|---|
+    | 0.1 | [date] | [role] | [committee] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Sections 2, 3, and 4 alone make a usable one-page policy. Publish that
+        this week rather than a complete one next quarter.
+    - context: Regulated sectors
+      note: >-
+        Add record-keeping obligations for AI-assisted advice or communications,
+        and align section 4 with your existing conduct rules.
+    - context: Engineering-heavy organisations
+      note: >-
+        Add explicit rules for code assistants: licence contamination from
+        suggested code, secrets in prompts, and review requirements for
+        AI-generated code paths.
+    - context: Unions / works councils
+      note: >-
+        Where AI touches workforce monitoring or employment decisions,
+        consultation may be required before you publish. Involve them early
+        rather than presenting a finished policy.
+  related: [ai-governance-framework, data-classification-policy, ai-development-standard, incident-log]
+
+- id: ai-development-standard
+  title: AI Development & Deployment Standard
+  section: policies
+  path: policies/ai-development-standard.md
+  status: ready
+  purpose: >-
+    The engineering-facing requirements for building, testing, deploying, and
+    operating AI systems — the technical controls that make the framework's
+    principles real inside a delivery pipeline.
+  when_to_use: >-
+    Applies to every system you build or materially fine-tune. Apply the gates
+    proportionately: full rigour for high-risk, light touch for minimal.
+  how_to_use: >-
+    Implement the gates as pipeline checks rather than documents wherever you
+    can. A requirement that a human must remember to check will be skipped under
+    deadline pressure; one that fails a build will not.
+  body: |
+    ### 1. Scope
+
+    Applies to AI systems built, fine-tuned, or materially configured by
+    **[Organisation]**. Third-party systems used as-is fall under
+    {{third-party-ai-risk-policy}}.
+
+    ### 2. Lifecycle gates
+
+    | Gate | Requirement | Evidence | Blocking? |
+    |---|---|---|---|
+    | **G1 Intake** | Prohibited-practice screen; risk tier assigned; registered. | {{ai-system-inventory}} entry | Yes — all tiers |
+    | **G2 Data** | Sources registered, lawful, classified; quality assessed. | {{data-asset-register}}; quality report | Yes — all tiers |
+    | **G3 Design** | Risk assessment started; oversight approach defined. | {{ai-risk-assessment}} | High-risk |
+    | **G4 Build** | Evaluation plan; bias testing; version control of data and model. | Test results | High-risk |
+    | **G5 Pre-deploy** | Documentation complete; oversight operable; owner sign-off. | {{model-card}}; sign-off | Yes — all tiers |
+    | **G6 Operate** | Monitoring live; logging retained; incident route defined. | Monitoring config | High-risk |
+    | **G7 Change** | Material change re-triggers G3–G5. | Change record | High-risk |
+    | **G8 Retire** | Decommissioned; records retained; inventory updated. | Retirement record | Yes — all tiers |
+
+    ### 3. Data requirements
+
+    - Training, validation, and test data **must** be documented as to source,
+      licence, and lawful basis.
+    - Splits **must** be documented and leakage-checked.
+    - Representativeness **must** be assessed against the affected population.
+    - Data versions **must** be recorded so results can be reproduced.
+
+    ### 4. Evaluation
+
+    | Requirement | Minimal | High-risk |
+    |---|---|---|
+    | Accuracy metrics declared | Recommended | **Required** |
+    | Performance across subgroups | Recommended | **Required** |
+    | Robustness / adversarial testing | Optional | **Required** |
+    | Reproducible evaluation | Recommended | **Required** |
+    | Independent review of results | Optional | **Required** |
+
+    Declare metrics **before** running the evaluation. Choosing the metric after
+    seeing the results is how systems get approved on the one number that
+    happened to look acceptable.
+
+    ### 5. Logging
+
+    High-risk systems **must** automatically log, at minimum: timestamp, system
+    and model version, input reference, output, confidence where available, and
+    any human override. Retain per **[retention period]** — long enough to
+    reconstruct a decision if it is challenged.
+
+    !!! note "Application logs are usually not enough"
+        Standard telemetry records that a request happened. Art. 12 traceability
+        needs what the model was asked and what it answered. These are rarely the
+        same log.
+
+    ### 6. Human oversight implementation
+
+    - The interface **must** show the reviewer what they need in order to judge
+      the output, including uncertainty.
+    - Override **must** be possible without engineering involvement.
+    - Overrides **must** be logged and reviewed for pattern — a system that is
+      overridden constantly is not working.
+    - Reviewer workload **must** allow genuine consideration. Record the assumed
+      review time per decision.
+
+    ### 7. Security
+
+    Address AI-specific threats alongside conventional application security:
+    prompt injection, training-data poisoning, model extraction, membership
+    inference, and unintended disclosure through outputs. See
+    {{control-library}}.
+
+    ### 8. Deployment & rollback
+
+    Staged rollout for high-risk systems, with a **tested** rollback path and a
+    defined kill switch. Record who can invoke it — see {{decision-rights}}.
+
+    ### 9. Review
+
+    | Version | Date | Owner | Approved by |
+    |---|---|---|---|
+    | 0.1 | [date] | [role] | [committee] |
+  adaptation:
+    - context: Small teams
+      note: >-
+        Gates G1, G2, G5, and G8 are the minimum viable set: know what you have,
+        know your data is lawful, check before launch, clean up after.
+    - context: MLOps-mature organisations
+      note: >-
+        Map each gate to an existing pipeline stage and enforce it in CI. The
+        goal is that evidence is produced as a by-product rather than assembled
+        before an audit.
+    - context: Regulated financial services
+      note: >-
+        Add independent model validation before G5 and align documentation with
+        your model risk management standard.
+    - context: Mostly buying, not building
+      note: >-
+        This standard will be largely out of scope. Invest instead in
+        {{third-party-ai-risk-policy}} and contractual evidence rights.
+  related: [ai-governance-framework, model-card, ai-risk-assessment, control-library]
+
+- id: third-party-ai-risk-policy
+  title: Third-Party AI Risk Policy
+  section: policies
+  path: policies/third-party-ai-risk-policy.md
+  status: ready
+  purpose: >-
+    How you assess, contract for, and monitor AI you did not build — including AI
+    features that appear inside software you already licence. For most
+    organisations this is the majority of their AI exposure.
+  when_to_use: >-
+    At procurement, at renewal, and whenever a vendor announces new AI
+    functionality in an existing product.
+  how_to_use: >-
+    The hard part is not the assessment; it is finding out that a vendor switched
+    AI on. Build the trigger into contract renewal and vendor release-note
+    reviews, and accept that you will discover some AI features after the fact.
+  body: |
+    ### 1. Scope
+
+    Applies to any AI capability we consume rather than build: standalone AI
+    products, AI features inside existing SaaS, APIs and foundation models, and
+    outsourced services using AI on our behalf.
+
+    !!! warning "The invisible majority"
+        Most organisations' largest AI exposure is AI switched on inside software
+        they already bought. Your CRM, HR system, and support desk have all
+        shipped AI features. Assume you have more than you know.
+
+    ### 2. Vendor risk tiering
+
+    | Tier | Criteria | Assessment depth |
+    |---|---|---|
+    | **Critical** | High-risk use case, or personal / Restricted data, or customer-facing decisions | Full assessment + contractual controls + annual review |
+    | **Significant** | Confidential data, or a material business process | Standard assessment + contract terms |
+    | **Limited** | Internal data, non-critical | Lightweight screen |
+
+    ### 3. Assessment questions
+
+    Ask before purchase, and record the answers.
+
+    **The system**
+
+    1. What does it do, and what decisions does it inform or make?
+    2. Are we the provider or the deployer under the AI Act? (Rebranding or
+       fine-tuning can make you the provider.)
+    3. What is its risk classification?
+
+    **Data**
+
+    4. What data do we send, and at what classification?
+    5. **Is our data used to train their models?** Can that be disabled
+       contractually, not merely by a setting?
+    6. Where is data processed and stored, and who else can access it?
+    7. What is retained after termination?
+
+    **Model & assurance**
+
+    8. What model underlies it, and are we told when it changes?
+    9. What documentation exists — model cards, evaluations, bias testing?
+    10. What accuracy and robustness evidence can they provide?
+    11. Do they hold relevant certifications (ISO/IEC 42001, SOC 2)?
+
+    **Compliance**
+
+    12. Can they evidence AI Act compliance for their role?
+    13. Will they support our obligations — documentation, incident notification,
+        audit?
+    14. What is their incident notification commitment, and in what timeframe?
+
+    ### 4. Contract clauses to require
+
+    | Clause | Why |
+    |---|---|
+    | AI Act obligation flow-down | You remain accountable for what you deploy. |
+    | No training on our data (or explicit consent) | Prevents your confidential data improving a shared model. |
+    | Notification of material model change | A silent model swap can change system behaviour overnight. |
+    | Documentation rights | You cannot evidence what you cannot obtain. |
+    | Audit or third-party assurance rights | Trust needs verification. |
+    | Incident notification within **[24–72h]** | Your own reporting clock may already be running. |
+    | Data location and sub-processor control | Transfer and access obligations. |
+    | Exit: data return and deletion | Avoids hostage data at renewal. |
+
+    ### 5. Ongoing monitoring
+
+    | Activity | Frequency |
+    |---|---|
+    | Reassess Critical vendors | Annually |
+    | Review vendor release notes for new AI features | Quarterly |
+    | Confirm certifications still current | Annually |
+    | Review incidents involving the vendor | Each occurrence |
+
+    ### 6. Recording
+
+    Every third-party AI system is entered in the {{ai-system-inventory}}, marked
+    as third-party, with vendor, tier, assessment date, and review date.
+
+    ### 7. Review
+
+    | Version | Date | Owner | Approved by |
+    |---|---|---|---|
+    | 0.1 | [date] | [role] | [committee] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        You will not renegotiate the contracts of large vendors. Focus on
+        questions 4–7 (data handling), choose products with acceptable defaults,
+        and document the residual risk you are accepting.
+    - context: Regulated sectors
+      note: >-
+        Align with your existing outsourcing and operational resilience regime —
+        AI vendors supporting important business services likely fall inside it
+        already.
+    - context: Public sector
+      note: >-
+        Fold these questions into your standard procurement framework so the
+        assessment happens inside a process staff already follow.
+  related: [ai-system-inventory, ai-governance-framework, control-library, acceptable-ai-use-policy]
+
+# ===========================================================================
+# OPERATING MODEL
+# ===========================================================================
+
+- id: raci
+  title: RACI Matrix
+  section: operating-model
+  path: operating-model/raci.md
+  status: ready
+  purpose: >-
+    Removes ambiguity about who does what. For every significant governance
+    activity it names exactly one accountable party, so decisions have an owner
+    and gaps become visible before they become incidents.
+  when_to_use: >-
+    Agree it when you stand up the operating model, and revisit whenever roles
+    change or an escalation reveals that nobody owned something.
+  how_to_use: >-
+    Fill it in a room with the actual people, not in a document sent round for
+    comment — the value is in the argument about who is accountable. Enforce one
+    A per row. If two functions both claim accountability, you have found a
+    problem worth resolving now rather than during an incident.
+  body: |
+    ### Legend
+
+    | Letter | Meaning |
+    |---|---|
+    | **R** | Responsible — does the work |
+    | **A** | Accountable — answerable for the outcome (**exactly one per row**) |
+    | **C** | Consulted — input sought before the decision |
+    | **I** | Informed — told after the decision |
+
+    ### Matrix
+
+    Columns are illustrative roles. Replace with your own.
+
+    | Activity | Board | Committee | Gov Lead | Data Owner | AI Owner | ML Team | Legal/DPO | Security | Audit |
+    |---|---|---|---|---|---|---|---|---|---|
+    | **Strategy & mandate** | | | | | | | | | |
+    | Approve governance charter | **A** | R | R | C | C | I | C | C | I |
+    | Set risk appetite | **A** | R | C | C | C | I | C | C | I |
+    | Approve frameworks & policies | I | **A** | R | C | C | C | C | C | I |
+    | **Inventory & classification** | | | | | | | | | |
+    | Maintain AI inventory | I | I | **A** | C | R | R | I | C | I |
+    | Classify AI system risk tier | I | C | **A** | C | R | C | C | C | I |
+    | Maintain data asset register | I | I | **A** | R | I | C | C | C | I |
+    | **Risk** | | | | | | | | | |
+    | Screen for prohibited practices | I | C | **A** | I | R | R | C | I | I |
+    | Complete AI risk assessment | I | C | C | C | **A** | R | C | C | I |
+    | Accept residual risk (high-risk) | I | **A** | R | C | C | I | C | C | I |
+    | Maintain risk register | I | C | **A** | R | R | C | C | C | I |
+    | **Build & deploy** | | | | | | | | | |
+    | Approve data for training | I | I | C | **A** | C | R | C | C | I |
+    | Produce model documentation | I | I | C | I | **A** | R | C | I | I |
+    | Approve deployment (high-risk) | I | **A** | R | C | R | C | C | C | I |
+    | Design human oversight | I | C | C | I | **A** | R | C | I | I |
+    | **Third party** | | | | | | | | | |
+    | Assess vendor AI risk | I | I | C | C | C | C | C | **A** | I |
+    | Negotiate AI contract terms | I | I | C | C | C | I | **A** | R | I |
+    | **Operate** | | | | | | | | | |
+    | Monitor performance & drift | I | I | C | I | **A** | R | I | C | I |
+    | Manage AI incidents | I | C | R | C | R | R | C | **A** | I |
+    | Report serious incident to authority | I | C | R | I | C | I | **A** | C | I |
+    | **Assurance** | | | | | | | | | |
+    | Report to board | **A** | R | R | I | I | I | C | C | C |
+    | Independent assurance | I | C | I | I | I | I | I | I | **A** |
+
+    ### Validation
+
+    Before you sign it off, check:
+
+    - [ ] Every row has **exactly one A**. Two means nobody.
+    - [ ] Nobody is A on so many rows that it is not credible.
+    - [ ] Every A has the authority and budget to actually deliver.
+    - [ ] Rows with many Cs are reviewed — over-consultation is how decisions
+          stall.
+    - [ ] Each named role has a real person behind it today.
+
+    !!! tip "The test that matters"
+        Pick a row and ask the person marked A to describe what they would do if
+        it went wrong tomorrow. If they cannot, the matrix is aspirational.
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Collapse to four columns — Exec, Governance Lead, Delivery, Independent
+        review. One person may hold several, which is fine as long as the
+        accountability split is conscious and written down.
+    - context: Three lines of defence
+      note: >-
+        Keep first line (own and manage), second line (challenge and advise), and
+        third line (assure) strictly separated in the A column. The same function
+        should never both perform and assure an activity.
+    - context: Federated / multi-entity
+      note: >-
+        Add a column per entity, or produce one matrix per entity with a shared
+        group-level row set, so local accountability is explicit.
+  related: [roles-responsibilities, decision-rights, committee-charter]
+
+- id: committee-charter
+  title: Committee Charter (Terms of Reference)
+  nav: Committee Charter (ToR)
+  section: operating-model
+  path: operating-model/committee-charter.md
+  status: ready
+  purpose: >-
+    Establishes the forum where governance decisions are actually made: its
+    authority, membership, quorum, cadence, and what it must decide rather than
+    merely discuss.
+  when_to_use: >-
+    When standing up the committee, then reviewed annually. Revisit if meetings
+    routinely fail to reach decisions.
+  how_to_use: >-
+    Be specific about decision rights and quorum. The most common failure is a
+    committee that discusses at length and decides nothing, because nobody
+    established what it is empowered to settle on its own.
+  body: |
+    ### 1. Purpose
+
+    The **[Data & AI Governance Committee]** is the decision-making forum for
+    data and AI governance at **[Organisation]**, established under
+    {{governance-charter}}.
+
+    ### 2. Authority
+
+    The committee is authorised to:
+
+    - Approve frameworks, policies, and standards within its scope.
+    - Approve or refuse deployment of **high-risk** AI systems.
+    - **Require remediation, or suspend a system**, where risk is unacceptable.
+    - Approve exceptions to policy, with expiry dates.
+    - Escalate to **[the Board / Audit & Risk Committee]**.
+
+    Matters reserved to the Board: **[risk appetite, charter changes, matters
+    above [threshold]]**.
+
+    ### 3. Membership
+
+    | Role | Member | Voting? |
+    |---|---|---|
+    | Chair | [Exec sponsor] | Yes |
+    | Governance Lead | [name] | Yes |
+    | Data Owner representative | [name] | Yes |
+    | Technology / ML lead | [name] | Yes |
+    | Legal / DPO | [name] | Yes |
+    | Security | [name] | Yes |
+    | HR / People | [name] | Yes |
+    | Internal Audit | [name] | **No — observer** |
+
+    !!! note "Audit observes, never votes"
+        If Internal Audit votes on a control, it cannot later provide independent
+        assurance over that control. Keep the third line out of the decision.
+
+    ### 4. Quorum & decisions
+
+    - **Quorum:** **[four]** voting members, **must** include the Chair (or
+      delegate) and **[Legal/DPO]**.
+    - **Decisions:** by consensus where possible; otherwise a majority of voting
+      members present. The Chair holds a casting vote.
+    - **Dissent is minuted.** A member who disagrees with a risk acceptance has
+      it recorded by name.
+    - **Out of cycle:** urgent decisions by **[written procedure with 48h
+      response]**, ratified at the next meeting.
+
+    ### 5. Cadence & agenda
+
+    Meets **[monthly / quarterly]**. Standing agenda:
+
+    1. Minutes and actions outstanding
+    2. New AI systems for classification or approval
+    3. Risk register — new, changed, and escalated items
+    4. Incidents since last meeting
+    5. Policy exceptions requested and expiring
+    6. Regulatory horizon (EU AI Act milestones)
+    7. Metrics — see {{kpi-dashboard}}
+    8. Decisions required
+    9. AOB
+
+    ### 6. Papers
+
+    Circulated **[five working days]** in advance. Papers arriving late are
+    deferred by default — otherwise deadlines get managed by ambushing the
+    committee.
+
+    ### 7. Reporting
+
+    Reports to **[the Board]** **[quarterly]** using {{board-pack}}. Minutes are
+    retained for **[period]** as evidence of governance.
+
+    ### 8. Review
+
+    | Version | Date | Approved by | Next review |
+    |---|---|---|---|
+    | 0.1 | [date] | [board] | [date] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        A standing 45-minute item on an existing leadership meeting, with real
+        minutes, beats a separate committee that quietly stops meeting.
+    - context: Regulated sectors
+      note: >-
+        Align composition and reporting lines with your existing risk committee
+        structure, and check whether any member must be independent by rule.
+    - context: Global organisations
+      note: >-
+        Consider regional sub-committees with a group committee for policy and
+        escalation, and state clearly which decisions cannot be taken locally.
+  related: [governance-charter, decision-rights, raci, board-pack]
+
+- id: roles-responsibilities
+  title: Roles & Responsibilities
+  section: operating-model
+  path: operating-model/roles-responsibilities.md
+  status: ready
+  purpose: >-
+    Defines each governance role in enough detail that it can be put in a job
+    description, recruited for, and assessed against — rather than assumed.
+  when_to_use: >-
+    Alongside the RACI, when appointing people into roles, and during
+    onboarding.
+  how_to_use: >-
+    For each role, name a real person and confirm they know they hold it. The
+    most common finding in a first governance audit is a role defined on paper
+    that its supposed holder has never heard of.
+  body: |
+    ### Data roles
+
+    #### Data Owner
+
+    **Accountable for** a data domain's definitions, quality, access, and risk.
+
+    - Approves access to the domain, particularly Restricted data.
+    - Sets and monitors quality thresholds per {{data-quality-standard}}.
+    - Accepts or escalates risk relating to the domain.
+    - Approves use of the domain's data for AI training.
+
+    **Typically held by:** the senior business leader who owns the process the
+    data comes from — not IT, and not the team who happens to store it.
+
+    #### Data Steward
+
+    **Responsible for** day-to-day custody of a domain.
+
+    - Maintains business definitions and the data catalogue entry.
+    - Monitors quality and triages issues.
+    - First point of contact for questions about the data's meaning.
+
+    #### Data Custodian
+
+    **Responsible for** technical operation: storage, backup, access enforcement,
+    encryption, and monitoring. Usually sits in engineering or platform.
+
+    ### AI roles
+
+    #### AI Accountable Owner (per system)
+
+    **Accountable for** one AI system's outcomes and compliance across its whole
+    lifecycle.
+
+    - Ensures classification, assessment, and documentation are complete.
+    - Signs off deployment and material change.
+    - Owns monitoring, incidents, and eventual retirement.
+    - **Answerable if the system causes harm.**
+
+    !!! warning "This role cannot be a committee"
+        Every AI system needs one named human. If your answer to "who is
+        accountable for this system?" is a team name, you do not yet have an
+        accountable owner.
+
+    #### Model Developer / ML Engineer
+
+    **Responsible for** building within {{ai-development-standard}}: documenting
+    data, evaluating performance and bias, producing the {{model-card}}, and
+    raising risks they discover rather than routing around them.
+
+    #### Product Owner
+
+    **Responsible for** the use case: whether the system should exist, how it
+    affects users, transparency to those users, and designing oversight that
+    works in the real workflow.
+
+    ### Governance & assurance roles
+
+    #### Governance Lead
+
+    **Accountable for** the programme: maintaining frameworks and registers,
+    running the committee, reporting, and driving remediation. The role that
+    makes governance an operating function rather than a document set.
+
+    #### Legal / DPO
+
+    **Responsible for** lawfulness: regulatory interpretation, DPIAs, lawful
+    basis, contracts, and the independence to say no. Note that a DPO's statutory
+    independence limits how far they can also own delivery.
+
+    #### Security
+
+    **Responsible for** protecting systems and data, including AI-specific
+    threats — see {{control-library}}.
+
+    #### Internal Audit
+
+    **Accountable for** independent assurance. Must not have designed or operated
+    the controls being assured.
+
+    ### Appointment record
+
+    | Role | Holder | Appointed | Deputy | Confirmed aware |
+    |---|---|---|---|---|
+    | Governance Lead | [name] | [date] | [name] | [ ] |
+    | Data Owner — [domain] | [name] | [date] | [name] | [ ] |
+    | AI Accountable Owner — [system] | [name] | [date] | [name] | [ ] |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        One person may hold several roles. The only combination to avoid is
+        someone assuring their own work — keep independent review genuinely
+        independent, even if that means an external reviewer once a year.
+    - context: Regulated financial services
+      note: >-
+        Map these to your senior management regime responsibilities, and check
+        whether any of them must be held by a certified or approved person.
+    - context: Where a statutory DPO exists
+      note: >-
+        The DPO advises and monitors; they should not also own the processing
+        decisions they oversee, as that compromises the independence the role
+        requires.
+  related: [raci, decision-rights, committee-charter, governance-charter]
+
+- id: decision-rights
+  title: Decision Rights & Escalation
+  section: operating-model
+  path: operating-model/decision-rights.md
+  status: ready
+  purpose: >-
+    States who can decide what, at what threshold, and what happens when people
+    disagree or a decision is needed urgently. It is the document that stops
+    governance stalling.
+  when_to_use: >-
+    With the operating model. Test it after the first real escalation, and again
+    after the first urgent out-of-hours decision.
+  how_to_use: >-
+    Set thresholds in concrete terms — money, number of people affected, data
+    classification — not adjectives like "significant". Then walk a real past
+    decision through it and see whether the answer it gives matches what actually
+    happened.
+  body: |
+    ### 1. Decision authority
+
+    | Decision | Authority | Consult | Escalate if |
+    |---|---|---|---|
+    | Deploy a **minimal-risk** AI system | AI Accountable Owner | Gov Lead | Classification is disputed |
+    | Deploy a **limited-risk** AI system | Gov Lead | Legal, Security | Customer-facing |
+    | Deploy a **high-risk** AI system | **Committee** | Legal, Security, Audit | Board threshold met |
+    | Approve a **prohibited-practice** exception | **Not available** | — | Prohibited means prohibited |
+    | Use personal data for training | Data Owner + DPO | Gov Lead | Special category data |
+    | Accept residual risk — low / medium | AI Accountable Owner | Gov Lead | — |
+    | Accept residual risk — high | **Committee** | Legal, Security | Above **[threshold]** |
+    | Accept residual risk — critical | **Board** | Committee | — |
+    | Approve a new AI vendor | Gov Lead | Security, Legal | Critical tier |
+    | Policy exception ≤ **[90 days]** | Gov Lead | Owner | Repeat request |
+    | Policy exception > **[90 days]** | **Committee** | Legal | — |
+    | **Suspend a live AI system** | AI Owner, Gov Lead, **or** Security | Notify Committee within [24h] | Always report |
+
+    !!! danger "Suspension must be fast and blameless"
+        Any of three roles can stop a system, and none of them needs permission
+        first. If stopping a system requires a committee meeting, it will not
+        happen in time. Notification comes after the stop, never before.
+
+    ### 2. Escalation thresholds
+
+    Escalate to the **Committee** when any is true:
+
+    - Risk is rated **high** or above after mitigation.
+    - Personal data of **[10,000+]** people, or any special category data.
+    - The system makes or materially informs decisions about individuals.
+    - Two functions disagree and cannot resolve it within **[5 working days]**.
+    - An exception is requested for the second time.
+
+    Escalate to the **Board** when any is true:
+
+    - Residual risk is **critical**.
+    - Regulatory notification is likely or required.
+    - Potential impact exceeds **[£X]** or affects **[X]** customers.
+    - Reputational exposure is material.
+
+    ### 3. Disagreement
+
+    1. **Resolve locally** — the two parties, within 5 working days.
+    2. **Governance Lead facilitates** — within 5 further days.
+    3. **Committee decides** — at the next meeting, or by written procedure.
+    4. **Board** — where the committee cannot agree or the threshold is met.
+
+    The dissenting position is **recorded in the minutes by name**. People are far
+    more willing to raise concerns when disagreement is documented rather than
+    absorbed.
+
+    ### 4. Urgent decisions
+
+    | Situation | Who can act | Ratification |
+    |---|---|---|
+    | Live incident, harm occurring | Any of AI Owner / Gov Lead / Security — **act first** | Committee within [48h] |
+    | Regulatory deadline | Gov Lead + Legal | Next meeting |
+    | Out of hours | **[on-call role]** | Next working day |
+
+    ### 5. Recording
+
+    Every decision at committee level or above records: decision, date, who
+    decided, rationale, dissent, and review date. This is the evidence trail a
+    regulator asks for.
+
+    ### 6. Review
+
+    Test annually against real decisions taken. If people routinely go around the
+    matrix, the matrix is wrong — fix the matrix, not the people.
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Two levels are enough — an operational decision-maker and an escalation
+        point. Keep the suspension right distributed regardless of size.
+    - context: Regulated sectors
+      note: >-
+        Align thresholds with existing risk acceptance limits so you do not run
+        two incompatible sets of numbers.
+    - context: Fast-moving product teams
+      note: >-
+        Set generous authority at the minimal and limited tiers so governance is
+        not the bottleneck, and spend the control effort on high-risk instead.
+  related: [raci, committee-charter, roles-responsibilities, risk-register]
+
+# ===========================================================================
+# REGISTERS
+# ===========================================================================
+
+- id: data-asset-register
+  title: Data Asset Register
+  section: registers
+  path: registers/data-asset-register.md
+  status: ready
+  purpose: >-
+    The catalogue of what data you hold, who owns it, how sensitive it is, and
+    where it lives. Almost every other governance control depends on it.
+  when_to_use: >-
+    Start it early and keep it current. Review entries at least annually, and
+    whenever a system or a data flow changes.
+  how_to_use: >-
+    Register your ten most important assets properly rather than every asset
+    badly. A short accurate register is used; an exhaustive stale one is not.
+    Set a review date on every row so staleness becomes visible.
+  body: |
+    ### Register fields
+
+    | Field | Why it matters |
+    |---|---|
+    | Asset ID | Stable reference for linking from other registers |
+    | Name & description | What it actually is, in business language |
+    | Domain | Links to the owner |
+    | Data Owner | Named accountable person |
+    | Steward | Day-to-day contact |
+    | Classification | Drives handling rules |
+    | Personal data? | Triggers DPIA and lawful basis questions |
+    | Special category? | Triggers additional protection |
+    | System of record | Where the authoritative copy lives |
+    | Source | Where it came from; licence if external |
+    | Lawful basis | Required for personal data |
+    | Used in AI? | Links to {{ai-system-inventory}} |
+    | Quality thresholds | Links to {{data-quality-standard}} |
+    | Retention | How long, and under what rule |
+    | Last reviewed / next review | Makes staleness visible |
+
+    ### The register
+
+    | ID | Asset | Domain | Owner | Class. | Personal? | System | Used in AI | Retention | Next review |
+    |---|---|---|---|---|---|---|---|---|---|
+    | DA-001 | Customer master | Customer | [name] | Confidential | Yes | [CRM] | AI-003 | [7y] | [date] |
+    | DA-002 | Employee records | Employee | [name] | Confidential | Yes | [HRIS] | AI-007 | [6y post-exit] | [date] |
+    | DA-003 | Product telemetry | Product | [name] | Internal | No | [warehouse] | AI-001 | [2y] | [date] |
+    | DA-004 | Support transcripts | Customer | [name] | Confidential | Yes | [helpdesk] | AI-002 | [3y] | [date] |
+
+    ### Practical guidance
+
+    **Start where the risk is.** Personal data, regulated data, and anything
+    feeding an AI system first. Marketing collateral can wait.
+
+    **One row per asset, not per table.** "Customer master" is an asset;
+    forty database tables that compose it are not forty assets.
+
+    **The "used in AI" column earns its keep.** When a model misbehaves, this is
+    how you find what fed it. When a data subject exercises their rights, it is
+    how you find where they appear.
+
+    !!! tip "The staleness test"
+        A register nobody has updated in six months is a liability, not a
+        control — it gives false assurance. Better to register fewer assets and
+        keep them true.
+
+    ### Maintenance
+
+    | Trigger | Action |
+    |---|---|
+    | New system or data flow | Register before production use |
+    | Classification change | Update; review downstream handling |
+    | New AI use of the asset | Update the AI column; check lawful basis covers it |
+    | Annual review | Owner confirms accuracy or corrects |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        A spreadsheet with the first eight columns is genuinely enough. Do not
+        buy a catalogue tool before you have proven you will maintain a list.
+    - context: Existing catalogue tooling
+      note: >-
+        Do not duplicate. Add the governance-specific fields — owner,
+        classification, lawful basis, AI usage — to what you already have.
+    - context: Regulated sectors
+      note: >-
+        Add lineage and critical-data-element flags, and link to your regulatory
+        reporting inventory.
+  related: [data-governance-framework, data-classification-policy, ai-system-inventory, processing-dpia-log]
+
+- id: ai-system-inventory
+  title: AI System Inventory
+  section: registers
+  path: registers/ai-system-inventory.md
+  status: ready
+  purpose: >-
+    The single list of every AI system you build, buy, or have embedded in
+    something you already licence. It is the foundation of AI Act compliance:
+    every other obligation applies per system, so a system you have not listed is
+    one you cannot govern.
+  when_to_use: >-
+    Create it now, before anything else. Add systems at ideation, not at launch.
+    Review the whole inventory quarterly.
+  how_to_use: >-
+    Run a discovery sweep first — ask each team what AI they use, then check your
+    SaaS contracts for AI features you did not know were switched on. Expect the
+    real number to be two to three times what people initially report.
+  body: |
+    ### Inventory fields
+
+    | Field | Notes |
+    |---|---|
+    | System ID | Stable reference |
+    | Name & purpose | What it does, in business language |
+    | Business owner | The **named** AI Accountable Owner |
+    | Technical owner | Who operates it |
+    | Build / buy / embedded | Determines which policy applies |
+    | Vendor & product | For bought or embedded |
+    | **Our role** | Provider / deployer / importer / distributor |
+    | **Risk tier** | Prohibited / high-risk / limited / minimal |
+    | Tier rationale | Why — the decision, not just the label |
+    | Annex reference | If high-risk, which Annex III point |
+    | Model / technique | E.g. GPT-class LLM, gradient boosting |
+    | Data sources | Links to {{data-asset-register}} |
+    | Personal data? | Triggers DPIA |
+    | Affects individuals? | Triggers oversight and transparency duties |
+    | Lifecycle stage | Ideation / dev / live / retired |
+    | Human oversight | How, and by whom |
+    | Documentation | Link to {{model-card}} |
+    | Risk assessment | Link to {{ai-risk-assessment}} |
+    | Last / next review | |
+
+    ### The inventory
+
+    | ID | System | Owner | Source | Role | Tier | Personal data | Stage | Next review |
+    |---|---|---|---|---|---|---|---|---|
+    | AI-001 | Demand forecasting | [name] | Build | Provider | Minimal | No | Live | [date] |
+    | AI-002 | Support summarisation | [name] | Buy (SaaS) | Deployer | Limited | Yes | Live | [date] |
+    | AI-003 | Credit decision support | [name] | Build | Provider | **High** | Yes | Live | [date] |
+    | AI-004 | CV screening | [name] | Buy | Deployer | **High** | Yes | Live | [date] |
+    | AI-005 | Marketing copy assistant | [name] | Embedded | Deployer | Limited | No | Live | [date] |
+
+    ### Finding what you already have
+
+    Most organisations under-count on the first pass. Look in all of these:
+
+    | Where to look | What you tend to find |
+    |---|---|
+    | Ask each team directly | Tools bought on expenses or team cards |
+    | SaaS contracts and release notes | AI features switched on by the vendor |
+    | Expense claims | Individual AI subscriptions |
+    | Network / SSO logs | Tools nobody declared |
+    | Code repositories | Model APIs called directly |
+    | Data warehouse jobs | Scoring pipelines nobody calls "AI" |
+
+    !!! warning "Embedded AI is the blind spot"
+        Your HR system, CRM, and helpdesk have almost certainly shipped AI
+        features in the last two years. Some are high-risk uses under Annex III —
+        CV screening especially. Nobody procured them as AI, so nobody assessed
+        them.
+
+    ### Classification decision record
+
+    For each system, record the classification decision itself:
+
+    | System | Tier | Rationale | Decided by | Date | Challenged? |
+    |---|---|---|---|---|---|
+    | AI-004 | High | Annex III(4) — employment; screens candidates | [committee] | [date] | No |
+
+    A classification without a rationale cannot be defended later, and cannot be
+    reviewed sensibly when the system changes.
+
+    ### Maintenance
+
+    | Trigger | Action |
+    |---|---|
+    | New system proposed | Register at ideation, before build |
+    | Purpose changes materially | Re-classify; re-assess |
+    | Vendor changes the model | Review; re-assess if behaviour changed |
+    | Quarterly | Full review; confirm owners still in post |
+    | Retirement | Mark retired; retain records per schedule |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        A spreadsheet is fine. The fields that must not be dropped are owner,
+        role, tier, and rationale — everything else can be added later.
+    - context: Large / federated organisations
+      note: >-
+        Federate collection to business units with a group-level standard for
+        tiering, or you will get four incompatible interpretations of high-risk.
+    - context: Heavy vendor use
+      note: >-
+        Add contract reference and renewal date, and link to your vendor
+        assessment under {{third-party-ai-risk-policy}}.
+  related: [ai-governance-framework, ai-risk-assessment, model-card, third-party-ai-risk-policy]
+
+- id: risk-register
+  title: Risk Register
+  section: registers
+  path: registers/risk-register.md
+  status: ready
+  purpose: >-
+    The live record of data and AI risks: what could go wrong, how likely and how
+    bad, what you are doing about it, and who owns it.
+  when_to_use: >-
+    Continuously. Review at every committee meeting; refresh scoring at least
+    quarterly.
+  how_to_use: >-
+    Write risks as cause, event, and consequence — "because X, Y may happen,
+    leading to Z". A register full of one-word risks like "data quality" cannot
+    be managed, because nobody can tell what treating it would involve.
+  body: |
+    ### Scoring
+
+    **Likelihood**
+
+    | Score | Level | Guide |
+    |---|---|---|
+    | 1 | Rare | Not expected in 5 years |
+    | 2 | Unlikely | Possible in 3–5 years |
+    | 3 | Possible | Likely within 2 years |
+    | 4 | Likely | Expected this year |
+    | 5 | Almost certain | Expected within months |
+
+    **Impact**
+
+    | Score | Level | Guide |
+    |---|---|---|
+    | 1 | Negligible | Absorbed in normal operation |
+    | 2 | Minor | Limited, contained |
+    | 3 | Moderate | Material; management attention |
+    | 4 | Major | Regulatory interest; significant harm |
+    | 5 | Severe | Enforcement, serious harm, or existential |
+
+    **Rating** = likelihood × impact. 1–4 Low · 5–9 Medium · 10–14 High ·
+    15–25 Critical.
+
+    ### The register
+
+    | ID | Risk (cause → event → consequence) | Category | L | I | Rating | Owner | Treatment | Target | Residual | Review |
+    |---|---|---|---|---|---|---|---|---|---|---|
+    | R-001 | Because AI systems are procured without governance review, unassessed high-risk systems may go live, leading to regulatory breach and enforcement | Compliance | 4 | 4 | **16** | [name] | Mandatory intake gate; quarterly SaaS sweep | 8 | | [date] |
+    | R-002 | Because training data under-represents some groups, the model may produce discriminatory outcomes, leading to harm and legal claims | Fairness | 3 | 5 | **15** | [name] | Representativeness testing at G4; subgroup metrics | 6 | | [date] |
+    | R-003 | Because staff use unapproved AI tools, confidential data may be disclosed to third parties, leading to breach notification | Security | 4 | 4 | **16** | [name] | Approved tool list; DLP; training | 8 | | [date] |
+    | R-004 | Because vendors change models without notice, system behaviour may change silently, leading to undetected performance degradation | Operational | 3 | 3 | **9** | [name] | Contractual notification; output monitoring | 4 | | [date] |
+
+    ### Treatment options
+
+    | Option | When appropriate | Record |
+    |---|---|---|
+    | **Treat** | Reduce likelihood or impact | The controls and their owner |
+    | **Tolerate** | Within appetite | **Who accepted it, and when** |
+    | **Transfer** | Insurance or contract | Note that accountability rarely transfers |
+    | **Terminate** | Risk exceeds value | The decision and rationale |
+
+    !!! note "Tolerating is a decision with a name on it"
+        Accepted risk must record who accepted it and at what level of authority
+        — see {{decision-rights}}. Risk that is tolerated by nobody in particular
+        is risk that has simply been ignored.
+
+    ### Common AI risks to consider
+
+    Use as a prompt, not a checklist to copy:
+
+    - Unassessed or unknown systems in production
+    - Discriminatory outcomes for protected groups
+    - Model drift degrading performance unnoticed
+    - Over-reliance: humans rubber-stamping AI output
+    - Confidential data leaked into external tools
+    - Prompt injection or training-data poisoning
+    - Vendor model change altering behaviour
+    - Inability to explain a decision when challenged
+    - Missing logs when evidence is needed
+    - Key-person dependency on one ML engineer
+
+    ### Review
+
+    | Level | Cadence |
+    |---|---|
+    | Critical | Monthly, at committee |
+    | High | Quarterly |
+    | Medium | Half-yearly |
+    | Low | Annually |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        A 3×3 matrix and a single register covering all risk types is easier to
+        sustain than a separate AI register nobody looks at.
+    - context: Existing enterprise risk management
+      note: >-
+        Do not create a parallel register. Add AI risks to the enterprise one
+        with an AI tag, so they reach the board through the route that already
+        works.
+    - context: Regulated sectors
+      note: >-
+        Align scales with your enterprise risk framework, and map risks to the
+        regulatory obligations they threaten.
+  related: [ai-risk-assessment, control-library, incident-log, decision-rights]
+
+- id: incident-log
+  title: Issue & Incident Log
+  section: registers
+  path: registers/incident-log.md
+  status: ready
+  purpose: >-
+    The record of what went wrong, what you did, and what changed as a result.
+    It is both a management tool and the evidence base for serious-incident
+    reporting duties.
+  when_to_use: >-
+    From day one. You need the route defined before the first incident, not
+    during it.
+  how_to_use: >-
+    Define severity and the reporting clock in advance, and make reporting easy
+    and blameless. The failure mode is not a bad log — it is people not reporting
+    at all because they fear the consequences.
+  body: |
+    ### Severity
+
+    | Severity | Definition | Response | Notify |
+    |---|---|---|---|
+    | **S1 Critical** | Harm to people, regulatory breach, or major data loss | Immediate; incident lead appointed | Committee **immediately**; Board; regulator assessment within **[24h]** |
+    | **S2 Major** | Material impact; significant risk | Within [4h] | Committee within [24h] |
+    | **S3 Moderate** | Contained impact | Within [1 working day] | Governance Lead |
+    | **S4 Minor** | Negligible | Next cycle | Logged only |
+
+    !!! danger "The serious-incident clock"
+        Under Art. 73 the reporting window for serious incidents is short and
+        starts when you establish the link between the system and the incident —
+        not when you finish investigating. Assess reportability **early and in
+        parallel** with fixing it.
+
+    ### The log
+
+    | ID | Date | Title | System | Severity | Type | Reported by | Owner | Personal data? | Reportable? | Status | Closed |
+    |---|---|---|---|---|---|---|---|---|---|---|---|
+    | INC-001 | [date] | Model returned biased ranking | AI-004 | S2 | Fairness | [name] | [name] | Yes | Under assessment | Open | |
+    | INC-002 | [date] | Confidential doc pasted into public LLM | — | S2 | Data leak | [name] | [name] | Yes | Yes — DPA | Closed | [date] |
+
+    ### Incident types
+
+    Fairness / bias · Accuracy or drift · Data leak · Unauthorised use ·
+    Security (injection, poisoning, extraction) · Availability · Transparency
+    failure · Oversight failure · Third-party / vendor · Regulatory
+
+    ### Record for each incident
+
+    1. **What happened** — factual, no blame.
+    2. **When** — occurred, detected, reported. The gap between occurred and
+       detected is itself a finding.
+    3. **Impact** — who and what was affected, how many people.
+    4. **Immediate action** — including whether the system was suspended.
+    5. **Root cause** — the real one, not the proximate one.
+    6. **Reportability assessment** — with the reasoning and the date decided.
+    7. **Remediation** — actions, owners, dates.
+    8. **Lessons** — what changed so it does not recur.
+
+    ### Post-incident review
+
+    For S1 and S2, hold a blameless review within **[10 working days]**. Ask:
+
+    - Could we have prevented it? Which control failed or was missing?
+    - Could we have detected it sooner?
+    - Did the escalation path work as written?
+    - What changes in policy, control, or design follow?
+    - **Does anything here change the {{risk-register}}?**
+
+    ### Trends
+
+    Review quarterly for pattern: repeat causes, systems appearing often, and
+    detection times getting longer. Report to committee via {{kpi-dashboard}}.
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Use your existing incident process and add the AI-specific fields —
+        system, reportability, personal data. A separate AI process will not be
+        remembered under pressure.
+    - context: Regulated sectors
+      note: >-
+        Map severity to your existing operational incident taxonomy and
+        regulatory reporting triggers, so one incident does not get two
+        incompatible severities.
+    - context: Consumer-facing services
+      note: >-
+        Add a customer communication field: what was said, by whom, and when.
+        It is usually the part that gets scrutinised afterwards.
+  related: [risk-register, control-library, ai-system-inventory, decision-rights]
+
+- id: processing-dpia-log
+  title: Processing & DPIA Log
+  section: registers
+  path: registers/processing-dpia-log.md
+  status: ready
+  purpose: >-
+    The record of personal data processing activities and the impact assessments
+    that cover them — the point where AI governance meets data protection law.
+  when_to_use: >-
+    Maintain continuously. Complete a DPIA before high-risk processing begins,
+    not after the system is built.
+  how_to_use: >-
+    If you already keep an Art. 30 record of processing, extend it rather than
+    starting a second list. Add the AI-specific columns and cross-reference the
+    {{ai-system-inventory}} so the two can never disagree about what exists.
+  body: |
+    ### Processing activities
+
+    | ID | Activity | Purpose | Lawful basis | Categories of data | Data subjects | Special category? | Recipients | Transfers | Retention | AI system | DPIA |
+    |---|---|---|---|---|---|---|---|---|---|---|---|
+    | P-001 | Customer support triage | Route and summarise tickets | Legitimate interests | Contact, ticket content | Customers | No | [vendor] | [country] | 3y | AI-002 | DPIA-002 |
+    | P-002 | Candidate screening | Shortlist applicants | Legitimate interests | CV, application | Candidates | Possible | [vendor] | EU | 12m | AI-004 | DPIA-001 |
+
+    ### When a DPIA is required
+
+    A DPIA is required where processing is likely to result in high risk — and
+    for AI, that is common. Triggers include:
+
+    - [ ] Systematic and extensive **automated evaluation** of people, including
+          profiling, with legal or similarly significant effects
+    - [ ] Large-scale processing of **special category** data
+    - [ ] Systematic **monitoring** of a publicly accessible area
+    - [ ] **Innovative technology** applied to personal data — most novel AI
+          qualifies
+    - [ ] Processing that **prevents access** to a service or contract
+    - [ ] Data concerning **vulnerable people**, including employees and children
+
+    !!! tip "AI Act and GDPR assessments overlap — link them"
+        A high-risk AI system will usually need both a DPIA and an AI risk
+        assessment, and certain deployers additionally owe a fundamental rights
+        impact assessment. Run them together and cross-reference; duplicating the
+        analysis in two documents guarantees they will diverge.
+
+    ### DPIA log
+
+    | ID | System | Processing | Started | Completed | Outcome | Residual risk | DPO opinion | Consulted authority? | Review |
+    |---|---|---|---|---|---|---|---|---|---|
+    | DPIA-001 | AI-004 | Candidate screening | [date] | [date] | Proceed with controls | Medium | Given [date] | No | [date] |
+
+    ### DPIA contents
+
+    1. **Description** — nature, scope, context, purpose; how the AI works in
+       terms a non-specialist can follow.
+    2. **Necessity and proportionality** — lawful basis, and why a less intrusive
+       option would not achieve the purpose.
+    3. **Risks to individuals** — discrimination, loss of autonomy, inaccuracy,
+       exclusion, distress, not merely security risk.
+    4. **Measures** — controls, human oversight, transparency, and the routes for
+       people to contest a decision.
+    5. **Residual risk** and sign-off. If risk stays high after mitigation, prior
+       consultation with the supervisory authority may be required.
+
+    ### Individual rights with AI
+
+    Confirm you can actually deliver these before the system goes live:
+
+    | Right | The AI-specific question |
+    |---|---|
+    | Access | Can you show what data about them the system used? |
+    | Rectification | Can a correction propagate to model behaviour? |
+    | Erasure | Can you remove them from training data or retrain? |
+    | Object | Can you exclude them from processing? |
+    | Automated decisions | Can you offer human review, explanation, and challenge? |
+
+    !!! warning "Erasure is the hard one"
+        "The data is in the model weights" is not an answer a regulator accepts.
+        Decide your approach — retraining cadence, exclusion lists, or not
+        training on personal data at all — **before** you build.
+  adaptation:
+    - context: Small organisations
+      note: >-
+        One spreadsheet covering both processing and DPIAs is fine. The lawful
+        basis and retention columns are the ones auditors ask for first.
+    - context: Where a statutory DPO exists
+      note: >-
+        The DPO's opinion must be recorded, and where you proceed against it,
+        the reasons must be documented.
+    - context: Non-EU / other regimes
+      note: >-
+        Replace DPIA with your local equivalent (e.g. a privacy impact
+        assessment). The triggers and structure translate with little change.
+  related: [data-classification-policy, ai-risk-assessment, ai-system-inventory, data-asset-register]
+
+# ===========================================================================
+# RISK & CONTROL
+# ===========================================================================
+
+- id: ai-risk-assessment
+  title: AI Risk Assessment
+  section: risk
+  path: risk/ai-risk-assessment.md
+  status: ready
+  purpose: >-
+    A structured assessment of what could go wrong with a specific AI system, how
+    bad it would be, and what you are doing about it. For high-risk systems it is
+    the core evidence that Art. 9 risk management is operating.
+  when_to_use: >-
+    Before development for high-risk systems, before deployment for all systems,
+    and again on material change. Review live high-risk systems at least
+    annually.
+  how_to_use: >-
+    Do it with the people who build and use the system, not about them. Assess
+    risk to the people affected first and to the organisation second — that
+    ordering is what the regulation expects, and it also surfaces the risks that
+    later become reputational ones.
+  body: |
+    ### System under assessment
+
+    | Field | Value |
+    |---|---|
+    | System ID / name | [AI-00X] |
+    | Accountable owner | [name] |
+    | Purpose | [what it does and what decisions it drives] |
+    | Risk tier | [prohibited / high / limited / minimal] |
+    | Affects individuals? | [yes / no — how] |
+    | Assessment date / assessor | [date] / [name] |
+
+    ### 1. Prohibited practice screen
+
+    Answer first. Any "yes" stops the assessment.
+
+    - [ ] Deploys subliminal, manipulative, or exploitative techniques
+    - [ ] Exploits vulnerability by age, disability, or social/economic situation
+    - [ ] Performs social scoring leading to unjustified detrimental treatment
+    - [ ] Predicts criminal offending based solely on profiling or personality
+    - [ ] Builds facial recognition databases by untargeted scraping
+    - [ ] Infers emotion in the workplace or in education
+    - [ ] Performs biometric categorisation to infer protected characteristics
+    - [ ] Performs real-time remote biometric identification in public spaces
+
+    **Any box ticked → do not proceed. Escalate immediately.**
+
+    ### 2. Harms assessment
+
+    Assess harm **to people** first.
+
+    | Harm type | Could it occur? | Who is affected? | Severity | Likelihood | Rating |
+    |---|---|---|---|---|---|
+    | Discrimination / unfair outcome | | | | | |
+    | Loss of opportunity (job, credit, service) | | | | | |
+    | Financial loss | | | | | |
+    | Physical or psychological harm | | | | | |
+    | Privacy intrusion | | | | | |
+    | Loss of autonomy or ability to contest | | | | | |
+    | Misinformation | | | | | |
+    | Exclusion of a group | | | | | |
+
+    Then to the organisation: regulatory, financial, reputational, operational.
+
+    !!! tip "Ask who is worst affected, not who is average"
+        Aggregate accuracy hides concentrated harm. A system that is 95% accurate
+        overall can be systematically wrong about one group — and that group is
+        who will be harmed, and who will complain.
+
+    ### 3. Technical risk
+
+    | Area | Question | Assessment | Mitigation |
+    |---|---|---|---|
+    | Data quality | Is training data relevant, representative, current? | | |
+    | Bias | Have you tested performance across subgroups? | | |
+    | Accuracy | Does it meet the declared threshold? Where does it fail? | | |
+    | Robustness | How does it behave on edge cases and adversarial input? | | |
+    | Drift | How would you detect degradation? | | |
+    | Explainability | Can you explain a decision to the person affected? | | |
+    | Security | Injection, poisoning, extraction, leakage through output? | | |
+    | Dependencies | What happens if the vendor or model changes? | | |
+
+    ### 4. Human oversight
+
+    | Question | Answer |
+    |---|---|
+    | Who reviews the output? | [named role] |
+    | What information do they see? | |
+    | Can they realistically override? How? | |
+    | How long do they have per decision? | |
+    | How would we know if they were rubber-stamping? | |
+    | What training have they had? | |
+
+    !!! warning "The rubber-stamp test"
+        If a reviewer handles hundreds of decisions an hour, or overrides almost
+        never, oversight is nominal. Measure override rates — a rate near zero is
+        a warning sign, not a success metric.
+
+    ### 5. Transparency
+
+    - [ ] People are told they are interacting with, or subject to, AI
+    - [ ] AI-generated content is marked where required
+    - [ ] Affected people can obtain an explanation
+    - [ ] **There is a route to contest a decision**, and someone staffs it
+
+    ### 6. Residual risk and decision
+
+    | Residual rating | Justification | Accepted by | Authority | Date |
+    |---|---|---|---|---|
+    | [low/med/high/critical] | | [name] | Per {{decision-rights}} | [date] |
+
+    **Decision:** Proceed · Proceed with conditions · Do not proceed
+
+    Conditions: **[list, with owners and dates]**
+
+    ### 7. Review
+
+    | Trigger | Action |
+    |---|---|
+    | Material change of purpose or data | Full reassessment |
+    | Incident involving this system | Targeted reassessment |
+    | Annually (high-risk) | Full review |
+    | Vendor model change | Targeted reassessment |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Sections 1, 2, and 4 are the irreducible core: is it allowed, who could
+        it hurt, and who is watching. That fits on two pages.
+    - context: Regulated financial services
+      note: >-
+        Align with model risk management: add model validation findings, and
+        treat this as a complement to, not a replacement for, independent
+        validation.
+    - context: Where a DPIA is also required
+      note: >-
+        Run them together and cross-reference. Section 2 harms feed the DPIA's
+        risks-to-individuals directly — see {{processing-dpia-log}}.
+    - context: Research and experimentation
+      note: >-
+        Apply a shortened version at experiment stage, and the full assessment
+        before anything touches real users or real decisions.
+  related: [ai-system-inventory, model-card, risk-register, processing-dpia-log]
+
+- id: model-card
+  title: Model Card / Model Risk Documentation
+  nav: Model Card / Model Risk Doc
+  section: risk
+  path: risk/model-card.md
+  status: ready
+  purpose: >-
+    Standard documentation for a model: what it is for, what it was trained on,
+    how well it performs and for whom, and where it should not be used. Feeds
+    both AI Act technical documentation and the instructions deployers rely on.
+  when_to_use: >-
+    Complete before deployment; update on retraining or material change. Required
+    in practice for anything high-risk.
+  how_to_use: >-
+    Write the limitations section honestly and first. A model card that lists no
+    limitations tells a reader either that you did not look, or that you are not
+    telling them — and both undermine every other claim on the page.
+  body: |
+    ### Model details
+
+    | Field | Value |
+    |---|---|
+    | Model name / version | |
+    | System ID | [links to {{ai-system-inventory}}] |
+    | Owner | [named] |
+    | Type / architecture | |
+    | Base model (if fine-tuned) | |
+    | Training date | |
+    | Licence / provenance | |
+
+    ### Intended use
+
+    **Intended to:** [specific tasks and context]
+
+    **Intended users:** [who operates it]
+
+    **Out of scope — do not use for:**
+
+    - [specific uses that would be inappropriate]
+    - [populations it was not trained for]
+    - [decisions it must not make alone]
+
+    !!! note "Out-of-scope is the section that prevents harm"
+        Most AI failures come from a model used well outside what it was built
+        for. Be specific enough that someone can recognise their own misuse case.
+
+    ### Training data
+
+    | Field | Value |
+    |---|---|
+    | Sources | [links to {{data-asset-register}}] |
+    | Size and period covered | |
+    | Personal data? | [and lawful basis] |
+    | Preprocessing | |
+    | Train / validation / test split | [method; leakage check] |
+    | Known gaps or skews | |
+    | Representativeness assessment | [vs. affected population] |
+
+    ### Performance
+
+    | Metric | Overall | Notes |
+    |---|---|---|
+    | [Accuracy / F1 / AUC] | | |
+    | [Precision] | | |
+    | [Recall] | | |
+
+    **Performance across groups** — the section that matters most:
+
+    | Group | Metric | Result | Gap vs. overall |
+    |---|---|---|---|
+    | [group A] | | | |
+    | [group B] | | | |
+
+    Evaluation date, dataset, and method: **[record so results are reproducible]**
+
+    ### Limitations & failure modes
+
+    - **Known failure modes:** [where it goes wrong, and how it looks when it
+      does]
+    - **Uncertainty:** [does it signal low confidence? is that signal reliable?]
+    - **Drift sensitivity:** [what changes in the world degrade it]
+    - **Adversarial exposure:** [how it can be manipulated]
+
+    ### Human oversight
+
+    | Field | Value |
+    |---|---|
+    | Oversight design | [how a human reviews] |
+    | Override mechanism | [how, and by whom] |
+    | Expected review effort | [time per decision] |
+    | Escalation route | |
+
+    ### Monitoring
+
+    | What | How | Threshold | Owner | Action if breached |
+    |---|---|---|---|---|
+    | Accuracy | | | | |
+    | Subgroup performance | | | | |
+    | Input drift | | | | |
+    | Override rate | | | | |
+
+    ### Ethical & legal considerations
+
+    Fairness assessment · DPIA reference · Environmental cost, if material ·
+    Third-party dependencies
+
+    ### Version history
+
+    | Version | Date | Change | Retrained? | Approved by |
+    |---|---|---|---|---|
+    | 1.0 | [date] | Initial release | — | [name] |
+  adaptation:
+    - context: Bought models
+      note: >-
+        Complete what you can from vendor documentation and record explicitly
+        what they would not tell you. The gaps are themselves a risk finding to
+        raise under {{third-party-ai-risk-policy}}.
+    - context: LLM / GPAI applications
+      note: >-
+        Replace the training-data section with prompt, retrieval, and grounding
+        configuration; document system prompts, guardrails, and evaluation of
+        typical failure modes such as hallucination and injection.
+    - context: Regulated financial services
+      note: >-
+        Extend into a full model risk document: assumptions, conceptual soundness,
+        independent validation findings, and ongoing performance monitoring.
+    - context: Non-technical readers
+      note: >-
+        Keep a one-paragraph plain-English summary at the top. Boards and DPOs
+        read that; they do not read the metrics table.
+  related: [ai-development-standard, ai-risk-assessment, ai-system-inventory, data-quality-standard]
+
+- id: control-library
+  title: Control Library & Assurance Map
+  nav: Control Library & Assurance Map
+  section: risk
+  path: risk/control-library.md
+  status: ready
+  purpose: >-
+    Maps obligations to the controls that satisfy them, names an owner for each,
+    and records how you would evidence the control is operating. It turns "we
+    have a policy" into "here is what we do and how you can check".
+  when_to_use: >-
+    Build once the frameworks exist, then use it to plan assurance and to answer
+    regulator and auditor questions efficiently.
+  how_to_use: >-
+    Start from obligations and work outwards to controls, not from your existing
+    controls inwards. Working the other way finds only the obligations you happen
+    to already cover, which is precisely the wrong direction for gap analysis.
+  body: |
+    ### Structure
+
+    | Element | Meaning |
+    |---|---|
+    | **Obligation** | The requirement — regulatory, contractual, or internal |
+    | **Control** | What you do to satisfy it |
+    | **Type** | Preventive / detective / corrective |
+    | **Frequency** | Continuous, per-event, or periodic |
+    | **Owner** | Named, first line |
+    | **Evidence** | What you would show to prove it operated |
+    | **Assurance** | Who checks, and how often |
+
+    ### Control library
+
+    | ID | Obligation | Control | Type | Freq. | Owner | Evidence | Assurance |
+    |---|---|---|---|---|---|---|---|
+    | C-01 | Art. 5 — prohibited practices | Intake screen at G1 blocks prohibited use cases | Preventive | Per system | Gov Lead | Screening record in inventory | 2L quarterly sample |
+    | C-02 | Art. 6 — classification | Every system classified with recorded rationale before build | Preventive | Per system | Gov Lead | {{ai-system-inventory}} | 2L quarterly |
+    | C-03 | Art. 9 — risk management | Risk assessment completed and reviewed for high-risk systems | Preventive | Per system + annual | AI Owner | {{ai-risk-assessment}} | 3L annual |
+    | C-04 | Art. 10 — data governance | Training data assessed for relevance, representativeness, bias | Preventive | Per model | ML Lead | Data quality report | 2L per release |
+    | C-05 | Art. 11 — documentation | Model card completed before deployment | Preventive | Per model | ML Lead | {{model-card}} | 3L annual |
+    | C-06 | Art. 12 — logging | Automatic logging enabled and retained | Detective | Continuous | Tech Owner | Log configuration; retention proof | 2L quarterly |
+    | C-07 | Art. 14 — human oversight | Reviewer workflow with override; override rates monitored | Preventive | Continuous | Product Owner | Override metrics | 2L quarterly |
+    | C-08 | Art. 15 — accuracy & security | Evaluation and adversarial testing before release | Preventive | Per release | ML Lead | Test results | 3L annual |
+    | C-09 | Art. 50 — transparency | AI disclosure present in user-facing surfaces | Preventive | Per release | Product Owner | UI evidence | 2L sample |
+    | C-10 | Art. 72/73 — monitoring & incidents | Monitoring live; incident route defined and tested | Detective | Continuous | Gov Lead | {{incident-log}} | 3L annual |
+    | C-11 | Art. 4 — AI literacy | Role-appropriate training delivered and tracked | Preventive | Annual | HR | Completion records | 2L annual |
+    | C-12 | Art. 26 — vendor obligations | Vendor assessment and contract clauses in place | Preventive | Per vendor | Procurement | Assessment; contract | 2L annual |
+    | C-13 | GDPR Art. 35 — DPIA | DPIA completed before high-risk processing | Preventive | Per activity | DPO | {{processing-dpia-log}} | 3L annual |
+
+    ### Assurance map
+
+    Shows who checks what, and exposes obligations nobody is assuring.
+
+    | Obligation area | 1L — does it | 2L — challenges | 3L — assures | Gaps |
+    |---|---|---|---|---|
+    | Prohibited practices | Product / ML | Governance | Audit | |
+    | Classification | Gov Lead | Legal | Audit | |
+    | Risk management | AI Owners | Risk | Audit | |
+    | Data governance | Data Owners | Governance | Audit | |
+    | Documentation | ML teams | Governance | Audit | |
+    | Human oversight | Product | Governance | Audit | |
+    | Transparency | Product | Legal | Audit | |
+    | Third party | Procurement | Security / Legal | Audit | |
+    | Literacy | HR | Governance | Audit | |
+
+    !!! tip "Look for the blank cells"
+        The value of this map is where a column is empty. An obligation with a
+        first line but no assurance is a control you are trusting without ever
+        checking.
+
+    ### Control testing
+
+    | Test type | What it answers |
+    |---|---|
+    | **Design** | Would this control work if it operated as described? |
+    | **Operating effectiveness** | Did it actually operate, over the period? |
+
+    Test high-risk controls at least annually; sample others on a risk basis.
+    Record failures in the {{incident-log}} and the {{risk-register}}.
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Controls C-01, C-02, C-05, and C-07 give you the most coverage for the
+        least effort. Self-assessment substitutes for a third line, but say so
+        openly rather than implying independence you do not have.
+    - context: Existing GRC tooling
+      note: >-
+        Load these as a control set in the tool you already have rather than
+        maintaining a separate spreadsheet.
+    - context: ISO/IEC 42001 or NIST AI RMF
+      note: >-
+        Add a column mapping each control to the corresponding clause or
+        function, so a single control satisfies several frameworks and you test
+        it once.
+  related: [ai-risk-assessment, risk-register, incident-log, maturity-assessment]
+
+# ===========================================================================
+# BOARD & REPORTING
+# ===========================================================================
+
+- id: board-pack
+  title: Board Pack Template
+  section: board
+  path: board/board-pack.md
+  status: ready
+  purpose: >-
+    A structured report that gives the board what it needs to discharge its
+    oversight duty: current posture, what changed, what went wrong, and what
+    decisions are being asked of them.
+  when_to_use: >-
+    Every board or risk committee cycle — typically quarterly. Also for an
+    extraordinary session after a serious incident.
+  how_to_use: >-
+    Write the first page so it stands alone; assume it is the only page some
+    members read. Lead with decisions being sought, not with activity completed.
+    Boards do not need to know how busy you were.
+  body: |
+    ---
+
+    ## Data & AI Governance — Board Report
+
+    **Period:** [Q_ 20__] · **Prepared by:** [name] · **Date:** [date] ·
+    **Classification:** [Confidential]
+
+    ### 1. Executive summary
+
+    **Overall posture:** 🟢 Green / 🟡 Amber / 🔴 Red
+
+    [Three or four sentences. Where we stand, the single most important thing
+    that changed, and the most important thing the board should worry about.]
+
+    **Decisions sought this session:**
+
+    1. [Decision] — see section 7
+    2. [Decision]
+
+    ### 2. Risk posture
+
+    | Risk | Rating | Movement | Owner | Commentary |
+    |---|---|---|---|---|
+    | [Top risk] | High | ↑ | [name] | [one line] |
+    | [Risk] | Medium | → | [name] | |
+    | [Risk] | Medium | ↓ | [name] | |
+
+    **Appetite:** [within / outside] appetite. [If outside: what is being done,
+    and by when.]
+
+    ### 3. What changed this period
+
+    | Area | Change | Implication |
+    |---|---|---|
+    | AI estate | [X new systems; Y retired] | |
+    | Regulation | [milestones reached or approaching] | |
+    | Policy | [adopted or revised] | |
+    | Capability | [people, tooling, training] | |
+
+    ### 4. Incidents
+
+    | ID | Severity | Summary | Status | Reportable? | Lesson |
+    |---|---|---|---|---|---|
+    | INC-00X | S2 | [one line] | Closed | No | [what changed] |
+
+    [If none: "No S1 or S2 incidents this period." Say it explicitly — silence
+    reads as an omission.]
+
+    ### 5. EU AI Act readiness
+
+    **Readiness: [X]%** ([n] of [m] obligations met) — [↑ from Y% last period]
+
+    | Area | Status | Gap | Action | By |
+    |---|---|---|---|---|
+    | Inventory & classification | 🟢 | — | — | — |
+    | Risk management | 🟡 | [gap] | [action] | [date] |
+    | Documentation | 🔴 | [gap] | [action] | [date] |
+    | Transparency | 🟡 | [gap] | [action] | [date] |
+
+    **Next milestone:** [date] — [obligation]. **[On / off] track.**
+
+    ### 6. Metrics
+
+    | Metric | Now | Last | Target | Trend |
+    |---|---|---|---|---|
+    | AI systems registered | | | 100% | |
+    | High-risk systems assessed | | | 100% | |
+    | Documentation complete | | | 100% | |
+    | Staff trained (AI literacy) | | | [90%] | |
+    | Open high risks | | | [0] | |
+
+    Full detail in {{kpi-dashboard}}.
+
+    ### 7. Decisions sought
+
+    | # | Decision | Recommendation | Rationale | Impact if deferred |
+    |---|---|---|---|---|
+    | 1 | [e.g. approve additional resource] | Approve | [why] | [consequence] |
+
+    ### 8. Appendices
+
+    A. Risk register extract · B. AI inventory summary ·
+    C. Regulatory horizon · D. Incident detail
+
+    ---
+
+    !!! tip "Two tests before you send it"
+        **The one-page test:** does page one alone tell a director what to worry
+        about and what to decide?
+        **The "so what" test:** every number should imply an action. If a metric
+        implies nothing, cut it.
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Sections 1, 2, 4, and 7 are enough. Two pages that get read beat eight
+        that get skimmed.
+    - context: Regulated sectors
+      note: >-
+        Add a supervisory engagement section — open queries, commitments made,
+        deadlines — and align RAG definitions with your enterprise risk
+        framework.
+    - context: First report to a board
+      note: >-
+        Spend a paragraph on what AI governance is and why the board is
+        accountable. Do not assume the mandate is understood; establishing it is
+        half the value of the first pack.
+    - context: Using the assessment tool
+      note: >-
+        Run the assessment with the Board audience selected and export it — it
+        produces section 5 and much of section 2 directly.
+  related: [kpi-dashboard, risk-register, committee-charter, maturity-assessment]
+
+- id: kpi-dashboard
+  title: KPI / KRI Dashboard
+  section: board
+  path: board/kpi-dashboard.md
+  status: ready
+  purpose: >-
+    The measures that show whether governance is actually working — coverage,
+    quality, timeliness, and leading indicators of trouble — rather than how much
+    documentation exists.
+  when_to_use: >-
+    Report every cycle. Review the metric set annually and drop anything that has
+    never changed a decision.
+  how_to_use: >-
+    Choose eight to twelve measures maximum and hold them stable, because trend
+    is the point. Distinguish KPIs (is it working?) from KRIs (is something about
+    to go wrong?) — most dashboards have far too few of the latter.
+  body: |
+    ### Coverage KPIs
+
+    Are we governing everything we should be?
+
+    | Metric | Definition | Target | Source |
+    |---|---|---|---|
+    | AI systems registered | Registered ÷ known to exist | 100% | {{ai-system-inventory}} |
+    | Systems classified | With recorded tier and rationale | 100% | Inventory |
+    | High-risk assessed | With current {{ai-risk-assessment}} | 100% | Assessments |
+    | Documentation complete | High-risk with current {{model-card}} | 100% | Model cards |
+    | Data assets registered | Material assets registered | [90%] | {{data-asset-register}} |
+    | Vendors assessed | Critical AI vendors with current assessment | 100% | Vendor register |
+
+    ### Effectiveness KPIs
+
+    Is it working, rather than merely present?
+
+    | Metric | Definition | Target | Why |
+    |---|---|---|---|
+    | Assessment cycle time | Intake to decision, median days | [< 10] | Slow governance gets bypassed |
+    | Gate pass rate first time | % passing without rework | [> 70%] | Low means unclear standards |
+    | Data quality score | Weighted across key domains | [> 95%] | {{data-quality-standard}} |
+    | AI literacy completion | Relevant staff trained | [> 90%] | Art. 4 obligation |
+    | Control tests passed | Tested controls operating effectively | [> 95%] | {{control-library}} |
+
+    ### Risk indicators (KRIs)
+
+    Leading signals that something is going wrong.
+
+    | Indicator | Threshold | Why it matters |
+    |---|---|---|
+    | Unregistered systems found | Any | Governance is being bypassed |
+    | Overdue high-risk reviews | > 0 | Assessments going stale |
+    | Open high/critical risks past target | > 0 | Treatment is not landing |
+    | Exceptions open beyond expiry | > 0 | Silent policy erosion |
+    | **Human override rate** | < [2%] **or** > [20%] | Too low = rubber-stamping; too high = model not fit |
+    | Model drift alerts | Any unresolved | Performance degrading |
+    | Incidents detected externally | Any | Monitoring is not working |
+    | Mean time to detect | Increasing | Detection is degrading |
+
+    !!! tip "Override rate is the single best oversight metric"
+        It is one of the few numbers that reveals whether human oversight is real.
+        A rate near zero almost always means reviewers are approving by default,
+        not that the model is perfect.
+
+    ### Presentation
+
+    | Element | Guidance |
+    |---|---|
+    | RAG status | Define thresholds once and keep them fixed |
+    | Trend arrows | Direction matters more than level |
+    | Sparklines | Show the last 4–6 periods |
+    | Commentary | One line per amber or red, naming the action and owner |
+
+    ### Dashboard summary
+
+    | Metric | Now | Last | Trend | Target | RAG | Commentary |
+    |---|---|---|---|---|---|---|
+    | AI systems registered | | | | 100% | | |
+    | High-risk assessed | | | | 100% | | |
+    | Documentation complete | | | | 100% | | |
+    | AI literacy | | | | 90% | | |
+    | Open high risks | | | | 0 | | |
+    | Override rate | | | | 2–20% | | |
+
+    ### Metrics to avoid
+
+    | Avoid | Why | Use instead |
+    |---|---|---|
+    | Policies published | Measures activity, not effect | Attestation and exception rates |
+    | Training hours delivered | Time is not competence | Assessment pass rates |
+    | Number of meetings | Effort, not outcome | Decisions made and actions closed |
+    | Total AI systems | Growth is not risk | Systems by tier, unassessed count |
+  adaptation:
+    - context: Small organisations
+      note: >-
+        Six metrics is plenty: registered, assessed, documented, trained, open
+        high risks, and override rate.
+    - context: Early-stage programmes
+      note: >-
+        Coverage metrics first — you cannot measure effectiveness of controls you
+        have not yet applied everywhere. Expect coverage to look bad initially;
+        that is the honest baseline.
+    - context: Mature programmes
+      note: >-
+        Shift emphasis to KRIs and control-testing results. Coverage at 100% for
+        four quarters running has stopped telling you anything.
+  related: [board-pack, control-library, maturity-assessment, risk-register]
+
+# ===========================================================================
+# EU AI ACT
+# ===========================================================================
+# NOTE: the readiness checklist body is GENERATED from data/questions.yml
+# (every question carrying a `checklist:` number). `generate_body: checklist`
+# tells the build script to do that, so the published checklist and the
+# assessment tool can never drift apart.
+
+- id: eu-ai-act-readiness-checklist
+  title: EU AI Act — 25-point readiness checklist
+  nav: Readiness Checklist (25-point)
+  section: eu-ai-act
+  path: eu-ai-act/readiness-checklist.md
+  status: ready
+  generate_body: checklist
+  purpose: >-
+    A fast self-assessment of where your organisation stands against the EU AI
+    Act. Work through it, mark what is true today, and treat every unticked box
+    as a backlog item.
+  when_to_use: >-
+    As a first baseline, then quarterly, and again whenever you launch or
+    materially change an AI system.
+  how_to_use: >-
+    Answer honestly rather than optimistically — an inflated baseline produces a
+    plan that fixes the wrong things. Each item names the templates that close it.
+    For a scored version tailored to your role, take the interactive assessment.
+  adaptation:
+    - context: Non-EU organisations
+      note: >-
+        The Act can still reach you where output is used in the EU. Work through
+        the checklist anyway, then confirm scope with counsel — territorial reach
+        is the question most often got wrong.
+    - context: Deployers rather than providers
+      note: >-
+        Items 11–18 are mostly provider obligations, but you inherit exposure
+        through what you deploy. Focus on 1–10 and 22–25, and press vendors on
+        the rest via {{third-party-ai-risk-policy}}.
+    - context: Using this with the assessment tool
+      note: >-
+        The interactive assessment covers these 25 points plus role-specific
+        questions, and scores them by severity. This page is the reference; the
+        tool is the working version.
+  related: [eu-ai-act-timeline, ai-system-inventory, ai-risk-assessment, board-pack]
+
+- id: eu-ai-act-timeline
+  title: EU AI Act timeline (2026 Digital Omnibus)
+  nav: Timeline (2026 Digital Omnibus)
+  section: eu-ai-act
+  path: eu-ai-act/timeline.md
+  status: ready
+  purpose: >-
+    The dates that actually bind you, reflecting the 2026 Digital Omnibus
+    amendments — what is already in force, what was deferred, and what to work
+    backwards from.
+  when_to_use: >-
+    When planning your roadmap, and whenever you are asked "how long have we
+    got?". Re-check before you rely on any date; this area is still moving.
+  how_to_use: >-
+    Treat the dates as the deadline to *be compliant*, then work backwards from
+    them. Classification, conformity assessment, and documentation take many
+    months, so the practical start date is far earlier than the legal one.
+  body: |
+    !!! warning "Verify before you rely on this"
+        Dates below reflect the **Digital Omnibus on AI** reaching political
+        agreement in late 2025 / early 2026. The Omnibus amends the original AI
+        Act timeline. Because implementing acts, guidance, and national measures
+        continue to evolve, **confirm each date against the official EU sources**
+        before making compliance decisions. This page is a planning aid, not
+        legal advice.
+
+    ### Key dates at a glance
+
+    | Obligation | Original date | Current date | Change |
+    |---|---|---|---|
+    | **Prohibited practices** (Art. 5) | 2 Feb 2025 | 2 Feb 2025 | In force — unchanged |
+    | **AI literacy** (Art. 4) | 2 Feb 2025 | 2 Feb 2025 | In force — unchanged |
+    | New bans (CSAM / "nudifiers") | — | 2 Dec 2026 | Added by Omnibus, transitional |
+    | **GPAI model obligations** (Art. 51–56) | 2 Aug 2025 | 2 Aug 2025 | In force — unchanged |
+    | **Art. 50 transparency** (deepfakes, chatbots) | 2 Aug 2026 | 2 Aug 2026 | Proceeds as scheduled |
+    | ↳ Watermarking grace for existing systems | — | 2 Dec 2026 | 4-month grace added |
+    | **High-risk — Annex III** (stand-alone) | 2 Aug 2026 | **2 Dec 2027** | Deferred ~16 months |
+    | **High-risk — Annex I** (embedded in products) | 2 Aug 2027 | **2 Aug 2028** | Deferred ~12 months |
+    | AI regulatory sandboxes (national) | 2 Aug 2026 | 2 Aug 2027 | Deferred ~12 months |
+
+    ### What the Digital Omnibus changed
+
+    The Omnibus is a **simplification and timeline-relief** package. The headline
+    is that **high-risk obligations were pushed back** — Annex III stand-alone
+    systems (recruitment, credit scoring, education, law enforcement, border
+    control) now apply from **2 December 2027** rather than August 2026, and
+    Annex I systems embedded in regulated products (medical devices, machinery,
+    vehicles) move to **2 August 2028**.
+
+    It also adds a **four-month watermarking grace period** for pre-existing
+    systems under the Article 50 transparency rules, introduces **new
+    prohibitions** (child sexual abuse material and non-consensual "nudifier"
+    tools) with a transitional period to 2 December 2026, and includes
+    **targeted exemptions** to reduce duplication where machinery-regulation
+    products already carry equivalent requirements.
+
+    ### What this means for your programme
+
+    The deferral is **breathing room, not a reprieve.** The heavy lifting for
+    high-risk systems — classification, conformity assessment, technical
+    documentation, human oversight, logging, and post-market monitoring — still
+    takes many months to build. Treat the new dates as the deadline to *be
+    compliant*, and work backwards.
+
+    A sensible sequencing:
+
+    1. **Now** — inventory and classify every AI system (see the
+       {{ai-system-inventory}}). You cannot manage what you have not catalogued.
+    2. **Now** — confirm you are clear of prohibited practices and are meeting
+       the GPAI, AI literacy, and Article 50 transparency duties already in force.
+    3. **2026** — build the control framework for anything that will be
+       high-risk: risk management, data governance, documentation, human
+       oversight.
+    4. **Ahead of Dec 2027** — complete conformity assessments and post-market
+       monitoring for Annex III systems.
+
+    !!! tip "Work backwards from December 2027"
+        If an Annex III system needs a conformity assessment, count back: the
+        assessment needs complete technical documentation, which needs a finished
+        risk management process, which needs classified systems and governed
+        training data. That chain is comfortably an 18-month programme.
+
+    ### Sources
+
+    - [Gibson Dunn — EU AI Act Omnibus Agreement: Postponed High-Risk Deadlines](https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes/)
+    - [DLA Piper — The Digital AI Omnibus: proposed deferral of high-risk AI obligations](https://knowledge.dlapiper.com/dlapiperknowledge/globalemploymentlatestdevelopments/2026/The-Digital-AI-Omnibus-Proposed-deferral-of-high-risk-AI-obligations-under-the-AI-Act)
+    - [Covington Inside Privacy — Timeline Relief, Targeted Simplification, and New Prohibitions](https://www.insideprivacy.com/artificial-intelligence/eu-ai-act-update-timeline-relief-targeted-simplification-and-new-prohibitions/)
+    - [Freshfields — EU AI Act unpacked #34: the final Digital Omnibus on AI](https://www.freshfields.com/en/our-thinking/blogs/technology-quotient/eu-ai-act-unpacked-34-the-final-digital-omnibus-on-ai-key-amendments-to-the-a-102nber)
+
+    Always cross-check against the official *Official Journal of the European
+    Union* text and the European Commission's AI Act pages for the definitive
+    dates.
+  adaptation:
+    - context: Non-EU organisations
+      note: >-
+        These dates bind you where you place systems on the EU market or where
+        output is used in the EU. Check scope first — many organisations assume
+        they are out and are not.
+    - context: Long product cycles
+      note: >-
+        If your release cycle is 12 months or more, the December 2027 date is
+        effectively one or two releases away. Treat it as current-roadmap work,
+        not future work.
+    - context: Maintaining this page
+      note: >-
+        This is the page most likely to age. Re-verify against official sources
+        each quarter and update the dates here in `data/templates.yml`.
+  related: [eu-ai-act-readiness-checklist, ai-system-inventory, ai-governance-framework, board-pack]

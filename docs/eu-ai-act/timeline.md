@@ -1,19 +1,36 @@
+<!-- GENERATED FILE — DO NOT EDIT.
+     Source: data/templates.yml
+     Regenerate with: python tools/build_content.py -->
+
+
 # EU AI Act timeline (2026 Digital Omnibus)
 
 <span class="pill ready">Ready</span>
 
-!!! warning "Verify before you rely on this"
-    Dates below reflect the **Digital Omnibus on AI** agreement reaching political
-    agreement in late 2025 / early 2026. The Omnibus amends the original AI Act
-    timeline. Because implementing acts, guidance, and national measures continue
-    to evolve, **confirm each date against the official EU sources** before making
-    compliance decisions. This page is a planning aid, not legal advice.
+**Purpose.** The dates that actually bind you, reflecting the 2026 Digital Omnibus amendments — what is already in force, what was deferred, and what to work backwards from.
 
-## Key dates at a glance
+**When to use it.** When planning your roadmap, and whenever you are asked "how long have we got?". Re-check before you rely on any date; this area is still moving.
+
+**How to use it.** Treat the dates as the deadline to *be compliant*, then work backwards from them. Classification, conformity assessment, and documentation take many months, so the practical start date is far earlier than the legal one.
+
+---
+
+## The template
+
+!!! warning "Verify before you rely on this"
+    Dates below reflect the **Digital Omnibus on AI** reaching political
+    agreement in late 2025 / early 2026. The Omnibus amends the original AI
+    Act timeline. Because implementing acts, guidance, and national measures
+    continue to evolve, **confirm each date against the official EU sources**
+    before making compliance decisions. This page is a planning aid, not
+    legal advice.
+
+### Key dates at a glance
 
 | Obligation | Original date | Current date | Change |
 |---|---|---|---|
 | **Prohibited practices** (Art. 5) | 2 Feb 2025 | 2 Feb 2025 | In force — unchanged |
+| **AI literacy** (Art. 4) | 2 Feb 2025 | 2 Feb 2025 | In force — unchanged |
 | New bans (CSAM / "nudifiers") | — | 2 Dec 2026 | Added by Omnibus, transitional |
 | **GPAI model obligations** (Art. 51–56) | 2 Aug 2025 | 2 Aug 2025 | In force — unchanged |
 | **Art. 50 transparency** (deepfakes, chatbots) | 2 Aug 2026 | 2 Aug 2026 | Proceeds as scheduled |
@@ -22,48 +39,75 @@
 | **High-risk — Annex I** (embedded in products) | 2 Aug 2027 | **2 Aug 2028** | Deferred ~12 months |
 | AI regulatory sandboxes (national) | 2 Aug 2026 | 2 Aug 2027 | Deferred ~12 months |
 
-## What the Digital Omnibus changed
+### What the Digital Omnibus changed
 
-The Omnibus is a **simplification and timeline-relief** package. The headline is
-that **high-risk obligations were pushed back** — Annex III stand-alone systems
-(recruitment, credit scoring, education, law enforcement, border control) now
-apply from **2 December 2027** rather than August 2026, and Annex I systems
-embedded in regulated products (medical devices, machinery, vehicles) move to
-**2 August 2028**.
+The Omnibus is a **simplification and timeline-relief** package. The headline
+is that **high-risk obligations were pushed back** — Annex III stand-alone
+systems (recruitment, credit scoring, education, law enforcement, border
+control) now apply from **2 December 2027** rather than August 2026, and
+Annex I systems embedded in regulated products (medical devices, machinery,
+vehicles) move to **2 August 2028**.
 
-It also adds a **four-month watermarking grace period** for pre-existing systems
-under the Article 50 transparency rules, introduces **new prohibitions** (child
-sexual abuse material and non-consensual "nudifier" tools) with a transitional
-period to 2 December 2026, and includes **targeted exemptions** to reduce
-duplication where machinery-regulation products already carry equivalent
-requirements.
+It also adds a **four-month watermarking grace period** for pre-existing
+systems under the Article 50 transparency rules, introduces **new
+prohibitions** (child sexual abuse material and non-consensual "nudifier"
+tools) with a transitional period to 2 December 2026, and includes
+**targeted exemptions** to reduce duplication where machinery-regulation
+products already carry equivalent requirements.
 
-## What this means for your programme
+### What this means for your programme
 
 The deferral is **breathing room, not a reprieve.** The heavy lifting for
 high-risk systems — classification, conformity assessment, technical
 documentation, human oversight, logging, and post-market monitoring — still
-takes many months to build. Treat the new dates as the deadline to *be compliant*,
-and work backwards.
+takes many months to build. Treat the new dates as the deadline to *be
+compliant*, and work backwards.
 
 A sensible sequencing:
 
 1. **Now** — inventory and classify every AI system (see the
-   [AI System Inventory](../registers/ai-system-inventory.md)). You can't manage
-   what you haven't catalogued.
-2. **Now** — confirm you are clear of prohibited practices and meeting GPAI and
-   Article 50 transparency duties already in force.
-3. **2026** — build the control framework for anything that will be high-risk:
-   risk management, data governance, documentation, human oversight.
+   [AI System Inventory](../registers/ai-system-inventory.md)). You cannot manage what you have not catalogued.
+2. **Now** — confirm you are clear of prohibited practices and are meeting
+   the GPAI, AI literacy, and Article 50 transparency duties already in force.
+3. **2026** — build the control framework for anything that will be
+   high-risk: risk management, data governance, documentation, human
+   oversight.
 4. **Ahead of Dec 2027** — complete conformity assessments and post-market
    monitoring for Annex III systems.
 
-## Sources
+!!! tip "Work backwards from December 2027"
+    If an Annex III system needs a conformity assessment, count back: the
+    assessment needs complete technical documentation, which needs a finished
+    risk management process, which needs classified systems and governed
+    training data. That chain is comfortably an 18-month programme.
+
+### Sources
 
 - [Gibson Dunn — EU AI Act Omnibus Agreement: Postponed High-Risk Deadlines](https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes/)
 - [DLA Piper — The Digital AI Omnibus: proposed deferral of high-risk AI obligations](https://knowledge.dlapiper.com/dlapiperknowledge/globalemploymentlatestdevelopments/2026/The-Digital-AI-Omnibus-Proposed-deferral-of-high-risk-AI-obligations-under-the-AI-Act)
 - [Covington Inside Privacy — Timeline Relief, Targeted Simplification, and New Prohibitions](https://www.insideprivacy.com/artificial-intelligence/eu-ai-act-update-timeline-relief-targeted-simplification-and-new-prohibitions/)
 - [Freshfields — EU AI Act unpacked #34: the final Digital Omnibus on AI](https://www.freshfields.com/en/our-thinking/blogs/technology-quotient/eu-ai-act-unpacked-34-the-final-digital-omnibus-on-ai-key-amendments-to-the-a-102nber)
 
-Always cross-check against the official *Official Journal of the European Union*
-text and the European Commission's AI Act pages for the definitive dates.
+Always cross-check against the official *Official Journal of the European
+Union* text and the European Commission's AI Act pages for the definitive
+dates.
+
+---
+
+## Adaptation notes
+
+- **Non-EU organisations:** These dates bind you where you place systems on the EU market or where output is used in the EU. Check scope first — many organisations assume they are out and are not.
+- **Long product cycles:** If your release cycle is 12 months or more, the December 2027 date is effectively one or two releases away. Treat it as current-roadmap work, not future work.
+- **Maintaining this page:** This is the page most likely to age. Re-verify against official sources each quarter and update the dates here in `data/templates.yml`.
+
+## Related
+
+- [EU AI Act — 25-point readiness checklist](readiness-checklist.md) — <span class="pill ready">Ready</span>
+- [AI System Inventory](../registers/ai-system-inventory.md) — <span class="pill ready">Ready</span>
+- [AI Governance Framework](../frameworks/ai-governance-framework.md) — <span class="pill ready">Ready</span>
+- [Board Pack Template](../board/board-pack.md) — <span class="pill ready">Ready</span>
+
+!!! warning "Not legal advice"
+    These templates are a head start, not a substitute for professional
+    judgement. Adapt them to your jurisdiction, sector, and risk appetite, and
+    have qualified counsel review anything material before you rely on it.

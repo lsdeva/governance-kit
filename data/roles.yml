@@ -1,0 +1,74 @@
+# Roles a visitor can select in the /assess/ questionnaire.
+#
+# NOTE: the questions that apply to a role are NOT listed here. They are derived
+# from `applies_to` in data/questions.yml, so each question's audience is defined
+# in exactly one place. Storing it in both files would guarantee drift.
+#
+# Fields:
+#   id      - stable slug, referenced by questions.yml `applies_to`
+#   name    - display name
+#   short   - one-line description shown on the role picker card
+#   icon    - Material icon name (rendered as an inline SVG by the app)
+#   focus   - categories this role most cares about; used to order their report
+
+- id: exec-sponsor
+  name: Exec Sponsor / Board
+  short: >-
+    Accountable for the organisation's overall risk posture and for resourcing
+    governance properly.
+  icon: presentation
+  focus: [Oversight, Risk, Literacy]
+
+- id: governance-lead
+  name: Governance Lead
+  short: >-
+    Owns the governance programme day to day — frameworks, committee, registers,
+    and reporting.
+  icon: account-group
+  focus: [Oversight, Inventory, Documentation, Risk]
+
+- id: legal-dpo
+  name: Legal / DPO
+  short: >-
+    Lawfulness, data protection, and the point where AI obligations meet GDPR.
+  icon: scale-balance
+  focus: [Documentation, Transparency, Third-party]
+
+- id: ml-data-science
+  name: ML / Data Science
+  short: >-
+    Builds and operates the models. Closest to training data, evaluation, and
+    real system behaviour.
+  icon: chart-line
+  focus: [Documentation, Risk, Inventory]
+
+- id: product-owner
+  name: Product Owner
+  short: >-
+    Owns an AI-enabled product or feature and the decisions it makes about
+    people.
+  icon: package-variant
+  focus: [Transparency, Oversight, Risk]
+
+- id: security
+  name: Security
+  short: >-
+    Robustness, access, logging, and the security of models and the data behind
+    them.
+  icon: shield-lock
+  focus: [Risk, Documentation, Third-party]
+
+- id: people-hr
+  name: Head of People / HR
+  short: >-
+    AI literacy, workforce impact, and AI used in recruitment or employment
+    decisions — an Annex III high-risk area.
+  icon: account-school
+  focus: [Literacy, Transparency, Oversight]
+
+- id: internal-audit
+  name: Internal Audit
+  short: >-
+    Independent assurance that the controls described actually operate.
+  icon: clipboard-check
+  focus: [Oversight, Documentation, Risk]

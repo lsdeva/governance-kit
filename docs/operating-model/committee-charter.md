@@ -1,36 +1,119 @@
+<!-- GENERATED FILE — DO NOT EDIT.
+     Source: data/templates.yml
+     Regenerate with: python tools/build_content.py -->
+
+
 # Committee Charter (Terms of Reference)
 
-<span class="pill draft">Draft</span>
+<span class="pill ready">Ready</span>
 
-**Purpose.** Define the governance committee: purpose, membership, quorum, cadence, decision authority, and reporting lines.
+**Purpose.** Establishes the forum where governance decisions are actually made: its authority, membership, quorum, cadence, and what it must decide rather than merely discuss.
 
-**When to use it.** Stand up the committee; review annually.
+**When to use it.** When standing up the committee, then reviewed annually. Revisit if meetings routinely fail to reach decisions.
 
-**How to use it.** Copy the structure below, replace the bracketed placeholders,
-and ratify it through your governance committee. Keep it proportionate to your
-size and risk.
+**How to use it.** Be specific about decision rights and quorum. The most common failure is a committee that discusses at length and decides nothing, because nobody established what it is empowered to settle on its own.
 
-!!! note "Contributions welcome"
-    This page is a **draft** — the structure is set but it needs fleshing out. See [Contributing](../contributing.md) to help complete it.
+!!! tip "Closes assessment gaps"
+    This template addresses **Q02**, **Q31**, **Q35** in the [readiness assessment](../assess/index.md).
 
 ---
 
 ## The template
 
-**Mandate** — the authority granted and by whom.
-**Purpose & objectives** — what success looks like.
-**Scope** — in and out of scope.
-**Sponsorship** — executive sponsor and accountable owner.
-**Membership** — who sits on the committee.
-**Cadence & quorum** — how often it meets and what's needed to decide.
-**Decision authority** — what it can approve vs escalate.
-**Reporting** — to whom, how often.
+### 1. Purpose
+
+The **[Data & AI Governance Committee]** is the decision-making forum for
+data and AI governance at **[Organisation]**, established under
+[Governance Charter](../frameworks/governance-charter.md).
+
+### 2. Authority
+
+The committee is authorised to:
+
+- Approve frameworks, policies, and standards within its scope.
+- Approve or refuse deployment of **high-risk** AI systems.
+- **Require remediation, or suspend a system**, where risk is unacceptable.
+- Approve exceptions to policy, with expiry dates.
+- Escalate to **[the Board / Audit & Risk Committee]**.
+
+Matters reserved to the Board: **[risk appetite, charter changes, matters
+above [threshold]]**.
+
+### 3. Membership
+
+| Role | Member | Voting? |
+|---|---|---|
+| Chair | [Exec sponsor] | Yes |
+| Governance Lead | [name] | Yes |
+| Data Owner representative | [name] | Yes |
+| Technology / ML lead | [name] | Yes |
+| Legal / DPO | [name] | Yes |
+| Security | [name] | Yes |
+| HR / People | [name] | Yes |
+| Internal Audit | [name] | **No — observer** |
+
+!!! note "Audit observes, never votes"
+    If Internal Audit votes on a control, it cannot later provide independent
+    assurance over that control. Keep the third line out of the decision.
+
+### 4. Quorum & decisions
+
+- **Quorum:** **[four]** voting members, **must** include the Chair (or
+  delegate) and **[Legal/DPO]**.
+- **Decisions:** by consensus where possible; otherwise a majority of voting
+  members present. The Chair holds a casting vote.
+- **Dissent is minuted.** A member who disagrees with a risk acceptance has
+  it recorded by name.
+- **Out of cycle:** urgent decisions by **[written procedure with 48h
+  response]**, ratified at the next meeting.
+
+### 5. Cadence & agenda
+
+Meets **[monthly / quarterly]**. Standing agenda:
+
+1. Minutes and actions outstanding
+2. New AI systems for classification or approval
+3. Risk register — new, changed, and escalated items
+4. Incidents since last meeting
+5. Policy exceptions requested and expiring
+6. Regulatory horizon (EU AI Act milestones)
+7. Metrics — see [KPI / KRI Dashboard](../board/kpi-dashboard.md)
+8. Decisions required
+9. AOB
+
+### 6. Papers
+
+Circulated **[five working days]** in advance. Papers arriving late are
+deferred by default — otherwise deadlines get managed by ambushing the
+committee.
+
+### 7. Reporting
+
+Reports to **[the Board]** **[quarterly]** using [Board Pack Template](../board/board-pack.md). Minutes are
+retained for **[period]** as evidence of governance.
+
+### 8. Review
+
+| Version | Date | Approved by | Next review |
+|---|---|---|---|
+| 0.1 | [date] | [board] | [date] |
 
 ---
 
 ## Adaptation notes
 
-- **Small organisations:** keep the fields but reduce the cadence and merge roles.
-- **Regulated sectors:** align terminology and controls to your supervisory
-  expectations and to the [EU AI Act readiness checklist](../eu-ai-act/readiness-checklist.md).
-- **Non-EU:** swap regulatory references for your local regime; the structure holds.
+- **Small organisations:** A standing 45-minute item on an existing leadership meeting, with real minutes, beats a separate committee that quietly stops meeting.
+- **Regulated sectors:** Align composition and reporting lines with your existing risk committee structure, and check whether any member must be independent by rule.
+- **Global organisations:** Consider regional sub-committees with a group committee for policy and escalation, and state clearly which decisions cannot be taken locally.
+
+## Related
+
+- [Governance Charter](../frameworks/governance-charter.md) — <span class="pill draft">Draft</span>
+- [Decision Rights & Escalation](decision-rights.md) — <span class="pill ready">Ready</span>
+- [RACI Matrix](raci.md) — <span class="pill ready">Ready</span>
+- [Board Pack Template](../board/board-pack.md) — <span class="pill ready">Ready</span>
+
+!!! warning "Not legal advice"
+    These templates are a head start, not a substitute for professional
+    judgement. Adapt them to your jurisdiction, sector, and risk appetite, and
+    have qualified counsel review anything material before you rely on it.
