@@ -1,0 +1,8 @@
+# Normalise line endings so the CI "generated content is up to date" check
+# cannot fail spuriously: tools/build_content.py always writes LF, and the
+# workflow compares its output against the committed files on a Linux runner.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
