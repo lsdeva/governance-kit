@@ -10,12 +10,14 @@ hide:
 
 <p class="tagline">
 Board-ready data & AI governance templates — the scaffolding every organisation
-needs, given away free. Frameworks, policies, operating model, registers, board
-packs, and EU AI Act readiness updated for the 2026 Digital Omnibus dates.
+needs, given away free. Take the role-based assessment to find your gaps, then
+use the 25 templates that close them. Frameworks, policies, operating model,
+registers, board packs, and EU AI Act readiness updated for the 2026 Digital
+Omnibus dates.
 </p>
 
-[Get started](getting-started.md){ .md-button .md-button--primary }
-[Browse the EU AI Act checklist](eu-ai-act/readiness-checklist.md){ .md-button }
+[Take the assessment](assess/index.md){ .md-button .md-button--primary }
+[Browse the templates](getting-started.md){ .md-button }
 
 </div>
 
@@ -24,6 +26,46 @@ packs, and EU AI Act readiness updated for the 2026 Digital Omnibus dates.
     [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): use it, adapt it,
     ship it inside your own organisation. Attribution appreciated, never required
     for internal use.
+
+## Find your gaps in ten minutes
+
+The [readiness assessment](assess/index.md) asks only the questions relevant to
+your role — Legal, Governance, ML, Product, HR, Security, Audit, or the Board —
+scores them by severity, and produces a report you can present.
+
+<div class="grid cards" markdown>
+
+- :material-account-check:{ .lg } **Answer as your role**
+
+    ---
+
+    Pick one or more roles and answer only what applies to you, with plain-English
+    help on what each question really requires.
+
+- :material-chart-box:{ .lg } **Get a scored report**
+
+    ---
+
+    Overall readiness, a score per category, and your top gaps ranked by
+    severity — each linked to the template that closes it.
+
+- :material-account-tie:{ .lg } **Tailor it to the audience**
+
+    ---
+
+    Reframe the same answers for a Board, a regulator, your exec team, or the
+    working team. Export to PDF, Markdown, or standalone HTML.
+
+- :material-lock-check:{ .lg } **Nothing leaves your browser**
+
+    ---
+
+    No accounts, no uploads, no analytics. Answers are stored only on your device,
+    and one button erases them.
+
+</div>
+
+[Start the assessment](assess/index.md){ .md-button .md-button--primary }
 
 ## What's inside
 

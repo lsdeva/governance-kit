@@ -4,12 +4,12 @@
 
 **Board-ready data &amp; AI governance templates — given away free.**
 
-The scaffolding every organisation rebuilds from scratch: frameworks, policies,
-operating model, RACI, registers, board packs, and EU AI Act readiness.<br>
-25 templates. No accounts, no paywall, no email capture.
+Take a role-based readiness assessment, get a report you can present to a board
+or a regulator, and use the 25 templates that close your gaps.<br>
+No accounts, no paywall, no email capture — and nothing ever leaves your browser.
 
-[**Browse the kit →**](https://lsdeva.github.io/governance-kit/) &nbsp;·&nbsp;
-[Get started](https://lsdeva.github.io/governance-kit/getting-started/) &nbsp;·&nbsp;
+[**Take the assessment →**](https://lsdeva.github.io/governance-kit/assess/) &nbsp;·&nbsp;
+[Browse the kit](https://lsdeva.github.io/governance-kit/) &nbsp;·&nbsp;
 [EU AI Act checklist](https://lsdeva.github.io/governance-kit/eu-ai-act/readiness-checklist/) &nbsp;·&nbsp;
 [Contributing](docs/contributing.md)
 
@@ -22,6 +22,25 @@ operating model, RACI, registers, board packs, and EU AI Act readiness.<br>
 </div>
 
 ---
+
+## The assessment
+
+Most template libraries leave you to work out what you need. This one asks.
+
+1. **Pick your role** — Legal/DPO, Governance Lead, ML/Data Science, Product
+   Owner, Head of People, Security, Internal Audit, or Exec Sponsor/Board.
+2. **Answer what applies to you** — only the questions relevant to those roles,
+   each with plain-English guidance on what "yes" actually requires.
+3. **Get a report you can present** — overall readiness, a score per category,
+   and your top gaps ranked by severity, each deep-linked to the template that
+   closes it.
+4. **Reframe it for your audience** — Board, regulator, exec team, or working
+   team. Export as print/PDF, Markdown, or a self-contained HTML file.
+
+**Privacy by design.** There is no backend. Answers are held in your browser and
+saved to `localStorage` only on your device, with a "Clear my data" button on
+every screen. The site makes no external requests at all — no fonts, no
+analytics, no API calls.
 
 ## Why this exists
 
@@ -58,6 +77,7 @@ sells convenience, an open commons wins on trust, reach, and durability.
 | **[Risk &amp; Control](docs/risk/)** | 3 | AI risk assessment, model cards, control library &amp; assurance map |
 | **[Board &amp; Reporting](docs/board/)** | 2 | Board pack, KPI / KRI dashboard |
 | **[EU AI Act](docs/eu-ai-act/)** | 1 + timeline | 25-point readiness checklist, obligation timeline |
+| **[Assessment](https://lsdeva.github.io/governance-kit/assess/)** | 40 questions | 8 roles, 7 categories, audience-tailored report |
 
 Each page follows the same structure — **Purpose → When to use it → How to use it
 → The template → Adaptation notes** — so the kit stays predictable and
@@ -73,9 +93,9 @@ Pages carry a status so you know what you're getting:
 | 🟡 **Draft** | Sound structure, needs a review pass |
 | ⚪ **Stub** | Outline with the right shape — [contributions welcome](docs/contributing.md) |
 
-Four pages are fully worked as reference implementations: the
-**AI Governance Framework**, **RACI Matrix**, **AI System Inventory**, and the
-**EU AI Act Readiness Checklist**. Copy their shape when filling a stub.
+All 25 templates plus the EU AI Act timeline are written out in full; the
+Governance Charter is marked Draft pending a review pass. Real-world experience
+still makes them sharper — [corrections and sector variants are welcome](docs/contributing.md).
 
 ## Where to start
 
@@ -102,33 +122,121 @@ pip install -r requirements.txt
 mkdocs serve                     # → http://127.0.0.1:8000
 ```
 
-Before opening a PR, confirm the site still builds clean:
+After editing anything in `data/`, regenerate before previewing:
 
 ```bash
-mkdocs build --strict            # fails on any broken internal link
+python tools/build_content.py    # rewrite generated pages + assessment data
+```
+
+Before opening a PR, confirm both still pass:
+
+```bash
+python tools/build_content.py --check   # generated pages match the data files
+mkdocs build --strict                   # fails on any broken internal link
 ```
 
 ## How it's built
 
-Markdown content rendered by [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/),
+Markdown rendered by [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/),
 built and deployed to GitHub Pages by
-[GitHub Actions](.github/workflows/deploy.yml) on every push to `main`. It is
-static end to end — no backend, no database, no tracking — which is what keeps it
-free to host and easy to fork.
+[GitHub Actions](.github/workflows/deploy.yml) on every push to `main`. Static
+end to end — no backend, no database, no tracking.
+
+**All content is defined once, in `data/`.** The template pages, the section
+index pages, the EU AI Act checklist, the site navigation, and the assessment's
+question bank are all generated from those files by `tools/build_content.py`.
+Nothing is duplicated, so the published checklist and the assessment tool cannot
+drift apart — they read the same source.
 
 ```
-├── mkdocs.yml                    # site config + navigation
-├── requirements.txt              # pinned to mkdocs-material 9.x
-├── .github/workflows/deploy.yml  # strict build → GitHub Pages
+├── data/                         # ← THE SOURCE OF TRUTH
+│   ├── templates.yml             #   25 templates, including page content
+│   ├── questions.yml             #   40 assessment questions
+│   ├── roles.yml                 #   8 roles
+│   ├── sections.yml              #   section metadata → nav + index pages
+│   └── snippets.yml              #   shared blocks (disclaimer, legends)
+├── tools/build_content.py        # generator + integrity checks
+├── mkdocs.yml                    # site config; nav block is generated
+├── overrides/partials/           # theme override that removes an external call
 └── docs/
-    ├── index.md                  # landing page
-    ├── getting-started.md        # three starting paths
-    ├── frameworks/  policies/  operating-model/
-    ├── registers/   risk/       board/
-    ├── eu-ai-act/                # checklist + timeline
-    ├── contributing.md
-    └── about.md
+    ├── index.md, getting-started.md, contributing.md, about.md   # hand-written
+    ├── assess/                   # the assessment app (js + css + generated json)
+    └── frameworks/ policies/ operating-model/ registers/ risk/ board/ eu-ai-act/
+                                  # ← ALL GENERATED. Do not edit.
 ```
+
+### Editing content
+
+Every page under those six section folders carries a
+`<!-- GENERATED FILE — DO NOT EDIT -->` header. Change the data file instead,
+then regenerate:
+
+```bash
+python tools/build_content.py     # rewrite pages + assessment data
+mkdocs build --strict             # confirm it still builds clean
+```
+
+| To change… | Edit this |
+| :--- | :--- |
+| A template's content, wording, or status | `data/templates.yml` |
+| An assessment question, its help text, or weight | `data/questions.yml` |
+| Which roles see a question | `applies_to` in `data/questions.yml` |
+| A role's name or description | `data/roles.yml` |
+| A section name, blurb, or the nav order | `data/sections.yml` |
+| The "not legal advice" notice (all 26 pages at once) | `data/snippets.yml` |
+
+<details>
+<summary><strong>Adding a template, question, or role</strong></summary>
+
+<br>
+
+**A template** — add an entry to `data/templates.yml`:
+
+```yaml
+- id: my-template            # stable slug; referenced by questions.yml
+  title: My Template
+  section: policies          # must exist in data/sections.yml
+  path: policies/my-template.md
+  status: draft              # ready | draft | stub
+  purpose: >-
+    What it is for.
+  when_to_use: >-
+    Trigger and cadence.
+  how_to_use: >-
+    Steps specific to this template.
+  body: |
+    ### 1. First section
+
+    Link other templates with {{their-id}} — the generator resolves it to a
+    correct relative link, so pages can move without breaking anything.
+  adaptation:
+    - context: Small organisations
+      note: >-
+        What changes for them.
+  related: [data-governance-policy]
+```
+
+The page, its navigation entry, and its row on the section index all appear
+automatically.
+
+**A question** — add to `data/questions.yml` with `applies_to`, a `weight` of
+1–5, and the `templates` that close it. It immediately appears for those roles,
+and on the pages of every template it references.
+
+**A role** — add to `data/roles.yml`, then add its id to the `applies_to` of the
+questions it should see. Roles need at least five questions; the generator
+enforces this so no role gets a report too thin to be useful.
+
+**Never renumber existing question ids** — saved assessments in people's
+browsers are keyed by them.
+
+</details>
+
+The generator validates ids, sections, statuses, weights, categories, every
+cross-reference, and per-role question coverage — failing loudly rather than
+producing a broken site. CI re-runs it and rejects the build if the committed
+pages do not match the data files, so a hand-edit of a generated page is caught
+rather than silently lost.
 
 <details>
 <summary><strong>Forking this for your own organisation</strong></summary>

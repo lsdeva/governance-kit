@@ -4,6 +4,12 @@ This kit is designed so you can stand up a credible data & AI governance
 programme in weeks instead of months. You don't need to use everything — start
 where the pressure is.
 
+!!! tip "Not sure where you stand? Start with the assessment"
+    The [role-based assessment](assess/index.md) asks only the questions relevant
+    to your role, scores them by severity, and tells you which templates close
+    your biggest gaps. It takes about ten minutes, and everything stays in your
+    browser. If you would rather read first, carry on below.
+
 ## Three common starting points
 
 === "Brand-new programme"

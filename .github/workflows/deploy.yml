@@ -25,6 +25,21 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      # Pages under docs/ are generated from data/*.yml. Regenerate and fail if
+      # anything changed: that means either a generated file was hand-edited
+      # (the edit would be silently lost on the next build) or the data files
+      # were changed without re-running the generator.
+      - name: Check generated content is up to date
+        run: |
+          python tools/build_content.py
+          if ! git diff --quiet; then
+            echo "::error::Generated content is stale or a generated file was edited by hand."
+            echo "Run 'python tools/build_content.py' and commit the result."
+            git diff --stat
+            exit 1
+          fi
+
       - name: Build site
         run: mkdocs build --strict
       - name: Upload artifact

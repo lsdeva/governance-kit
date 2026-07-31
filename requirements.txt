@@ -2,3 +2,7 @@
 # backward-incompatible (plugins and theme overrides break, no migration path).
 # Bump these only after verifying `mkdocs build --strict` still passes.
 mkdocs-material>=9.5,<10
+
+# Used by tools/build_content.py to read data/*.yml. No plugins: the generator
+# is a plain script, so it keeps working if the MkDocs plugin API changes.
+PyYAML>=6.0,<7
