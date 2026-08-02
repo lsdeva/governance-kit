@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/data-governance-policy.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/data-governance-policy.md.txt){ .md-button .gk-dl download="data-governance-policy.md" }
+</div>
+
 **Purpose.** The mandatory rules for handling data. Where the framework explains how governance works, this policy states what people must and must not do, in language you can hold someone to.
 
 **When to use it.** Adopt alongside the data governance framework. Review annually, and reissue with attestation whenever the obligations change materially.

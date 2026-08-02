@@ -7,6 +7,12 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/maturity-assessment.docx){ .md-button .gk-dl download }
+[:material-file-excel: Excel](../downloads/maturity-assessment.xlsx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/maturity-assessment.md.txt){ .md-button .gk-dl download="maturity-assessment.md" }
+</div>
+
 **Purpose.** A structured baseline of how capable your governance actually is today, across the dimensions that matter, so you can prioritise honestly and show movement over time.
 
 **When to use it.** At programme start, then every six to twelve months. Also useful immediately after an incident, when appetite for investment is briefly high.

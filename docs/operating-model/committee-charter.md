@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/committee-charter.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/committee-charter.md.txt){ .md-button .gk-dl download="committee-charter.md" }
+</div>
+
 **Purpose.** Establishes the forum where governance decisions are actually made: its authority, membership, quorum, cadence, and what it must decide rather than merely discuss.
 
 **When to use it.** When standing up the committee, then reviewed annually. Revisit if meetings routinely fail to reach decisions.

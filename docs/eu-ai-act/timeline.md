@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/eu-ai-act-timeline.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/eu-ai-act-timeline.md.txt){ .md-button .gk-dl download="eu-ai-act-timeline.md" }
+</div>
+
 **Purpose.** The dates that actually bind you, reflecting the 2026 Digital Omnibus amendments — what is already in force, what was deferred, and what to work backwards from.
 
 **When to use it.** When planning your roadmap, and whenever you are asked "how long have we got?". Re-check before you rely on any date; this area is still moving.

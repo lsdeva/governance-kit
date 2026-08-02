@@ -7,6 +7,12 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/ai-risk-assessment.docx){ .md-button .gk-dl download }
+[:material-file-excel: Excel](../downloads/ai-risk-assessment.xlsx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/ai-risk-assessment.md.txt){ .md-button .gk-dl download="ai-risk-assessment.md" }
+</div>
+
 **Purpose.** A structured assessment of what could go wrong with a specific AI system, how bad it would be, and what you are doing about it. For high-risk systems it is the core evidence that Art. 9 risk management is operating.
 
 **When to use it.** Before development for high-risk systems, before deployment for all systems, and again on material change. Review live high-risk systems at least annually.

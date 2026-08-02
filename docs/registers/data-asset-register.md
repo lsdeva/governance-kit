@@ -7,6 +7,12 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/data-asset-register.docx){ .md-button .gk-dl download }
+[:material-file-excel: Excel](../downloads/data-asset-register.xlsx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/data-asset-register.md.txt){ .md-button .gk-dl download="data-asset-register.md" }
+</div>
+
 **Purpose.** The catalogue of what data you hold, who owns it, how sensitive it is, and where it lives. Almost every other governance control depends on it.
 
 **When to use it.** Start it early and keep it current. Review entries at least annually, and whenever a system or a data flow changes.

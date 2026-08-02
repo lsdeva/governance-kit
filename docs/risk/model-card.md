@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/model-card.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/model-card.md.txt){ .md-button .gk-dl download="model-card.md" }
+</div>
+
 **Purpose.** Standard documentation for a model: what it is for, what it was trained on, how well it performs and for whom, and where it should not be used. Feeds both AI Act technical documentation and the instructions deployers rely on.
 
 **When to use it.** Complete before deployment; update on retraining or material change. Required in practice for anything high-risk.

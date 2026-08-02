@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/acceptable-ai-use-policy.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/acceptable-ai-use-policy.md.txt){ .md-button .gk-dl download="acceptable-ai-use-policy.md" }
+</div>
+
 **Purpose.** The staff-facing rules for using AI at work: what is encouraged, what needs approval, and what is never allowed. This is the most-read document in the kit, and usually the one that prevents the most damage.
 
 **When to use it.** As early as possible — staff are already using AI tools whether or not you have a policy. Review at least twice a year while the tool landscape moves.

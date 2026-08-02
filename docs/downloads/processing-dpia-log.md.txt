@@ -1,0 +1,87 @@
+# Processing & DPIA Log
+
+**Purpose.** The record of personal data processing activities and the impact assessments that cover them — the point where AI governance meets data protection law.
+
+**When to use it.** Maintain continuously. Complete a DPIA before high-risk processing begins, not after the system is built.
+
+**How to use it.** If you already keep an Art. 30 record of processing, extend it rather than starting a second list. Add the AI-specific columns and cross-reference the AI System Inventory so the two can never disagree about what exists.
+
+---
+
+### Processing activities
+
+| ID | Activity | Purpose | Lawful basis | Categories of data | Data subjects | Special category? | Recipients | Transfers | Retention | AI system | DPIA |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| P-001 | Customer support triage | Route and summarise tickets | Legitimate interests | Contact, ticket content | Customers | No | [vendor] | [country] | 3y | AI-002 | DPIA-002 |
+| P-002 | Candidate screening | Shortlist applicants | Legitimate interests | CV, application | Candidates | Possible | [vendor] | EU | 12m | AI-004 | DPIA-001 |
+
+### When a DPIA is required
+
+A DPIA is required where processing is likely to result in high risk — and
+for AI, that is common. Triggers include:
+
+- [ ] Systematic and extensive **automated evaluation** of people, including
+      profiling, with legal or similarly significant effects
+- [ ] Large-scale processing of **special category** data
+- [ ] Systematic **monitoring** of a publicly accessible area
+- [ ] **Innovative technology** applied to personal data — most novel AI
+      qualifies
+- [ ] Processing that **prevents access** to a service or contract
+- [ ] Data concerning **vulnerable people**, including employees and children
+
+> **AI Act and GDPR assessments overlap — link them**
+> A high-risk AI system will usually need both a DPIA and an AI risk
+> assessment, and certain deployers additionally owe a fundamental rights
+> impact assessment. Run them together and cross-reference; duplicating the
+> analysis in two documents guarantees they will diverge.
+
+### DPIA log
+
+| ID | System | Processing | Started | Completed | Outcome | Residual risk | DPO opinion | Consulted authority? | Review |
+|---|---|---|---|---|---|---|---|---|---|
+| DPIA-001 | AI-004 | Candidate screening | [date] | [date] | Proceed with controls | Medium | Given [date] | No | [date] |
+
+### DPIA contents
+
+1. **Description** — nature, scope, context, purpose; how the AI works in
+   terms a non-specialist can follow.
+2. **Necessity and proportionality** — lawful basis, and why a less intrusive
+   option would not achieve the purpose.
+3. **Risks to individuals** — discrimination, loss of autonomy, inaccuracy,
+   exclusion, distress, not merely security risk.
+4. **Measures** — controls, human oversight, transparency, and the routes for
+   people to contest a decision.
+5. **Residual risk** and sign-off. If risk stays high after mitigation, prior
+   consultation with the supervisory authority may be required.
+
+### Individual rights with AI
+
+Confirm you can actually deliver these before the system goes live:
+
+| Right | The AI-specific question |
+|---|---|
+| Access | Can you show what data about them the system used? |
+| Rectification | Can a correction propagate to model behaviour? |
+| Erasure | Can you remove them from training data or retrain? |
+| Object | Can you exclude them from processing? |
+| Automated decisions | Can you offer human review, explanation, and challenge? |
+
+> **Erasure is the hard one**
+> "The data is in the model weights" is not an answer a regulator accepts.
+> Decide your approach — retraining cadence, exclusion lists, or not
+> training on personal data at all — **before** you build.
+
+
+---
+
+## Adaptation notes
+
+- **Small organisations:** One spreadsheet covering both processing and DPIAs is fine. The lawful basis and retention columns are the ones auditors ask for first.
+- **Where a statutory DPO exists:** The DPO's opinion must be recorded, and where you proceed against it, the reasons must be documented.
+- **Non-EU / other regimes:** Replace DPIA with your local equivalent (e.g. a privacy impact assessment). The triggers and structure translate with little change.
+
+---
+
+*From the [Open Data & AI Governance Kit](https://lsdeva.github.io/governance-kit/). Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to use, adapt, and share with attribution.*
+
+***Not legal advice.** Adapt to your jurisdiction, sector, and risk appetite, and have qualified counsel review anything material.*

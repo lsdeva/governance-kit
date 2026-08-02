@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/eu-ai-act-readiness-checklist.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/eu-ai-act-readiness-checklist.md.txt){ .md-button .gk-dl download="eu-ai-act-readiness-checklist.md" }
+</div>
+
 **Purpose.** A fast self-assessment of where your organisation stands against the EU AI Act. Work through it, mark what is true today, and treat every unticked box as a backlog item.
 
 **When to use it.** As a first baseline, then quarterly, and again whenever you launch or materially change an AI system.
@@ -19,7 +24,9 @@
 
 This checklist is generated from the same question bank as the [interactive assessment](../assess/index.md), so the two can never disagree.
 
-**How to score.** Count what you can honestly tick. **0–8:** early — start with inventory and prohibited-practice checks. **9–17:** developing — close policy and documentation gaps. **18–25:** mature — focus on assurance and continuous monitoring.
+**Tick the boxes as you go** — your progress is saved in this browser and nothing is uploaded.
+
+<div id="gk-checklist" class="gk-cl"></div>
 
 ### Inventory
 

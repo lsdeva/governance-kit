@@ -30,6 +30,39 @@
   box-shadow: 0 2px 12px rgba(0,0,0,.06);
 }
 
+/* Download buttons on template pages */
+.gk-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: .9rem 0 1.4rem;
+}
+.gk-downloads .md-button.gk-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin: 0;
+  padding: .3rem .75rem;
+  font-size: .74rem;
+  font-weight: 600;
+  border-width: 1px;
+  border-radius: .3rem;
+}
+.gk-downloads .md-button.gk-dl svg {
+  width: .95rem;
+  height: .95rem;
+  fill: currentColor;
+}
+.gk-downloads .md-button.gk-dl:hover {
+  background: var(--md-accent-fg-color);
+  border-color: var(--md-accent-fg-color);
+  color: var(--md-accent-bg-color);
+}
+
+@media print {
+  .gk-downloads { display: none; }
+}
+
 /* Status pills for template pages */
 .pill {
   display: inline-block;

@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/raci.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/raci.md.txt){ .md-button .gk-dl download="raci.md" }
+</div>
+
 **Purpose.** Removes ambiguity about who does what. For every significant governance activity it names exactly one accountable party, so decisions have an owner and gaps become visible before they become incidents.
 
 **When to use it.** Agree it when you stand up the operating model, and revisit whenever roles change or an escalation reveals that nobody owned something.

@@ -44,6 +44,10 @@ NAV_END = "# NAV:END"
 
 STATUS_LABELS = {"ready": "Ready", "draft": "Draft", "stub": "Stub"}
 
+# Template ids that also get an .xlsx. Populated from data/spreadsheets.yml at
+# runtime so the download buttons cannot advertise a file that is not built.
+SPREADSHEET_IDS = set()
+
 # Order categories appear in the questionnaire and the report.
 CATEGORY_ORDER = [
     "Inventory",
@@ -117,10 +121,11 @@ def build_checklist_body(questions: list, templates_by_id: dict, page_path: str)
         "This checklist is generated from the same question bank as the "
         "[interactive assessment](" + rel_link(page_path, "assess/index.md") + "), "
         "so the two can never disagree.\n",
-        "**How to score.** Count what you can honestly tick. "
-        "**0–8:** early — start with inventory and prohibited-practice checks. "
-        "**9–17:** developing — close policy and documentation gaps. "
-        "**18–25:** mature — focus on assurance and continuous monitoring.\n",
+        "**Tick the boxes as you go** — your progress is saved in this browser "
+        "and nothing is uploaded.\n",
+        # docs/assess/checklist.js finds this element, enables the checkboxes,
+        # and renders the live count and clear control into it.
+        '<div id="gk-checklist" class="gk-cl"></div>\n',
     ]
 
     for category in CATEGORY_ORDER:
@@ -166,6 +171,25 @@ def render_template_page(t: dict, by_id: dict, snippets: dict, questions: list) 
             snippets["draft_note"].format(contributing=rel_link(path, "contributing.md"))
         )
 
+    # Download buttons. build_downloads.py writes one .docx per template and a
+    # .xlsx for anything in spreadsheets.yml; these links must match its output.
+    dl = rel_link(path, "downloads/x").rsplit("/", 1)[0]
+    buttons = [
+        f'[:material-file-word: Word]({dl}/{t["id"]}.docx)'
+        '{ .md-button .gk-dl download }'
+    ]
+    if t["id"] in SPREADSHEET_IDS:
+        buttons.append(
+            f'[:material-file-excel: Excel]({dl}/{t["id"]}.xlsx)'
+            '{ .md-button .gk-dl download }'
+        )
+    buttons.append(
+        f'[:material-language-markdown: Markdown]({dl}/{t["id"]}.md.txt)'
+        f'{{ .md-button .gk-dl download="{t["id"]}.md" }}'
+    )
+    parts.append('<div class="gk-downloads" markdown>\n'
+                 + "\n".join(buttons) + "\n</div>\n")
+
     parts.append(f"**Purpose.** {resolve_links(t['purpose'].strip(), path, by_id)}\n")
     parts.append(f"**When to use it.** {resolve_links(t['when_to_use'].strip(), path, by_id)}\n")
     parts.append(f"**How to use it.** {resolve_links(t['how_to_use'].strip(), path, by_id)}\n")
@@ -208,6 +232,77 @@ def render_template_page(t: dict, by_id: dict, snippets: dict, questions: list) 
 
     parts.append(snippets["not_legal_advice"])
     return "\n".join(parts)
+
+
+def render_markdown_download(t: dict, by_id: dict, questions: list) -> str:
+    """The template as standalone Markdown, for pasting into a wiki.
+
+    Cross-references become plain template names rather than relative links,
+    since those links would be broken once the file leaves the site.
+    """
+    def plain(text):
+        return re.sub(
+            r"\{\{([a-z0-9\-]+)\}\}",
+            lambda m: by_id[m.group(1)]["title"] if m.group(1) in by_id else m.group(1),
+            text or "",
+        )
+
+    out = [f"# {t['title']}\n"]
+    out.append(f"**Purpose.** {plain(' '.join(t['purpose'].split()))}\n")
+    out.append(f"**When to use it.** {plain(' '.join(t['when_to_use'].split()))}\n")
+    out.append(f"**How to use it.** {plain(' '.join(t['how_to_use'].split()))}\n")
+    out.append("---\n")
+
+    if t.get("generate_body") == "checklist":
+        items = sorted([q for q in questions if q.get("checklist")],
+                       key=lambda q: q["checklist"])
+        current = None
+        for q in items:
+            if q["category"] != current:
+                current = q["category"]
+                out.append(f"\n## {current}\n")
+            out.append(f"- [ ] **{q['checklist']}.** {q['text']}")
+            out.append(f"  <!-- {' '.join(q['help'].split())} -->")
+        out.append("")
+    else:
+        # Admonitions are MkDocs-specific; flatten them to blockquotes so the
+        # file renders sensibly in GitHub, Notion, Confluence, and plain editors.
+        body = plain(t["body"].rstrip())
+        lines, flat = body.split("\n"), []
+        i = 0
+        while i < len(lines):
+            m = re.match(r'^!!!\s+\w+\s*"?([^"]*)"?\s*$', lines[i].strip())
+            if m:
+                flat.append(f"> **{m.group(1).strip() or 'Note'}**")
+                i += 1
+                while i < len(lines) and (not lines[i].strip()
+                                          or lines[i].startswith("    ")):
+                    if lines[i].strip():
+                        flat.append("> " + lines[i].strip())
+                    i += 1
+                flat.append("")
+                continue
+            flat.append(lines[i])
+            i += 1
+        out.append("\n".join(flat) + "\n")
+
+    out.append("---\n")
+    out.append("## Adaptation notes\n")
+    for note in t["adaptation"]:
+        out.append(f"- **{note['context']}:** {plain(' '.join(note['note'].split()))}")
+    out.append("")
+    out.append("---\n")
+    out.append(
+        "*From the [Open Data & AI Governance Kit]"
+        "(https://lsdeva.github.io/governance-kit/). Licensed "
+        "[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to use, "
+        "adapt, and share with attribution.*\n"
+    )
+    out.append(
+        "***Not legal advice.** Adapt to your jurisdiction, sector, and risk "
+        "appetite, and have qualified counsel review anything material.*\n"
+    )
+    return "\n".join(out)
 
 
 def render_section_index(section: dict, templates: list, by_id: dict) -> str:
@@ -341,6 +436,7 @@ def main() -> int:
     snippets = load("snippets.yml")
 
     SNIPPET_ASSESS = snippets["assess_callout"]
+    SPREADSHEET_IDS.update((load("spreadsheets.yml") or {}).keys())
 
     by_id = {t["id"]: t for t in templates}
 
@@ -385,6 +481,14 @@ def main() -> int:
     for t in templates:
         write(DOCS / t["path"],
               render_template_page(t, by_id, snippets, questions), written, args.check)
+        # Raw Markdown download: the template on its own, without site chrome or
+        # cross-page links, ready to paste into a wiki or an internal doc.
+        #
+        # Written with a .md.txt extension because MkDocs treats any .md file
+        # under docs/ as a page to render — a plain .md here would be served as
+        # HTML, so the "Markdown" button would hand back the wrong thing.
+        write(DOCS / "downloads" / (t["id"] + ".md.txt"),
+              render_markdown_download(t, by_id, questions), written, args.check)
 
     # ---- section index pages ------------------------------------------------
     for s in sections:

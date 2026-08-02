@@ -7,6 +7,12 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/processing-dpia-log.docx){ .md-button .gk-dl download }
+[:material-file-excel: Excel](../downloads/processing-dpia-log.xlsx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/processing-dpia-log.md.txt){ .md-button .gk-dl download="processing-dpia-log.md" }
+</div>
+
 **Purpose.** The record of personal data processing activities and the impact assessments that cover them — the point where AI governance meets data protection law.
 
 **When to use it.** Maintain continuously. Complete a DPIA before high-risk processing begins, not after the system is built.

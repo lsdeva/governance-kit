@@ -527,6 +527,93 @@
   padding: 2rem 0;
 }
 
+/* ------------------------------------------- tickable EU AI Act checklist */
+
+.gk-cl {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  padding: 0.9rem 1.1rem;
+  margin: 1.25rem 0 1.75rem;
+  position: sticky;
+  top: 3.2rem;
+  z-index: 2;
+  background: var(--md-default-bg-color);
+}
+
+.gk-cl-count {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.gk-cl-band {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.85rem;
+}
+
+.gk-cl-bar {
+  height: 0.5rem;
+  background: var(--md-default-fg-color--lightest);
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.gk-cl-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 0.25rem;
+  transition: width 0.2s;
+  background: var(--md-accent-fg-color);
+}
+
+.gk-cl-fill.is-good { background: #1e7d34; }
+.gk-cl-fill.is-mid  { background: #a25b12; }
+.gk-cl-fill.is-bad  { background: #b3261e; }
+
+.gk-cl-note {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+  margin: 0.6rem 0 0.5rem;
+}
+
+.gk-cl-clear {
+  font-size: 0.78rem;
+  padding: 0.28rem 0.7rem;
+}
+
+/* Material renders task lists read-only: it hides the real <input> and paints
+ * a .task-list-indicator span on top. checklist.js enables the inputs, so on
+ * that page the span must stop intercepting clicks and the real checkbox must
+ * become visible — otherwise the boxes look tickable but are not.
+ *
+ * Scoped to .gk-checklist-live, which checklist.js sets on <body>, so ordinary
+ * task lists elsewhere on the site keep Material's styling. */
+.gk-checklist-live .md-content .task-list-indicator {
+  display: none;
+}
+
+.gk-checklist-live .md-content .task-list-item input[type="checkbox"] {
+  position: static;
+  visibility: visible;
+  opacity: 1;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0 .45rem 0 -1.6rem;
+  vertical-align: -.15rem;
+  cursor: pointer;
+  accent-color: var(--md-accent-fg-color);
+  transform: none;
+  pointer-events: auto;
+}
+
+.gk-checklist-live .md-content .task-list-item input[type="checkbox"]:checked ~ small {
+  opacity: .7;
+}
+
+@media print {
+  .gk-cl { position: static; }
+  .gk-cl-clear { display: none; }
+}
+
 /* --------------------------------------------------------------------- print */
 
 @media print {

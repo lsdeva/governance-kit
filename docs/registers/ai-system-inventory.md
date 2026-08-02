@@ -7,6 +7,12 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/ai-system-inventory.docx){ .md-button .gk-dl download }
+[:material-file-excel: Excel](../downloads/ai-system-inventory.xlsx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/ai-system-inventory.md.txt){ .md-button .gk-dl download="ai-system-inventory.md" }
+</div>
+
 **Purpose.** The single list of every AI system you build, buy, or have embedded in something you already licence. It is the foundation of AI Act compliance: every other obligation applies per system, so a system you have not listed is one you cannot govern.
 
 **When to use it.** Create it now, before anything else. Add systems at ideation, not at launch. Review the whole inventory quarterly.

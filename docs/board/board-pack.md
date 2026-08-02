@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/board-pack.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/board-pack.md.txt){ .md-button .gk-dl download="board-pack.md" }
+</div>
+
 **Purpose.** A structured report that gives the board what it needs to discharge its oversight duty: current posture, what changed, what went wrong, and what decisions are being asked of them.
 
 **When to use it.** Every board or risk committee cycle — typically quarterly. Also for an extraordinary session after a serious incident.

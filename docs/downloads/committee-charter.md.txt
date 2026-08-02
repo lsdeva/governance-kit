@@ -1,0 +1,101 @@
+# Committee Charter (Terms of Reference)
+
+**Purpose.** Establishes the forum where governance decisions are actually made: its authority, membership, quorum, cadence, and what it must decide rather than merely discuss.
+
+**When to use it.** When standing up the committee, then reviewed annually. Revisit if meetings routinely fail to reach decisions.
+
+**How to use it.** Be specific about decision rights and quorum. The most common failure is a committee that discusses at length and decides nothing, because nobody established what it is empowered to settle on its own.
+
+---
+
+### 1. Purpose
+
+The **[Data & AI Governance Committee]** is the decision-making forum for
+data and AI governance at **[Organisation]**, established under
+Governance Charter.
+
+### 2. Authority
+
+The committee is authorised to:
+
+- Approve frameworks, policies, and standards within its scope.
+- Approve or refuse deployment of **high-risk** AI systems.
+- **Require remediation, or suspend a system**, where risk is unacceptable.
+- Approve exceptions to policy, with expiry dates.
+- Escalate to **[the Board / Audit & Risk Committee]**.
+
+Matters reserved to the Board: **[risk appetite, charter changes, matters
+above [threshold]]**.
+
+### 3. Membership
+
+| Role | Member | Voting? |
+|---|---|---|
+| Chair | [Exec sponsor] | Yes |
+| Governance Lead | [name] | Yes |
+| Data Owner representative | [name] | Yes |
+| Technology / ML lead | [name] | Yes |
+| Legal / DPO | [name] | Yes |
+| Security | [name] | Yes |
+| HR / People | [name] | Yes |
+| Internal Audit | [name] | **No — observer** |
+
+> **Audit observes, never votes**
+> If Internal Audit votes on a control, it cannot later provide independent
+> assurance over that control. Keep the third line out of the decision.
+
+### 4. Quorum & decisions
+
+- **Quorum:** **[four]** voting members, **must** include the Chair (or
+  delegate) and **[Legal/DPO]**.
+- **Decisions:** by consensus where possible; otherwise a majority of voting
+  members present. The Chair holds a casting vote.
+- **Dissent is minuted.** A member who disagrees with a risk acceptance has
+  it recorded by name.
+- **Out of cycle:** urgent decisions by **[written procedure with 48h
+  response]**, ratified at the next meeting.
+
+### 5. Cadence & agenda
+
+Meets **[monthly / quarterly]**. Standing agenda:
+
+1. Minutes and actions outstanding
+2. New AI systems for classification or approval
+3. Risk register — new, changed, and escalated items
+4. Incidents since last meeting
+5. Policy exceptions requested and expiring
+6. Regulatory horizon (EU AI Act milestones)
+7. Metrics — see KPI / KRI Dashboard
+8. Decisions required
+9. AOB
+
+### 6. Papers
+
+Circulated **[five working days]** in advance. Papers arriving late are
+deferred by default — otherwise deadlines get managed by ambushing the
+committee.
+
+### 7. Reporting
+
+Reports to **[the Board]** **[quarterly]** using Board Pack Template. Minutes are
+retained for **[period]** as evidence of governance.
+
+### 8. Review
+
+| Version | Date | Approved by | Next review |
+|---|---|---|---|
+| 0.1 | [date] | [board] | [date] |
+
+---
+
+## Adaptation notes
+
+- **Small organisations:** A standing 45-minute item on an existing leadership meeting, with real minutes, beats a separate committee that quietly stops meeting.
+- **Regulated sectors:** Align composition and reporting lines with your existing risk committee structure, and check whether any member must be independent by rule.
+- **Global organisations:** Consider regional sub-committees with a group committee for policy and escalation, and state clearly which decisions cannot be taken locally.
+
+---
+
+*From the [Open Data & AI Governance Kit](https://lsdeva.github.io/governance-kit/). Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to use, adapt, and share with attribution.*
+
+***Not legal advice.** Adapt to your jurisdiction, sector, and risk appetite, and have qualified counsel review anything material.*

@@ -7,6 +7,12 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/kpi-dashboard.docx){ .md-button .gk-dl download }
+[:material-file-excel: Excel](../downloads/kpi-dashboard.xlsx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/kpi-dashboard.md.txt){ .md-button .gk-dl download="kpi-dashboard.md" }
+</div>
+
 **Purpose.** The measures that show whether governance is actually working — coverage, quality, timeliness, and leading indicators of trouble — rather than how much documentation exists.
 
 **When to use it.** Report every cycle. Review the metric set annually and drop anything that has never changed a decision.

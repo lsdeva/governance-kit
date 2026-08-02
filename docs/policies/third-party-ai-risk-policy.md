@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/third-party-ai-risk-policy.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/third-party-ai-risk-policy.md.txt){ .md-button .gk-dl download="third-party-ai-risk-policy.md" }
+</div>
+
 **Purpose.** How you assess, contract for, and monitor AI you did not build — including AI features that appear inside software you already licence. For most organisations this is the majority of their AI exposure.
 
 **When to use it.** At procurement, at renewal, and whenever a vendor announces new AI functionality in an existing product.

@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/decision-rights.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/decision-rights.md.txt){ .md-button .gk-dl download="decision-rights.md" }
+</div>
+
 **Purpose.** States who can decide what, at what threshold, and what happens when people disagree or a decision is needed urgently. It is the document that stops governance stalling.
 
 **When to use it.** With the operating model. Test it after the first real escalation, and again after the first urgent out-of-hours decision.

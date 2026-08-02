@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/ai-governance-framework.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/ai-governance-framework.md.txt){ .md-button .gk-dl download="ai-governance-framework.md" }
+</div>
+
 **Purpose.** A single reference that defines how your organisation governs AI across its lifecycle — who is accountable, what principles apply, how risk is tiered and controlled, and how it connects to data governance and the EU AI Act. It is the document you hand to a board, a regulator, or a new hire to explain "how we do AI here".
 
 **When to use it.** Adopt it once, then review at least annually and whenever regulation, your risk appetite, or your AI footprint changes materially.

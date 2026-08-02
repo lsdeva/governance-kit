@@ -1,0 +1,92 @@
+# Decision Rights & Escalation
+
+**Purpose.** States who can decide what, at what threshold, and what happens when people disagree or a decision is needed urgently. It is the document that stops governance stalling.
+
+**When to use it.** With the operating model. Test it after the first real escalation, and again after the first urgent out-of-hours decision.
+
+**How to use it.** Set thresholds in concrete terms — money, number of people affected, data classification — not adjectives like "significant". Then walk a real past decision through it and see whether the answer it gives matches what actually happened.
+
+---
+
+### 1. Decision authority
+
+| Decision | Authority | Consult | Escalate if |
+|---|---|---|---|
+| Deploy a **minimal-risk** AI system | AI Accountable Owner | Gov Lead | Classification is disputed |
+| Deploy a **limited-risk** AI system | Gov Lead | Legal, Security | Customer-facing |
+| Deploy a **high-risk** AI system | **Committee** | Legal, Security, Audit | Board threshold met |
+| Approve a **prohibited-practice** exception | **Not available** | — | Prohibited means prohibited |
+| Use personal data for training | Data Owner + DPO | Gov Lead | Special category data |
+| Accept residual risk — low / medium | AI Accountable Owner | Gov Lead | — |
+| Accept residual risk — high | **Committee** | Legal, Security | Above **[threshold]** |
+| Accept residual risk — critical | **Board** | Committee | — |
+| Approve a new AI vendor | Gov Lead | Security, Legal | Critical tier |
+| Policy exception ≤ **[90 days]** | Gov Lead | Owner | Repeat request |
+| Policy exception > **[90 days]** | **Committee** | Legal | — |
+| **Suspend a live AI system** | AI Owner, Gov Lead, **or** Security | Notify Committee within [24h] | Always report |
+
+> **Suspension must be fast and blameless**
+> Any of three roles can stop a system, and none of them needs permission
+> first. If stopping a system requires a committee meeting, it will not
+> happen in time. Notification comes after the stop, never before.
+
+### 2. Escalation thresholds
+
+Escalate to the **Committee** when any is true:
+
+- Risk is rated **high** or above after mitigation.
+- Personal data of **[10,000+]** people, or any special category data.
+- The system makes or materially informs decisions about individuals.
+- Two functions disagree and cannot resolve it within **[5 working days]**.
+- An exception is requested for the second time.
+
+Escalate to the **Board** when any is true:
+
+- Residual risk is **critical**.
+- Regulatory notification is likely or required.
+- Potential impact exceeds **[£X]** or affects **[X]** customers.
+- Reputational exposure is material.
+
+### 3. Disagreement
+
+1. **Resolve locally** — the two parties, within 5 working days.
+2. **Governance Lead facilitates** — within 5 further days.
+3. **Committee decides** — at the next meeting, or by written procedure.
+4. **Board** — where the committee cannot agree or the threshold is met.
+
+The dissenting position is **recorded in the minutes by name**. People are far
+more willing to raise concerns when disagreement is documented rather than
+absorbed.
+
+### 4. Urgent decisions
+
+| Situation | Who can act | Ratification |
+|---|---|---|
+| Live incident, harm occurring | Any of AI Owner / Gov Lead / Security — **act first** | Committee within [48h] |
+| Regulatory deadline | Gov Lead + Legal | Next meeting |
+| Out of hours | **[on-call role]** | Next working day |
+
+### 5. Recording
+
+Every decision at committee level or above records: decision, date, who
+decided, rationale, dissent, and review date. This is the evidence trail a
+regulator asks for.
+
+### 6. Review
+
+Test annually against real decisions taken. If people routinely go around the
+matrix, the matrix is wrong — fix the matrix, not the people.
+
+---
+
+## Adaptation notes
+
+- **Small organisations:** Two levels are enough — an operational decision-maker and an escalation point. Keep the suspension right distributed regardless of size.
+- **Regulated sectors:** Align thresholds with existing risk acceptance limits so you do not run two incompatible sets of numbers.
+- **Fast-moving product teams:** Set generous authority at the minimal and limited tiers so governance is not the bottleneck, and spend the control effort on high-risk instead.
+
+---
+
+*From the [Open Data & AI Governance Kit](https://lsdeva.github.io/governance-kit/). Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to use, adapt, and share with attribution.*
+
+***Not legal advice.** Adapt to your jurisdiction, sector, and risk appetite, and have qualified counsel review anything material.*

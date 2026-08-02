@@ -7,6 +7,11 @@
 
 <span class="pill ready">Ready</span>
 
+<div class="gk-downloads" markdown>
+[:material-file-word: Word](../downloads/data-quality-standard.docx){ .md-button .gk-dl download }
+[:material-language-markdown: Markdown](../downloads/data-quality-standard.md.txt){ .md-button .gk-dl download="data-quality-standard.md" }
+</div>
+
 **Purpose.** Defines what "good enough" data means in measurable terms — the dimensions, how they are measured, the thresholds that apply, and who acts when a threshold is breached.
 
 **When to use it.** Alongside the data governance policy, and specifically before any dataset is used to train or evaluate a model. Review thresholds annually.

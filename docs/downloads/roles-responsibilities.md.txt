@@ -1,0 +1,111 @@
+# Roles & Responsibilities
+
+**Purpose.** Defines each governance role in enough detail that it can be put in a job description, recruited for, and assessed against — rather than assumed.
+
+**When to use it.** Alongside the RACI, when appointing people into roles, and during onboarding.
+
+**How to use it.** For each role, name a real person and confirm they know they hold it. The most common finding in a first governance audit is a role defined on paper that its supposed holder has never heard of.
+
+---
+
+### Data roles
+
+#### Data Owner
+
+**Accountable for** a data domain's definitions, quality, access, and risk.
+
+- Approves access to the domain, particularly Restricted data.
+- Sets and monitors quality thresholds per Data Quality Standard.
+- Accepts or escalates risk relating to the domain.
+- Approves use of the domain's data for AI training.
+
+**Typically held by:** the senior business leader who owns the process the
+data comes from — not IT, and not the team who happens to store it.
+
+#### Data Steward
+
+**Responsible for** day-to-day custody of a domain.
+
+- Maintains business definitions and the data catalogue entry.
+- Monitors quality and triages issues.
+- First point of contact for questions about the data's meaning.
+
+#### Data Custodian
+
+**Responsible for** technical operation: storage, backup, access enforcement,
+encryption, and monitoring. Usually sits in engineering or platform.
+
+### AI roles
+
+#### AI Accountable Owner (per system)
+
+**Accountable for** one AI system's outcomes and compliance across its whole
+lifecycle.
+
+- Ensures classification, assessment, and documentation are complete.
+- Signs off deployment and material change.
+- Owns monitoring, incidents, and eventual retirement.
+- **Answerable if the system causes harm.**
+
+> **This role cannot be a committee**
+> Every AI system needs one named human. If your answer to "who is
+> accountable for this system?" is a team name, you do not yet have an
+> accountable owner.
+
+#### Model Developer / ML Engineer
+
+**Responsible for** building within AI Development & Deployment Standard: documenting
+data, evaluating performance and bias, producing the Model Card / Model Risk Documentation, and
+raising risks they discover rather than routing around them.
+
+#### Product Owner
+
+**Responsible for** the use case: whether the system should exist, how it
+affects users, transparency to those users, and designing oversight that
+works in the real workflow.
+
+### Governance & assurance roles
+
+#### Governance Lead
+
+**Accountable for** the programme: maintaining frameworks and registers,
+running the committee, reporting, and driving remediation. The role that
+makes governance an operating function rather than a document set.
+
+#### Legal / DPO
+
+**Responsible for** lawfulness: regulatory interpretation, DPIAs, lawful
+basis, contracts, and the independence to say no. Note that a DPO's statutory
+independence limits how far they can also own delivery.
+
+#### Security
+
+**Responsible for** protecting systems and data, including AI-specific
+threats — see Control Library & Assurance Map.
+
+#### Internal Audit
+
+**Accountable for** independent assurance. Must not have designed or operated
+the controls being assured.
+
+### Appointment record
+
+| Role | Holder | Appointed | Deputy | Confirmed aware |
+|---|---|---|---|---|
+| Governance Lead | [name] | [date] | [name] | [ ] |
+| Data Owner — [domain] | [name] | [date] | [name] | [ ] |
+| AI Accountable Owner — [system] | [name] | [date] | [name] | [ ] |
+
+---
+
+## Adaptation notes
+
+- **Small organisations:** One person may hold several roles. The only combination to avoid is someone assuring their own work — keep independent review genuinely independent, even if that means an external reviewer once a year.
+- **Regulated financial services:** Map these to your senior management regime responsibilities, and check whether any of them must be held by a certified or approved person.
+- **Where a statutory DPO exists:** The DPO advises and monitors; they should not also own the processing decisions they oversee, as that compromises the independence the role requires.
+
+---
+
+*From the [Open Data & AI Governance Kit](https://lsdeva.github.io/governance-kit/). Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to use, adapt, and share with attribution.*
+
+***Not legal advice.** Adapt to your jurisdiction, sector, and risk appetite, and have qualified counsel review anything material.*
