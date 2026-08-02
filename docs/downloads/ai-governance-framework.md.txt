@@ -79,13 +79,13 @@ AI System Inventory. Re-classify on material change of purpose.
 
 ### 7. Reporting & assurance
 
-The committee reports to the board at least **[quarterly]** using
+The committee reports to the board at least {{default:board-reporting-cadence}} using
 Board Pack Template and tracks health via KPI / KRI Dashboard. Internal Audit
 provides independent assurance on a risk-based cycle.
 
 ### 8. Review
 
-Owner: **[role]**. Cadence: **[annually / on material change]**.
+Owner: **[role]**. Cadence: {{default:policy-review-cycle}}.
 
 | Version | Date | Author | Approved by |
 |---|---|---|---|

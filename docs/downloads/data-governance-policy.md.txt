@@ -52,7 +52,7 @@ behalf of the organisation, in all systems and locations.
 **Access**
 
 10. Access **must** be granted on least privilege and reviewed at least
-    **[annually]**.
+    {{default:access-review-cycle}}.
 11. Access to Restricted data **must** be approved by the Data Owner.
 
 **Retention & disposal**

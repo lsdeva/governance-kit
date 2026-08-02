@@ -35,6 +35,9 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
 ROOT = Path(__file__).resolve().parent.parent
+
+# Recommended defaults, loaded in main(); see data/defaults.yml.
+DEFAULTS = {}
 DATA = ROOT / "data"
 OUT = ROOT / "docs" / "downloads"
 
@@ -57,6 +60,19 @@ def load(name):
 
 def strip_md(text: str) -> str:
     """Markdown inline -> plain text. Word carries its own formatting."""
+    # Recommended defaults render as "value (unless: condition)" — the Word
+    # copy must carry the recommendation AND when to deviate, or the downloaded
+    # document is less useful than the web page it came from.
+    def default_sub(m):
+        d = DEFAULTS.get(m.group(1))
+        if d is None:
+            return m.group(0)
+        return "%s (unless: %s)" % (
+            " ".join(str(d["value"]).split()),
+            " ".join(str(d["unless"]).split()),
+        )
+
+    text = re.sub(r"\{\{default:([a-z0-9\-]+)\}\}", default_sub, text)
     text = re.sub(r"\{\{([a-z0-9\-]+)\}\}", lambda m: m.group(1).replace("-", " ").title(), text)
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)      # links
     text = re.sub(r"\*\*([^*]+)\*\*", r"\1", text)            # bold
@@ -470,6 +486,7 @@ def main() -> int:
     templates = load("templates.yml")
     questions = load("questions.yml")
     sheets = load("spreadsheets.yml") or {}
+    DEFAULTS.update({d["id"]: d for d in (load("defaults.yml") or [])})
     by_id = {t["id"]: t for t in templates}
 
     unknown = [k for k in sheets if k not in by_id]

@@ -69,7 +69,7 @@ Ask before purchase, and record the answers.
 | Notification of material model change | A silent model swap can change system behaviour overnight. |
 | Documentation rights | You cannot evidence what you cannot obtain. |
 | Audit or third-party assurance rights | Trust needs verification. |
-| Incident notification within **[24–72h]** | Your own reporting clock may already be running. |
+| Incident notification within {{default:vendor-incident-notification}} | Your own reporting clock may already be running. |
 | Data location and sub-processor control | Transfer and access obligations. |
 | Exit: data return and deletion | Avoids hostage data at renewal. |
 
@@ -77,8 +77,8 @@ Ask before purchase, and record the answers.
 
 | Activity | Frequency |
 |---|---|
-| Reassess Critical vendors | Annually |
-| Review vendor release notes for new AI features | Quarterly |
+| Reassess Critical vendors | {{default:vendor-reassessment}} |
+| Review vendor release notes for new AI features | {{default:inventory-review-cycle}} |
 | Confirm certifications still current | Annually |
 | Review incidents involving the vendor | Each occurrence |
 

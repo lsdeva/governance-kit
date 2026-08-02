@@ -83,6 +83,38 @@ def rel_link(from_path: str, to_path: str) -> str:
     return Path(__import__("os").path.relpath(Path(to_path), from_dir)).as_posix()
 
 
+def resolve_defaults(text: str) -> str:
+    """Replace {{default:id}} with the recommendation and its deviation rule.
+
+    A bracketed placeholder delegates a decision to the reader. These render as
+    a stated value plus the condition for changing it, so accepting the default
+    is an informed choice rather than a shrug.
+    """
+    if not text:
+        return text
+
+    def sub(match: re.Match) -> str:
+        did = match.group(1).strip()
+        d = DEFAULTS.get(did)
+        if d is None:
+            raise SystemExit(
+                f"ERROR: unknown default id '{{{{default:{did}}}}}'. "
+                f"Known: {sorted(DEFAULTS)}"
+            )
+        return (
+            f'<span class="gk-default" title="{esc_attr(d["why"])}">'
+            f'<strong>{d["value"]}</strong>'
+            f'<span class="gk-default-unless">Unless: '
+            f'{" ".join(d["unless"].split())}</span></span>'
+        )
+
+    return re.sub(r"\{\{default:([a-z0-9\-]+)\}\}", sub, text)
+
+
+def esc_attr(s: str) -> str:
+    return " ".join(str(s).split()).replace('"', "&quot;").replace("<", "&lt;")
+
+
 def resolve_links(text: str, from_path: str, by_id: dict) -> str:
     """Replace {{template-id}} with a proper relative Markdown link.
 
@@ -91,6 +123,8 @@ def resolve_links(text: str, from_path: str, by_id: dict) -> str:
     """
     if not text:
         return text
+
+    text = resolve_defaults(text)
 
     def sub(match: re.Match) -> str:
         tid = match.group(1).strip()
@@ -340,6 +374,33 @@ def render_examples_index(examples: list, company: dict, by_id: dict) -> str:
             f"| [{tpl['title']}]({rel_link(path, tpl['path'])}) |"
         )
     parts.append("")
+    parts.append(SNIPPETS_CACHE["not_legal_advice"])
+    return "\n".join(parts)
+
+
+def render_decide_page(decisions: list) -> str:
+    """Mount point for the guided decisions and the decision log."""
+    parts = [BANNER.format(source="decisions.yml")]
+    parts.append("---\ntitle: Decide\nhide:\n  - toc\n---\n")
+    parts.append("# Decide\n")
+    parts.append(
+        "The rest of this kit tells you what the options are. This page walks "
+        "you to an answer — one question at a time, ending in a verdict with "
+        "its reasoning recorded and dated.\n"
+    )
+    parts.append(
+        '!!! tip "Why the record matters more than the answer"\n'
+        "    The EU AI Act, ISO/IEC 42001 and NIST AI RMF all ask for\n"
+        "    **documented, reasoned decisions**. A classification with no\n"
+        "    rationale cannot be defended or sensibly reviewed later — so the\n"
+        "    rationale trail is not paperwork, it is the deliverable.\n"
+    )
+    # Raw HTML attribute, so MkDocs does not rewrite it like a Markdown link.
+    # decide.md publishes to /decide/, one level deep, hence the ../ prefix.
+    parts.append(
+        '<div id="gk-decide" data-src="../assess/decision-data.json">'
+        '<p>Loading the guided decisions…</p></div>\n'
+    )
     parts.append(SNIPPETS_CACHE["not_legal_advice"])
     return "\n".join(parts)
 
@@ -773,6 +834,7 @@ SNIPPET_ASSESS = ""  # filled from snippets.yml at runtime
 SNIPPETS_CACHE = {}  # ditto; used by the example renderers
 EXAMPLE_OF = {}      # template id -> worked example, for the "see it filled in" link
 BANDS_RUNTIME = []   # built from data/benchmarks.yml in main()
+DEFAULTS = {}        # id -> recommended default, from data/defaults.yml
 
 
 def build_assessment_json(roles, questions, templates, sections) -> dict:
@@ -840,11 +902,13 @@ def build_assessment_json(roles, questions, templates, sections) -> dict:
     }
 
 
-def build_nav(sections, templates, examples, tasks, plans, crosswalk, workspace) -> str:
+def build_nav(sections, templates, examples, tasks, plans, crosswalk, workspace, decisions) -> str:
     lines = [NAV_START, "nav:", "  - Home: index.md", "  - Get started: getting-started.md",
              "  - Assessment: assess/index.md"]
     if workspace:
         lines.append("  - Workspace: workspace.md")
+    if decisions:
+        lines.append("  - Decide: decide.md")
     lines.append("  - How scoring works: scoring.md")
     if tasks:
         lines.append("  - I've been asked to…: tasks.md")
@@ -899,6 +963,20 @@ def main() -> int:
     SNIPPETS_CACHE.update(snippets)
     sheets_raw = load("spreadsheets.yml") or {}
     SPREADSHEET_IDS.update(sheets_raw.keys())
+
+    defaults_list = load("defaults.yml") or []
+    dup = [i for i, c in Counter(d["id"] for d in defaults_list).items() if c > 1]
+    if dup:
+        raise SystemExit(f"ERROR: duplicate default ids: {dup}")
+    for d in defaults_list:
+        for field in ("label", "value", "unless", "why"):
+            if not str(d.get(field, "")).strip():
+                raise SystemExit(
+                    f"ERROR: default '{d['id']}' is missing `{field}`. Every "
+                    "default needs a value, a deviation condition, and the "
+                    "reasoning — otherwise it is just another unexplained number."
+                )
+    DEFAULTS.update({d["id"]: d for d in defaults_list})
 
     benchmarks = load("benchmarks.yml")
     bands = sorted(benchmarks["bands"], key=lambda b: -b["min"])
@@ -1003,6 +1081,133 @@ def main() -> int:
     )
     write(ROOT / "snippets" / "stats.md", stats, written, args.check)
 
+    # ---- guided decisions ---------------------------------------------------
+    decisions = load("decisions.yml") or []
+    if decisions:
+        # Validate the tree: every branch must terminate in a real outcome or a
+        # real question, or a user hits a dead end mid-decision.
+        for d in decisions:
+            qids = {q["id"] for q in d["questions"]}
+            oids = {o["id"] for o in d["outcomes"]}
+            if d["start"] not in qids:
+                raise SystemExit(
+                    f"ERROR: decision '{d['id']}' starts at unknown question "
+                    f"'{d['start']}'")
+            for q in d["questions"]:
+                targets = []
+                if q.get("options"):
+                    targets = [o["next"] for o in q["options"]]
+                else:
+                    targets = [q.get(True), q.get(False)]
+                for tgt in targets:
+                    if tgt is None:
+                        raise SystemExit(
+                            f"ERROR: {d['id']}/{q['id']} has a branch with no "
+                            "destination")
+                    if isinstance(tgt, str):
+                        if tgt not in qids:
+                            raise SystemExit(
+                                f"ERROR: {d['id']}/{q['id']} points at unknown "
+                                f"question '{tgt}'")
+                    elif tgt.get("outcome") not in oids:
+                        raise SystemExit(
+                            f"ERROR: {d['id']}/{q['id']} points at unknown "
+                            f"outcome '{tgt.get('outcome')}'")
+            for o in d["outcomes"]:
+                for tid in o.get("templates", []):
+                    if tid not in by_id:
+                        raise SystemExit(
+                            f"ERROR: outcome '{o['id']}' references unknown "
+                            f"template '{tid}'")
+                # An unquoted "Label: text" list item parses as a dict, not a
+                # string, and reaches the browser as an object the renderer
+                # cannot append. Catch it here rather than at runtime.
+                for field in ("actions",):
+                    for item in o.get(field, []):
+                        if not isinstance(item, str):
+                            raise SystemExit(
+                                f"ERROR: outcome '{o['id']}' has a non-string "
+                                f"{field} entry ({item!r}). A YAML list item "
+                                "containing a colon must be quoted or written "
+                                "as a folded block."
+                            )
+                for field in ("headline", "detail", "tier", "severity"):
+                    if not isinstance(o.get(field), str):
+                        raise SystemExit(
+                            f"ERROR: outcome '{o['id']}' field '{field}' must "
+                            f"be a string, got {type(o.get(field)).__name__}")
+
+            # Walk every path exhaustively: no unreachable question, no cycle,
+            # no outcome that can never be reached, and every branch terminates.
+            qmap = {q["id"]: q for q in d["questions"]}
+            reached_q, reached_o = set(), set()
+
+            def walk(qid, depth):
+                if depth > 40:
+                    raise SystemExit(
+                        f"ERROR: decision '{d['id']}' has a cycle at '{qid}'")
+                reached_q.add(qid)
+                q = qmap[qid]
+                if q.get("options"):
+                    nxt = [o["next"] for o in q["options"]]
+                else:
+                    nxt = [q.get(True), q.get(False)]
+                for tgt in nxt:
+                    if isinstance(tgt, str):
+                        walk(tgt, depth + 1)
+                    else:
+                        reached_o.add(tgt["outcome"])
+
+            walk(d["start"], 0)
+            orphan_q = qids - reached_q
+            if orphan_q:
+                raise SystemExit(
+                    f"ERROR: decision '{d['id']}' has unreachable question(s): "
+                    f"{sorted(orphan_q)}")
+            orphan_o = oids - reached_o
+            if orphan_o:
+                raise SystemExit(
+                    f"ERROR: decision '{d['id']}' has outcome(s) no path "
+                    f"reaches: {sorted(orphan_o)}")
+
+        # PyYAML parses bare yes/no keys as booleans; the app expects "yes"/"no".
+        def norm(q):
+            out = dict(q)
+            if True in out:
+                out["yes"] = out.pop(True)
+            if False in out:
+                out["no"] = out.pop(False)
+            return out
+
+        payload = {
+            "version": 1,
+            "decisions": [
+                {
+                    "id": d["id"],
+                    "title": d["title"],
+                    "short": " ".join(d["short"].split()),
+                    "why": " ".join(d["why"].split()),
+                    "intro": " ".join(d["intro"].split()),
+                    "start": d["start"],
+                    "questions": [norm(q) for q in d["questions"]],
+                    "outcomes": d["outcomes"],
+                }
+                for d in decisions
+            ],
+            "templates": {
+                t["id"]: {
+                    "id": t["id"],
+                    "title": t["title"],
+                    "url": rel_link("assess/index.md", t["path"]).replace(".md", "/"),
+                }
+                for t in templates
+            },
+        }
+        write(DOCS / "assess" / "decision-data.json",
+              json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+              written, args.check)
+        write(DOCS / "decide.md", render_decide_page(decisions), written, args.check)
+
     # ---- scoring method -----------------------------------------------------
     write(DOCS / "scoring.md",
           render_scoring_page(benchmarks, questions, BANDS_RUNTIME),
@@ -1074,7 +1279,7 @@ def main() -> int:
     # ---- navigation in mkdocs.yml ------------------------------------------
     mk = ROOT / "mkdocs.yml"
     text = mk.read_text(encoding="utf-8")
-    nav = build_nav(sections, templates, examples, tasks, plans, crosswalk, bool(sheets_raw))
+    nav = build_nav(sections, templates, examples, tasks, plans, crosswalk, bool(sheets_raw), decisions)
     if NAV_START in text and NAV_END in text:
         new_text = re.sub(
             re.escape(NAV_START) + r".*?" + re.escape(NAV_END),
@@ -1088,6 +1293,52 @@ def main() -> int:
         if not args.check:
             mk.write_text(new_text, encoding="utf-8", newline="\n")
         written.append(mk)
+
+    # ---- verify raw-HTML data-src attributes resolve ------------------------
+    # MkDocs rewrites Markdown links but NOT raw HTML attributes, so a data-src
+    # that looks right relative to the .md source can 404 on the published page
+    # (docs/a/b.md publishes to /a/b/, one level deeper). This has caused two
+    # silent breakages; check it at build time instead of in a browser.
+    for md in DOCS.rglob("*.md"):
+        text = md.read_text(encoding="utf-8")
+        for m in re.finditer(r'data-src="([^"]+)"', text):
+            src = m.group(1)
+            if src.startswith(("http://", "https://", "/")):
+                continue
+            # Work out the published URL directory for this page:
+            #   docs/a/b.md      -> /a/b/     (assets resolve from /a/b/)
+            #   docs/a/index.md  -> /a/       (assets resolve from /a/)
+            rel = md.relative_to(DOCS)
+            if md.name == "index.md":
+                url_dir = rel.parent
+            else:
+                url_dir = rel.parent / rel.stem
+
+            # Resolve src against that directory the way a browser would.
+            # Done with plain string segments, not Path.resolve(), which on
+            # Windows would drag in the drive root and collapse the ".." wrongly.
+            segs = [s for s in url_dir.as_posix().split("/") if s and s != "."]
+            for part in src.split("/"):
+                if part in ("", "."):
+                    continue
+                if part == "..":
+                    if not segs:
+                        raise SystemExit(
+                            f"ERROR: {rel} data-src=\"{src}\" escapes the site root"
+                        )
+                    segs.pop()
+                else:
+                    segs.append(part)
+            target = "/".join(segs)
+            wanted = DOCS / target
+            if not wanted.exists():
+                raise SystemExit(
+                    f"ERROR: {rel} has data-src=\"{src}\", which resolves to "
+                    f"{target} from the published page /"
+                    f"{url_dir.as_posix()}/ — no such file. MkDocs does not "
+                    "rewrite raw HTML attributes the way it rewrites Markdown "
+                    "links, so this would 404 in the browser."
+                )
 
     # ---- report -------------------------------------------------------------
     if args.check:

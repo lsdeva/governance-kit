@@ -12,8 +12,8 @@
 
 | Severity | Definition | Response | Notify |
 |---|---|---|---|
-| **S1 Critical** | Harm to people, regulatory breach, or major data loss | Immediate; incident lead appointed | Committee **immediately**; Board; regulator assessment within **[24h]** |
-| **S2 Major** | Material impact; significant risk | Within [4h] | Committee within [24h] |
+| **S1 Critical** | Harm to people, regulatory breach, or major data loss | Immediate; incident lead appointed | Committee **immediately**; Board; regulator assessment within {{default:serious-incident-assessment}} |
+| **S2 Major** | Material impact; significant risk | Within 4 hours | Committee within 24 hours |
 | **S3 Moderate** | Contained impact | Within [1 working day] | Governance Lead |
 | **S4 Minor** | Negligible | Next cycle | Logged only |
 

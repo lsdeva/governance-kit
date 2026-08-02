@@ -17,8 +17,8 @@ Omnibus dates.
 </p>
 
 [Take the assessment](assess/index.md){ .md-button .md-button--primary }
+[Classify a system](decide.md){ .md-button }
 [Open the workspace](workspace.md){ .md-button }
-[Browse the templates](getting-started.md){ .md-button }
 
 <div class="gk-stats" markdown>
 --8<-- "stats.md"
@@ -152,6 +152,13 @@ The kit covers data and AI governance end to end — 25 templates across six are
 
     The same templates mapped to ISO/IEC 42001, NIST AI RMF, Singapore's Model
     AI Governance Framework, and the EU AI Act.
+
+- :material-directions-fork:{ .lg } **[Decide, don't just read](decide.md)**
+
+    ---
+
+    Guided paths through the hard judgements — is this system high-risk? — that
+    end in a verdict with its reasoning recorded and dated, not in more reading.
 
 - :material-table-edit:{ .lg } **[Fill in the registers here](workspace.md)**
 

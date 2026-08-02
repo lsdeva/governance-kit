@@ -1,0 +1,226 @@
+/* Guided decisions and the decision log.
+ *
+ * Deliberately one big question at a time: the whole point is to remove the
+ * "which of these 25 pages applies to me" load, so the screen shows exactly one
+ * choice and nothing else competing for attention.
+ */
+
+.gk-dec {
+  max-width: 44rem;
+}
+
+.gk-dec-card {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-left: 3px solid var(--md-accent-fg-color);
+  border-radius: .4rem;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+}
+
+.gk-dec-card h3 { margin-top: 0; }
+.gk-dec-card p  { margin: .3rem 0 .6rem; }
+
+.gk-dec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: 1rem;
+  padding-bottom: .4rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.gk-dec-stage {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--md-accent-fg-color);
+}
+
+.gk-dec-step {
+  font-size: .75rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.gk-dec-subject {
+  display: block;
+  margin: 0 0 1.25rem;
+}
+
+.gk-dec-subject span {
+  display: block;
+  font-size: .8rem;
+  font-weight: 600;
+  margin-bottom: .25rem;
+}
+
+.gk-dec-subject input {
+  width: 100%;
+  padding: .45rem .6rem;
+  font: inherit;
+  font-size: .9rem;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: .3rem;
+}
+
+.gk-dec-subject input:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: -1px;
+}
+
+.gk-dec-q {
+  font-size: 1.35rem;
+  line-height: 1.4;
+  margin: .3rem 0 .5rem;
+}
+
+.gk-dec-help {
+  color: var(--md-default-fg-color--light);
+  font-size: .9rem;
+  line-height: 1.6;
+  margin-bottom: 1.1rem;
+}
+
+.gk-dec-opts {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-bottom: .75rem;
+}
+
+.gk-dec-opt {
+  text-align: left;
+  padding: .7rem .9rem;
+  font: inherit;
+  font-size: .92rem;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: .4rem;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, transform .05s;
+}
+
+.gk-dec-opt:hover {
+  border-color: var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+}
+
+.gk-dec-opt:active { transform: translateY(1px); }
+
+/* Yes/No/Not sure sit side by side; the long Annex III options stack. */
+.gk-dec-opt.is-yes,
+.gk-dec-opt.is-no,
+.gk-dec-opt.is-unsure {
+  display: inline-block;
+  width: auto;
+  min-width: 7rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.gk-dec-opts:has(.is-yes) {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.gk-dec-opt.is-yes:hover    { background: #b3261e; border-color: #b3261e; color: #fff; }
+.gk-dec-opt.is-no:hover     { background: #1e7d34; border-color: #1e7d34; color: #fff; }
+.gk-dec-opt.is-unsure:hover { background: #a25b12; border-color: #a25b12; color: #fff; }
+
+.gk-dec-unsure {
+  margin-top: -.3rem;
+}
+
+.gk-dec-trail {
+  margin-top: 1.5rem;
+  padding-top: .6rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  font-size: .8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.gk-dec-trail .gk-link { margin-left: .5rem; }
+
+.gk-dec-trail-full {
+  font-size: .88rem;
+  line-height: 1.6;
+}
+
+.gk-dec-actions li { margin-bottom: .4rem; }
+
+/* ------------------------------------------------------------------ verdict */
+
+.gk-verdict {
+  border-radius: .5rem;
+  padding: 1.2rem 1.4rem;
+  margin: .5rem 0 1.5rem;
+  border-left: 5px solid;
+}
+
+.gk-verdict h2 { margin: .2rem 0 .5rem; font-size: 1.3rem; }
+.gk-verdict p  { margin: .3rem 0; }
+
+.gk-verdict-tier {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: .12rem .5rem;
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, .07);
+}
+
+.gk-verdict-ref {
+  font-size: .8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.gk-verdict.is-stop   { border-left-color: #b3261e; background: #fdecea; }
+.gk-verdict.is-high   { border-left-color: #a25b12; background: #fdf0e3; }
+.gk-verdict.is-medium { border-left-color: #3f51b5; background: #eceff5; }
+.gk-verdict.is-low    { border-left-color: #1e7d34; background: #e6f4ea; }
+
+[data-md-color-scheme="slate"] .gk-verdict.is-stop   { background: #3a1614; }
+[data-md-color-scheme="slate"] .gk-verdict.is-high   { background: #3a2a12; }
+[data-md-color-scheme="slate"] .gk-verdict.is-medium { background: #232838; }
+[data-md-color-scheme="slate"] .gk-verdict.is-low    { background: #12351c; }
+
+[data-md-color-scheme="slate"] .gk-verdict-tier {
+  background: rgba(255, 255, 255, .12);
+}
+
+.gk-counsel {
+  border-left: 3px solid #a25b12;
+  background: var(--md-code-bg-color);
+  padding: .7rem 1rem;
+  border-radius: 0 .4rem .4rem 0;
+  margin: 1rem 0;
+  font-size: .9rem;
+}
+
+/* ---------------------------------------------------------------- decision log */
+
+.gk-log {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--md-default-fg-color--lightest);
+}
+
+@media print {
+  .gk-dec-opts,
+  .gk-dec-card button,
+  .gk-log .gk-actions,
+  .gk-reg-x {
+    display: none !important;
+  }
+  .gk-verdict {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    break-inside: avoid;
+  }
+}

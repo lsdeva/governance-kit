@@ -92,7 +92,7 @@ Shows who checks what, and exposes obligations nobody is assuring.
 | **Design** | Would this control work if it operated as described? |
 | **Operating effectiveness** | Did it actually operate, over the period? |
 
-Test high-risk controls at least annually; sample others on a risk basis.
+Test controls on this cycle: <span class="gk-default" title="Testing design once and operation annually is the minimum that supports a genuine assurance opinion. Re-testing what has already failed is where the value is."><strong>Annually for high-risk controls; a risk-based sample for the rest</strong><span class="gk-default-unless">Unless: Quarterly for any control that has failed in the last twelve months.</span></span>
 Record failures in the [Issue & Incident Log](../registers/incident-log.md) and the [Risk Register](../registers/risk-register.md).
 
 ---

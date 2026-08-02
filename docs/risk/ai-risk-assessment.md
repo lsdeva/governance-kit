@@ -138,7 +138,7 @@ Conditions: **[list, with owners and dates]**
 |---|---|
 | Material change of purpose or data | Full reassessment |
 | Incident involving this system | Targeted reassessment |
-| Annually (high-risk) | Full review |
+| Annually (high-risk) | Full review — see <span class="gk-default" title="Risk assessment under Art. 9 is a continuous process, not a launch gate. Tying review to material change catches the drift an annual date misses."><strong>Annually, and on any material change of purpose, data, or model</strong><span class="gk-default-unless">Unless: Every six months where the model is retrained frequently or the vendor ships model changes without notice.</span></span> |
 | Vendor model change | Targeted reassessment |
 
 ---

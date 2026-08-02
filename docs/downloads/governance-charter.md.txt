@@ -57,7 +57,7 @@ The programme, through its committee, is authorised to:
 |---|---|---|---|
 | Complete AI inventory | % systems registered | 100% | [date] |
 | Risk classification | % classified | 100% | [date] |
-| Policy adoption | % staff attested | [90%] | [date] |
+| Policy adoption | % staff attested | 90% | [date] |
 | Board visibility | Reports delivered | [4]/year | Ongoing |
 
 ### 7. Resourcing

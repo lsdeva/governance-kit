@@ -108,7 +108,7 @@ Conditions: **[list, with owners and dates]**
 |---|---|
 | Material change of purpose or data | Full reassessment |
 | Incident involving this system | Targeted reassessment |
-| Annually (high-risk) | Full review |
+| Annually (high-risk) | Full review — see {{default:high-risk-review-cycle}} |
 | Vendor model change | Targeted reassessment |
 
 ---

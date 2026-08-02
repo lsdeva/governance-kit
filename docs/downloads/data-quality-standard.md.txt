@@ -51,16 +51,16 @@ is the Art. 10 obligation in practice:
 
 ### 4. Measurement & reporting
 
-Scores are produced **[frequency]**, published to **[location]**, and
+Scores are produced **monthly** (weekly for data feeding a high-risk system), published to **[location]**, and
 summarised in KPI / KRI Dashboard. Trend matters more than absolute level.
 
 ### 5. Breach handling
 
 | Severity | Definition | Response | Timeframe |
 |---|---|---|---|
-| Critical | Regulatory or high-risk AI impact | Escalate to committee; consider suspending use | [24h] |
-| Major | Material business impact | Owner-led remediation plan | [5 days] |
-| Minor | Limited impact | Backlog for next cycle | [30 days] |
+| Critical | Regulatory or high-risk AI impact | Escalate to committee; consider suspending use | 24 hours |
+| Major | Material business impact | Owner-led remediation plan | 5 working days |
+| Minor | Limited impact | Backlog for next cycle | 30 days |
 
 Breaches are recorded in the Issue & Incident Log.
 

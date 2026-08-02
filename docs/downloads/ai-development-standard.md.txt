@@ -53,7 +53,7 @@ happened to look acceptable.
 
 High-risk systems **must** automatically log, at minimum: timestamp, system
 and model version, input reference, output, confidence where available, and
-any human override. Retain per **[retention period]** — long enough to
+any human override. Retain per {{default:log-retention}} — long enough to
 reconstruct a decision if it is challenged.
 
 > **Application logs are usually not enough**

@@ -233,13 +233,13 @@
 
     ### 7. Reporting & assurance
 
-    The committee reports to the board at least **[quarterly]** using
+    The committee reports to the board at least {{default:board-reporting-cadence}} using
     {{board-pack}} and tracks health via {{kpi-dashboard}}. Internal Audit
     provides independent assurance on a risk-based cycle.
 
     ### 8. Review
 
-    Owner: **[role]**. Cadence: **[annually / on material change]**.
+    Owner: **[role]**. Cadence: {{default:policy-review-cycle}}.
 
     | Version | Date | Author | Approved by |
     |---|---|---|---|
@@ -333,7 +333,7 @@
     |---|---|---|---|
     | Complete AI inventory | % systems registered | 100% | [date] |
     | Risk classification | % classified | 100% | [date] |
-    | Policy adoption | % staff attested | [90%] | [date] |
+    | Policy adoption | % staff attested | 90% | [date] |
     | Board visibility | Reports delivered | [4]/year | Ongoing |
 
     ### 7. Resourcing
@@ -519,7 +519,7 @@
     **Access**
 
     10. Access **must** be granted on least privilege and reviewed at least
-        **[annually]**.
+        {{default:access-review-cycle}}.
     11. Access to Restricted data **must** be approved by the Data Owner.
 
     **Retention & disposal**
@@ -626,16 +626,16 @@
 
     ### 4. Measurement & reporting
 
-    Scores are produced **[frequency]**, published to **[location]**, and
+    Scores are produced **monthly** (weekly for data feeding a high-risk system), published to **[location]**, and
     summarised in {{kpi-dashboard}}. Trend matters more than absolute level.
 
     ### 5. Breach handling
 
     | Severity | Definition | Response | Timeframe |
     |---|---|---|---|
-    | Critical | Regulatory or high-risk AI impact | Escalate to committee; consider suspending use | [24h] |
-    | Major | Material business impact | Owner-led remediation plan | [5 days] |
-    | Minor | Limited impact | Backlog for next cycle | [30 days] |
+    | Critical | Regulatory or high-risk AI impact | Escalate to committee; consider suspending use | 24 hours |
+    | Major | Material business impact | Owner-led remediation plan | 5 working days |
+    | Minor | Limited impact | Backlog for next cycle | 30 days |
 
     Breaches are recorded in the {{incident-log}}.
 
@@ -793,7 +793,7 @@
     | [Tool C] | [Customer-facing] | [Restricted — with controls] | [role] |
 
     Tools not on this list are **not approved**. To request one, contact
-    **[route]** — expected turnaround **[5 working days]**.
+    **[route]** — expected turnaround {{default:tool-approval-turnaround}}.
 
     ### 4. Always prohibited
 
@@ -930,7 +930,7 @@
 
     High-risk systems **must** automatically log, at minimum: timestamp, system
     and model version, input reference, output, confidence where available, and
-    any human override. Retain per **[retention period]** — long enough to
+    any human override. Retain per {{default:log-retention}} — long enough to
     reconstruct a decision if it is challenged.
 
     !!! note "Application logs are usually not enough"
@@ -1063,7 +1063,7 @@
     | Notification of material model change | A silent model swap can change system behaviour overnight. |
     | Documentation rights | You cannot evidence what you cannot obtain. |
     | Audit or third-party assurance rights | Trust needs verification. |
-    | Incident notification within **[24–72h]** | Your own reporting clock may already be running. |
+    | Incident notification within {{default:vendor-incident-notification}} | Your own reporting clock may already be running. |
     | Data location and sub-processor control | Transfer and access obligations. |
     | Exit: data return and deletion | Avoids hostage data at renewal. |
 
@@ -1071,8 +1071,8 @@
 
     | Activity | Frequency |
     |---|---|
-    | Reassess Critical vendors | Annually |
-    | Review vendor release notes for new AI features | Quarterly |
+    | Reassess Critical vendors | {{default:vendor-reassessment}} |
+    | Review vendor release notes for new AI features | {{default:inventory-review-cycle}} |
     | Confirm certifications still current | Annually |
     | Review incidents involving the vendor | Each occurrence |
 
@@ -1256,8 +1256,7 @@
 
     ### 4. Quorum & decisions
 
-    - **Quorum:** **[four]** voting members, **must** include the Chair (or
-      delegate) and **[Legal/DPO]**.
+    - **Quorum:** {{default:committee-quorum}}.
     - **Decisions:** by consensus where possible; otherwise a majority of voting
       members present. The Chair holds a casting vote.
     - **Dissent is minuted.** A member who disagrees with a risk acceptance has
@@ -1267,7 +1266,7 @@
 
     ### 5. Cadence & agenda
 
-    Meets **[monthly / quarterly]**. Standing agenda:
+    Meets {{default:committee-cadence}}. Standing agenda:
 
     1. Minutes and actions outstanding
     2. New AI systems for classification or approval
@@ -1281,14 +1280,14 @@
 
     ### 6. Papers
 
-    Circulated **[five working days]** in advance. Papers arriving late are
+    Circulated {{default:papers-deadline}} in advance. Papers arriving late are
     deferred by default — otherwise deadlines get managed by ambushing the
     committee.
 
     ### 7. Reporting
 
-    Reports to **[the Board]** **[quarterly]** using {{board-pack}}. Minutes are
-    retained for **[period]** as evidence of governance.
+    Reports to **[the Board]** {{default:board-reporting-cadence}} using {{board-pack}}. Minutes are
+    retained for {{default:log-retention}} as evidence of governance.
 
     ### 8. Review
 
@@ -1461,9 +1460,9 @@
     | Accept residual risk — high | **Committee** | Legal, Security | Above **[threshold]** |
     | Accept residual risk — critical | **Board** | Committee | — |
     | Approve a new AI vendor | Gov Lead | Security, Legal | Critical tier |
-    | Policy exception ≤ **[90 days]** | Gov Lead | Owner | Repeat request |
-    | Policy exception > **[90 days]** | **Committee** | Legal | — |
-    | **Suspend a live AI system** | AI Owner, Gov Lead, **or** Security | Notify Committee within [24h] | Always report |
+    | Policy exception ≤ {{default:exception-expiry}} | Gov Lead | Owner | Repeat request |
+    | Policy exception > {{default:exception-expiry}} | **Committee** | Legal | — |
+    | **Suspend a live AI system** | AI Owner, Gov Lead, **or** Security | Notify Committee within 24 hours | Always report |
 
     !!! danger "Suspension must be fast and blameless"
         Any of three roles can stop a system, and none of them needs permission
@@ -1477,7 +1476,7 @@
     - Risk is rated **high** or above after mitigation.
     - Personal data of **[10,000+]** people, or any special category data.
     - The system makes or materially informs decisions about individuals.
-    - Two functions disagree and cannot resolve it within **[5 working days]**.
+    - Two functions disagree and cannot resolve it within {{default:tool-approval-turnaround}}.
     - An exception is requested for the second time.
 
     Escalate to the **Board** when any is true:
@@ -1709,7 +1708,7 @@
     | New system proposed | Register at ideation, before build |
     | Purpose changes materially | Re-classify; re-assess |
     | Vendor changes the model | Review; re-assess if behaviour changed |
-    | Quarterly | Full review; confirm owners still in post |
+    | {{default:inventory-review-cycle}} | Full review; confirm owners still in post |
     | Retirement | Mark retired; retain records per schedule |
   adaptation:
     - context: Small organisations
@@ -1850,8 +1849,8 @@
 
     | Severity | Definition | Response | Notify |
     |---|---|---|---|
-    | **S1 Critical** | Harm to people, regulatory breach, or major data loss | Immediate; incident lead appointed | Committee **immediately**; Board; regulator assessment within **[24h]** |
-    | **S2 Major** | Material impact; significant risk | Within [4h] | Committee within [24h] |
+    | **S1 Critical** | Harm to people, regulatory breach, or major data loss | Immediate; incident lead appointed | Committee **immediately**; Board; regulator assessment within {{default:serious-incident-assessment}} |
+    | **S2 Major** | Material impact; significant risk | Within 4 hours | Committee within 24 hours |
     | **S3 Moderate** | Contained impact | Within [1 working day] | Governance Lead |
     | **S4 Minor** | Negligible | Next cycle | Logged only |
 
@@ -2133,7 +2132,7 @@
     |---|---|
     | Material change of purpose or data | Full reassessment |
     | Incident involving this system | Targeted reassessment |
-    | Annually (high-risk) | Full review |
+    | Annually (high-risk) | Full review — see {{default:high-risk-review-cycle}} |
     | Vendor model change | Targeted reassessment |
   adaptation:
     - context: Small organisations
@@ -2363,7 +2362,7 @@
     | **Design** | Would this control work if it operated as described? |
     | **Operating effectiveness** | Did it actually operate, over the period? |
 
-    Test high-risk controls at least annually; sample others on a risk basis.
+    Test controls on this cycle: {{default:control-test-cycle}}
     Record failures in the {{incident-log}} and the {{risk-register}}.
   adaptation:
     - context: Small organisations

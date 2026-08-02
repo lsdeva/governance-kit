@@ -38,9 +38,9 @@
 | Accept residual risk — high | **Committee** | Legal, Security | Above **[threshold]** |
 | Accept residual risk — critical | **Board** | Committee | — |
 | Approve a new AI vendor | Gov Lead | Security, Legal | Critical tier |
-| Policy exception ≤ **[90 days]** | Gov Lead | Owner | Repeat request |
-| Policy exception > **[90 days]** | **Committee** | Legal | — |
-| **Suspend a live AI system** | AI Owner, Gov Lead, **or** Security | Notify Committee within [24h] | Always report |
+| Policy exception ≤ <span class="gk-default" title="An exception with no expiry is a silent policy change. Ninety days is long enough to fix the underlying problem and short enough that nobody forgets it exists."><strong>90 days</strong><span class="gk-default-unless">Unless: 30 days where the exception touches a high-risk system or personal data. Never grant one without an expiry date.</span></span> | Gov Lead | Owner | Repeat request |
+| Policy exception > <span class="gk-default" title="An exception with no expiry is a silent policy change. Ninety days is long enough to fix the underlying problem and short enough that nobody forgets it exists."><strong>90 days</strong><span class="gk-default-unless">Unless: 30 days where the exception touches a high-risk system or personal data. Never grant one without an expiry date.</span></span> | **Committee** | Legal | — |
+| **Suspend a live AI system** | AI Owner, Gov Lead, **or** Security | Notify Committee within 24 hours | Always report |
 
 !!! danger "Suspension must be fast and blameless"
     Any of three roles can stop a system, and none of them needs permission
@@ -54,7 +54,7 @@ Escalate to the **Committee** when any is true:
 - Risk is rated **high** or above after mitigation.
 - Personal data of **[10,000+]** people, or any special category data.
 - The system makes or materially informs decisions about individuals.
-- Two functions disagree and cannot resolve it within **[5 working days]**.
+- Two functions disagree and cannot resolve it within <span class="gk-default" title="Slow approval produces shadow AI, which is worse than the risk you were managing. Publishing the turnaround is what makes people willing to ask."><strong>Five working days</strong><span class="gk-default-unless">Unless: Ten days where the tool will process personal data and needs a DPIA.</span></span>.
 - An exception is requested for the second time.
 
 Escalate to the **Board** when any is true:

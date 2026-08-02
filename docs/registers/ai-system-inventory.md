@@ -109,7 +109,7 @@ reviewed sensibly when the system changes.
 | New system proposed | Register at ideation, before build |
 | Purpose changes materially | Re-classify; re-assess |
 | Vendor changes the model | Review; re-assess if behaviour changed |
-| Quarterly | Full review; confirm owners still in post |
+| <span class="gk-default" title="Most organisations' fastest-growing AI exposure is features switched on inside software they already licence. Nobody procured them as AI, so only a deliberate sweep finds them."><strong>Quarterly, including a review of vendor release notes</strong><span class="gk-default-unless">Unless: Monthly if you have a large SaaS estate or an active procurement pipeline.</span></span> | Full review; confirm owners still in post |
 | Retirement | Mark retired; retain records per schedule |
 
 ---

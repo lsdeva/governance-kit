@@ -49,7 +49,7 @@ our behalf — and to all AI tools, whether we provide them or not.
 | [Tool C] | [Customer-facing] | [Restricted — with controls] | [role] |
 
 Tools not on this list are **not approved**. To request one, contact
-**[route]** — expected turnaround **[5 working days]**.
+**[route]** — expected turnaround <span class="gk-default" title="Slow approval produces shadow AI, which is worse than the risk you were managing. Publishing the turnaround is what makes people willing to ask."><strong>Five working days</strong><span class="gk-default-unless">Unless: Ten days where the tool will process personal data and needs a DPIA.</span></span>.
 
 ### 4. Always prohibited
 

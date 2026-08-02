@@ -63,8 +63,7 @@ above [threshold]]**.
 
 ### 4. Quorum & decisions
 
-- **Quorum:** **[four]** voting members, **must** include the Chair (or
-  delegate) and **[Legal/DPO]**.
+- **Quorum:** <span class="gk-default" title="Without a quorum rule, a committee eventually takes a significant decision with two people in the room, and that decision is the one a regulator asks about."><strong>Four voting members, and must include the chair (or a named delegate) and Legal/DPO</strong><span class="gk-default-unless">Unless: In organisations under about 150 staff, three including the chair. Never drop the requirement for a legal or data-protection voice on decisions about personal data.</span></span>.
 - **Decisions:** by consensus where possible; otherwise a majority of voting
   members present. The Chair holds a casting vote.
 - **Dissent is minuted.** A member who disagrees with a risk acceptance has
@@ -74,7 +73,7 @@ above [threshold]]**.
 
 ### 5. Cadence & agenda
 
-Meets **[monthly / quarterly]**. Standing agenda:
+Meets <span class="gk-default" title="Monthly keeps decisions moving without the committee becoming the bottleneck. The failure mode is a quarterly committee that becomes the reason nothing ships for eleven weeks."><strong>Monthly</strong><span class="gk-default-unless">Unless: Quarterly is enough below roughly 150 staff with no high-risk systems. Fortnightly during an active remediation programme.</span></span>. Standing agenda:
 
 1. Minutes and actions outstanding
 2. New AI systems for classification or approval
@@ -88,14 +87,14 @@ Meets **[monthly / quarterly]**. Standing agenda:
 
 ### 6. Papers
 
-Circulated **[five working days]** in advance. Papers arriving late are
+Circulated <span class="gk-default" title="Late papers are how a committee gets ambushed into approving something nobody read. Deferring late papers by default is the enforcement mechanism."><strong>Five working days</strong><span class="gk-default-unless">Unless: Three days for a committee meeting fortnightly or more often.</span></span> in advance. Papers arriving late are
 deferred by default — otherwise deadlines get managed by ambushing the
 committee.
 
 ### 7. Reporting
 
-Reports to **[the Board]** **[quarterly]** using [Board Pack Template](../board/board-pack.md). Minutes are
-retained for **[period]** as evidence of governance.
+Reports to **[the Board]** <span class="gk-default" title="Quarterly matches most board cycles, so governance rides an existing meeting rather than competing for a new one. More often than that and you report noise; less often and a problem can run for half a year unseen."><strong>Quarterly</strong><span class="gk-default-unless">Unless: Move to monthly while any high-risk system is unassessed, or after a serious incident, until the position is stable again.</span></span> using [Board Pack Template](../board/board-pack.md). Minutes are
+retained for <span class="gk-default" title="Art. 12 expects logs sufficient to trace behaviour over the system's lifetime. A challenge to a decision usually arrives months after it was made, so shorter retention means you cannot answer it."><strong>Six months minimum; twelve months for high-risk systems</strong><span class="gk-default-unless">Unless: Longer where your sector's record-keeping rules or your limitation period require it. Shorter is rarely defensible for a high-risk system.</span></span> as evidence of governance.
 
 ### 8. Review
 

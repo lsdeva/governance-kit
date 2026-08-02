@@ -23,6 +23,8 @@ and translations are all welcome.
 | A section's name or blurb | `data/sections.yml` | same |
 | The "not legal advice" notice or a shared block | `data/snippets.yml` | same |
 | A scoring band, weight meaning, or limitation | `data/benchmarks.yml` | same |
+| A recommended default, or its deviation condition | `data/defaults.yml` | same |
+| A guided decision's questions or verdicts | `data/decisions.yml` | same |
 | A register's columns, dropdowns, or formulas | `data/spreadsheets.yml` | same |
 | The landing page, this page, or About | `docs/*.md` directly | — |
 | The assessment app's behaviour or styling | `docs/assess/assess.js` / `.css` | — |
@@ -132,6 +134,11 @@ Keep every template page in the shared structure:
 - Adaptation notes must be specific to that template. Never boilerplate.
 - Cite sources for regulatory claims; prefer primary sources.
 - Nothing here is legal advice — do not imply it is.
+- **Recommend, do not delegate.** A `[bracketed placeholder]` hands a decision
+  to the least qualified person in the room. If a choice has a sensible default,
+  put it in `data/defaults.yml` with the condition for deviating. Reserve
+  placeholders for details only the user can supply — their name, their date,
+  their organisation.
 - **Never invent benchmark or survey data.** If you cannot cite it, do not state
   it as a figure. The scoring thresholds in `data/benchmarks.yml` are labelled
   editorial judgement precisely because they are not empirical, and the kit

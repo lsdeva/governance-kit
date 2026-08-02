@@ -38,8 +38,8 @@ Work directly in the browser — nothing is uploaded, and your rows are saved on
 
 | Severity | Definition | Response | Notify |
 |---|---|---|---|
-| **S1 Critical** | Harm to people, regulatory breach, or major data loss | Immediate; incident lead appointed | Committee **immediately**; Board; regulator assessment within **[24h]** |
-| **S2 Major** | Material impact; significant risk | Within [4h] | Committee within [24h] |
+| **S1 Critical** | Harm to people, regulatory breach, or major data loss | Immediate; incident lead appointed | Committee **immediately**; Board; regulator assessment within <span class="gk-default" title="Reportability is a separate decision from remediation and must not queue behind it. Assessing early and recording the reasoning protects you even if the answer is &quot;not reportable&quot;."><strong>Within 24 hours of detection, in parallel with fixing it</strong><span class="gk-default-unless">Unless: Immediately if the incident involves harm to a person or special category data.</span></span> |
+| **S2 Major** | Material impact; significant risk | Within 4 hours | Committee within 24 hours |
 | **S3 Moderate** | Contained impact | Within [1 working day] | Governance Lead |
 | **S4 Minor** | Negligible | Next cycle | Logged only |
 

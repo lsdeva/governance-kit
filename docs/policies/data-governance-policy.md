@@ -69,7 +69,7 @@ behalf of the organisation, in all systems and locations.
 **Access**
 
 10. Access **must** be granted on least privilege and reviewed at least
-    **[annually]**.
+    <span class="gk-default" title="Access accumulates. Most over-permissioning comes from people changing role rather than from bad initial grants, so the review matters more than the approval."><strong>Annually for all data; every six months for Restricted</strong><span class="gk-default-unless">Unless: Quarterly for Restricted data in a regulated sector, or where staff turnover is high.</span></span>.
 11. Access to Restricted data **must** be approved by the Data Owner.
 
 **Retention & disposal**

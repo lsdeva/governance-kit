@@ -66,7 +66,7 @@ Shows who checks what, and exposes obligations nobody is assuring.
 | **Design** | Would this control work if it operated as described? |
 | **Operating effectiveness** | Did it actually operate, over the period? |
 
-Test high-risk controls at least annually; sample others on a risk basis.
+Test controls on this cycle: {{default:control-test-cycle}}
 Record failures in the Issue & Incident Log and the Risk Register.
 
 ---

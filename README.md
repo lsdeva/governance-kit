@@ -42,6 +42,18 @@ saved to `localStorage` only on your device, with a "Clear my data" button on
 every screen. The site makes no external requests at all — no fonts, no
 analytics, no API calls.
 
+**Recommendations, not blank choices.** Where the kit used to leave a
+`[bracketed placeholder]` — a decision handed to whoever was reading — it now
+states a recommended default *and* the condition for deviating from it
+("quarterly, unless you run high-risk systems in production"). Accepting every
+default produces a coherent, defensible programme.
+
+**[Decide](https://lsdeva.github.io/governance-kit/decide/), don't just read.**
+The hard judgements are guided one question at a time and end in a verdict —
+with its reasoning and date recorded, exportable as evidence. The EU AI Act,
+ISO/IEC 42001 and NIST AI RMF all ask for documented, reasoned decisions, so
+the rationale trail is the deliverable rather than paperwork.
+
 **No fake benchmarks.** The scoring thresholds are stated openly as editorial
 judgement, not industry data, and the kit holds **no peer-comparison figures** —
 producing them honestly would mean collecting your answers on a server, which
@@ -205,6 +217,8 @@ mkdocs build --strict             # confirm it still builds clean
 | An "I've been asked to…" entry | `data/tasks.yml` |
 | An Excel register's columns, dropdowns, or formulas | `data/spreadsheets.yml` |
 | A scoring band, weight meaning, or stated limitation | `data/benchmarks.yml` |
+| A recommended default, or when to deviate from it | `data/defaults.yml` |
+| A guided decision's questions or verdicts | `data/decisions.yml` |
 
 <details>
 <summary><strong>Adding a template, question, or role</strong></summary>

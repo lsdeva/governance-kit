@@ -1,0 +1,260 @@
+# Recommended defaults.
+#
+# A bracketed placeholder is a decision delegated to whoever is reading — often
+# the least qualified person in the room. Every entry here replaces one with a
+# stated recommendation AND the condition for deviating from it, so a user can
+# accept the whole set and end up with a coherent, defensible programme.
+#
+# The test for including something: would an inexperienced reader stall here?
+# If the answer is "they'd just type their own name", it is a detail to fill in,
+# not a judgement — those stay as placeholders.
+#
+# Fields:
+#   id        - stable slug; referenced from templates.yml as {{default:id}}
+#   label     - what is being decided
+#   value     - THE RECOMMENDATION. Stated plainly, no hedging.
+#   unless    - the condition that should make you deviate, and to what
+#   why       - the reasoning, so accepting it is informed rather than blind
+#   applies   - template ids where this default appears (documentation only)
+
+- id: board-reporting-cadence
+  label: How often governance reports to the board
+  value: Quarterly
+  unless: >-
+    Move to monthly while any high-risk system is unassessed, or after a serious
+    incident, until the position is stable again.
+  why: >-
+    Quarterly matches most board cycles, so governance rides an existing meeting
+    rather than competing for a new one. More often than that and you report
+    noise; less often and a problem can run for half a year unseen.
+  applies: [ai-governance-framework, committee-charter, board-pack, governance-charter]
+
+- id: committee-cadence
+  label: How often the governance committee meets
+  value: Monthly
+  unless: >-
+    Quarterly is enough below roughly 150 staff with no high-risk systems.
+    Fortnightly during an active remediation programme.
+  why: >-
+    Monthly keeps decisions moving without the committee becoming the bottleneck.
+    The failure mode is a quarterly committee that becomes the reason nothing
+    ships for eleven weeks.
+  applies: [committee-charter]
+
+- id: committee-quorum
+  label: Quorum for a valid committee decision
+  value: Four voting members, and must include the chair (or a named delegate) and Legal/DPO
+  unless: >-
+    In organisations under about 150 staff, three including the chair. Never
+    drop the requirement for a legal or data-protection voice on decisions
+    about personal data.
+  why: >-
+    Without a quorum rule, a committee eventually takes a significant decision
+    with two people in the room, and that decision is the one a regulator asks
+    about.
+  applies: [committee-charter]
+
+- id: papers-deadline
+  label: How far ahead committee papers circulate
+  value: Five working days
+  unless: >-
+    Three days for a committee meeting fortnightly or more often.
+  why: >-
+    Late papers are how a committee gets ambushed into approving something
+    nobody read. Deferring late papers by default is the enforcement mechanism.
+  applies: [committee-charter]
+
+- id: policy-review-cycle
+  label: How often a policy or framework is reviewed
+  value: Annually, and on any material change to your AI estate or the law
+  unless: >-
+    Every six months for the Acceptable AI Use Policy while the tool landscape
+    is moving as fast as it currently is.
+  why: >-
+    Annual review is the cadence auditors expect and most organisations can
+    actually sustain. Tying it to material change as well stops a document
+    going stale between reviews.
+  applies: [ai-governance-framework, data-governance-framework, data-governance-policy, acceptable-ai-use-policy, data-classification-policy, ai-development-standard, third-party-ai-risk-policy, data-quality-standard]
+
+- id: exception-expiry
+  label: How long a policy exception lasts before it must be renewed
+  value: 90 days
+  unless: >-
+    30 days where the exception touches a high-risk system or personal data.
+    Never grant one without an expiry date.
+  why: >-
+    An exception with no expiry is a silent policy change. Ninety days is long
+    enough to fix the underlying problem and short enough that nobody forgets
+    it exists.
+  applies: [data-governance-policy, decision-rights]
+
+- id: access-review-cycle
+  label: How often access to data is re-reviewed
+  value: Annually for all data; every six months for Restricted
+  unless: >-
+    Quarterly for Restricted data in a regulated sector, or where staff turnover
+    is high.
+  why: >-
+    Access accumulates. Most over-permissioning comes from people changing role
+    rather than from bad initial grants, so the review matters more than the
+    approval.
+  applies: [data-governance-policy]
+
+- id: incident-response-times
+  label: How fast each incident severity must be picked up
+  value: >-
+    S1 immediately, S2 within 4 hours, S3 within one working day, S4 next cycle
+  unless: >-
+    Tighten S1 and S2 if you operate a 24/7 service or your sector sets shorter
+    supervisory reporting windows.
+  why: >-
+    The Art. 73 serious-incident clock starts when you establish the link
+    between system and incident, not when you finish investigating. Slow
+    triage burns the reporting window before anyone realises it is running.
+  applies: [incident-log, data-quality-standard]
+
+- id: serious-incident-assessment
+  label: When to decide whether an incident is reportable
+  value: Within 24 hours of detection, in parallel with fixing it
+  unless: >-
+    Immediately if the incident involves harm to a person or special category
+    data.
+  why: >-
+    Reportability is a separate decision from remediation and must not queue
+    behind it. Assessing early and recording the reasoning protects you even if
+    the answer is "not reportable".
+  applies: [incident-log]
+
+- id: log-retention
+  label: How long AI system logs are retained
+  value: Six months minimum; twelve months for high-risk systems
+  unless: >-
+    Longer where your sector's record-keeping rules or your limitation period
+    require it. Shorter is rarely defensible for a high-risk system.
+  why: >-
+    Art. 12 expects logs sufficient to trace behaviour over the system's
+    lifetime. A challenge to a decision usually arrives months after it was
+    made, so shorter retention means you cannot answer it.
+  applies: [ai-development-standard]
+
+- id: high-risk-review-cycle
+  label: How often a high-risk system is re-assessed
+  value: Annually, and on any material change of purpose, data, or model
+  unless: >-
+    Every six months where the model is retrained frequently or the vendor
+    ships model changes without notice.
+  why: >-
+    Risk assessment under Art. 9 is a continuous process, not a launch gate.
+    Tying review to material change catches the drift an annual date misses.
+  applies: [ai-risk-assessment, ai-system-inventory]
+
+- id: inventory-review-cycle
+  label: How often the AI inventory is swept for new systems
+  value: Quarterly, including a review of vendor release notes
+  unless: >-
+    Monthly if you have a large SaaS estate or an active procurement pipeline.
+  why: >-
+    Most organisations' fastest-growing AI exposure is features switched on
+    inside software they already licence. Nobody procured them as AI, so only a
+    deliberate sweep finds them.
+  applies: [ai-system-inventory, third-party-ai-risk-policy]
+
+- id: vendor-incident-notification
+  label: How quickly a vendor must tell you about an incident
+  value: 24 hours for critical vendors; 72 hours otherwise
+  unless: >-
+    Match the tightest window that applies to you — if your own regulator gives
+    you 72 hours, a vendor telling you at 72 hours is already too late.
+  why: >-
+    Your reporting clock may already be running while you wait to hear. This is
+    the clause most worth spending negotiating capital on.
+  applies: [third-party-ai-risk-policy]
+
+- id: vendor-reassessment
+  label: How often vendor AI risk is reassessed
+  value: Annually for critical vendors, and at every contract renewal
+  unless: >-
+    Immediately whenever a vendor announces new AI functionality in a product
+    you already use.
+  why: >-
+    Renewal is the only moment you reliably have leverage, so tie the
+    assessment to it rather than to an arbitrary date.
+  applies: [third-party-ai-risk-policy]
+
+- id: literacy-target
+  label: What proportion of relevant staff should complete AI literacy training
+  value: 90% of staff who build, buy, or operate AI, within 12 months
+  unless: >-
+    100% where staff make or materially inform decisions about individuals —
+    there is no acceptable untrained minority in that group.
+  why: >-
+    Art. 4 has been in force since February 2025 and applies regardless of risk
+    tier. Ninety percent is achievable and measurable; chasing the last ten
+    percent of a general population costs more than it returns.
+  applies: [governance-charter, acceptable-ai-use-policy, kpi-dashboard]
+
+- id: tool-approval-turnaround
+  label: How long approving a new AI tool should take
+  value: Five working days
+  unless: >-
+    Ten days where the tool will process personal data and needs a DPIA.
+  why: >-
+    Slow approval produces shadow AI, which is worse than the risk you were
+    managing. Publishing the turnaround is what makes people willing to ask.
+  applies: [acceptable-ai-use-policy]
+
+- id: data-quality-thresholds
+  label: What data quality threshold to set
+  value: 98% completeness and 99% validity on data feeding a high-risk AI system
+  unless: >-
+    Set thresholds from use, not ambition. Data feeding an internal dashboard
+    can sit far lower; data feeding a regulatory return should be higher.
+  why: >-
+    A threshold nobody measures is worse than none, because it implies
+    assurance you do not have. Start with two dimensions on your two most
+    important domains.
+  applies: [data-quality-standard]
+
+- id: control-test-cycle
+  label: How often controls are tested
+  value: Annually for high-risk controls; a risk-based sample for the rest
+  unless: >-
+    Quarterly for any control that has failed in the last twelve months.
+  why: >-
+    Testing design once and operation annually is the minimum that supports a
+    genuine assurance opinion. Re-testing what has already failed is where the
+    value is.
+  applies: [control-library]
+
+- id: retention-default
+  label: How long to keep personal data by default
+  value: Only as long as the stated purpose requires, with a documented period per activity
+  unless: >-
+    Your sector sets a statutory minimum — those override any shorter period
+    you would otherwise choose.
+  why: >-
+    "As long as necessary" is not a retention period. A named number per
+    activity is what makes deletion enforceable and defensible.
+  applies: [data-governance-policy, processing-dpia-log]
+
+- id: escalation-timebox
+  label: How long two functions get to resolve a disagreement before it escalates
+  value: Five working days, then the governance lead facilitates for a further five
+  unless: >-
+    Escalate immediately where a live system is causing harm — do not run the
+    clock during an incident.
+  why: >-
+    Unresolved disagreement is the most common reason a control quietly stops
+    operating. A timebox forces it upward instead of letting it stall.
+  applies: [decision-rights]
+
+- id: suspension-notification
+  label: How quickly a system suspension must be reported to the committee
+  value: Within 24 hours of the suspension, never before it
+  unless: >-
+    Nothing. Notification always follows the stop.
+  why: >-
+    If stopping a system requires permission first, it will not happen in time.
+    Distributing the right to suspend and requiring prompt notification
+    afterwards is what makes the control real.
+  applies: [decision-rights, committee-charter]

@@ -70,7 +70,7 @@ happened to look acceptable.
 
 High-risk systems **must** automatically log, at minimum: timestamp, system
 and model version, input reference, output, confidence where available, and
-any human override. Retain per **[retention period]** — long enough to
+any human override. Retain per <span class="gk-default" title="Art. 12 expects logs sufficient to trace behaviour over the system's lifetime. A challenge to a decision usually arrives months after it was made, so shorter retention means you cannot answer it."><strong>Six months minimum; twelve months for high-risk systems</strong><span class="gk-default-unless">Unless: Longer where your sector's record-keeping rules or your limitation period require it. Shorter is rarely defensible for a high-risk system.</span></span> — long enough to
 reconstruct a decision if it is challenged.
 
 !!! note "Application logs are usually not enough"

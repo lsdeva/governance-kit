@@ -96,13 +96,13 @@ Classification is a recorded decision with a date and an owner, held in the
 
 ### 7. Reporting & assurance
 
-The committee reports to the board at least **[quarterly]** using
+The committee reports to the board at least <span class="gk-default" title="Quarterly matches most board cycles, so governance rides an existing meeting rather than competing for a new one. More often than that and you report noise; less often and a problem can run for half a year unseen."><strong>Quarterly</strong><span class="gk-default-unless">Unless: Move to monthly while any high-risk system is unassessed, or after a serious incident, until the position is stable again.</span></span> using
 [Board Pack Template](../board/board-pack.md) and tracks health via [KPI / KRI Dashboard](../board/kpi-dashboard.md). Internal Audit
 provides independent assurance on a risk-based cycle.
 
 ### 8. Review
 
-Owner: **[role]**. Cadence: **[annually / on material change]**.
+Owner: **[role]**. Cadence: <span class="gk-default" title="Annual review is the cadence auditors expect and most organisations can actually sustain. Tying it to material change as well stops a document going stale between reviews."><strong>Annually, and on any material change to your AI estate or the law</strong><span class="gk-default-unless">Unless: Every six months for the Acceptable AI Use Policy while the tool landscape is moving as fast as it currently is.</span></span>.
 
 | Version | Date | Author | Approved by |
 |---|---|---|---|

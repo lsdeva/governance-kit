@@ -86,7 +86,7 @@ Ask before purchase, and record the answers.
 | Notification of material model change | A silent model swap can change system behaviour overnight. |
 | Documentation rights | You cannot evidence what you cannot obtain. |
 | Audit or third-party assurance rights | Trust needs verification. |
-| Incident notification within **[24–72h]** | Your own reporting clock may already be running. |
+| Incident notification within <span class="gk-default" title="Your reporting clock may already be running while you wait to hear. This is the clause most worth spending negotiating capital on."><strong>24 hours for critical vendors; 72 hours otherwise</strong><span class="gk-default-unless">Unless: Match the tightest window that applies to you — if your own regulator gives you 72 hours, a vendor telling you at 72 hours is already too late.</span></span> | Your own reporting clock may already be running. |
 | Data location and sub-processor control | Transfer and access obligations. |
 | Exit: data return and deletion | Avoids hostage data at renewal. |
 
@@ -94,8 +94,8 @@ Ask before purchase, and record the answers.
 
 | Activity | Frequency |
 |---|---|
-| Reassess Critical vendors | Annually |
-| Review vendor release notes for new AI features | Quarterly |
+| Reassess Critical vendors | <span class="gk-default" title="Renewal is the only moment you reliably have leverage, so tie the assessment to it rather than to an arbitrary date."><strong>Annually for critical vendors, and at every contract renewal</strong><span class="gk-default-unless">Unless: Immediately whenever a vendor announces new AI functionality in a product you already use.</span></span> |
+| Review vendor release notes for new AI features | <span class="gk-default" title="Most organisations' fastest-growing AI exposure is features switched on inside software they already licence. Nobody procured them as AI, so only a deliberate sweep finds them."><strong>Quarterly, including a review of vendor release notes</strong><span class="gk-default-unless">Unless: Monthly if you have a large SaaS estate or an active procurement pipeline.</span></span> |
 | Confirm certifications still current | Annually |
 | Review incidents involving the vendor | Each occurrence |
 

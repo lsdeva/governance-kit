@@ -44,6 +44,36 @@
   letter-spacing: .01em;
 }
 
+/* Recommended defaults: the value, plus when to deviate from it.
+ * Replaces a [bracketed placeholder], which delegated the decision to whoever
+ * was reading. */
+.gk-default {
+  display: inline;
+}
+.gk-default > strong {
+  background: var(--md-code-bg-color);
+  border-bottom: 2px solid var(--md-accent-fg-color);
+  padding: .05rem .3rem;
+  border-radius: .2rem .2rem 0 0;
+  cursor: help;
+}
+.gk-default-unless {
+  display: block;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--md-default-fg-color--light);
+  margin-top: .2rem;
+  padding-left: .55rem;
+  border-left: 2px solid var(--md-default-fg-color--lightest);
+}
+/* Inside a table cell the block form would wreck the layout. */
+.md-typeset table .gk-default-unless {
+  display: block;
+  margin-top: .15rem;
+  padding-left: .4rem;
+  font-size: .7rem;
+}
+
 /* "Evidence:" line under each checklist item */
 .gk-ev {
   display: inline-block;

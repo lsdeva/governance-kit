@@ -32,7 +32,7 @@ our behalf — and to all AI tools, whether we provide them or not.
 | [Tool C] | [Customer-facing] | [Restricted — with controls] | [role] |
 
 Tools not on this list are **not approved**. To request one, contact
-**[route]** — expected turnaround **[5 working days]**.
+**[route]** — expected turnaround {{default:tool-approval-turnaround}}.
 
 ### 4. Always prohibited
 

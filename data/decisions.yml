@@ -1,0 +1,252 @@
+# Guided decisions — the site reaching a verdict rather than describing options.
+#
+# The kit already holds the content needed to classify an AI system. What it
+# lacked was the sequencing and the conclusion: a reader met a definition table
+# and had to work out for themselves which row they were in. This file encodes
+# the decision as a path that ends in an answer, a rationale, and a date.
+#
+# Design rules:
+#   - Every question has a plain-language prompt and, where the term is
+#     jargon, an example of what does and does not count.
+#   - Every path terminates in an OUTCOME, never in "read more".
+#   - Where the honest answer is "this needs a lawyer", the outcome says so
+#     rather than guessing.
+#   - The outcome carries the reasoning, so the recorded decision is defensible
+#     and reviewable later.
+
+- id: risk-tier
+  title: What risk tier is this AI system?
+  short: >-
+    Work out whether a system is prohibited, high-risk, limited-risk, or
+    minimal-risk under the EU AI Act — and record why.
+  why: >-
+    Classification determines which obligations apply and by when. It is the
+    decision every other AI Act obligation depends on, and the one most often
+    left undone because the definitions are hard to apply to a real system.
+  intro: >-
+    Answer about ONE system at a time. Take the system as it actually operates,
+    not as it was described in the business case. If two answers seem true,
+    pick the stronger one — over-classifying costs effort, under-classifying
+    costs a great deal more.
+  records: ai-system-inventory
+  start: prohibited-emotion
+
+  questions:
+    # --- Stage 1: prohibited practices (Art. 5). Any yes stops everything. ---
+    - id: prohibited-emotion
+      stage: Prohibited practices
+      text: Does the system infer people's emotions in a workplace or an educational setting?
+      help: >-
+        Includes tone or sentiment analysis of employee messages, engagement or
+        attention monitoring, and mood detection in interviews. Detecting
+        emotion for medical or safety reasons is treated differently — if that
+        is your case, answer No and note it.
+      yes: { outcome: prohibited, ref: "Art. 5(1)(f)" }
+      no: prohibited-social-scoring
+
+    - id: prohibited-social-scoring
+      stage: Prohibited practices
+      text: Does it score or rank people's trustworthiness or social behaviour, in a way that could disadvantage them in an unrelated context?
+      help: >-
+        The test is unrelated context: using payment history to decide credit is
+        ordinary; using it to restrict access to a school place is not.
+      yes: { outcome: prohibited, ref: "Art. 5(1)(c)" }
+      no: prohibited-manipulation
+
+    - id: prohibited-manipulation
+      stage: Prohibited practices
+      text: Does it use subliminal or deliberately manipulative techniques, or exploit someone's age, disability, or economic vulnerability, in a way likely to cause harm?
+      help: >-
+        Ordinary persuasion and marketing are not caught. What is caught is
+        technique designed to bypass conscious decision-making, or targeting
+        that works precisely because the person is vulnerable.
+      yes: { outcome: prohibited, ref: "Art. 5(1)(a)-(b)" }
+      no: prohibited-biometric
+
+    - id: prohibited-biometric
+      stage: Prohibited practices
+      text: Does it do real-time remote biometric identification in a public space, scrape facial images untargeted from the internet or CCTV, or infer protected characteristics from biometrics?
+      help: >-
+        Protected characteristics here means race, political opinion, trade
+        union membership, religion, sex life, or sexual orientation. Verifying
+        one person against their own stored image — unlocking a phone — is not
+        this.
+      yes: { outcome: prohibited, ref: "Art. 5(1)(d)-(g)" }
+      no: prohibited-predictive-policing
+
+    - id: prohibited-predictive-policing
+      stage: Prohibited practices
+      text: Does it predict whether an individual will commit a crime, based only on profiling or personality traits?
+      help: >-
+        Assessing a specific, already-suspected individual on objective facts is
+        different from profiling the general population.
+      yes: { outcome: prohibited, ref: "Art. 5(1)(d)" }
+      no: hr-annex3
+
+    # --- Stage 2: Annex III high-risk areas. ---
+    - id: hr-annex3
+      stage: High-risk areas
+      text: Is the system used in any of these areas?
+      help: >-
+        Pick the closest match. These are the Annex III areas where AI is
+        treated as high-risk because of what is at stake for the person
+        affected.
+      options:
+        - label: Employment — recruitment, screening, promotion, task allocation, or monitoring
+          next: hr-derogation
+        - label: Education — admission, assessment, or proctoring
+          next: hr-derogation
+        - label: Essential services — credit scoring, insurance pricing, or access to public benefits
+          next: hr-derogation
+        - label: Healthcare triage, or emergency service dispatch
+          next: hr-derogation
+        - label: Law enforcement, migration, border control, or justice
+          next: hr-derogation
+        - label: Biometric identification or categorisation (where not prohibited above)
+          next: hr-derogation
+        - label: Critical infrastructure — safety in water, gas, electricity, or transport
+          next: hr-derogation
+        - label: None of these
+          next: hr-safety-component
+
+    - id: hr-safety-component
+      stage: High-risk areas
+      text: Is the system a safety component of a product that already needs third-party conformity assessment?
+      help: >-
+        Think medical devices, machinery, lifts, vehicles, toys. If your product
+        already carries a CE mark under its own regulation and this AI affects
+        its safety, that is Annex I.
+      # Not an Annex III area and not an Annex I safety component, so the
+      # Art. 6(3) narrowing is irrelevant — go straight to the transparency
+      # questions.
+      yes: { outcome: high-risk, ref: "Annex I" }
+      no: lim-interaction
+
+    - id: hr-derogation
+      stage: High-risk areas
+      text: Does the system only perform a narrow procedural task, improve the result of prior human work, detect patterns without replacing human assessment, or do preparatory work?
+      help: >-
+        This is the Art. 6(3) narrowing, and it is the most commonly
+        over-claimed provision in the Act. Be honest: if the human who reviews
+        the output almost always accepts it, the system is not merely
+        preparatory — it is deciding.
+      yes: { outcome: high-risk-derogation, ref: "Art. 6(3)" }
+      no: { outcome: high-risk, ref: "Annex III" }
+
+    # --- Stage 3: transparency obligations (Art. 50). ---
+    - id: lim-interaction
+      stage: Transparency
+      text: Do people interact with this system directly — a chatbot, a voice agent, an assistant?
+      help: >-
+        The question is whether a person could be talking to it, not whether
+        they usually realise they are.
+      yes: { outcome: limited, ref: "Art. 50(1)" }
+      no: lim-synthetic
+
+    - id: lim-synthetic
+      stage: Transparency
+      text: Does it generate or materially alter image, audio, video, or text published to the public?
+      help: >-
+        Includes marketing copy, synthetic voice, and edited imagery. Internal
+        drafting that a human rewrites before publication is not this.
+      yes: { outcome: limited, ref: "Art. 50(2)" }
+      no: lim-emotion-permitted
+
+    - id: lim-emotion-permitted
+      stage: Transparency
+      text: Does it do emotion recognition or biometric categorisation in a setting that is permitted?
+      help: >-
+        You will have answered No to the workplace and education question
+        earlier. If you use neither at all, answer No.
+      yes: { outcome: limited, ref: "Art. 50(3)" }
+      no: { outcome: minimal }
+
+  outcomes:
+    - id: prohibited
+      tier: Prohibited
+      severity: stop
+      headline: Stop. This looks like a prohibited practice.
+      detail: >-
+        Practices banned under Article 5 have been unlawful since 2 February
+        2025, and carry the highest penalty tier. There is no transition period
+        left and no compliance route — the system cannot be brought into
+        compliance by adding controls.
+      actions:
+        - Do not deploy it. If it is live, suspend it now and notify your committee within 24 hours.
+        - Record the decision, the date, and who made it.
+        - Get legal advice before restarting any related work.
+        - Check whether anything else in your estate does the same thing.
+      counsel: >-
+        The Article 5 prohibitions have carve-outs and definitional edges that
+        matter enormously here. Confirm with qualified counsel before you either
+        proceed or write the system off.
+      templates: [acceptable-ai-use-policy, ai-risk-assessment, incident-log]
+
+    - id: high-risk
+      tier: High-risk
+      severity: high
+      headline: This is high-risk. The full obligation set applies.
+      detail: >-
+        High-risk systems carry the heaviest obligations in the Act: a
+        continuous risk management process, training-data governance, technical
+        documentation, automatic logging, effective human oversight, declared
+        accuracy and robustness, conformity assessment, and post-market
+        monitoring.
+      actions:
+        - Register it in your AI inventory with this rationale and today's date.
+        - Complete an AI risk assessment before it goes further.
+        - Confirm whether you are the provider or the deployer — the obligations differ sharply.
+        - >-
+          Check the timeline — Annex III obligations apply from 2 December 2027,
+          Annex I from 2 August 2028. Work backwards from there.
+        - If personal data is involved, a DPIA is almost certainly required too.
+      templates: [ai-risk-assessment, ai-system-inventory, model-card, ai-development-standard]
+
+    - id: high-risk-derogation
+      tier: High-risk (derogation may apply)
+      severity: high
+      headline: High-risk area, but the Article 6(3) narrowing may apply.
+      detail: >-
+        You are in an Annex III area, which is the default trigger for high-risk
+        status, but you have indicated the system only performs a narrow or
+        preparatory role. That derogation is real — and it is also the most
+        commonly over-claimed provision in the Act.
+      actions:
+        - "Treat it as high-risk until you can evidence otherwise. The burden is on you."
+        - Document the assessment of why the derogation applies, and register it — the Act requires this even when you rely on the exemption.
+        - "Measure whether humans actually override the output. If the override rate is near zero, the system is not preparatory in practice and the derogation does not hold."
+        - Re-check this decision whenever the system's role expands.
+      counsel: >-
+        Relying on Article 6(3) is a legal position, not an engineering one. Have
+        it reviewed before you build your compliance programme on it.
+      templates: [ai-risk-assessment, ai-system-inventory, control-library]
+
+    - id: limited
+      tier: Limited (transparency)
+      severity: medium
+      headline: Limited risk — transparency obligations apply.
+      detail: >-
+        The system does not carry the high-risk obligation set, but people must
+        be told they are dealing with AI, and AI-generated content must be
+        marked in a machine-readable way.
+      actions:
+        - Add a clear disclosure at the point of interaction, not buried in terms of service.
+        - Mark generated or materially altered content.
+        - Register it in your inventory with this rationale.
+        - "Note the date: Article 50 applies from 2 August 2026, with a grace period to 2 December 2026 for systems already in service."
+      templates: [ai-system-inventory, acceptable-ai-use-policy, ai-governance-framework]
+
+    - id: minimal
+      tier: Minimal
+      severity: low
+      headline: Minimal risk. Baseline governance is enough.
+      detail: >-
+        No specific AI Act obligations attach beyond AI literacy for the people
+        operating it. That is not the same as no governance — it still belongs
+        in your inventory, and your ordinary data protection and security duties
+        are unaffected.
+      actions:
+        - Register it anyway. An unlisted system is one you cannot govern, and classification can change when purpose changes.
+        - Apply your acceptable use policy and data classification rules.
+        - Re-classify if its purpose changes materially.
+      templates: [ai-system-inventory, acceptable-ai-use-policy]

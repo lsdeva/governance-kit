@@ -46,8 +46,7 @@ above [threshold]]**.
 
 ### 4. Quorum & decisions
 
-- **Quorum:** **[four]** voting members, **must** include the Chair (or
-  delegate) and **[Legal/DPO]**.
+- **Quorum:** {{default:committee-quorum}}.
 - **Decisions:** by consensus where possible; otherwise a majority of voting
   members present. The Chair holds a casting vote.
 - **Dissent is minuted.** A member who disagrees with a risk acceptance has
@@ -57,7 +56,7 @@ above [threshold]]**.
 
 ### 5. Cadence & agenda
 
-Meets **[monthly / quarterly]**. Standing agenda:
+Meets {{default:committee-cadence}}. Standing agenda:
 
 1. Minutes and actions outstanding
 2. New AI systems for classification or approval
@@ -71,14 +70,14 @@ Meets **[monthly / quarterly]**. Standing agenda:
 
 ### 6. Papers
 
-Circulated **[five working days]** in advance. Papers arriving late are
+Circulated {{default:papers-deadline}} in advance. Papers arriving late are
 deferred by default — otherwise deadlines get managed by ambushing the
 committee.
 
 ### 7. Reporting
 
-Reports to **[the Board]** **[quarterly]** using Board Pack Template. Minutes are
-retained for **[period]** as evidence of governance.
+Reports to **[the Board]** {{default:board-reporting-cadence}} using Board Pack Template. Minutes are
+retained for {{default:log-retention}} as evidence of governance.
 
 ### 8. Review
 

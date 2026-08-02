@@ -79,7 +79,7 @@ reviewed sensibly when the system changes.
 | New system proposed | Register at ideation, before build |
 | Purpose changes materially | Re-classify; re-assess |
 | Vendor changes the model | Review; re-assess if behaviour changed |
-| Quarterly | Full review; confirm owners still in post |
+| {{default:inventory-review-cycle}} | Full review; confirm owners still in post |
 | Retirement | Mark retired; retain records per schedule |
 
 ---
