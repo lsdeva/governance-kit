@@ -1210,6 +1210,19 @@ def main() -> int:
                 }
                 for t in templates
             },
+            # Accepting a recommended default is a decision too, so the app can
+            # record adoption in the same log. Same source as the values shown
+            # on the template pages.
+            "defaults": [
+                {
+                    "id": d["id"],
+                    "label": " ".join(d["label"].split()),
+                    "value": " ".join(str(d["value"]).split()),
+                    "unless": " ".join(d["unless"].split()),
+                    "why": " ".join(d["why"].split()),
+                }
+                for d in defaults_list
+            ],
         }
         write(DOCS / "assess" / "decision-data.json",
               json.dumps(payload, indent=2, ensure_ascii=False) + "\n",

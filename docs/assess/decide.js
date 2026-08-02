@@ -368,8 +368,99 @@
       ]));
     });
 
+    wrap.appendChild(defaultsCard());
     wrap.appendChild(logBlock());
     return wrap;
+  }
+
+  /*
+   * Adopting the recommended defaults is itself a decision — 21 of them — and
+   * until now accepting them left no trace. Recording adoption turns "we used
+   * the defaults" into a dated, exportable statement that the organisation
+   * consciously chose them, which is what an auditor asks for.
+   */
+  function adoptedEntry() {
+    return loadLog().filter(function (e) {
+      return e.decisionId === "adopt-defaults";
+    }).pop();
+  }
+
+  function defaultsCard() {
+    var defs = (DATA && DATA.defaults) || [];
+    if (!defs.length) return el("span");
+
+    var already = adoptedEntry();
+    var card = el("div", { class: "gk-dec-card gk-dec-defaults" });
+    card.appendChild(el("h3", {}, ["Adopt the recommended defaults"]));
+    card.appendChild(el("p", {}, [
+      "The kit recommends a value for every judgement it can reasonably make " +
+      "for you — reporting cadence, exception expiry, retention, response " +
+      "times — each with the condition for deviating. Accepting them gives you " +
+      "a coherent starting programme."
+    ]));
+    card.appendChild(el("p", { class: "gk-muted" }, [
+      defs.length + " defaults. Adopting them records the decision, with each " +
+      "value and its deviation condition, so your export shows you chose them " +
+      "rather than drifted into them."
+    ]));
+
+    var details = el("details", { class: "gk-dec-deflist" });
+    details.appendChild(el("summary", {}, ["See what you would be adopting"]));
+    var dl = el("dl");
+    defs.forEach(function (d) {
+      dl.appendChild(el("dt", {}, [d.label]));
+      dl.appendChild(el("dd", {}, [
+        el("strong", {}, [d.value]),
+        el("span", { class: "gk-muted" }, [" — unless: " + d.unless])
+      ]));
+    });
+    details.appendChild(dl);
+    card.appendChild(details);
+
+    if (already) {
+      card.appendChild(el("p", { class: "gk-log-done" }, [
+        "Adopted on " + already.date + " (" + already.id + ")."
+      ]));
+    }
+    card.appendChild(el("button", {
+      class: "gk-btn" + (already ? "" : " gk-btn-primary"), type: "button",
+      onclick: function () {
+        if (!window.confirm(
+          "Record that your organisation adopts these " + defs.length +
+          " recommended defaults?\n\nEach value and its deviation condition is " +
+          "written to your decision log with today's date. You can still " +
+          "deviate from any of them — that is what the 'unless' conditions " +
+          "are for.")) return;
+        adoptDefaults(defs);
+      }
+    }, [already ? "Re-adopt (records a new date)" : "Adopt the recommended defaults"]));
+    return card;
+  }
+
+  function adoptDefaults(defs) {
+    var entries = loadLog();
+    entries.push({
+      id: "D-" + String(entries.length + 1).padStart(3, "0"),
+      decision: "Adoption of recommended defaults",
+      decisionId: "adopt-defaults",
+      subject: "Organisation-wide governance defaults",
+      verdict: "Adopted (" + defs.length + " defaults)",
+      ref: null,
+      headline: "The recommended defaults were adopted as the starting position.",
+      date: todayISO(),
+      at: new Date().toISOString(),
+      // Stored in the same `path` shape the flows use, so the exports need no
+      // special case: each default reads as question -> answer.
+      path: defs.map(function (d) {
+        return {
+          question: d.label + " —",
+          answer: d.value + " (unless: " + d.unless + ")"
+        };
+      })
+    });
+    saveLog(entries);
+    state.flash = "Recorded adoption of " + defs.length + " recommended defaults.";
+    render();
   }
 
   function viewQuestion() {
