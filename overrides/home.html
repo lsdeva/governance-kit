@@ -1,0 +1,258 @@
+{% extends "main.html" %}
+
+<!--
+  The GovKit landing page.
+
+  Extends main.html rather than base.html so the header, search, theme toggle,
+  announcement bar and social meta all still work — only the content area is
+  replaced. Inner pages keep Material's docs layout, which is the right shape
+  for reading templates; this shape is only right for the front door.
+
+  Numbers in the stat tiles come from config.extra.landing, generated into
+  mkdocs.yml by tools/build_content.py from data/*.yml. Nothing here is
+  hardcoded that could drift from the data.
+-->
+
+{% block container %}
+{%- set L = config.extra.landing -%}
+<div class="gk-home">
+
+  <!-- ============================ hero ============================ -->
+  <header class="gk-hero">
+    <div class="gk-wrap gk-hero-in">
+      <div class="gk-hero-copy">
+        <span class="gk-eyebrow">Free &amp; open · CC BY 4.0 · No accounts</span>
+
+        <h1 class="gk-h1">
+          Govern your AI.<br>
+          <span class="gk-grad">Decide with confidence.</span>
+        </h1>
+
+        <p class="gk-sub">
+          Board-ready data &amp; AI governance — {{ L.tiles[0].value }} templates,
+          a role-based readiness assessment, and guided decisions that end in a
+          defensible, dated verdict. Updated for Regulation (EU) 2026/1744.
+        </p>
+
+        <div class="gk-cta">
+          <a class="gk-btn-lg gk-btn-primary" href="{{ 'decide/' | url }}">
+            Classify a system <span aria-hidden="true">→</span>
+          </a>
+          <a class="gk-btn-lg" href="{{ 'assess/' | url }}">
+            Take the 10-min assessment
+          </a>
+        </div>
+
+        <div class="gk-trust-row">
+          <span class="gk-trust">
+            <i class="gk-dot" aria-hidden="true"></i>
+            <b>Current law</b>
+            {%- if L.reviewed %} · reviewed {{ L.reviewed }}{% endif %}
+          </span>
+          <span class="gk-trust">
+            <span aria-hidden="true">🔒</span> <b>Nothing leaves your browser</b>
+          </span>
+          <span class="gk-trust">
+            <span aria-hidden="true">⤓</span>
+            <b>Word · Excel · Markdown</b> downloads
+          </span>
+        </div>
+      </div>
+
+      <!-- Product visual. Static illustration with representative figures —
+           deliberately not labelled as live data. -->
+      <div class="gk-visual" aria-hidden="true">
+        <div class="gk-card gk-report-card gk-rv">
+          <div class="gk-rc-head">
+            <b>Readiness</b>
+            <span class="gk-rc-score">62%</span>
+          </div>
+          <p class="gk-rc-sub">Score by category · Governance lead</p>
+          {% for row in [('Inventory', 78), ('Oversight', 64),
+                         ('Documentation', 45), ('Transparency', 28)] %}
+          <div class="gk-rc-row">
+            <span class="gk-rc-label">{{ row[0] }}</span>
+            <span class="gk-bar"><i data-w="{{ row[1] }}%"></i></span>
+            <span class="gk-rc-pct">{{ row[1] }}%</span>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="gk-card gk-verdict-card gk-rv">
+          <div class="gk-vc-chips">
+            <span class="gk-chip-hi">▲ High-risk</span>
+            <span class="gk-chip-lim">+ Limited (transparency)</span>
+          </div>
+          <h3 class="gk-vc-title">CV screening tool</h3>
+          <p class="gk-vc-meta">
+            Annex III(4) · Art. 50(1) — recorded D-003, with the full answer path
+          </p>
+          <ol class="gk-vc-steps">
+            <li><span>1</span>Register it in the AI inventory with this rationale — done automatically.</li>
+            <li><span>2</span>Run the AI risk assessment before the next hiring round.</li>
+            <li><span>3</span>Confirm your operator role — <b>work it out now →</b></li>
+          </ol>
+          <div class="gk-vc-foot">
+            <span class="gk-vc-btn">Added to inventory ✓</span>
+            <span class="gk-vc-btn gk-vc-btn-ghost">Export decision record</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================ stat tiles ============================ -->
+  <section class="gk-wrap gk-stats-band">
+    <div class="gk-stat-grid">
+      {% for t in L.tiles %}
+      <div class="gk-stat gk-rv">
+        <div class="gk-stat-v">{{ t.value }}</div>
+        <div class="gk-stat-l">{{ t.label }}</div>
+        <div class="gk-stat-n{% if t.tone == 'good' %} is-good{% endif %}">{{ t.note }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ======================= show, don't tell ======================= -->
+  <section class="gk-wrap gk-section">
+    <p class="gk-kicker">See it, don't take our word</p>
+    <h2 class="gk-h2">
+      The kit doesn't just tell you the options.<br>It walks you to an answer.
+    </h2>
+    <p class="gk-lede">
+      One question at a time, plain language, and every verdict recorded with its
+      reasoning and date — because the EU AI Act, ISO/IEC 42001 and NIST AI RMF
+      all ask for documented, reasoned decisions.
+    </p>
+
+    <div class="gk-shots">
+      <div class="gk-card gk-shot gk-rv">
+        <div class="gk-shot-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="gk-shot-body">
+          <b class="gk-shot-q">Q7 · High-risk screen</b>
+          <p class="gk-shot-p">
+            Does the system only perform a narrow procedural task, improve prior
+            human work, or do preparatory work?
+          </p>
+          <div class="gk-shot-opts">
+            <span>Yes</span><span class="is-sel">No</span><span>Not sure</span>
+          </div>
+          <p class="gk-shot-note">
+            Not sure? It counts as No — the burden of showing the derogation
+            applies is on you.
+          </p>
+        </div>
+        <div class="gk-shot-cap">
+          <b>Decide</b>
+          <p>Guided classification with honest defaults — "ask a lawyer" when
+             that's the true answer.</p>
+        </div>
+      </div>
+
+      <div class="gk-card gk-shot gk-rv">
+        <div class="gk-shot-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="gk-shot-body">
+          <b class="gk-shot-q">Decision log</b>
+          <table class="gk-mini">
+            <tr><th>ID</th><th>Decision</th><th>Verdict</th><th>Date</th></tr>
+            <tr><td>D-001</td><td>Risk tier — CV sc…</td>
+                <td><span class="gk-tag gk-tag-hi">High-risk</span></td><td>03 Aug</td></tr>
+            <tr><td>D-002</td><td>Operator role — …</td><td>Deployer</td><td>03 Aug</td></tr>
+            <tr><td>D-003</td><td>Adopted 30 defa…</td><td>Adopted</td><td>03 Aug</td></tr>
+          </table>
+          <p class="gk-shot-note">Export as Markdown · CSV · PDF</p>
+        </div>
+        <div class="gk-shot-cap">
+          <b>Evidence, not paperwork</b>
+          <p>Every verdict lands in a dated, exportable log — audit-ready by
+             construction.</p>
+        </div>
+      </div>
+
+      <div class="gk-card gk-shot gk-rv">
+        <div class="gk-shot-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="gk-shot-body">
+          <b class="gk-shot-q">AI System Inventory</b>
+          <table class="gk-mini">
+            <tr><th>ID</th><th>System</th><th>Tier</th><th>Role</th></tr>
+            <tr><td>AI-001</td><td>CV screening tool</td>
+                <td><span class="gk-tag gk-tag-hi">High-risk</span></td><td>Deployer</td></tr>
+            <tr><td>AI-002</td><td>Demand forecast…</td>
+                <td><span class="gk-tag gk-tag-min">Minimal</span></td><td>Provider</td></tr>
+            <tr><td>AI-003</td><td>Support chatbot</td>
+                <td><span class="gk-tag gk-tag-lim">Limited</span></td><td>Deployer</td></tr>
+          </table>
+          <p class="gk-shot-note">Fill it in the browser · Excel &amp; CSV export</p>
+        </div>
+        <div class="gk-shot-cap">
+          <b>Registers that fill themselves</b>
+          <p>Verdicts write straight into your inventory — no retyping, no drift.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= feature cards ========================= -->
+  <section class="gk-wrap gk-section">
+    <p class="gk-kicker">Everything a programme needs</p>
+    <h2 class="gk-h2">From first question to board pack.</h2>
+    <p class="gk-lede">
+      Six areas, one consistent structure, and a recommended default for every
+      judgement the kit can reasonably make for you — each with the condition
+      for deviating.
+    </p>
+
+    <div class="gk-features">
+      {% set feats = [
+        ('⚖', 'Guided decisions',
+         'Risk tier and operator role, walked one question at a time to a defensible verdict with article references.',
+         'decide/'),
+        ('✎', 'Opinionated defaults',
+         '30 recommended values — cadence, quorum, retention — each with its reasoning and an "unless" you can invoke.',
+         'decide/'),
+        ('⤓', 'Word &amp; Excel downloads',
+         'Every template as .docx, every register as .xlsx with live formulas. Built for the meeting, not the browser.',
+         'workspace/'),
+        ('◷', 'Current, and provably so',
+         'Reflects Reg. (EU) 2026/1744, the Art. 50 Guidelines and the Code of Practice — stamped and dated on every page.',
+         'eu-ai-act/timeline/'),
+        ('⇄', 'Standards crosswalk',
+         'Fifteen themes mapped across the EU AI Act, ISO/IEC 42001, NIST AI RMF and Singapore\'s framework.',
+         'crosswalk/'),
+        ('🔒', 'Private by architecture',
+         'Static site, no accounts, no analytics scripts, no uploads. Your answers never leave your device.',
+         'scoring/')
+      ] %}
+      {% for f in feats %}
+      <a class="gk-card gk-feat gk-rv" href="{{ f[3] | url }}">
+        <span class="gk-feat-icon" aria-hidden="true">{{ f[0] }}</span>
+        <b>{{ f[1] }}</b>
+        <p>{{ f[2] }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- =========================== trust strip =========================== -->
+  <section class="gk-wrap gk-section">
+    <div class="gk-card gk-trust-strip gk-rv">
+      <b>Open commons, not a product trial.</b>
+      <p>CC BY 4.0 — use it, adapt it, ship it inside your organisation.
+         Attribution appreciated, never required internally.</p>
+      <div class="gk-trust-links">
+        <a class="gk-btn-sm" href="{{ config.repo_url }}">View on GitHub</a>
+        <a class="gk-btn-sm" href="{{ config.repo_url }}/fork">Fork &amp; adapt</a>
+        <a class="gk-btn-sm" href="{{ 'contributing/' | url }}">Suggest a change</a>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ 'assets/home.js' | url }}"></script>
+{% endblock %}

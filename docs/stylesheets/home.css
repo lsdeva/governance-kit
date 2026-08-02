@@ -1,0 +1,659 @@
+/* ===========================================================================
+ * GovKit landing page.
+ *
+ * Loaded on every page (Material has no per-page stylesheet hook) but every
+ * rule is scoped under .gk-home, so inner docs pages are untouched.
+ *
+ * All colour comes from the tokens in extra.css — nothing is re-specified here.
+ * ======================================================================== */
+
+.gk-home {
+  color: var(--gk-ink);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.gk-home .gk-wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* The home template replaces the content block entirely, so Material's usual
+   .md-content wrapper is absent. Widen the grid and let .gk-home own the page
+   width, centring itself and running its own background to the full viewport. */
+.md-main__inner.md-grid { max-width: none; margin: 0; }
+.md-sidebar { display: none; }
+
+.gk-home {
+  width: 100%;
+  margin: 0;
+}
+
+/* Full-bleed section backgrounds, inner content centred at 1120px. */
+.gk-home .gk-wrap {
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ------------------------------------------------------------- announcement */
+
+.md-banner { background: var(--gk-brand-deep); }
+
+.gk-announce-in {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 8px 24px;
+  font-size: 13px;
+  color: #fff;
+  text-align: center;
+}
+
+.gk-announce-in a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-left: 6px;
+}
+
+/* --------------------------------------------------------------------- hero */
+
+.gk-hero {
+  background:
+    radial-gradient(900px 420px at 78% -8%, rgba(42, 120, 214, .10), transparent 62%),
+    radial-gradient(700px 380px at 8% 0%, rgba(74, 58, 167, .07), transparent 60%),
+    var(--gk-page);
+  padding: 64px 0 8px;
+  border-bottom: 1px solid transparent;
+}
+
+[data-md-color-scheme="slate"] .gk-hero {
+  background:
+    radial-gradient(900px 420px at 78% -8%, rgba(57, 135, 229, .16), transparent 62%),
+    radial-gradient(700px 380px at 8% 0%, rgba(74, 58, 167, .14), transparent 60%),
+    var(--gk-page);
+}
+
+.gk-hero-in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  gap: 40px;
+  align-items: start;
+}
+
+.gk-eyebrow {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gk-brand-deep);
+  background: var(--gk-brand-soft);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+.gk-h1 {
+  font-size: clamp(38px, 5.2vw, 60px);
+  line-height: 1.04;
+  letter-spacing: -.022em;
+  font-weight: 800;
+  margin: 18px 0 0;
+  color: var(--gk-ink);
+}
+
+.gk-grad {
+  background: linear-gradient(94deg, var(--gk-brand), var(--gk-violet) 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* A gradient on text has no colour of its own; if background-clip fails the
+     text would vanish, so a solid fallback is declared first in source order. */
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .gk-grad { color: var(--gk-brand); background: none; }
+}
+
+.gk-sub {
+  font-size: 17px;
+  color: var(--gk-ink-2);
+  max-width: 34rem;
+  margin: 18px 0 0;
+}
+
+.gk-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 26px 0 0;
+}
+
+.gk-btn-lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--gk-hairline);
+  background: var(--gk-surface);
+  color: var(--gk-ink);
+  font-size: 14.5px;
+  font-weight: 650;
+  text-decoration: none;
+  transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+}
+
+.gk-btn-lg:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--gk-shadow-1);
+  border-color: var(--gk-brand);
+}
+
+.gk-btn-lg.gk-btn-primary {
+  background: var(--gk-brand);
+  border-color: var(--gk-brand);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(11, 11, 11, .08), 0 8px 20px rgba(42, 120, 214, .28);
+}
+
+.gk-btn-lg.gk-btn-primary:hover { background: var(--gk-brand-deep); }
+
+[data-md-color-scheme="slate"] .gk-btn-lg.gk-btn-primary:hover {
+  background: var(--gk-brand);
+  filter: brightness(1.12);
+}
+
+.gk-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 22px 0 0;
+}
+
+.gk-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--gk-ink-2);
+  background: var(--gk-surface);
+  border: 1px solid var(--gk-hairline);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+.gk-trust b { color: var(--gk-ink); font-weight: 650; }
+
+.gk-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gk-good);
+  display: inline-block;
+}
+
+/* ----------------------------------------------------------- product visual */
+
+.gk-visual {
+  position: relative;
+  min-height: 340px;
+  padding-top: 6px;
+}
+
+.gk-card {
+  background: var(--gk-surface);
+  border: 1px solid var(--gk-hairline);
+  border-radius: var(--gk-r-lg);
+  box-shadow: var(--gk-shadow-1);
+}
+
+/* Layered, but never overlapping text. The mock tucks the readiness card
+   further under the verdict card, which clipped its bars and labels; these
+   widths keep the depth cue while leaving both cards fully legible. */
+.gk-report-card {
+  position: absolute;
+  left: 0;
+  top: 156px;
+  /* Wide enough for the score and every percentage to render in full. The
+     verdict card starts at 46%, so a ~2% tuck keeps the layered depth cue
+     without covering any text. */
+  /* right edge lands 12px past the verdict card's left edge (40%),
+     so the tuck is a fixed, predictable overlap */
+  width: calc(40% + 12px);
+  padding: 14px 16px;
+  z-index: 1;
+}
+
+.gk-verdict-card {
+  position: relative;
+  margin-left: 40%;
+  width: 60%;
+  padding: 16px 18px;
+  box-shadow: var(--gk-shadow-2);
+  z-index: 2;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.gk-verdict-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--gk-shadow-2), 0 24px 60px rgba(11, 11, 11, .12);
+}
+
+.gk-rc-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gk-rc-head b { font-size: 14px; }
+.gk-rc-score { font-size: 20px; font-weight: 800; color: var(--gk-brand); }
+
+.gk-rc-sub {
+  font-size: 11.5px;
+  color: var(--gk-ink-3);
+  margin: 2px 0 12px;
+}
+
+.gk-rc-row {
+  display: grid;
+  grid-template-columns: 72px 1fr 30px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.gk-rc-label { font-size: 11.5px; color: var(--gk-ink-2); }
+.gk-rc-pct { font-size: 11px; color: var(--gk-ink-3); text-align: right; }
+
+.gk-bar {
+  display: block;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--gk-seq-track);
+  overflow: hidden;
+}
+
+.gk-bar > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--gk-brand);
+  transition: width .9s cubic-bezier(.22, 1, .36, 1);
+}
+
+.gk-vc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.gk-chip-hi, .gk-chip-lim { white-space: nowrap; }
+
+.gk-chip-hi,
+.gk-chip-lim {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+
+.gk-chip-hi { background: var(--gk-serious); color: #fff; }
+
+.gk-chip-lim {
+  background: transparent;
+  border: 1px solid var(--gk-warn);
+  color: var(--gk-warn-text);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.gk-vc-title { font-size: 17px; font-weight: 750; margin: 10px 0 2px; }
+
+.gk-vc-meta {
+  font-size: 11.5px;
+  color: var(--gk-ink-3);
+  margin: 0 0 10px;
+}
+
+.gk-vc-steps { list-style: none; margin: 0; padding: 0; }
+
+.gk-vc-steps li {
+  display: flex;
+  gap: 9px;
+  font-size: 12.5px;
+  color: var(--gk-ink-2);
+  padding: 7px 0;
+  border-top: 1px solid var(--gk-hairline);
+  line-height: 1.45;
+}
+
+.gk-vc-steps li span {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: var(--gk-brand-soft);
+  color: var(--gk-brand-deep);
+  font-size: 10.5px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.gk-vc-steps li b { color: var(--gk-brand); }
+
+.gk-vc-foot { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+.gk-vc-btn {
+  font-size: 12px;
+  font-weight: 650;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--gk-brand);
+  color: #fff;
+}
+
+.gk-vc-btn-ghost {
+  background: transparent;
+  color: var(--gk-ink-2);
+  border: 1px solid var(--gk-hairline);
+}
+
+/* --------------------------------------------------------------- stat tiles */
+
+.gk-stats-band { padding: 56px 24px 24px; }
+
+.gk-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.gk-stat {
+  background: var(--gk-surface);
+  border: 1px solid var(--gk-hairline);
+  border-radius: var(--gk-r-md);
+  padding: 16px 18px;
+}
+
+.gk-stat-v {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.gk-stat-l { font-size: 12.5px; color: var(--gk-ink-2); margin-top: 2px; }
+
+.gk-stat-n {
+  font-size: 11.5px;
+  color: var(--gk-ink-3);
+  margin-top: 6px;
+}
+
+.gk-stat-n.is-good { color: var(--gk-good-text); font-weight: 650; }
+
+/* ----------------------------------------------------------------- sections */
+
+.gk-section { padding: 72px 24px 0; }
+
+.gk-kicker {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--gk-brand);
+  margin: 0;
+}
+
+.gk-h2 {
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1.18;
+  letter-spacing: -.018em;
+  font-weight: 780;
+  margin: 10px 0 0;
+  color: var(--gk-ink);
+}
+
+.gk-lede {
+  font-size: 15px;
+  color: var(--gk-ink-2);
+  max-width: 44rem;
+  margin: 12px 0 0;
+}
+
+/* -------------------------------------------------------- show, don't tell */
+
+.gk-shots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.gk-shot { overflow: hidden; display: flex; flex-direction: column; }
+
+.gk-shot-bar {
+  display: flex;
+  gap: 5px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--gk-hairline);
+}
+
+.gk-shot-bar i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gk-hairline);
+}
+
+.gk-shot-body { padding: 14px 16px; flex: 1; }
+.gk-shot-q { font-size: 12.5px; display: block; margin-bottom: 6px; }
+
+.gk-shot-p {
+  font-size: 12.5px;
+  color: var(--gk-ink-2);
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.gk-shot-opts { display: flex; gap: 6px; }
+
+.gk-shot-opts span {
+  font-size: 12px;
+  padding: 6px 14px;
+  border: 1px solid var(--gk-hairline);
+  border-radius: 8px;
+  color: var(--gk-ink-2);
+}
+
+.gk-shot-opts .is-sel {
+  border-color: var(--gk-brand);
+  background: var(--gk-brand-soft);
+  color: var(--gk-brand-deep);
+  font-weight: 650;
+}
+
+.gk-shot-note {
+  font-size: 11px;
+  color: var(--gk-ink-3);
+  margin: 10px 0 0;
+  line-height: 1.45;
+}
+
+.gk-shot-cap {
+  padding: 12px 16px 16px;
+  border-top: 1px solid var(--gk-hairline);
+}
+
+.gk-shot-cap b { font-size: 13.5px; }
+
+.gk-shot-cap p {
+  font-size: 12.5px;
+  color: var(--gk-ink-2);
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+
+.gk-mini { width: 100%; border-collapse: collapse; font-size: 11px; }
+
+.gk-mini th {
+  text-align: left;
+  font-weight: 650;
+  color: var(--gk-ink-2);
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--gk-hairline);
+}
+
+.gk-mini td {
+  padding: 6px;
+  border-bottom: 1px solid var(--gk-hairline);
+  color: var(--gk-ink-2);
+  white-space: nowrap;
+}
+
+.gk-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.gk-tag-hi  { background: var(--gk-serious); color: #fff; }
+.gk-tag-min { background: var(--gk-good); color: #fff; }
+.gk-tag-lim { background: var(--gk-warn); color: #3a2a00; }
+
+/* ------------------------------------------------------------ feature cards */
+
+.gk-features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.gk-feat {
+  display: block;
+  padding: 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.gk-feat:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--gk-shadow-2);
+  border-color: var(--gk-brand);
+}
+
+.gk-feat-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--gk-brand-soft);
+  color: var(--gk-brand-deep);
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.gk-feat b { display: block; font-size: 14.5px; margin-bottom: 5px; }
+
+.gk-feat p {
+  font-size: 12.5px;
+  color: var(--gk-ink-2);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ------------------------------------------------------------- trust strip */
+
+.gk-trust-strip { padding: 22px 24px; margin-bottom: 72px; }
+.gk-trust-strip b { font-size: 15.5px; }
+
+.gk-trust-strip p {
+  font-size: 13px;
+  color: var(--gk-ink-2);
+  margin: 6px 0 14px;
+}
+
+.gk-trust-links { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.gk-btn-sm {
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--gk-hairline);
+  background: var(--gk-page);
+  color: var(--gk-ink);
+  text-decoration: none;
+  transition: border-color .14s ease, transform .14s ease;
+}
+
+.gk-btn-sm:hover { border-color: var(--gk-brand); transform: translateY(-1px); }
+
+/* --------------------------------------------------------------- reveal ----
+ * Fail-safe by default: content is VISIBLE unless JavaScript arms the
+ * animation by putting .gk-js on <html>. Hiding by default would leave a blank
+ * page for anyone whose JS is slow, blocked, or errored — the content matters
+ * more than the entrance.
+ */
+.gk-js .gk-rv {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+
+.gk-js .gk-rv.in { opacity: 1; transform: none; }
+
+/* ------------------------------------------------------------- responsive -- */
+
+@media (max-width: 1000px) {
+  .gk-hero-in { grid-template-columns: 1fr; gap: 28px; }
+  .gk-visual { min-height: 0; padding-top: 0; }
+  .gk-report-card { position: static; width: 100%; margin-bottom: 12px; }
+  .gk-verdict-card { margin-left: 0; width: 100%; }
+  .gk-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gk-shots, .gk-features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 680px) {
+  .gk-hero { padding-top: 40px; }
+  .gk-stat-grid, .gk-shots, .gk-features { grid-template-columns: 1fr; }
+  .gk-home .gk-wrap { padding: 0 18px; }
+  .gk-cta { flex-direction: column; align-items: stretch; }
+  .gk-btn-lg { justify-content: center; }
+}
+
+/* Motion is decoration. With reduced motion the content must be fully visible
+   and static — the reveal class must not leave anything at opacity 0. */
+@media (prefers-reduced-motion: reduce) {
+  .gk-rv,
+  .gk-rv.in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .gk-bar > i { transition: none; }
+  .gk-btn-lg, .gk-feat, .gk-btn-sm, .gk-verdict-card { transition: none; }
+  .gk-btn-lg:hover, .gk-feat:hover, .gk-btn-sm:hover, .gk-verdict-card:hover {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------- nav tabs --
+ * The site has more top-level entries than fit at once. Material's tab bar
+ * clips them rather than wrapping, so allow it to scroll horizontally — the
+ * items stay reachable instead of disappearing off the right edge.
+ */
+.md-tabs__list {
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+}
+
+.md-tabs__list::-webkit-scrollbar { display: none; }

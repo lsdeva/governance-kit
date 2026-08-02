@@ -1,0 +1,16 @@
+# The announcement bar at the top of every page.
+#
+# Kept in data/ so updating it never means editing a template. Set `show: false`
+# to hide the bar entirely rather than deleting the text.
+#
+# Keep it to one line — it is the first thing every visitor reads, and a bar
+# that wraps to three lines on mobile reads as a banner ad.
+
+show: true
+
+# The claim itself. Must stay consistent with docs/eu-ai-act/timeline.md.
+text: Art. 50 transparency obligations are in force since 2 Aug 2026
+
+# Where the call to action goes, relative to the site root.
+link_text: check whether your systems must disclose
+link_url: decide/

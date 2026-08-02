@@ -39,3 +39,21 @@
 
   <meta name="description" content="{{ page_desc }}">
 {% endblock %}
+
+<!--
+  Announcement bar. Text comes from data/announcement.yml via the generated
+  block in mkdocs.yml, so updating it never means editing a template.
+  Appended to main.html rather than replacing it — the social meta block above
+  still applies.
+-->
+{% block announce %}
+  {%- set a = config.extra.landing.announcement if config.extra.landing else none -%}
+  {%- if a and a.show and a.text -%}
+    <div class="gk-announce-in">
+      <span>{{ a.text }}</span>
+      {%- if a.link_text and a.link_url %}
+        <a href="{{ (a.link_url) | url }}">{{ a.link_text }} &rarr;</a>
+      {%- endif %}
+    </div>
+  {%- endif -%}
+{% endblock %}
