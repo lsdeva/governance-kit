@@ -34,6 +34,13 @@ Maintained by **Lali Devamanthri**.
 Corrections and contributions from other practitioners are welcome and credited
 in the repository history — see [Contributing](contributing.md).
 
+**Not on GitHub?** Most of this kit's audience — governance leads, DPOs,
+lawyers — have no reason to hold a GitHub account, and you should not need one
+to tell us something is wrong. Send corrections, questions, or "this template
+does not work in my sector" straight to
+[Lali Devamanthri on LinkedIn](https://www.linkedin.com/in/lalisd/). Anything
+substantive gets raised as an issue and credited.
+
 ## How current is this?
 
 Regulation moves, and the EU AI Act pages are the most likely part of this kit

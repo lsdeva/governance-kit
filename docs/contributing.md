@@ -62,6 +62,21 @@ open a pull request describing the change.
 CI re-runs the generator and fails if the committed pages do not match the data
 files, so this is checked automatically rather than left to review.
 
+### Not on GitHub?
+
+You do not need a GitHub account to improve this kit. Most of its audience —
+governance leads, DPOs, lawyers — have no reason to hold one, and a pull request
+is a poor way to say "this obligation is out of date in my jurisdiction".
+
+Send it to [Lali Devamanthri on LinkedIn](https://www.linkedin.com/in/lalisd/):
+a correction, a date that has moved, a template that does not work in your
+sector, or simply a question. Anything substantive is raised as an issue here
+and credited to you unless you would rather it were not.
+
+Please do not send anything confidential — this is a public, openly licensed
+project, and a message about your own organisation's governance gaps is better
+kept inside your organisation.
+
 ## Adding a template
 
 Add an entry to `data/templates.yml`:
