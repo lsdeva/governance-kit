@@ -1,0 +1,151 @@
+# Scoring reference data — the single source of truth for how the assessment
+# scores, bands, and weights, AND for the honest account of where those numbers
+# come from.
+#
+# ---------------------------------------------------------------------------
+# READ THIS FIRST
+#
+# These thresholds are EDITORIAL JUDGEMENT, not empirical benchmarks. They are
+# not derived from a survey, a peer dataset, or any published study, and they
+# are not a certification standard.
+#
+# There is deliberately no peer-comparison data in this kit, because there is
+# no honest way to produce it. Real benchmarks need a population of real
+# assessments, which would mean collecting users' answers on a server — that
+# breaks the "nothing leaves your browser" guarantee the site is built on, and
+# requires a backend the project rules out.
+#
+# Inventing plausible-looking peer percentages would be worse: a governance kit
+# that fabricates the evidence base for its own scoring has no business telling
+# anyone else to evidence their controls.
+#
+# What replaces peer comparison is SELF comparison — snapshots over time. A
+# board asks "are we improving?" far more often than "how do we compare?", and
+# trend against your own baseline is a question this tool can answer honestly.
+# ---------------------------------------------------------------------------
+
+method:
+  version: "1.0"
+  reviewed: 2026-08-02
+  basis: editorial
+  summary: >-
+    Scores are a weighted coverage measure: the proportion of applicable
+    obligation weight you have in place, where a partial counts half and
+    "not applicable" is excluded entirely.
+  formula: >-
+    score = sum(weight x factor) / sum(weight) x 100, over answered questions,
+    where factor is 1.0 for yes, 0.5 for partial, 0 for no. Questions marked
+    not applicable are removed from BOTH the numerator and the denominator, so
+    they neither help nor harm the result.
+  what_it_is: >-
+    A structured, repeatable way to see which obligations you can evidence
+    today, weighted so that a missing inventory counts for more than a missing
+    metric.
+  what_it_is_not: >-
+    A compliance score, a certification, a legal opinion, or a comparison
+    against other organisations. A high score means you answered yes to
+    questions you selected; it does not mean a regulator would agree.
+
+# Why each band sits where it does. The wording is deliberately about what to
+# DO next rather than about how good you are.
+bands:
+  - min: 90
+    label: Advanced
+    rationale: >-
+      Above 90% you are answering yes to nearly everything including the
+      assurance and measurement questions, which are the ones organisations
+      reach last. The remaining work is keeping it true rather than making it
+      true.
+  - min: 70
+    label: Established
+    rationale: >-
+      70% is roughly the point where the core obligations — inventory,
+      classification, risk assessment, accountability — are all in place and
+      what remains is documentation and evidence. Set here because coverage of
+      the basics matters more than breadth.
+  - min: 40
+    label: Developing
+    rationale: >-
+      Below 40% it is statistically difficult to have the high-weight items
+      covered, since the five-weight questions alone account for a large share
+      of the total. Above it, foundations exist but unevenly.
+  - min: 0
+    label: Early
+    rationale: >-
+      Anything below 40% means several critical-severity obligations are
+      missing. The advice at this band deliberately names inventory and
+      prohibited-practice screening, because those two block everything else.
+
+# What each weight means, so a reader can judge whether they agree with the
+# emphasis rather than having to take the score on trust.
+weights:
+  - value: 5
+    label: Critical
+    meaning: >-
+      Regulatory or board-level exposure. Absence is directly enforceable, or
+      makes every other obligation impossible to satisfy. Prohibited practices,
+      inventory, classification, DPIA, employment-related AI.
+  - value: 4
+    label: High
+    meaning: >-
+      A material control gap. Not immediately enforceable on its own, but it is
+      what an auditor or regulator asks for second.
+  - value: 3
+    label: Medium
+    meaning: >-
+      Important and usually time-bound — needed before a deadline, but not the
+      first thing to fix.
+  - value: 2
+    label: Good practice
+    meaning: >-
+      Expected of a mature programme; its absence is a finding, not a breach.
+  - value: 1
+    label: Hygiene
+    meaning: >-
+      Worth doing, low consequence if missing.
+
+# Honest limitations. Shown to users rather than buried, because the report is
+# meant to be presentable to a board and a board should know what it is reading.
+limitations:
+  - title: It is self-assessed and unverified
+    detail: >-
+      Nobody checks your answers. Two people in the same organisation will
+      often score it differently — which is itself useful information, but it
+      means the number is a conversation starter, not a measurement.
+  - title: Coverage is not effectiveness
+    detail: >-
+      Answering yes means a control exists. It does not mean it works. A
+      documented human-oversight process with a 0.4% override rate scores the
+      same as one that genuinely catches errors.
+  - title: The weights are a judgement, not a calculation
+    detail: >-
+      They reflect a reading of where regulatory and practical consequence
+      falls. Your sector may weight them differently, and you are free to
+      disagree — the weights are in data/questions.yml and you can fork and
+      change them.
+  - title: There is no peer comparison, deliberately
+    detail: >-
+      Producing real benchmark data would mean collecting users' answers
+      centrally. This kit does not do that, so it cannot tell you how you
+      compare to others — only how you compare to yourself over time.
+  - title: Your role selection shapes the score
+    detail: >-
+      Different roles see different questions, so a Legal score and an ML score
+      are not comparable to each other. Compare like with like: same roles,
+      different dates.
+
+# What to use instead of peer benchmarks.
+self_comparison:
+  title: Compare against yourself, not against strangers
+  detail: >-
+    Save a snapshot each time you assess. The report then shows movement, which
+    is the thing a board actually asks about and the thing you can defend —
+    "we were at 41% in March and 68% now, here is what changed" is a stronger
+    story than any percentile.
+  cadence: >-
+    Quarterly is enough for most organisations; monthly only if you are in
+    active remediation. Re-assess after any material change to your AI estate.
+  guidance:
+    - Keep the same roles selected between snapshots, or the comparison is meaningless.
+    - Expect the score to DROP the first time someone honest re-scores it. That is the baseline correcting, not a regression.
+    - Movement in the critical-weight questions matters more than the headline number.

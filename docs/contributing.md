@@ -22,6 +22,8 @@ and translations are all welcome.
 | A role, or which questions it sees | `data/roles.yml` / `applies_to` in `questions.yml` | same |
 | A section's name or blurb | `data/sections.yml` | same |
 | The "not legal advice" notice or a shared block | `data/snippets.yml` | same |
+| A scoring band, weight meaning, or limitation | `data/benchmarks.yml` | same |
+| A register's columns, dropdowns, or formulas | `data/spreadsheets.yml` | same |
 | The landing page, this page, or About | `docs/*.md` directly | — |
 | The assessment app's behaviour or styling | `docs/assess/assess.js` / `.css` | — |
 
@@ -130,6 +132,12 @@ Keep every template page in the shared structure:
 - Adaptation notes must be specific to that template. Never boilerplate.
 - Cite sources for regulatory claims; prefer primary sources.
 - Nothing here is legal advice — do not imply it is.
+- **Never invent benchmark or survey data.** If you cannot cite it, do not state
+  it as a figure. The scoring thresholds in `data/benchmarks.yml` are labelled
+  editorial judgement precisely because they are not empirical, and the kit
+  holds no peer-comparison data by design — collecting it would mean uploading
+  users' answers. A governance kit that fabricates its own evidence base has no
+  business telling anyone to evidence their controls.
 
 ## Licensing of contributions
 

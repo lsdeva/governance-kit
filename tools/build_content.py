@@ -60,12 +60,16 @@ CATEGORY_ORDER = [
 ]
 
 # Readiness bands, shared by the report and the checklist page.
-BANDS = [
-    {"min": 90, "label": "Advanced", "blurb": "Controls are measured and independently assured. Focus on continuous improvement."},
-    {"min": 70, "label": "Established", "blurb": "The core is in place and operating. Focus on evidencing that controls work."},
-    {"min": 40, "label": "Developing", "blurb": "Foundations exist but coverage is uneven. Close the documentation and process gaps."},
-    {"min": 0, "label": "Early", "blurb": "Significant exposure. Start with inventory, prohibited-practice screening, and accountability."},
-]
+#
+# The thresholds and labels come from data/benchmarks.yml, which also records
+# WHY each one sits where it does. Keeping the numbers in one place means the
+# published explanation cannot drift from the scoring the tool actually applies.
+BAND_BLURBS = {
+    "Advanced": "Controls are measured and independently assured. Focus on continuous improvement.",
+    "Established": "The core is in place and operating. Focus on evidencing that controls work.",
+    "Developing": "Foundations exist but coverage is uneven. Close the documentation and process gaps.",
+    "Early": "Significant exposure. Start with inventory, prohibited-practice screening, and accountability.",
+}
 
 
 def load(name: str):
@@ -336,6 +340,103 @@ def render_examples_index(examples: list, company: dict, by_id: dict) -> str:
             f"| [{tpl['title']}]({rel_link(path, tpl['path'])}) |"
         )
     parts.append("")
+    parts.append(SNIPPETS_CACHE["not_legal_advice"])
+    return "\n".join(parts)
+
+
+def render_scoring_page(bm: dict, questions: list, bands: list) -> str:
+    """How the assessment scores, and — just as importantly — what it is not.
+
+    The site tells people to evidence their controls. It would be indefensible
+    to present a score without saying where the numbers come from, so this page
+    states plainly that the thresholds are editorial rather than empirical.
+    """
+    path = "scoring.md"
+    m = bm["method"]
+    parts = [BANNER.format(source="benchmarks.yml")]
+    parts.append("# How the scoring works\n")
+    parts.append(
+        f'<span class="gk-meta">Method v{m["version"]}</span> &nbsp;·&nbsp; '
+        f'<span class="gk-meta">Last reviewed <strong>{m["reviewed"]}</strong></span>\n'
+    )
+
+    parts.append(
+        '!!! warning "These thresholds are editorial judgement, not benchmarks"\n'
+        "    They are **not** derived from a survey, a peer dataset, or any\n"
+        "    published study, and they are not a certification standard.\n"
+        "\n"
+        "    This kit deliberately holds **no peer-comparison data**. Real\n"
+        "    benchmarks would need a population of real assessments, which\n"
+        "    would mean collecting your answers on a server — breaking the\n"
+        "    guarantee that nothing leaves your browser. Inventing\n"
+        "    plausible-looking peer percentages would be worse: a governance kit\n"
+        "    that fabricates its own evidence base has no business telling you\n"
+        "    to evidence your controls.\n"
+    )
+
+    parts.append("## What the score measures\n")
+    parts.append(" ".join(m["summary"].split()) + "\n")
+    parts.append("```\n" + " ".join(m["formula"].split()) + "\n```\n")
+
+    parts.append("| | |")
+    parts.append("|---|---|")
+    parts.append(f"| **It is** | {' '.join(m['what_it_is'].split())} |")
+    parts.append(f"| **It is not** | {' '.join(m['what_it_is_not'].split())} |")
+    parts.append("")
+
+    parts.append("## The bands, and why they sit there\n")
+    parts.append("| Score | Band | Why this threshold |")
+    parts.append("|---|---|---|")
+    for b in bm["bands"]:
+        rng = f"{b['min']}–100" if b["min"] == 90 else f"{b['min']}+"
+        parts.append(
+            f"| **{rng}** | {b['label']} | {' '.join(b['rationale'].split())} |"
+        )
+    parts.append("")
+
+    parts.append("## What the weights mean\n")
+    parts.append(
+        "Every question carries a weight of 1–5 reflecting the consequence of "
+        "its absence. This is why a missing inventory moves the score more than "
+        "a missing metric.\n"
+    )
+    counts = Counter(q["weight"] for q in questions)
+    parts.append("| Weight | Meaning | Questions |")
+    parts.append("|---|---|---|")
+    for w in bm["weights"]:
+        parts.append(
+            f"| **{w['value']} — {w['label']}** | {' '.join(w['meaning'].split())} "
+            f"| {counts.get(w['value'], 0)} |"
+        )
+    parts.append("")
+    parts.append(
+        "The weights live in `data/questions.yml`. If you disagree with the "
+        "emphasis for your sector, fork the repository and change them — that is "
+        "what an open licence is for.\n"
+    )
+
+    parts.append("## Limitations you should know about\n")
+    parts.append(
+        "The report is meant to be presentable to a board, and a board should "
+        "know what it is reading.\n"
+    )
+    for lim in bm["limitations"]:
+        parts.append(f"**{lim['title']}.** {' '.join(lim['detail'].split())}\n")
+
+    sc = bm["self_comparison"]
+    parts.append(f"## {sc['title']}\n")
+    parts.append(" ".join(sc["detail"].split()) + "\n")
+    parts.append(f"**How often:** {' '.join(sc['cadence'].split())}\n")
+    for g in sc["guidance"]:
+        parts.append(f"- {' '.join(g.split())}")
+    parts.append("")
+    parts.append(
+        '!!! tip "Snapshots are built in"\n'
+        "    The [assessment](" + rel_link(path, "assess/index.md") + ") saves a\n"
+        "    dated snapshot each time you ask it to, and the report shows your\n"
+        "    movement between them. Snapshots stay in your browser like\n"
+        "    everything else — export them if you want to keep them.\n"
+    )
     parts.append(SNIPPETS_CACHE["not_legal_advice"])
     return "\n".join(parts)
 
@@ -671,6 +772,7 @@ def render_section_index(section: dict, templates: list, by_id: dict) -> str:
 SNIPPET_ASSESS = ""  # filled from snippets.yml at runtime
 SNIPPETS_CACHE = {}  # ditto; used by the example renderers
 EXAMPLE_OF = {}      # template id -> worked example, for the "see it filled in" link
+BANDS_RUNTIME = []   # built from data/benchmarks.yml in main()
 
 
 def build_assessment_json(roles, questions, templates, sections) -> dict:
@@ -733,7 +835,7 @@ def build_assessment_json(roles, questions, templates, sections) -> dict:
         "questions": q_out,
         "templates": tpl_out,
         "categories": CATEGORY_ORDER,
-        "bands": BANDS,
+        "bands": BANDS_RUNTIME,
         "sections": {s["id"]: s["title"] for s in sections},
     }
 
@@ -743,6 +845,7 @@ def build_nav(sections, templates, examples, tasks, plans, crosswalk, workspace)
              "  - Assessment: assess/index.md"]
     if workspace:
         lines.append("  - Workspace: workspace.md")
+    lines.append("  - How scoring works: scoring.md")
     if tasks:
         lines.append("  - I've been asked to…: tasks.md")
     if plans:
@@ -796,6 +899,20 @@ def main() -> int:
     SNIPPETS_CACHE.update(snippets)
     sheets_raw = load("spreadsheets.yml") or {}
     SPREADSHEET_IDS.update(sheets_raw.keys())
+
+    benchmarks = load("benchmarks.yml")
+    bands = sorted(benchmarks["bands"], key=lambda b: -b["min"])
+    if bands[-1]["min"] != 0:
+        raise SystemExit("ERROR: benchmarks.yml bands must include a 0 floor")
+    for b in bands:
+        if b["label"] not in BAND_BLURBS:
+            raise SystemExit(
+                f"ERROR: band '{b['label']}' has no blurb in BAND_BLURBS"
+            )
+    BANDS_RUNTIME[:] = [
+        {"min": b["min"], "label": b["label"], "blurb": BAND_BLURBS[b["label"]]}
+        for b in bands
+    ]
 
     examples_data = load("examples.yml") or {}
     company = examples_data.get("company", {})
@@ -885,6 +1002,11 @@ def main() -> int:
         f"{len(roles)} roles · {len(examples)} worked examples\n"
     )
     write(ROOT / "snippets" / "stats.md", stats, written, args.check)
+
+    # ---- scoring method -----------------------------------------------------
+    write(DOCS / "scoring.md",
+          render_scoring_page(benchmarks, questions, BANDS_RUNTIME),
+          written, args.check)
 
     # ---- workspace ----------------------------------------------------------
     if sheets_raw:

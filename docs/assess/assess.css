@@ -451,6 +451,22 @@
   margin: 2rem 0;
 }
 
+/* Movement over time — self-comparison, in place of peer benchmarks. */
+.gk-delta {
+  font-size: 1.05rem;
+}
+
+.gk-delta.is-up   { color: #1e7d34; }
+.gk-delta.is-down { color: #b3261e; }
+
+[data-md-color-scheme="slate"] .gk-delta.is-up   { color: #8fe0a3; }
+[data-md-color-scheme="slate"] .gk-delta.is-down { color: #f2b8b5; }
+
+.gk-trend-now td {
+  background: var(--md-code-bg-color);
+  font-weight: 600;
+}
+
 .gk-block h2 {
   font-size: 1.15rem;
   margin-bottom: 0.6rem;

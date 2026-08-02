@@ -14,6 +14,7 @@
   "use strict";
 
   var STORAGE_KEY = "gk-assessment-v1";
+  var SNAPSHOT_KEY = "gk-snapshots-v1";
   var root = document.getElementById("gk-assess");
   if (!root) return;
 
@@ -111,6 +112,47 @@
       if (!raw) return null;
       return JSON.parse(raw);
     } catch (e) { return null; }
+  }
+
+  /*
+   * Snapshots — self-comparison over time.
+   *
+   * This kit holds no peer-benchmark data, because producing it honestly would
+   * mean collecting users' answers on a server. Trend against your own baseline
+   * is the comparison it CAN make truthfully, and it happens to be the one a
+   * board asks for: "are we improving?" more often than "how do we compare?".
+   */
+  function loadSnapshots() {
+    try { return JSON.parse(localStorage.getItem(SNAPSHOT_KEY)) || []; }
+    catch (e) { return []; }
+  }
+
+  function saveSnapshot(s) {
+    var all = loadSnapshots();
+    all.push({
+      date: todayISO(),
+      at: new Date().toISOString(),
+      roles: state.roles.slice(),
+      overall: s.overall,
+      band: s.band ? s.band.label : null,
+      answered: s.answered,
+      total: s.total,
+      categories: s.categories.map(function (c) {
+        return { name: c.name, pct: c.pct };
+      })
+    });
+    // Keep a sensible history without letting storage grow unbounded.
+    if (all.length > 24) all = all.slice(all.length - 24);
+    try { localStorage.setItem(SNAPSHOT_KEY, JSON.stringify(all)); } catch (e) {}
+    return all;
+  }
+
+  /* Only compare like with like: same roles, or the delta is meaningless. */
+  function comparableSnapshots() {
+    var mine = state.roles.slice().sort().join(",");
+    return loadSnapshots().filter(function (s) {
+      return (s.roles || []).slice().sort().join(",") === mine;
+    });
   }
 
   function clearData() {
@@ -250,6 +292,14 @@
         "They are saved locally on this device so you can come back to them, and " +
         "you can erase them at any time."
       ])
+    ]));
+
+    wrap.appendChild(el("p", { class: "gk-muted" }, [
+      "Scores are a weighted measure of which obligations you can evidence. " +
+      "The thresholds are editorial judgement, not industry benchmarks, and " +
+      "this kit holds no peer-comparison data — ",
+      el("a", { href: "../scoring/" }, ["how scoring works"]),
+      " explains the method and its limits."
     ]));
 
     wrap.appendChild(el("h2", {}, ["1. Who is answering?"]));
@@ -567,6 +617,8 @@
     // Audience framing sentence.
     wrap.appendChild(el("p", { class: "gk-framing" }, [framingFor(state.audience, s)]));
 
+    wrap.appendChild(trendBlock(s));
+
     // ---- sections in audience-specific order
     var blocks = {
       categories: categoriesBlock(s),
@@ -590,6 +642,15 @@
         "not exhaustive, and not a substitute for legal analysis of your " +
         "circumstances. Confirm obligations with qualified counsel and the " +
         "official EU sources."
+      ]),
+      el("p", {}, [
+        el("strong", {}, ["About the score. "]),
+        "Scoring thresholds are editorial judgement, not empirical benchmarks, " +
+        "and this kit holds no peer-comparison data. The score measures which " +
+        "obligations you can evidence, not whether the controls behind them " +
+        "work. ",
+        el("a", { href: "../scoring/" }, ["How scoring works"]),
+        " sets out the method and its limitations."
       ]),
       el("p", { class: "gk-muted" }, [
         "Generated " + todayISO() + " with the Open Data & AI Governance Kit. " +
@@ -623,6 +684,87 @@
     return "Overall readiness is " + s.overall + "% across " + s.categories.length +
       " areas. The strongest and weakest areas are shown below, with the " +
       "investment implied by closing the top gaps.";
+  }
+
+  /*
+   * Movement against your own previous assessments.
+   *
+   * Deliberately NOT a peer comparison — see the "How scoring works" page for
+   * why this kit holds no benchmark data.
+   */
+  function trendBlock(s) {
+    var sec = el("section", { class: "gk-block gk-trend" });
+    var history = comparableSnapshots();
+
+    sec.appendChild(el("h2", {}, ["Movement over time"]));
+
+    if (!history.length) {
+      sec.appendChild(el("p", { class: "gk-muted" }, [
+        "No earlier assessment saved for these roles. Save a snapshot to start " +
+        "tracking movement — it is the comparison this tool can make honestly, " +
+        "since it holds no peer benchmark data."
+      ]));
+    } else {
+      var prev = history[history.length - 1];
+      var delta = s.overall - prev.overall;
+      var word = delta > 0 ? "up" : delta < 0 ? "down" : "unchanged";
+      sec.appendChild(el("p", {}, [
+        el("strong", {
+          class: "gk-delta " + (delta > 0 ? "is-up" : delta < 0 ? "is-down" : "")
+        }, [(delta > 0 ? "+" : "") + delta + " points"]),
+        " " + word + " from " + prev.overall + "% on " + prev.date + "."
+      ]));
+
+      var tbl = el("table", { class: "gk-table" });
+      tbl.appendChild(el("thead", {}, [el("tr", {}, [
+        el("th", {}, ["Date"]), el("th", {}, ["Score"]),
+        el("th", {}, ["Band"]), el("th", {}, ["Answered"])
+      ])]));
+      var tb = el("tbody");
+      history.slice(-6).forEach(function (h) {
+        tb.appendChild(el("tr", {}, [
+          el("td", {}, [h.date]),
+          el("td", {}, [h.overall + "%"]),
+          el("td", {}, [h.band || "—"]),
+          el("td", {}, [h.answered + " of " + h.total])
+        ]));
+      });
+      tb.appendChild(el("tr", { class: "gk-trend-now" }, [
+        el("td", {}, ["Now (" + todayISO() + ")"]),
+        el("td", {}, [s.overall + "%"]),
+        el("td", {}, [s.band ? s.band.label : "—"]),
+        el("td", {}, [s.answered + " of " + s.total])
+      ]));
+      tbl.appendChild(tb);
+      sec.appendChild(tbl);
+    }
+
+    var bar = el("div", { class: "gk-report-controls" });
+    bar.appendChild(el("button", {
+      class: "gk-btn", type: "button",
+      onclick: function () {
+        saveSnapshot(s);
+        render();
+      }
+    }, ["Save snapshot"]));
+    if (history.length) {
+      bar.appendChild(el("button", {
+        class: "gk-btn gk-btn-danger", type: "button",
+        onclick: function () {
+          if (!window.confirm("Delete all saved snapshots?\n\nThis cannot be undone.")) return;
+          try { localStorage.removeItem(SNAPSHOT_KEY); } catch (e) {}
+          render();
+        }
+      }, ["Clear snapshots"]));
+    }
+    sec.appendChild(bar);
+
+    sec.appendChild(el("p", { class: "gk-muted" }, [
+      "Snapshots are stored in this browser only, and compared against " +
+      "assessments taken with the same roles selected. This kit holds no " +
+      "peer-comparison data — see how scoring works for why."
+    ]));
+    return sec;
   }
 
   function categoriesBlock(s) {
@@ -810,6 +952,27 @@
     L.push("");
     L.push(framingFor(state.audience, s));
     L.push("");
+
+    var hist = comparableSnapshots();
+    if (hist.length) {
+      var prev = hist[hist.length - 1];
+      var delta = s.overall - prev.overall;
+      L.push("## Movement over time");
+      L.push("");
+      L.push("**" + (delta > 0 ? "+" : "") + delta + " points** since " +
+        prev.date + " (" + prev.overall + "%).");
+      L.push("");
+      L.push("| Date | Score | Band | Answered |");
+      L.push("|---|---|---|---|");
+      hist.slice(-6).forEach(function (h) {
+        L.push("| " + h.date + " | " + h.overall + "% | " + (h.band || "—") +
+          " | " + h.answered + " of " + h.total + " |");
+      });
+      L.push("| **Now (" + todayISO() + ")** | **" + s.overall + "%** | **" +
+        (s.band ? s.band.label : "—") + "** | " + s.answered + " of " + s.total + " |");
+      L.push("");
+    }
+
     L.push("## Score by category");
     L.push("");
     L.push("| Category | Score |");
@@ -884,6 +1047,12 @@
       "self-assessment. It is not exhaustive and not a substitute for legal " +
       "analysis of your circumstances.");
     L.push("");
+    L.push("**About the score.** Scoring thresholds are editorial judgement, not " +
+      "empirical benchmarks, and this kit holds no peer-comparison data. The " +
+      "score measures which obligations you can evidence, not whether the " +
+      "controls behind them work. See " +
+      absoluteUrl("../scoring/") + " for the method and its limitations.");
+    L.push("");
     L.push("Generated " + todayISO() + " with the Open Data & AI Governance Kit. " +
       "Self-assessed; answers were not verified.");
     return L.join("\n") + "\n";
@@ -932,6 +1101,25 @@
     H.push("</div></div>");
 
     H.push("<p>" + esc(framingFor(state.audience, s)) + "</p>");
+
+    var histH = comparableSnapshots();
+    if (histH.length) {
+      var prevH = histH[histH.length - 1];
+      var dH = s.overall - prevH.overall;
+      H.push("<h2>Movement over time</h2>");
+      H.push("<p><strong>" + (dH > 0 ? "+" : "") + dH + " points</strong> since " +
+        esc(prevH.date) + " (" + prevH.overall + "%).</p>");
+      H.push("<table><tr><th>Date</th><th>Score</th><th>Band</th><th>Answered</th></tr>");
+      histH.slice(-6).forEach(function (h) {
+        H.push("<tr><td>" + esc(h.date) + "</td><td>" + h.overall + "%</td><td>" +
+          esc(h.band || "—") + "</td><td>" + h.answered + " of " + h.total +
+          "</td></tr>");
+      });
+      H.push("<tr><td><strong>Now (" + todayISO() + ")</strong></td><td><strong>" +
+        s.overall + "%</strong></td><td><strong>" + esc(s.band ? s.band.label : "—") +
+        "</strong></td><td>" + s.answered + " of " + s.total + "</td></tr>");
+      H.push("</table>");
+    }
 
     H.push("<h2>Score by category</h2><table><tr><th>Category</th><th>Score</th><th></th></tr>");
     s.categories.slice().sort(function (a, b) { return a.pct - b.pct; })
@@ -995,6 +1183,12 @@
     H.push("<footer><p><strong>Not legal advice.</strong> This report is a planning " +
       "aid generated from a self-assessment. It is not exhaustive and not a " +
       "substitute for legal analysis of your circumstances.</p>");
+    H.push("<p><strong>About the score.</strong> Scoring thresholds are editorial " +
+      "judgement, not empirical benchmarks, and this kit holds no peer-comparison " +
+      "data. The score measures which obligations you can evidence, not whether " +
+      "the controls behind them work. See <a href='" +
+      esc(absoluteUrl("../scoring/")) + "'>how scoring works</a> for the method " +
+      "and its limitations.</p>");
     H.push("<p>Generated " + todayISO() + " with the Open Data &amp; AI Governance Kit. " +
       "Self-assessed; answers were not verified.</p></footer>");
     H.push("</body></html>");

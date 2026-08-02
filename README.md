@@ -42,6 +42,14 @@ saved to `localStorage` only on your device, with a "Clear my data" button on
 every screen. The site makes no external requests at all — no fonts, no
 analytics, no API calls.
 
+**No fake benchmarks.** The scoring thresholds are stated openly as editorial
+judgement, not industry data, and the kit holds **no peer-comparison figures** —
+producing them honestly would mean collecting your answers on a server, which
+this project will not do. Instead the report tracks *your own* movement between
+dated snapshots, which is what a board asks about anyway.
+[How scoring works](https://lsdeva.github.io/governance-kit/scoring/) sets out
+the method, the weights, and the limitations in full.
+
 ## Why this exists
 
 Standing up data &amp; AI governance means producing the same twenty-odd artefacts
@@ -196,6 +204,7 @@ mkdocs build --strict             # confirm it still builds clean
 | A standards mapping | `data/crosswalk.yml` |
 | An "I've been asked to…" entry | `data/tasks.yml` |
 | An Excel register's columns, dropdowns, or formulas | `data/spreadsheets.yml` |
+| A scoring band, weight meaning, or stated limitation | `data/benchmarks.yml` |
 
 <details>
 <summary><strong>Adding a template, question, or role</strong></summary>
