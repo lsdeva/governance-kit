@@ -98,7 +98,7 @@ reads as an omission.]
 | High-risk systems assessed | | | 100% | |
 | Documentation complete | | | 100% | |
 | Staff trained (AI literacy) | | | [90%] | |
-| Open high risks | | | [0] | |
+| Open high risks | | | <span class="gk-default" title="This is one of the few metrics where the target is genuinely zero. A non-zero number is not a performance issue — it means a decision has quietly expired."><strong>Zero</strong><span class="gk-default-unless">Unless: Nothing. A risk past its own remediation date is either being treated or should be formally re-accepted with a new date and a named acceptor.</span></span> | |
 
 Full detail in [KPI / KRI Dashboard](kpi-dashboard.md).
 

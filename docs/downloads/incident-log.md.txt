@@ -50,7 +50,7 @@ failure · Oversight failure · Third-party / vendor · Regulatory
 
 ### Post-incident review
 
-For S1 and S2, hold a blameless review within **[10 working days]**. Ask:
+For S1 and S2, hold a blameless review within {{default:post-incident-review-window}} Ask:
 
 - Could we have prevented it? Which control failed or was missing?
 - Could we have detected it sooner?

@@ -79,7 +79,7 @@ The programme, through its committee, is authorised to:
 | Complete AI inventory | % systems registered | 100% | [date] |
 | Risk classification | % classified | 100% | [date] |
 | Policy adoption | % staff attested | 90% | [date] |
-| Board visibility | Reports delivered | [4]/year | Ongoing |
+| Board visibility | Reports delivered | <span class="gk-default" title="Matches the quarterly reporting cadence and most board calendars. Fewer than four and a problem can run most of a year unseen by the people accountable for it."><strong>Four</strong><span class="gk-default-unless">Unless: Add an extraordinary report after any S1 incident or regulatory contact, rather than waiting for the next scheduled one.</span></span> per year | Ongoing |
 
 ### 7. Resourcing
 

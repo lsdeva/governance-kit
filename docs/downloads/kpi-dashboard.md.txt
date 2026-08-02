@@ -27,8 +27,8 @@ Is it working, rather than merely present?
 
 | Metric | Definition | Target | Why |
 |---|---|---|---|
-| Assessment cycle time | Intake to decision, median days | [< 10] | Slow governance gets bypassed |
-| Gate pass rate first time | % passing without rework | [> 70%] | Low means unclear standards |
+| Assessment cycle time | Intake to decision, median days | {{default:assessment-cycle-time-target}} | Slow governance gets bypassed |
+| Gate pass rate first time | % passing without rework | {{default:gate-pass-rate-target}} | Low means unclear standards |
 | Data quality score | Weighted across key domains | [> 95%] | Data Quality Standard |
 | AI literacy completion | Relevant staff trained | [> 90%] | Art. 4 obligation |
 | Control tests passed | Tested controls operating effectively | [> 95%] | Control Library & Assurance Map |
@@ -43,7 +43,7 @@ Leading signals that something is going wrong.
 | Overdue high-risk reviews | > 0 | Assessments going stale |
 | Open high/critical risks past target | > 0 | Treatment is not landing |
 | Exceptions open beyond expiry | > 0 | Silent policy erosion |
-| **Human override rate** | < [2%] **or** > [20%] | Too low = rubber-stamping; too high = model not fit |
+| **Human override rate** | {{default:override-rate-band}} | Too low = rubber-stamping; too high = model not fit |
 | Model drift alerts | Any unresolved | Performance degrading |
 | Incidents detected externally | Any | Monitoring is not working |
 | Mean time to detect | Increasing | Detection is degrading |

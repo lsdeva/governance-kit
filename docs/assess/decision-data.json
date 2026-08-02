@@ -811,6 +811,69 @@
       "value": "Within 24 hours of the suspension, never before it",
       "unless": "Nothing. Notification always follows the stop.",
       "why": "If stopping a system requires permission first, it will not happen in time. Distributing the right to suspend and requiring prompt notification afterwards is what makes the control real."
+    },
+    {
+      "id": "post-incident-review-window",
+      "label": "How soon after a serious incident to hold the review",
+      "value": "Within 10 working days for S1 and S2",
+      "unless": "Within 5 working days if the incident is still open or a regulator has been notified — the facts fade fast and you may need them.",
+      "why": "Long enough for the immediate fix to be done and the facts to settle, short enough that people still remember what happened. Beyond about a fortnight the review turns into a documentation exercise."
+    },
+    {
+      "id": "board-escalation-people-threshold",
+      "label": "How many affected people should trigger board-level escalation",
+      "value": "10,000 people, or any amount of special category data",
+      "unless": "Lower it to match your own breach-notification threshold if you already have one — running two different numbers guarantees the wrong one gets used.",
+      "why": "A round number people remember beats a precise one they look up. The special-category carve-out matters more than the count: a handful of health records can be graver than ten thousand email addresses."
+    },
+    {
+      "id": "urgent-ratification-window",
+      "label": "How quickly an urgent decision must be ratified by the committee",
+      "value": "Within 48 hours",
+      "unless": "Next working day if the decision suspended a live customer-facing system.",
+      "why": "Someone has already acted without permission — correctly, because the alternative was waiting during an incident. Ratifying quickly is what keeps that emergency power legitimate rather than habitual."
+    },
+    {
+      "id": "residual-risk-committee-threshold",
+      "label": "At what residual risk rating the committee, rather than an owner, must accept it",
+      "value": "A residual rating of 10 or above on a 5x5 scale (High and Critical)",
+      "unless": "Align to your enterprise risk framework's own escalation point if you have one, so the same risk does not get two different treatments.",
+      "why": "Below High, an accountable owner accepting risk is proportionate and fast. At High and above the consequence is organisational, so the acceptance should be too — and it should be minuted with a name against it."
+    },
+    {
+      "id": "assessment-cycle-time-target",
+      "label": "How long governance should take to reach a decision on a new system",
+      "value": "A median of 10 working days from intake to decision",
+      "unless": "20 days for high-risk systems, which genuinely need a fuller assessment — but publish the longer target rather than quietly missing the shorter one.",
+      "why": "This is the metric that decides whether people route around you. Slow governance produces shadow AI, which is a worse risk than the one you were managing."
+    },
+    {
+      "id": "gate-pass-rate-target",
+      "label": "What proportion of systems should pass a governance gate first time",
+      "value": "70%",
+      "unless": "Expect lower in the first two quarters while teams learn what is expected. Persistently below 50% means your standards are unclear, not that your teams are careless.",
+      "why": "A very high pass rate suggests the gate is not testing anything. A very low one suggests the requirements were never communicated. Around 70% is the band where the gate is doing real work."
+    },
+    {
+      "id": "override-rate-band",
+      "label": "What human override rate indicates oversight is genuinely working",
+      "value": "Between 2% and 20%",
+      "unless": "Judge it per system rather than globally. What matters is that the rate is monitored and explicable, not that it sits in any particular band.",
+      "why": "Below 2% the reviewer is almost certainly approving by default, which is the most common way Art. 14 human oversight fails in practice. Above 20% the model is not fit for the decision it is being used for."
+    },
+    {
+      "id": "open-high-risk-target",
+      "label": "How many high or critical risks should be open past their target date",
+      "value": "Zero",
+      "unless": "Nothing. A risk past its own remediation date is either being treated or should be formally re-accepted with a new date and a named acceptor.",
+      "why": "This is one of the few metrics where the target is genuinely zero. A non-zero number is not a performance issue — it means a decision has quietly expired."
+    },
+    {
+      "id": "board-reports-per-year",
+      "label": "How many governance reports the board should receive each year",
+      "value": "Four",
+      "unless": "Add an extraordinary report after any S1 incident or regulatory contact, rather than waiting for the next scheduled one.",
+      "why": "Matches the quarterly reporting cadence and most board calendars. Fewer than four and a problem can run most of a year unseen by the people accountable for it."
     }
   ]
 }

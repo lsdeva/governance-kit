@@ -77,7 +77,7 @@ reads as an omission.]
 | High-risk systems assessed | | | 100% | |
 | Documentation complete | | | 100% | |
 | Staff trained (AI literacy) | | | [90%] | |
-| Open high risks | | | [0] | |
+| Open high risks | | | {{default:open-high-risk-target}} | |
 
 Full detail in KPI / KRI Dashboard.
 

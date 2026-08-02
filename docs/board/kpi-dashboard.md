@@ -53,8 +53,8 @@ Is it working, rather than merely present?
 
 | Metric | Definition | Target | Why |
 |---|---|---|---|
-| Assessment cycle time | Intake to decision, median days | [< 10] | Slow governance gets bypassed |
-| Gate pass rate first time | % passing without rework | [> 70%] | Low means unclear standards |
+| Assessment cycle time | Intake to decision, median days | <span class="gk-default" title="This is the metric that decides whether people route around you. Slow governance produces shadow AI, which is a worse risk than the one you were managing."><strong>A median of 10 working days from intake to decision</strong><span class="gk-default-unless">Unless: 20 days for high-risk systems, which genuinely need a fuller assessment — but publish the longer target rather than quietly missing the shorter one.</span></span> | Slow governance gets bypassed |
+| Gate pass rate first time | % passing without rework | <span class="gk-default" title="A very high pass rate suggests the gate is not testing anything. A very low one suggests the requirements were never communicated. Around 70% is the band where the gate is doing real work."><strong>70%</strong><span class="gk-default-unless">Unless: Expect lower in the first two quarters while teams learn what is expected. Persistently below 50% means your standards are unclear, not that your teams are careless.</span></span> | Low means unclear standards |
 | Data quality score | Weighted across key domains | [> 95%] | [Data Quality Standard](../policies/data-quality-standard.md) |
 | AI literacy completion | Relevant staff trained | [> 90%] | Art. 4 obligation |
 | Control tests passed | Tested controls operating effectively | [> 95%] | [Control Library & Assurance Map](../risk/control-library.md) |
@@ -69,7 +69,7 @@ Leading signals that something is going wrong.
 | Overdue high-risk reviews | > 0 | Assessments going stale |
 | Open high/critical risks past target | > 0 | Treatment is not landing |
 | Exceptions open beyond expiry | > 0 | Silent policy erosion |
-| **Human override rate** | < [2%] **or** > [20%] | Too low = rubber-stamping; too high = model not fit |
+| **Human override rate** | <span class="gk-default" title="Below 2% the reviewer is almost certainly approving by default, which is the most common way Art. 14 human oversight fails in practice. Above 20% the model is not fit for the decision it is being used for."><strong>Between 2% and 20%</strong><span class="gk-default-unless">Unless: Judge it per system rather than globally. What matters is that the rate is monitored and explicable, not that it sits in any particular band.</span></span> | Too low = rubber-stamping; too high = model not fit |
 | Model drift alerts | Any unresolved | Performance degrading |
 | Incidents detected externally | Any | Monitoring is not working |
 | Mean time to detect | Increasing | Detection is degrading |

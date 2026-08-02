@@ -18,7 +18,7 @@
 | Approve a **prohibited-practice** exception | **Not available** | — | Prohibited means prohibited |
 | Use personal data for training | Data Owner + DPO | Gov Lead | Special category data |
 | Accept residual risk — low / medium | AI Accountable Owner | Gov Lead | — |
-| Accept residual risk — high | **Committee** | Legal, Security | Above **[threshold]** |
+| Accept residual risk — high | **Committee** | Legal, Security | {{default:residual-risk-committee-threshold}} |
 | Accept residual risk — critical | **Board** | Committee | — |
 | Approve a new AI vendor | Gov Lead | Security, Legal | Critical tier |
 | Policy exception ≤ {{default:exception-expiry}} | Gov Lead | Owner | Repeat request |
@@ -35,7 +35,7 @@
 Escalate to the **Committee** when any is true:
 
 - Risk is rated **high** or above after mitigation.
-- Personal data of **[10,000+]** people, or any special category data.
+- Personal data of {{default:board-escalation-people-threshold}}
 - The system makes or materially informs decisions about individuals.
 - Two functions disagree and cannot resolve it within {{default:tool-approval-turnaround}}.
 - An exception is requested for the second time.
@@ -62,7 +62,7 @@ absorbed.
 
 | Situation | Who can act | Ratification |
 |---|---|---|
-| Live incident, harm occurring | Any of AI Owner / Gov Lead / Security — **act first** | Committee within [48h] |
+| Live incident, harm occurring | Any of AI Owner / Gov Lead / Security — **act first** | {{default:urgent-ratification-window}} |
 | Regulatory deadline | Gov Lead + Legal | Next meeting |
 | Out of hours | **[on-call role]** | Next working day |
 

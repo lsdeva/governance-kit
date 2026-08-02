@@ -334,7 +334,7 @@
     | Complete AI inventory | % systems registered | 100% | [date] |
     | Risk classification | % classified | 100% | [date] |
     | Policy adoption | % staff attested | 90% | [date] |
-    | Board visibility | Reports delivered | [4]/year | Ongoing |
+    | Board visibility | Reports delivered | {{default:board-reports-per-year}} per year | Ongoing |
 
     ### 7. Resourcing
 
@@ -1457,7 +1457,7 @@
     | Approve a **prohibited-practice** exception | **Not available** | — | Prohibited means prohibited |
     | Use personal data for training | Data Owner + DPO | Gov Lead | Special category data |
     | Accept residual risk — low / medium | AI Accountable Owner | Gov Lead | — |
-    | Accept residual risk — high | **Committee** | Legal, Security | Above **[threshold]** |
+    | Accept residual risk — high | **Committee** | Legal, Security | {{default:residual-risk-committee-threshold}} |
     | Accept residual risk — critical | **Board** | Committee | — |
     | Approve a new AI vendor | Gov Lead | Security, Legal | Critical tier |
     | Policy exception ≤ {{default:exception-expiry}} | Gov Lead | Owner | Repeat request |
@@ -1474,7 +1474,7 @@
     Escalate to the **Committee** when any is true:
 
     - Risk is rated **high** or above after mitigation.
-    - Personal data of **[10,000+]** people, or any special category data.
+    - Personal data of {{default:board-escalation-people-threshold}}
     - The system makes or materially informs decisions about individuals.
     - Two functions disagree and cannot resolve it within {{default:tool-approval-turnaround}}.
     - An exception is requested for the second time.
@@ -1501,7 +1501,7 @@
 
     | Situation | Who can act | Ratification |
     |---|---|---|
-    | Live incident, harm occurring | Any of AI Owner / Gov Lead / Security — **act first** | Committee within [48h] |
+    | Live incident, harm occurring | Any of AI Owner / Gov Lead / Security — **act first** | {{default:urgent-ratification-window}} |
     | Regulatory deadline | Gov Lead + Legal | Next meeting |
     | Out of hours | **[on-call role]** | Next working day |
 
@@ -1887,7 +1887,7 @@
 
     ### Post-incident review
 
-    For S1 and S2, hold a blameless review within **[10 working days]**. Ask:
+    For S1 and S2, hold a blameless review within {{default:post-incident-review-window}} Ask:
 
     - Could we have prevented it? Which control failed or was missing?
     - Could we have detected it sooner?
@@ -2471,7 +2471,7 @@
     | High-risk systems assessed | | | 100% | |
     | Documentation complete | | | 100% | |
     | Staff trained (AI literacy) | | | [90%] | |
-    | Open high risks | | | [0] | |
+    | Open high risks | | | {{default:open-high-risk-target}} | |
 
     Full detail in {{kpi-dashboard}}.
 
@@ -2550,8 +2550,8 @@
 
     | Metric | Definition | Target | Why |
     |---|---|---|---|
-    | Assessment cycle time | Intake to decision, median days | [< 10] | Slow governance gets bypassed |
-    | Gate pass rate first time | % passing without rework | [> 70%] | Low means unclear standards |
+    | Assessment cycle time | Intake to decision, median days | {{default:assessment-cycle-time-target}} | Slow governance gets bypassed |
+    | Gate pass rate first time | % passing without rework | {{default:gate-pass-rate-target}} | Low means unclear standards |
     | Data quality score | Weighted across key domains | [> 95%] | {{data-quality-standard}} |
     | AI literacy completion | Relevant staff trained | [> 90%] | Art. 4 obligation |
     | Control tests passed | Tested controls operating effectively | [> 95%] | {{control-library}} |
@@ -2566,7 +2566,7 @@
     | Overdue high-risk reviews | > 0 | Assessments going stale |
     | Open high/critical risks past target | > 0 | Treatment is not landing |
     | Exceptions open beyond expiry | > 0 | Silent policy erosion |
-    | **Human override rate** | < [2%] **or** > [20%] | Too low = rubber-stamping; too high = model not fit |
+    | **Human override rate** | {{default:override-rate-band}} | Too low = rubber-stamping; too high = model not fit |
     | Model drift alerts | Any unresolved | Performance degrading |
     | Incidents detected externally | Any | Monitoring is not working |
     | Mean time to detect | Increasing | Detection is degrading |
