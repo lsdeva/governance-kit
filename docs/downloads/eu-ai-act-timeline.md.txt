@@ -9,19 +9,20 @@
 ---
 
 > **Verify before you rely on this**
-> Dates below reflect the **Digital Omnibus on AI** reaching political
-> agreement in late 2025 / early 2026. The Omnibus amends the original AI
-> Act timeline. Because implementing acts, guidance, and national measures
-> continue to evolve, **confirm each date against the official EU sources**
-> before making compliance decisions. This page is a planning aid, not
-> legal advice.
+> The Digital Omnibus on AI is now **enacted law**: Regulation (EU)
+> 2026/1744, published in the Official Journal on **24 July 2026** and in
+> force from **27 July 2026**. It amends Regulation (EU) 2024/1689 (the AI
+> Act) and two other regulations. Because implementing acts, guidance, and
+> national measures continue to evolve, **confirm each date against the
+> official EU sources** before making compliance decisions. This page is a
+> planning aid, not legal advice.
 
 ### Key dates at a glance
 
 | Obligation | Original date | Current date | Change |
 |---|---|---|---|
 | **Prohibited practices** (Art. 5) | 2 Feb 2025 | 2 Feb 2025 | In force — unchanged |
-| **AI literacy** (Art. 4) | 2 Feb 2025 | 2 Feb 2025 | In force — unchanged |
+| **AI literacy** (Art. 4) | 2 Feb 2025 | 2 Feb 2025 | In force — but **softened** by the Omnibus to an effort-based duty |
 | New bans (CSAM / "nudifiers") | — | 2 Dec 2026 | Added by Omnibus, transitional |
 | **GPAI model obligations** (Art. 51–56) | 2 Aug 2025 | 2 Aug 2025 | In force — unchanged |
 | **Art. 50 transparency** (deepfakes, chatbots) | 2 Aug 2026 | 2 Aug 2026 | Proceeds as scheduled |
@@ -29,6 +30,30 @@
 | **High-risk — Annex III** (stand-alone) | 2 Aug 2026 | **2 Dec 2027** | Deferred ~16 months |
 | **High-risk — Annex I** (embedded in products) | 2 Aug 2027 | **2 Aug 2028** | Deferred ~12 months |
 | AI regulatory sandboxes (national) | 2 Aug 2026 | 2 Aug 2027 | Deferred ~12 months |
+
+### What changed since the Omnibus was enacted
+
+Three developments matter for planning, all confirmed:
+
+| What | When | Why it matters |
+|---|---|---|
+| **Art. 50 transparency Guidelines** (final, 51 pages) | 20 Jul 2026 | The Commission's own reading of what disclosure and marking actually require, published two weeks before the obligations applied. Non-binding, but it is what supervisors will work from. |
+| **Code of Practice on Transparency of AI-Generated Content** assessed **adequate** | Jul 2026 | A voluntary route to demonstrating Art. 50 compliance. Around 190 organisations had signed by end of July 2026. |
+| **GPAI enforcement powers begin** | 2 Aug 2026 | The obligations applied from August 2025; the Commission's power to enforce them starts now. |
+
+> **Art. 4 AI literacy was softened, not removed**
+> The Omnibus replaced Art. 4 with an effort-based duty: you must **take
+> measures to support the development of** AI literacy, rather than
+> **ensure** it. The text is explicit that this "does not require
+> providers or deployers to guarantee any specific level of AI literacy of
+> any individual". The obligation still bites — it is simply no longer an
+> outcome you must achieve.
+
+> **Art. 6(3) registration survived, in simplified form**
+> If you rely on the Art. 6(3) derogation to say a system in an Annex III
+> area is not high-risk, you must still register it in the EU database.
+> The Omnibus streamlined what Annex VIII requires rather than removing
+> the duty. Claiming the exemption is not the same as walking away.
 
 ### What the Digital Omnibus changed
 
@@ -78,6 +103,9 @@ A sensible sequencing:
 interpretation, but only the official text is authoritative.
 
 - [Regulation (EU) 2024/1689 — the AI Act, consolidated text on EUR-Lex](https://eur-lex.europa.eu/eli/reg/2024/1689/oj)
+- [Regulation (EU) 2026/1744 — the Digital Omnibus on AI, OJ 24 Jul 2026](https://eur-lex.europa.eu/eli/reg/2026/1744/oj)
+- [Commission Guidelines on transparency obligations (Art. 50), 20 Jul 2026](https://digital-strategy.ec.europa.eu/en/policies/guidelines-transparency-ai-generated-content)
+- [Code of Practice on Transparency of AI-generated Content](https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content)
 - [EUR-Lex — AI Act procedure file and amendments](https://eur-lex.europa.eu/legal-content/EN/HIS/?uri=CELEX:32024R1689)
 - [European Commission — AI Act policy pages and implementing guidance](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai)
 - [European Commission — Digital Omnibus package](https://digital-strategy.ec.europa.eu/en/library/digital-omnibus)

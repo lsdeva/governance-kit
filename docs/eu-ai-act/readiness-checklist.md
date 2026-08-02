@@ -5,7 +5,7 @@
 
 # EU AI Act — 25-point readiness checklist
 
-<span class="pill ready">Ready</span> &nbsp;·&nbsp; <span class="gk-meta">v1.1</span> &nbsp;·&nbsp; <span class="gk-meta">Last reviewed <strong>2026-08-02</strong></span>
+<span class="pill ready">Ready</span> &nbsp;·&nbsp; <span class="gk-meta">v1.2</span> &nbsp;·&nbsp; <span class="gk-meta">Last reviewed <strong>2026-08-03</strong></span>
 
 <div class="gk-downloads" markdown>
 [:material-file-word: Word](../downloads/eu-ai-act-readiness-checklist.docx){ .md-button .gk-dl download }
@@ -163,7 +163,7 @@ This checklist is generated from the same question bank as the [interactive asse
 ### Literacy
 
 - [ ] **25.** Staff who build, buy, or operate AI have AI literacy appropriate to their role.
-    <br><small>A live obligation since February 2025, and one of the few that applies to everyone regardless of risk tier. Proportionate to role: a procurement lead needs different literacy from an ML engineer.</small>
+    <br><small>A live obligation since February 2025, and one of the few that applies to everyone regardless of risk tier. The 2026 Omnibus softened it: you must take measures to SUPPORT the development of AI literacy, not guarantee any individual reaches a particular level. Proportionate to role — a procurement lead needs different literacy from an ML engineer.</small>
     <br><small class="gk-ev">**Evidence:** Training completion records by role, plus the syllabus showing it is role-appropriate.</small>
     <br><small>**Fix with:** [Acceptable AI Use Policy](../policies/acceptable-ai-use-policy.md) · [Roles & Responsibilities](../operating-model/roles-responsibilities.md) · [Governance Charter](../frameworks/governance-charter.md)</small>
 

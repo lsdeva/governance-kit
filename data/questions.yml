@@ -537,8 +537,10 @@
   text: Staff who build, buy, or operate AI have AI literacy appropriate to their role.
   help: >-
     A live obligation since February 2025, and one of the few that applies to
-    everyone regardless of risk tier. Proportionate to role: a procurement lead
-    needs different literacy from an ML engineer.
+    everyone regardless of risk tier. The 2026 Omnibus softened it: you must
+    take measures to SUPPORT the development of AI literacy, not guarantee any
+    individual reaches a particular level. Proportionate to role — a
+    procurement lead needs different literacy from an ML engineer.
   evidence: >-
     Training completion records by role, plus the syllabus showing it is
     role-appropriate.
@@ -551,6 +553,8 @@
     label: AI literacy
     detail: >-
       In force since 2 February 2025 and applicable across the organisation.
+      Amended by Regulation (EU) 2026/1744 to an effort-based duty: take
+      measures to support AI literacy, rather than ensure it.
 
 # ---------------------------------------------------------------------------
 # Extended questions (not on the published 25-point checklist)
