@@ -135,6 +135,40 @@ The kit covers data and AI governance end to end — 25 templates across six are
 
 </div>
 
+## Then turn it into a plan
+
+<div class="grid cards" markdown>
+
+- :material-calendar-check:{ .lg } **[30/60/90-day plans](plans.md)**
+
+    ---
+
+    Sequenced plans per starting path, with rough effort estimates — including a
+    variant for small or flat organisations with no committee.
+
+- :material-swap-horizontal:{ .lg } **[Standards crosswalk](crosswalk.md)**
+
+    ---
+
+    The same templates mapped to ISO/IEC 42001, NIST AI RMF, Singapore's Model
+    AI Governance Framework, and the EU AI Act.
+
+- :material-clipboard-text-search:{ .lg } **[I've been asked to…](tasks.md)**
+
+    ---
+
+    Ten common requests, in the words they usually arrive in, mapped to where
+    to start and roughly how long it takes.
+
+- :material-file-document-check:{ .lg } **[Worked examples](examples/index.md)**
+
+    ---
+
+    Four templates filled in for a fictional mid-size company — deliberately
+    imperfect, so you can see what "good enough" actually looks like.
+
+</div>
+
 ## Start with the EU AI Act
 
 If you only do one thing today, find out where you stand. The

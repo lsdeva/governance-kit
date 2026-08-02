@@ -10,6 +10,15 @@ where the pressure is.
     your biggest gaps. It takes about ten minutes, and everything stays in your
     browser. If you would rather read first, carry on below.
 
+Three other routes in, depending on what you need:
+
+- **[I've been asked to…](tasks.md)** — someone has handed you a request; find it
+  and start where it points.
+- **[30/60/90-day plans](plans.md)** — the paths below, sequenced with effort
+  estimates, including a small-organisation variant.
+- **[Standards crosswalk](crosswalk.md)** — if you are held to ISO/IEC 42001,
+  NIST AI RMF, or Singapore's framework rather than the EU AI Act.
+
 ## Three common starting points
 
 === "Brand-new programme"

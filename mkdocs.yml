@@ -98,6 +98,8 @@ nav:
   - Get started: getting-started.md
   - Assessment: assess/index.md
   - I've been asked to…: tasks.md
+  - 30/60/90-day plans: plans.md
+  - Standards crosswalk: crosswalk.md
   - Frameworks:
       - Overview: frameworks/index.md
       - Data Governance Framework: frameworks/data-governance-framework.md

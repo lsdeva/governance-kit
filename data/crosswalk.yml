@@ -1,0 +1,169 @@
+# Standards crosswalk — maps this kit's templates to the major AI governance
+# frameworks, so the same control set can be justified against whichever regime
+# an organisation is held to.
+#
+# Widens the audience beyond the EU, and gives internal teams the language they
+# need ("this satisfies ISO 42001 clause 6.1.2") when arguing for investment.
+#
+# NOTE ON ACCURACY: these are indicative mappings to help you navigate, not
+# certified equivalences. Clause numbering and function names change between
+# editions. Verify against the standard itself before relying on a mapping in
+# an audit or certification context.
+
+frameworks:
+  - id: iso42001
+    name: ISO/IEC 42001
+    full: ISO/IEC 42001:2023 — AI management systems
+    short: >-
+      The certifiable AI management system standard. Structured like ISO 27001,
+      so if you already hold that, the shape will be familiar.
+    audience: Organisations wanting a certifiable, auditable management system.
+    note: >-
+      Certification is against the management system, not against individual AI
+      systems. Annex A controls are the part that maps most directly onto this
+      kit.
+    url: https://www.iso.org/standard/81230.html
+
+  - id: nist
+    name: NIST AI RMF
+    full: NIST AI Risk Management Framework 1.0
+    short: >-
+      Voluntary, outcome-based, and organised around four functions — Govern,
+      Map, Measure, Manage. Widely used in the US and as a common language
+      elsewhere.
+    audience: US organisations, and anyone wanting a non-certifiable risk framework.
+    note: >-
+      Not a compliance regime — nobody audits you against it. Its value is the
+      vocabulary and the completeness check.
+    url: https://www.nist.gov/itl/ai-risk-management-framework
+
+  - id: singapore
+    name: Singapore Model AI Governance Framework
+    full: Model AI Governance Framework (2nd ed.) & Model AI Governance Framework for Generative AI
+    short: >-
+      Practical, implementation-focused guidance from Singapore's IMDA/PDPC,
+      with a strong emphasis on internal governance and human oversight.
+    audience: APAC organisations, and anyone wanting worked implementation guidance.
+    note: >-
+      The generative-AI framework (2024) is the more current of the two for
+      LLM-based systems.
+    url: https://www.pdpc.gov.sg/help-and-resources/2020/01/model-ai-governance-framework
+
+  - id: euaiact
+    name: EU AI Act
+    full: Regulation (EU) 2024/1689
+    short: >-
+      Binding law, risk-tiered, with penalties. The only entry here that can
+      fine you.
+    audience: Anyone placing AI on the EU market or whose output is used in the EU.
+    note: >-
+      Obligations depend on your role (provider/deployer) and the system's risk
+      tier. See the timeline for what applies when.
+    url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+
+# theme -> how each framework expresses it -> which templates deliver it
+rows:
+  - theme: Leadership & accountability
+    euaiact: "Art. 3, Art. 26 — operator obligations; named accountability"
+    iso42001: "Cl. 5 Leadership; Cl. 5.3 Roles & responsibilities"
+    nist: "GOVERN 1, GOVERN 2 — policies, accountability structures"
+    singapore: "Internal governance structures & measures"
+    templates: [governance-charter, roles-responsibilities, raci, committee-charter]
+
+  - theme: Policy & management system
+    euaiact: "Art. 17 — quality management system (providers)"
+    iso42001: "Cl. 4-10 — the management system itself; A.2 AI policy"
+    nist: "GOVERN 1.1 — legal and regulatory requirements understood"
+    singapore: "Internal governance — policies and SOPs"
+    templates: [ai-governance-framework, data-governance-framework, data-governance-policy, acceptable-ai-use-policy]
+
+  - theme: Inventory & classification
+    euaiact: "Art. 6, Annex III — risk classification; Art. 49 registration"
+    iso42001: "A.4 AI system impact assessment; A.6 AI system lifecycle"
+    nist: "MAP 1, MAP 2 — context and categorisation"
+    singapore: "Determining the level of human involvement"
+    templates: [ai-system-inventory, data-asset-register]
+
+  - theme: Risk assessment
+    euaiact: "Art. 9 — risk management system; Art. 27 FRIA"
+    iso42001: "Cl. 6.1 — risk and opportunity; A.5 impact assessment"
+    nist: "MAP 5, MEASURE 2 — risk identification and analysis"
+    singapore: "Risk management and internal controls"
+    templates: [ai-risk-assessment, risk-register, maturity-assessment]
+
+  - theme: Data governance & quality
+    euaiact: "Art. 10 — data and data governance"
+    iso42001: "A.7 Data for AI systems"
+    nist: "MAP 2.3, MEASURE 2.2 — data quality and representativeness"
+    singapore: "Good data accountability practices"
+    templates: [data-governance-framework, data-quality-standard, data-classification-policy, data-asset-register]
+
+  - theme: Documentation & traceability
+    euaiact: "Art. 11 & Annex IV — technical documentation; Art. 12 logging"
+    iso42001: "Cl. 7.5 Documented information; A.6.2 documentation"
+    nist: "MAP 4, MEASURE 1 — documentation of methods and results"
+    singapore: "Traceability, reproducibility, auditability"
+    templates: [model-card, ai-development-standard, incident-log]
+
+  - theme: Human oversight
+    euaiact: "Art. 14 — human oversight"
+    iso42001: "A.9.2 — human oversight of AI systems"
+    nist: "GOVERN 3.2, MANAGE 2.1 — human-AI configuration"
+    singapore: "Human-in-the-loop / over-the-loop / out-of-the-loop"
+    templates: [ai-governance-framework, decision-rights, ai-risk-assessment]
+
+  - theme: Performance, robustness & security
+    euaiact: "Art. 15 — accuracy, robustness, cybersecurity"
+    iso42001: "A.6.2.4 verification & validation; A.10 third-party security"
+    nist: "MEASURE 2.5-2.7 — validity, reliability, security, resilience"
+    singapore: "Robustness, reproducibility, and testing"
+    templates: [ai-development-standard, model-card, control-library]
+
+  - theme: Fairness & bias
+    euaiact: "Art. 10(2)(f), Art. 15 — bias examination; Recital 27"
+    iso42001: "A.5.2, A.7.4 — impact on individuals and groups"
+    nist: "MEASURE 2.11 — harmful bias and homogenisation"
+    singapore: "Fairness — dataset and model bias"
+    templates: [ai-risk-assessment, model-card, data-quality-standard]
+
+  - theme: Transparency & explainability
+    euaiact: "Art. 13 instructions for use; Art. 50 transparency to people"
+    iso42001: "A.8 Information for interested parties"
+    nist: "MEASURE 2.8, MEASURE 2.9 — transparency and explainability"
+    singapore: "Transparency, explainability, and communication"
+    templates: [acceptable-ai-use-policy, model-card, ai-governance-framework]
+
+  - theme: Third-party & supply chain
+    euaiact: "Art. 25 — responsibilities along the value chain; Art. 53 GPAI"
+    iso42001: "A.10 — third-party and customer relationships"
+    nist: "MAP 4.1, MANAGE 3 — third-party risks"
+    singapore: "Vendor and deployment considerations"
+    templates: [third-party-ai-risk-policy, ai-system-inventory]
+
+  - theme: Monitoring & incidents
+    euaiact: "Art. 72 post-market monitoring; Art. 73 serious incidents"
+    iso42001: "Cl. 9 Performance evaluation; Cl. 10.2 Nonconformity"
+    nist: "MANAGE 4 — monitoring, feedback, and incident response"
+    singapore: "Monitoring and review; incident management"
+    templates: [incident-log, kpi-dashboard, control-library]
+
+  - theme: Assurance & audit
+    euaiact: "Art. 43 conformity assessment; Art. 74 market surveillance"
+    iso42001: "Cl. 9.2 Internal audit; Cl. 9.3 Management review"
+    nist: "GOVERN 4.1 — organisational risk culture and assurance"
+    singapore: "Internal audit and independent review"
+    templates: [control-library, maturity-assessment, board-pack]
+
+  - theme: Competence & literacy
+    euaiact: "Art. 4 — AI literacy"
+    iso42001: "Cl. 7.2 Competence; Cl. 7.3 Awareness"
+    nist: "GOVERN 3, GOVERN 4 — workforce diversity and culture"
+    singapore: "Staff training and capability"
+    templates: [acceptable-ai-use-policy, roles-responsibilities, governance-charter]
+
+  - theme: Privacy & data protection
+    euaiact: "Art. 27 FRIA; interacts with GDPR Art. 35"
+    iso42001: "A.7.3 — privacy in AI data; links to ISO/IEC 27701"
+    nist: "MEASURE 2.10 — privacy risk"
+    singapore: "PDPA alignment; data minimisation"
+    templates: [processing-dpia-log, data-classification-policy, data-governance-policy]

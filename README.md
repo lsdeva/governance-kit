@@ -78,6 +78,13 @@ sells convenience, an open commons wins on trust, reach, and durability.
 | **[Board &amp; Reporting](docs/board/)** | 2 | Board pack, KPI / KRI dashboard |
 | **[EU AI Act](docs/eu-ai-act/)** | 1 + timeline | 25-point readiness checklist, obligation timeline |
 | **[Assessment](https://lsdeva.github.io/governance-kit/assess/)** | 40 questions | 8 roles, 7 categories, audience-tailored report |
+| **[Worked examples](https://lsdeva.github.io/governance-kit/examples/)** | 4 | The same templates filled in for a fictional mid-size company |
+| **[30/60/90-day plans](https://lsdeva.github.io/governance-kit/plans/)** | 4 paths | Sequenced, with effort estimates and a small-org variant |
+| **[Standards crosswalk](https://lsdeva.github.io/governance-kit/crosswalk/)** | 15 themes | ISO/IEC 42001 · NIST AI RMF · Singapore · EU AI Act |
+
+**Every template downloads as Word, and the registers and scoring tools as
+Excel** — with frozen headers, dropdown validation, working formulas, and
+per-column guidance. Raw Markdown too, for pasting into a wiki.
 
 Each page follows the same structure — **Purpose → When to use it → How to use it
 → The template → Adaptation notes** — so the kit stays predictable and
@@ -184,6 +191,11 @@ mkdocs build --strict             # confirm it still builds clean
 | A role's name or description | `data/roles.yml` |
 | A section name, blurb, or the nav order | `data/sections.yml` |
 | The "not legal advice" notice (all 26 pages at once) | `data/snippets.yml` |
+| A worked example | `data/examples.yml` |
+| A 30/60/90-day plan | `data/plans.yml` |
+| A standards mapping | `data/crosswalk.yml` |
+| An "I've been asked to…" entry | `data/tasks.yml` |
+| An Excel register's columns, dropdowns, or formulas | `data/spreadsheets.yml` |
 
 <details>
 <summary><strong>Adding a template, question, or role</strong></summary>

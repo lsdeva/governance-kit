@@ -361,6 +361,146 @@ def render_tasks_page(tasks: list, by_id: dict) -> str:
     return "\n".join(parts)
 
 
+def render_plans_page(plans: list, by_id: dict) -> str:
+    """30/60/90-day plans, one per starting path, plus a small-org variant."""
+    path = "plans.md"
+    parts = [BANNER.format(source="plans.yml")]
+    parts.append("# 30/60/90-day plans\n")
+    parts.append(
+        "Knowing which templates you need is not the same as knowing what order "
+        "to do them in. These are sequenced plans with rough effort, so you can "
+        "plan resource and tell a sponsor when things will land.\n"
+    )
+    parts.append(
+        '!!! note "Effort is for one person, not full time"\n'
+        "    Estimates are person-days for whoever is running this, assuming it\n"
+        "    is not their only job. They cover a competent first pass — not a\n"
+        "    polished, audited version.\n"
+    )
+    parts.append("## Pick your path\n")
+    parts.append("| Path | When it fits | Total effort |")
+    parts.append("|---|---|---|")
+    for p in plans:
+        anchor = p["name"].lower().replace(" ", "-").replace("/", "").replace(",", "")
+        parts.append(
+            f"| [{p['name']}](#{anchor}) | {' '.join(p['when'].split())} "
+            f"| {p['total']} |"
+        )
+    parts.append("")
+
+    for p in plans:
+        parts.append(f"## {p['name']}\n")
+        if p.get("small_org"):
+            parts.append(
+                '!!! tip "This is not a cut-down version"\n'
+                "    The rest of the kit assumes a committee and named specialist\n"
+                "    roles. This path deliberately does not — it is a different\n"
+                "    sequence for organisations that have neither.\n"
+            )
+        parts.append(f"**When it fits:** {' '.join(p['when'].split())}  ")
+        parts.append(f"**Assumes:** {' '.join(p['assumes'].split())}  ")
+        parts.append(f"**Total effort:** {p['total']}\n")
+
+        for ph in p["phases"]:
+            parts.append(f"### {ph['window']} — {ph['goal']}\n")
+            parts.append(f"*Effort: {ph['effort']}*\n")
+            for n, s in enumerate(ph["steps"], start=1):
+                tpl = by_id.get(s["template"])
+                if tpl is None:
+                    raise SystemExit(
+                        f"ERROR: plan '{p['id']}' references unknown template "
+                        f"'{s['template']}'"
+                    )
+                parts.append(
+                    f"{n}. **{s['do']}** — [{tpl['title']}]"
+                    f"({rel_link(path, tpl['path'])}) · *{s['effort']}*"
+                )
+                if s.get("note"):
+                    parts.append(f"   <br>{' '.join(s['note'].split())}")
+            parts.append("")
+            parts.append("**You are done when:**\n")
+            for d in ph["done"]:
+                parts.append(f"- [ ] {d}")
+            parts.append("")
+        parts.append("---\n")
+
+    parts.append(SNIPPETS_CACHE["not_legal_advice"])
+    return "\n".join(parts)
+
+
+def render_crosswalk_page(cw: dict, by_id: dict) -> str:
+    """Map the kit's templates onto ISO 42001, NIST AI RMF, Singapore, EU AI Act."""
+    path = "crosswalk.md"
+    frameworks = cw["frameworks"]
+    parts = [BANNER.format(source="crosswalk.yml")]
+    parts.append("# Standards crosswalk\n")
+    parts.append(
+        "The same control usually satisfies several frameworks at once. This "
+        "maps the kit onto the major AI governance regimes, so you can build a "
+        "control once and justify it against whichever standard you are held "
+        "to — or wanted to cite when asking for budget.\n"
+    )
+    parts.append(
+        '!!! warning "Indicative, not certified equivalence"\n'
+        "    These mappings help you navigate. They are **not** certified\n"
+        "    equivalences, and clause numbering changes between editions.\n"
+        "    Verify against the standard itself before relying on a mapping in\n"
+        "    an audit or certification context.\n"
+    )
+
+    parts.append("## The frameworks\n")
+    for f in frameworks:
+        parts.append(f"### [{f['name']}]({f['url']})\n")
+        parts.append(f"*{f['full']}*\n")
+        parts.append(" ".join(f["short"].split()) + "\n")
+        parts.append(f"**Best for:** {' '.join(f['audience'].split())}  ")
+        parts.append(f"**Worth knowing:** {' '.join(f['note'].split())}\n")
+
+    parts.append("## The crosswalk\n")
+    parts.append(
+        "Read a row across to see how each regime expresses the same "
+        "obligation, then use the templates in the last column to satisfy all "
+        "of them at once.\n"
+    )
+
+    head = "| Theme | " + " | ".join(f["name"] for f in frameworks) + " | Templates |"
+    parts.append(head)
+    parts.append("|" + "---|" * (len(frameworks) + 2))
+    for row in cw["rows"]:
+        cells = [f"**{row['theme']}**"]
+        for f in frameworks:
+            cells.append(row.get(f["id"], "—"))
+        links = []
+        for tid in row["templates"]:
+            tpl = by_id.get(tid)
+            if tpl is None:
+                raise SystemExit(
+                    f"ERROR: crosswalk row '{row['theme']}' references unknown "
+                    f"template '{tid}'"
+                )
+            links.append(f"[{tpl['title']}]({rel_link(path, tpl['path'])})")
+        cells.append(" · ".join(links))
+        parts.append("| " + " | ".join(cells) + " |")
+    parts.append("")
+
+    parts.append("## Using this in practice\n")
+    parts.append(
+        "- **Certifying to ISO/IEC 42001?** The crosswalk shows which templates "
+        "produce the documented information each clause expects. You will still "
+        "need a management system around them.\n"
+        "- **Using NIST AI RMF as your vocabulary?** The functions map cleanly "
+        "onto the kit's structure: Govern to the operating model, Map to the "
+        "registers, Measure to risk and control, Manage to monitoring and "
+        "reporting.\n"
+        "- **Operating in several jurisdictions?** Build to the strictest "
+        "applicable requirement per theme, then map outwards. Maintaining "
+        "parallel control sets per regime is how governance programmes collapse "
+        "under their own weight.\n"
+    )
+    parts.append(SNIPPETS_CACHE["not_legal_advice"])
+    return "\n".join(parts)
+
+
 def render_markdown_download(t: dict, by_id: dict, questions: list) -> str:
     """The template as standalone Markdown, for pasting into a wiki.
 
@@ -527,11 +667,15 @@ def build_assessment_json(roles, questions, templates, sections) -> dict:
     }
 
 
-def build_nav(sections, templates, examples, tasks) -> str:
+def build_nav(sections, templates, examples, tasks, plans, crosswalk) -> str:
     lines = [NAV_START, "nav:", "  - Home: index.md", "  - Get started: getting-started.md",
              "  - Assessment: assess/index.md"]
     if tasks:
         lines.append("  - I've been asked to…: tasks.md")
+    if plans:
+        lines.append("  - 30/60/90-day plans: plans.md")
+    if crosswalk:
+        lines.append("  - Standards crosswalk: crosswalk.md")
     for s in sections:
         lines.append(f"  - {s['nav']}:")
         lines.append(f"      - Overview: {s['id']}/index.md")
@@ -668,10 +812,19 @@ def main() -> int:
     )
     write(ROOT / "snippets" / "stats.md", stats, written, args.check)
 
-    # ---- task index ---------------------------------------------------------
+    # ---- task index, plans, crosswalk ---------------------------------------
     tasks = load("tasks.yml") or []
     if tasks:
         write(DOCS / "tasks.md", render_tasks_page(tasks, by_id), written, args.check)
+
+    plans = load("plans.yml") or []
+    if plans:
+        write(DOCS / "plans.md", render_plans_page(plans, by_id), written, args.check)
+
+    crosswalk = load("crosswalk.yml") or {}
+    if crosswalk:
+        write(DOCS / "crosswalk.md",
+              render_crosswalk_page(crosswalk, by_id), written, args.check)
 
     # ---- worked examples ----------------------------------------------------
     if examples:
@@ -689,7 +842,7 @@ def main() -> int:
     # ---- navigation in mkdocs.yml ------------------------------------------
     mk = ROOT / "mkdocs.yml"
     text = mk.read_text(encoding="utf-8")
-    nav = build_nav(sections, templates, examples, tasks)
+    nav = build_nav(sections, templates, examples, tasks, plans, crosswalk)
     if NAV_START in text and NAV_END in text:
         new_text = re.sub(
             re.escape(NAV_START) + r".*?" + re.escape(NAV_END),
