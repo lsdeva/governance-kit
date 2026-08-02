@@ -108,6 +108,48 @@
     })[0];
   }
 
+  /* The value PROPERTY must be assigned, not the attribute — setAttribute only
+   * sets the default value, so a subject carried across a jump between flows
+   * would not appear in the box. */
+  function subjectInput() {
+    var input = el("input", {
+      type: "text",
+      placeholder: "e.g. Referral triage prioritisation",
+      oninput: function (e) { state.subject = e.target.value; }
+    });
+    input.value = state.subject || "";
+    return input;
+  }
+
+  function decisionById(id) {
+    return DATA.decisions.filter(function (d) { return d.id === id; })[0];
+  }
+
+  /*
+   * An action can point at another guided decision with {{decision:id}}.
+   * Rendered as a button that starts that flow, so "confirm whether you are the
+   * provider or the deployer" is a thing the user can DO from here rather than
+   * an instruction to go and find something.
+   */
+  function actionNodes(text) {
+    var parts = [];
+    var re = /\{\{decision:([a-z0-9\-]+)\}\}/g;
+    var last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      if (m.index > last) parts.push(text.slice(last, m.index));
+      var target = decisionById(m.group ? m.group(1) : m[1]);
+      if (target) {
+        parts.push(el("button", {
+          class: "gk-link gk-dec-jump", type: "button",
+          onclick: function () { begin(target.id, true); }
+        }, ["Work it out now →"]));
+      }
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) parts.push(text.slice(last));
+    return parts.length ? parts : [text];
+  }
+
   function questionById(qid) {
     return decision().questions.filter(function (q) { return q.id === qid; })[0];
   }
@@ -118,10 +160,14 @@
 
   // --------------------------------------------------------------- flow
 
-  function begin(id) {
+  /* keepSubject carries the system name across a jump between flows, so the
+   * user is not retyping "CV screening" to answer the next question about the
+   * same system. */
+  function begin(id, keepSubject) {
     state.decisionId = id;
     state.path = [];
     state.outcome = null;
+    if (!keepSubject) state.subject = "";
     state.current = decision().start;
     render();
   }
@@ -216,11 +262,7 @@
       wrap.appendChild(el("p", { class: "gk-muted" }, [d.intro]));
       var nameWrap = el("label", { class: "gk-dec-subject" }, [
         el("span", {}, ["Which system are you classifying?"]),
-        el("input", {
-          type: "text", placeholder: "e.g. Referral triage prioritisation",
-          value: state.subject,
-          oninput: function (e) { state.subject = e.target.value; }
-        })
+        subjectInput()
       ]);
       wrap.appendChild(nameWrap);
     } else if (state.subject) {
@@ -307,7 +349,7 @@
 
     wrap.appendChild(el("h3", {}, ["What to do now"]));
     var ol = el("ol", { class: "gk-dec-actions" });
-    o.actions.forEach(function (a) { ol.appendChild(el("li", {}, [a])); });
+    o.actions.forEach(function (a) { ol.appendChild(el("li", {}, actionNodes(a))); });
     wrap.appendChild(ol);
 
     if (o.counsel) {

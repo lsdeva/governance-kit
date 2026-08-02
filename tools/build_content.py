@@ -1136,6 +1136,14 @@ def main() -> int:
                         raise SystemExit(
                             f"ERROR: outcome '{o['id']}' field '{field}' must "
                             f"be a string, got {type(o.get(field)).__name__}")
+                # An action may link to another flow with {{decision:id}}; that
+                # id must exist or the button would go nowhere.
+                for act in o.get("actions", []):
+                    for ref in re.findall(r"\{\{decision:([a-z0-9\-]+)\}\}", act):
+                        if ref not in {x["id"] for x in decisions}:
+                            raise SystemExit(
+                                f"ERROR: outcome '{o['id']}' links to unknown "
+                                f"decision '{ref}'")
 
             # Walk every path exhaustively: no unreachable question, no cycle,
             # no outcome that can never be reached, and every branch terminates.

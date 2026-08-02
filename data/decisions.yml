@@ -195,7 +195,9 @@
       actions:
         - Register it in your AI inventory with this rationale and today's date.
         - Complete an AI risk assessment before it goes further.
-        - Confirm whether you are the provider or the deployer — the obligations differ sharply.
+        - >-
+          Confirm whether you are the provider or the deployer — the
+          obligations differ sharply. {{decision:operator-role}}
         - >-
           Check the timeline — Annex III obligations apply from 2 December 2027,
           Annex I from 2 August 2028. Work backwards from there.
@@ -250,3 +252,273 @@
         - Apply your acceptable use policy and data classification rules.
         - Re-classify if its purpose changes materially.
       templates: [ai-system-inventory, acceptable-ai-use-policy]
+
+# ===========================================================================
+# Which operator role do we play for this system?
+# ===========================================================================
+# Art. 3(3) provider / Art. 3(4) deployer, plus the Art. 25 traps that turn a
+# deployer into a provider. This is the decision the risk-tier flow tells
+# people to make next, and the one that determines which obligations actually
+# attach to them.
+
+- id: operator-role
+  title: Are we the provider or the deployer of this system?
+  short: >-
+    Work out which operator role you hold — provider, deployer, importer, or
+    distributor — and record why. The obligations differ sharply.
+  why: >-
+    Almost every obligation in the Act attaches to a role, not to a system. Get
+    this wrong and you either carry duties you do not owe, or miss the ones you
+    do. The common error is assuming that buying a tool always makes you a
+    deployer — fine-tuning it, putting your name on it, or using it for
+    something it was not built for can make you its provider instead.
+  intro: >-
+    Answer about ONE system at a time, and about how you actually use it today.
+    You can hold different roles for different systems, and your role can change
+    if you modify a system later.
+  records: ai-system-inventory
+  start: op-built
+
+  questions:
+    - id: op-built
+      stage: What you did
+      text: Did your organisation develop this system, or have it developed for you to your specification?
+      help: >-
+        Counts as Yes if you built it in-house, or commissioned it to your own
+        requirements. Counts as No if you bought or subscribed to something that
+        already existed — even if it was configured for you during onboarding.
+      yes: { outcome: provider, ref: "Art. 3(3)" }
+      no: op-own-name
+
+    - id: op-own-name
+      stage: What you did
+      text: Do you put it on the market or into service under your own name or trade mark?
+      help: >-
+        This is the white-labelling trap. If your customers see your brand on a
+        tool that someone else built, you are its provider as far as they and
+        the regulator are concerned — the underlying vendor's role does not
+        shield you.
+      yes: { outcome: provider-rebrand, ref: "Art. 25(1)(a)" }
+      no: op-substantial-mod
+
+    - id: op-substantial-mod
+      stage: What you changed
+      text: Have you fine-tuned, retrained, or substantially modified the system?
+      help: >-
+        Fine-tuning on your own data, retraining, or materially changing how it
+        works all count. Ordinary configuration does not — setting thresholds,
+        choosing which fields it reads, or turning features on and off is
+        normal deployer behaviour.
+      yes: { outcome: provider-modifier, ref: "Art. 25(1)(b)" }
+      no: op-purpose-change
+
+    - id: op-purpose-change
+      stage: What you changed
+      text: Do you use it for a purpose the vendor did not intend, or in a way that makes it high-risk when it was not sold as such?
+      help: >-
+        The example that catches people: a general-purpose text summariser used
+        to rank job applicants. The vendor never intended it for recruitment;
+        by pointing it at that decision, you have changed its intended purpose.
+      yes: { outcome: provider-purpose, ref: "Art. 25(1)(c)" }
+      no: op-established
+
+    - id: op-established
+      stage: Where you sit
+      text: Are you established in the EU, or using the system's output inside the EU?
+      help: >-
+        Answer Yes if your organisation is in the EU, or if people in the EU are
+        affected by what the system produces. Being outside the EU is not by
+        itself an exemption — the Act reaches output used in the EU.
+      yes: op-under-authority
+      no: op-outside-eu
+
+    - id: op-under-authority
+      stage: How you use it
+      text: Do you use the system under your own authority — that is, you decide it runs, on whose data, and for what?
+      help: >-
+        Answer Yes if you chose to deploy it and control how it is used. Answer
+        No if you merely pass it on to someone else, or use it purely
+        personally and non-professionally.
+      yes: { outcome: deployer, ref: "Art. 3(4)" }
+      no: op-supply-chain
+
+    - id: op-supply-chain
+      stage: How you use it
+      text: Which of these best describes what you do with it?
+      help: >-
+        Pick the closest. These are the value-chain roles for organisations that
+        move a system along rather than operate it.
+      options:
+        - label: We bring it into the EU from a provider based outside the EU
+          next: { outcome: importer, ref: "Art. 3(6)" }
+        - label: We make it available in the EU, but we did not build or import it
+          next: { outcome: distributor, ref: "Art. 3(7)" }
+        - label: We only use it ourselves, personally and not for work
+          next: { outcome: out-of-scope }
+        - label: None of these — we do operate it ourselves
+          next: { outcome: deployer, ref: "Art. 3(4)" }
+
+    - id: op-outside-eu
+      stage: Where you sit
+      text: Do you place this system on the EU market, or make it available to anyone in the EU?
+      help: >-
+        Includes selling, licensing, or offering it free to EU users. If the
+        answer is genuinely no on every count, the Act does not reach this
+        system — but check with counsel before relying on that.
+      yes: { outcome: provider, ref: "Art. 2(1)(a)" }
+      no: { outcome: out-of-scope }
+
+  outcomes:
+    - id: provider
+      tier: Provider
+      severity: high
+      headline: You are the provider of this system.
+      detail: >-
+        Providers carry the heaviest obligations in the Act. If the system is
+        also high-risk, that means a risk management system, data governance,
+        technical documentation, logging, human oversight design, declared
+        accuracy and robustness, a quality management system, conformity
+        assessment, CE marking, registration, and post-market monitoring.
+      actions:
+        - Record this role against the system in your AI inventory, with today's date.
+        - Classify its risk tier if you have not already — the obligations depend on both.
+        - >-
+          If it is high-risk, identify your conformity assessment route now.
+          Annex III obligations apply from 2 December 2027 and Annex I from
+          2 August 2028, and notified-body capacity is finite.
+        - Put a quality management system in place — Art. 17 expects one for high-risk systems.
+      templates: [ai-governance-framework, ai-development-standard, model-card, ai-system-inventory]
+
+    - id: provider-rebrand
+      tier: Provider (by rebranding)
+      severity: high
+      headline: You are the provider, because your name is on it.
+      detail: >-
+        Putting a system on the market under your own name or trade mark makes
+        you its provider, even though somebody else built it. The original
+        developer's compliance work does not automatically transfer to you.
+      actions:
+        - Record this role and the reason — rebranding — against the system.
+        - >-
+          Get the underlying provider's technical documentation in writing. You
+          need it to meet obligations that are now yours, and you have a
+          contractual right to ask.
+        - Check your contract flows down the evidence and notification rights you now depend on.
+        - Treat this as a provider obligation set, not a vendor-management exercise.
+      counsel: >-
+        Where a vendor built the system and you rebrand it, the split of
+        responsibility between you is a contractual question with statutory
+        limits. Have the arrangement reviewed rather than assuming the vendor
+        remains on the hook.
+      templates: [third-party-ai-risk-policy, ai-governance-framework, model-card]
+
+    - id: provider-modifier
+      tier: Provider (by substantial modification)
+      severity: high
+      headline: You have become the provider by modifying it.
+      detail: >-
+        Fine-tuning, retraining, or substantially modifying a high-risk system
+        makes you its provider for the modified version. This is the most
+        commonly missed route into provider obligations, because the work feels
+        like ordinary development rather than a change of legal role.
+      actions:
+        - Record this role and what you modified, with the date.
+        - Document the modification — what changed, on what data, and how you evaluated it.
+        - Produce your own technical documentation for the modified system. The original vendor's does not cover your changes.
+        - Re-check the risk tier — modification can change it.
+      counsel: >-
+        "Substantial modification" is a legal threshold, not an engineering
+        one, and fine-tuning sits close to the line. Confirm where your changes
+        fall before you decide which obligations apply.
+      templates: [ai-development-standard, model-card, ai-risk-assessment]
+
+    - id: provider-purpose
+      tier: Provider (by change of intended purpose)
+      severity: high
+      headline: You are the provider, because you changed what it is for.
+      detail: >-
+        Using a system for a purpose its vendor did not intend — particularly
+        one that makes it high-risk — makes you the provider of that use. The
+        vendor's documentation covers their intended purpose, not yours.
+      actions:
+        - Record this role and the purpose you are actually using it for.
+        - Re-classify the risk tier against your purpose, not the vendor's description.
+        - >-
+          Consider whether the intended purpose can be brought back in scope
+          instead. Using the tool as sold is often far cheaper than assuming
+          provider obligations for it.
+        - Produce documentation covering your use, since the vendor's will not.
+      counsel: >-
+        Whether your use is a genuine change of intended purpose or simply an
+        unusual application is exactly the kind of question worth putting to
+        counsel before you build a compliance programme on the answer.
+      templates: [ai-risk-assessment, ai-system-inventory, third-party-ai-risk-policy]
+
+    - id: deployer
+      tier: Deployer
+      severity: medium
+      headline: You are the deployer of this system.
+      detail: >-
+        Deployers use a system under their own authority. The obligations are
+        lighter than a provider's but real: use it per the instructions, assign
+        competent human oversight, keep logs where you control them, monitor
+        operation, and inform the people affected.
+      actions:
+        - Record this role against the system in your AI inventory, with today's date.
+        - Obtain and actually read the provider's instructions for use — your obligations are framed by them.
+        - Assign named human oversight with the competence and authority to override.
+        - >-
+          If the system is high-risk and you are a public body or provide
+          essential services, check whether you owe a fundamental rights impact
+          assessment under Art. 27.
+        - Tell affected people where transparency duties apply.
+      templates: [ai-system-inventory, third-party-ai-risk-policy, decision-rights, ai-risk-assessment]
+
+    - id: importer
+      tier: Importer
+      severity: medium
+      headline: You are the importer of this system.
+      detail: >-
+        You bring a system from a non-EU provider into the EU market. Your job
+        is to verify before placing it: that the provider did the conformity
+        assessment, that the documentation and CE marking exist, and that an
+        authorised representative is appointed.
+      actions:
+        - Record this role against the system.
+        - Verify the provider's conformity assessment and technical documentation before placing it on the market.
+        - Keep a copy of the documentation and the certificate for the retention period.
+        - Do not place it if you have reason to believe it is non-conforming — and tell the provider and the authorities if you find out later.
+      templates: [third-party-ai-risk-policy, ai-system-inventory, control-library]
+
+    - id: distributor
+      tier: Distributor
+      severity: medium
+      headline: You are a distributor of this system.
+      detail: >-
+        You make a system available on the EU market without being its provider
+        or importer. Your duties are verification-based: check the marking and
+        documentation are present, and act if you learn of a problem.
+      actions:
+        - Record this role against the system.
+        - Verify CE marking and that the provider and importer have met their obligations.
+        - Do not distribute a system you believe to be non-conforming.
+        - Cooperate with authorities and pass on any incident information you receive.
+      templates: [third-party-ai-risk-policy, ai-system-inventory]
+
+    - id: out-of-scope
+      tier: Likely out of scope
+      severity: low
+      headline: This use looks outside the Act's scope — but verify it.
+      detail: >-
+        On your answers, you neither place this system on the EU market nor use
+        its output in the EU, or your use is purely personal and
+        non-professional. The Act's operator obligations would not attach.
+      actions:
+        - Record the reasoning anyway — scope decisions are exactly what a regulator asks you to evidence.
+        - Re-check if your use, your markets, or the system's purpose change.
+        - Remember other law still applies. Data protection duties are unaffected by AI Act scope.
+      counsel: >-
+        Territorial scope is the question organisations most often get wrong,
+        because output used in the EU is enough to bring you in. Confirm this
+        one with counsel before relying on it.
+      templates: [ai-system-inventory, processing-dpia-log]
