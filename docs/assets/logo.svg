@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none" role="img" aria-label="GovKit">
+  <!-- Header logo. currentColor so it inherits the header's foreground and
+       stays legible in both colour schemes without a second asset. -->
+  <rect x="1.5" y="1.5" width="23" height="23" rx="6.5"
+        stroke="currentColor" stroke-width="2.4"/>
+  <path d="M7.5 13.5l4 4 7-8" stroke="currentColor" stroke-width="2.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

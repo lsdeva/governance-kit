@@ -88,11 +88,11 @@
 }
 
 .gk-reg-status.is-flash {
-  color: #1e7d34;
+  color: var(--gk-good-text);
 }
 
 [data-md-color-scheme="slate"] .gk-reg-status.is-flash {
-  color: #8fe0a3;
+  color: var(--gk-good-text);
 }
 
 /* --------------------------------------------------------------------- grid */
@@ -224,7 +224,7 @@
 }
 
 .gk-reg-x:hover {
-  background: #b3261e;
+  background: var(--gk-critical);
   color: #fff;
 }
 

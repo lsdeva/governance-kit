@@ -1,3 +1,121 @@
+/* ===========================================================================
+ * GovKit design tokens — the single palette for the whole site.
+ *
+ * Extracted from the approved landing mock. Dark mode is keyed off Material's
+ * own [data-md-color-scheme="slate"] rather than the mock's [data-theme], so
+ * the theme toggle in the header keeps working on every page.
+ *
+ * Everything downstream (pills, verdicts, register grids, the assessment
+ * report) references these names rather than repeating hex values, so the
+ * identity is defined once.
+ * ======================================================================== */
+
+:root,
+[data-md-color-scheme="default"] {
+  --gk-page:        #f9f9f7;
+  --gk-surface:     #fcfcfb;
+  --gk-ink:         #0b0b0b;
+  --gk-ink-2:       #52514e;
+  --gk-ink-3:       #898781;
+  --gk-hairline:    #e1e0d9;
+  --gk-ring:        rgba(11, 11, 11, .10);
+
+  --gk-brand:       #2a78d6;
+  --gk-brand-deep:  #1c5cab;
+  --gk-brand-soft:  #cde2fb;
+  --gk-violet:      #4a3aa7;
+  --gk-aqua:        #1baf7a;
+  --gk-seq-track:   #eef3fa;
+
+  /* Status fills, from the mock. */
+  --gk-good:        #0ca30c;
+  --gk-warn:        #fab219;
+  --gk-serious:     #ec835a;
+  --gk-critical:    #d03b3b;
+
+  /* Text-safe variants. The fills above are tuned for chips and bars; used as
+   * text on a light surface, good and warn fall short of 4.5:1. These darker
+   * pairs are what any *text* in those colours uses. */
+  --gk-good-text:     #006300;
+  --gk-warn-text:     #8a5a00;
+  --gk-serious-text:  #a2401c;
+  --gk-critical-text: #b3261e;
+
+  --gk-shadow-1: 0 1px 2px rgba(11, 11, 11, .05), 0 8px 24px rgba(11, 11, 11, .06);
+  --gk-shadow-2: 0 2px 4px rgba(11, 11, 11, .06), 0 16px 40px rgba(11, 11, 11, .10);
+
+  --gk-r-lg: 16px;
+  --gk-r-md: 12px;
+  --gk-r-sm: 8px;
+
+  /* Tinted chip backgrounds, derived so light and dark stay in step. */
+  --gk-good-bg:     #e6f4ea;
+  --gk-warn-bg:     #fdf0e3;
+  --gk-serious-bg:  #fdece6;
+  --gk-critical-bg: #fdecea;
+  --gk-neutral-bg:  #eceff1;
+  --gk-neutral-text: #546e7a;
+}
+
+[data-md-color-scheme="slate"] {
+  --gk-page:        #0d0d0d;
+  --gk-surface:     #1a1a19;
+  --gk-ink:         #ffffff;
+  --gk-ink-2:       #c3c2b7;
+  --gk-ink-3:       #898781;
+  --gk-hairline:    #2c2c2a;
+  --gk-ring:        rgba(255, 255, 255, .10);
+
+  --gk-brand:       #3987e5;
+  --gk-brand-deep:  #86b6ef;
+  --gk-brand-soft:  #104281;
+  --gk-seq-track:   #24282e;
+
+  --gk-good-text:     #8fe0a3;
+  --gk-warn-text:     #f0c088;
+  --gk-serious-text:  #f2b8a5;
+  --gk-critical-text: #f2b8b5;
+
+  --gk-shadow-1: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+  --gk-shadow-2: 0 2px 4px rgba(0, 0, 0, .45), 0 16px 40px rgba(0, 0, 0, .5);
+
+  --gk-good-bg:     #12351c;
+  --gk-warn-bg:     #3a2a12;
+  --gk-serious-bg:  #3a2016;
+  --gk-critical-bg: #3a1614;
+  --gk-neutral-bg:  #263238;
+  --gk-neutral-text: #b0bec5;
+}
+
+/* ---------------------------------------------------------------------------
+ * Drive Material's own primary/accent from the brand tokens. mkdocs.yml sets
+ * `primary: custom` on both palettes so the theme reads these rather than
+ * shipping indigo — which is what carries the identity onto every inner page.
+ * ------------------------------------------------------------------------ */
+
+:root,
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color:        var(--gk-brand);
+  --md-primary-fg-color--light: #4a90e2;
+  --md-primary-fg-color--dark:  var(--gk-brand-deep);
+  --md-primary-bg-color:        #ffffff;
+  --md-primary-bg-color--light: rgba(255, 255, 255, .7);
+  --md-accent-fg-color:         var(--gk-brand-deep);
+  --md-accent-fg-color--transparent: rgba(42, 120, 214, .1);
+  --md-accent-bg-color:         #ffffff;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:        var(--gk-brand);
+  --md-primary-fg-color--light: #6ba6ec;
+  --md-primary-fg-color--dark:  #1c5cab;
+  --md-primary-bg-color:        #ffffff;
+  --md-accent-fg-color:         var(--gk-brand-deep);
+  --md-accent-fg-color--transparent: rgba(57, 135, 229, .15);
+  --md-accent-bg-color:         #0d0d0d;
+  --md-typeset-a-color:         var(--gk-brand-deep);
+}
+
 /* Landing hero */
 .hero {
   padding: 2.5rem 0 1rem;
@@ -125,10 +243,10 @@
   border-radius: 1rem;
   letter-spacing: .02em;
 }
-.pill.ready   { background: #e6f4ea; color: #1e7d34; }
-.pill.draft   { background: #fdf0e3; color: #a25b12; }
-.pill.stub    { background: #eceff1; color: #546e7a; }
+.pill.ready   { background: var(--gk-good-bg); color: var(--gk-good-text); }
+.pill.draft   { background: var(--gk-warn-bg); color: var(--gk-warn-text); }
+.pill.stub    { background: var(--gk-neutral-bg); color: var(--gk-neutral-text); }
 
-[data-md-color-scheme="slate"] .pill.ready { background:#12351c; color:#8fe0a3; }
-[data-md-color-scheme="slate"] .pill.draft { background:#3a2a12; color:#f0c088; }
-[data-md-color-scheme="slate"] .pill.stub  { background:#263238; color:#b0bec5; }
+[data-md-color-scheme="slate"] .pill.ready { background: var(--gk-good-bg); color: var(--gk-good-text); }
+[data-md-color-scheme="slate"] .pill.draft { background: var(--gk-warn-bg); color: var(--gk-warn-text); }
+[data-md-color-scheme="slate"] .pill.stub  { background: var(--gk-neutral-bg); color: var(--gk-neutral-text); }

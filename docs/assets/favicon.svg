@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <!-- Favicon. Unlike the header logo this cannot inherit a colour, so the
+       brand blue is literal here. Light and dark values match the tokens in
+       stylesheets/extra.css; the media query keeps the mark visible on a dark
+       browser chrome. -->
+  <style>
+    .bg { fill: #ffffff; }
+    .fg { stroke: #2a78d6; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0d0d0d; }
+      .fg { stroke: #3987e5; }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="7"/>
+  <rect class="fg" x="2.8" y="2.8" width="26.4" height="26.4" rx="7"
+        stroke-width="2.8" fill="none"/>
+  <path class="fg" d="M9.2 16.6l4.9 4.9 8.6-9.8" stroke-width="3.1"
+        stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

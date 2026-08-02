@@ -1,8 +1,8 @@
-site_name: Open Data & AI Governance Kit
+site_name: GovKit
 site_description: >-
   A free, open collection of board-ready data and AI governance templates —
   frameworks, policies, operating model, registers, and EU AI Act readiness.
-site_url: https://lsdeva.github.io/governance-kit/
+site_url: https://govkit.soa.team/
 repo_url: https://github.com/lsdeva/governance-kit
 repo_name: lsdeva/governance-kit
 edit_uri: edit/main/docs/
@@ -20,21 +20,24 @@ theme:
   font: false
   # overrides/partials/source.html removes the api.github.com stats call.
   custom_dir: overrides
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
   icon:
-    logo: material/scale-balance
     repo: fontawesome/brands/github
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: indigo
+      # `custom` makes Material read --md-primary-fg-color* from our own CSS,
+      # so the brand tokens in stylesheets/extra.css drive the whole theme.
+      primary: custom
+      accent: custom
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: custom
+      accent: custom
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode

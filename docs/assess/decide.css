@@ -127,9 +127,9 @@
   flex-wrap: wrap;
 }
 
-.gk-dec-opt.is-yes:hover    { background: #b3261e; border-color: #b3261e; color: #fff; }
-.gk-dec-opt.is-no:hover     { background: #1e7d34; border-color: #1e7d34; color: #fff; }
-.gk-dec-opt.is-unsure:hover { background: #a25b12; border-color: #a25b12; color: #fff; }
+.gk-dec-opt.is-yes:hover    { background: var(--gk-critical); border-color: var(--gk-critical-text); color: #fff; }
+.gk-dec-opt.is-no:hover     { background: var(--gk-good); border-color: var(--gk-good-text); color: #fff; }
+.gk-dec-opt.is-unsure:hover { background: var(--gk-warn); border-color: var(--gk-warn-text); color: #fff; }
 
 .gk-dec-unsure {
   margin-top: -.3rem;
@@ -180,22 +180,22 @@
   color: var(--md-default-fg-color--light);
 }
 
-.gk-verdict.is-stop   { border-left-color: #b3261e; background: #fdecea; }
-.gk-verdict.is-high   { border-left-color: #a25b12; background: #fdf0e3; }
-.gk-verdict.is-medium { border-left-color: #3f51b5; background: #eceff5; }
-.gk-verdict.is-low    { border-left-color: #1e7d34; background: #e6f4ea; }
+.gk-verdict.is-stop   { border-left-color: var(--gk-critical-text); background: var(--gk-critical-bg); }
+.gk-verdict.is-high   { border-left-color: var(--gk-warn-text); background: var(--gk-warn-bg); }
+.gk-verdict.is-medium { border-left-color: var(--gk-brand); background: var(--gk-seq-track); }
+.gk-verdict.is-low    { border-left-color: var(--gk-good-text); background: var(--gk-good-bg); }
 
-[data-md-color-scheme="slate"] .gk-verdict.is-stop   { background: #3a1614; }
-[data-md-color-scheme="slate"] .gk-verdict.is-high   { background: #3a2a12; }
-[data-md-color-scheme="slate"] .gk-verdict.is-medium { background: #232838; }
-[data-md-color-scheme="slate"] .gk-verdict.is-low    { background: #12351c; }
+[data-md-color-scheme="slate"] .gk-verdict.is-stop   { background: var(--gk-critical-bg); }
+[data-md-color-scheme="slate"] .gk-verdict.is-high   { background: var(--gk-warn-bg); }
+[data-md-color-scheme="slate"] .gk-verdict.is-medium { background: var(--gk-seq-track); }
+[data-md-color-scheme="slate"] .gk-verdict.is-low    { background: var(--gk-good-bg); }
 
 [data-md-color-scheme="slate"] .gk-verdict-tier {
   background: rgba(255, 255, 255, .12);
 }
 
 .gk-counsel {
-  border-left: 3px solid #a25b12;
+  border-left: 3px solid var(--gk-warn);
   background: var(--md-code-bg-color);
   padding: .7rem 1rem;
   border-radius: 0 .4rem .4rem 0;
@@ -239,15 +239,15 @@
 
 .gk-log-done {
   font-size: .72rem;
-  color: #1e7d34;
+  color: var(--gk-good-text);
   font-weight: 600;
   margin-right: .3rem;
 }
 
-[data-md-color-scheme="slate"] .gk-log-done { color: #8fe0a3; }
+[data-md-color-scheme="slate"] .gk-log-done { color: var(--gk-good-text); }
 
 .gk-flash {
-  border-left: 3px solid #1e7d34;
+  border-left: 3px solid var(--gk-good);
   background: var(--md-code-bg-color);
   padding: .6rem .9rem;
   border-radius: 0 .4rem .4rem 0;
@@ -257,7 +257,7 @@
 
 /* Adopt-the-defaults card */
 .gk-dec-defaults {
-  border-left-color: #1e7d34;
+  border-left-color: var(--gk-good-text);
 }
 
 .gk-dec-deflist {
@@ -290,7 +290,7 @@
 /* A second obligation set that stacks on the tier (e.g. Art. 50 transparency
  * on a high-risk chatbot). */
 .gk-verdict-extra {
-  border-left: 3px solid #3f51b5;
+  border-left: 3px solid var(--gk-brand);
   background: var(--md-code-bg-color);
   padding: .7rem 1rem;
   border-radius: 0 .4rem .4rem 0;
@@ -301,7 +301,7 @@
 /* Stay on the outcome after recording, with the follow-up actions attached to
  * the entry just created. Returning to the landing page here stranded the user. */
 .gk-recorded {
-  border-left: 3px solid #1e7d34;
+  border-left: 3px solid var(--gk-good);
   background: var(--md-code-bg-color);
   padding: .9rem 1.1rem;
   border-radius: 0 .4rem .4rem 0;

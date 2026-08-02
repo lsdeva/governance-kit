@@ -21,3 +21,7 @@ __pycache__/
 Thumbs.db
 .idea/
 .vscode/
+
+# Design mock — reference only, not part of the site (do not commit)
+govkitlandingmock.html
+design/

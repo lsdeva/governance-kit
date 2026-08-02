@@ -152,12 +152,12 @@
 }
 
 .gk-btn-danger {
-  border-color: #b3261e;
-  color: #b3261e;
+  border-color: var(--gk-critical-text);
+  color: var(--gk-critical-text);
 }
 
 .gk-btn-danger:hover {
-  background: #b3261e;
+  background: var(--gk-critical);
   color: #fff;
 }
 
@@ -234,7 +234,7 @@
 }
 
 .gk-chip.is-done:not(.is-on) {
-  border-color: #1e7d34;
+  border-color: var(--gk-good-text);
 }
 
 .gk-chip-n {
@@ -291,11 +291,11 @@
   border-radius: 0.8rem;
 }
 
-.gk-sev-5 { background: #fdecea; color: #b3261e; }
-.gk-sev-4 { background: #fdf0e3; color: #a25b12; }
+.gk-sev-5 { background: var(--gk-critical-bg); color: var(--gk-critical-text); }
+.gk-sev-4 { background: var(--gk-warn-bg); color: var(--gk-warn-text); }
 
-[data-md-color-scheme="slate"] .gk-sev-5 { background: #3a1614; color: #f2b8b5; }
-[data-md-color-scheme="slate"] .gk-sev-4 { background: #3a2a12; color: #f0c088; }
+[data-md-color-scheme="slate"] .gk-sev-5 { background: var(--gk-critical-bg); color: var(--gk-critical-text); }
+[data-md-color-scheme="slate"] .gk-sev-4 { background: var(--gk-warn-bg); color: var(--gk-warn-text); }
 
 .gk-q-text {
   font-weight: 600;
@@ -353,10 +353,10 @@
   border-color: var(--md-accent-fg-color);
 }
 
-.gk-opt-yes.is-on     { background: #1e7d34; border-color: #1e7d34; color: #fff; }
-.gk-opt-partial.is-on { background: #a25b12; border-color: #a25b12; color: #fff; }
-.gk-opt-no.is-on      { background: #b3261e; border-color: #b3261e; color: #fff; }
-.gk-opt-na.is-on      { background: #546e7a; border-color: #546e7a; color: #fff; }
+.gk-opt-yes.is-on     { background: var(--gk-good); border-color: var(--gk-good-text); color: #fff; }
+.gk-opt-partial.is-on { background: var(--gk-warn); border-color: var(--gk-warn-text); color: #fff; }
+.gk-opt-no.is-on      { background: var(--gk-critical); border-color: var(--gk-critical-text); color: #fff; }
+.gk-opt-na.is-on      { background: var(--gk-neutral-text); border-color: var(--gk-neutral-text); color: #fff; }
 
 .gk-note {
   width: 100%;
@@ -427,10 +427,10 @@
 .gk-score-value { font-size: 3.2rem; }
 .gk-score-pct   { font-size: 1.3rem; opacity: 0.6; }
 
-.gk-score-num[data-band="Advanced"]    { color: #1e7d34; }
-.gk-score-num[data-band="Established"] { color: #2e7d32; }
-.gk-score-num[data-band="Developing"]  { color: #a25b12; }
-.gk-score-num[data-band="Early"]       { color: #b3261e; }
+.gk-score-num[data-band="Advanced"]    { color: var(--gk-good-text); }
+.gk-score-num[data-band="Established"] { color: var(--gk-good-text); }
+.gk-score-num[data-band="Developing"]  { color: var(--gk-warn-text); }
+.gk-score-num[data-band="Early"]       { color: var(--gk-critical-text); }
 
 .gk-score-text h2 {
   margin: 0 0 0.2rem;
@@ -456,11 +456,11 @@
   font-size: 1.05rem;
 }
 
-.gk-delta.is-up   { color: #1e7d34; }
-.gk-delta.is-down { color: #b3261e; }
+.gk-delta.is-up   { color: var(--gk-good-text); }
+.gk-delta.is-down { color: var(--gk-critical-text); }
 
-[data-md-color-scheme="slate"] .gk-delta.is-up   { color: #8fe0a3; }
-[data-md-color-scheme="slate"] .gk-delta.is-down { color: #f2b8b5; }
+[data-md-color-scheme="slate"] .gk-delta.is-up   { color: var(--gk-good-text); }
+[data-md-color-scheme="slate"] .gk-delta.is-down { color: var(--gk-critical-text); }
 
 .gk-trend-now td {
   background: var(--md-code-bg-color);
@@ -500,9 +500,9 @@
   border-radius: 0.35rem;
 }
 
-.gk-catfill.is-good { background: #1e7d34; }
-.gk-catfill.is-mid  { background: #a25b12; }
-.gk-catfill.is-bad  { background: #b3261e; }
+.gk-catfill.is-good { background: var(--gk-good); }
+.gk-catfill.is-mid  { background: var(--gk-warn); }
+.gk-catfill.is-bad  { background: var(--gk-critical); }
 
 .gk-catpct {
   text-align: right;
@@ -533,7 +533,7 @@
 }
 
 .gk-table tr.is-bad-row td:first-child {
-  box-shadow: inset 3px 0 0 #b3261e;
+  box-shadow: inset 3px 0 0 var(--gk-critical);
 }
 
 .gk-note-shown {
@@ -601,9 +601,9 @@
   background: var(--md-accent-fg-color);
 }
 
-.gk-cl-fill.is-good { background: #1e7d34; }
-.gk-cl-fill.is-mid  { background: #a25b12; }
-.gk-cl-fill.is-bad  { background: #b3261e; }
+.gk-cl-fill.is-good { background: var(--gk-good); }
+.gk-cl-fill.is-mid  { background: var(--gk-warn); }
+.gk-cl-fill.is-bad  { background: var(--gk-critical); }
 
 .gk-cl-note {
   font-size: 0.8rem;
@@ -704,6 +704,8 @@
   }
 
   .gk-table th {
+    /* Print only: a literal grey, since tokens follow the screen theme
+       and a dark-mode header would waste toner. */
     background: #f0f0f0 !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
