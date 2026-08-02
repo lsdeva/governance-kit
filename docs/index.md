@@ -17,8 +17,8 @@ Omnibus dates.
 </p>
 
 [Take the assessment](assess/index.md){ .md-button .md-button--primary }
+[Open the workspace](workspace.md){ .md-button }
 [Browse the templates](getting-started.md){ .md-button }
-[I've been asked to…](tasks.md){ .md-button }
 
 <div class="gk-stats" markdown>
 --8<-- "stats.md"
@@ -152,6 +152,13 @@ The kit covers data and AI governance end to end — 25 templates across six are
 
     The same templates mapped to ISO/IEC 42001, NIST AI RMF, Singapore's Model
     AI Governance Framework, and the EU AI Act.
+
+- :material-table-edit:{ .lg } **[Fill in the registers here](workspace.md)**
+
+    ---
+
+    Nine registers editable in the browser — dropdowns, live scoring, autosave,
+    and export to real Excel. Nothing is uploaded.
 
 - :material-clipboard-text-search:{ .lg } **[I've been asked to…](tasks.md)**
 

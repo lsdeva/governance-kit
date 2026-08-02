@@ -54,10 +54,14 @@ theme:
 extra_css:
   - stylesheets/extra.css
   - assess/assess.css
+  - assess/registers.css
 
 extra_javascript:
   - assess/assess.js
   - assess/checklist.js
+  # xlsx.js must load before registers.js — it provides window.GKXlsx.
+  - assess/xlsx.js
+  - assess/registers.js
 
 markdown_extensions:
   - admonition
@@ -97,6 +101,7 @@ nav:
   - Home: index.md
   - Get started: getting-started.md
   - Assessment: assess/index.md
+  - Workspace: workspace.md
   - I've been asked to…: tasks.md
   - 30/60/90-day plans: plans.md
   - Standards crosswalk: crosswalk.md

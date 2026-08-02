@@ -21,6 +21,14 @@
 
 ---
 
+## Fill it in here
+
+Work directly in the browser — nothing is uploaded, and your rows are saved on this device. Download to Excel whenever you want, or save a file you can reopen later.
+
+<div class="gk-reg-host" data-register="maturity-assessment" data-src="../../assess/register-data.json"><p class="gk-muted">Loading the editable register…</p></div>
+
+---
+
 ## The template
 
 ### Maturity levels

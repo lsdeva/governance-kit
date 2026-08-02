@@ -229,6 +229,27 @@ def render_template_page(t: dict, by_id: dict, snippets: dict, questions: list) 
             f"[readiness assessment]({rel_link(path, 'assess/index.md')}).\n"
         )
 
+    # Editable register, for the templates people actually work IN rather than
+    # read. Collapsed by default so it never buries the template itself.
+    if t["id"] in SPREADSHEET_IDS:
+        parts.append("---\n")
+        parts.append('## Fill it in here\n')
+        parts.append(
+            "Work directly in the browser — nothing is uploaded, and your rows "
+            "are saved on this device. Download to Excel whenever you want, or "
+            "save a file you can reopen later.\n"
+        )
+        # NOTE: this is a raw HTML attribute, so MkDocs does NOT rewrite it the
+        # way it rewrites Markdown links. rel_link() is relative to the .md
+        # source, but the published page lives one directory deeper
+        # (docs/a/b.md -> /a/b/), so compute the depth from the URL instead.
+        depth = len(Path(path).parts)  # b.md in a/ -> ['a','b.md'] -> 2 levels up
+        parts.append(
+            '<div class="gk-reg-host" data-register="' + t["id"] + '" '
+            'data-src="' + ("../" * depth) + 'assess/register-data.json">'
+            '<p class="gk-muted">Loading the editable register…</p></div>\n'
+        )
+
     parts.append("---\n")
     parts.append("## The template\n")
 
@@ -315,6 +336,56 @@ def render_examples_index(examples: list, company: dict, by_id: dict) -> str:
             f"| [{tpl['title']}]({rel_link(path, tpl['path'])}) |"
         )
     parts.append("")
+    parts.append(SNIPPETS_CACHE["not_legal_advice"])
+    return "\n".join(parts)
+
+
+def render_workspace_page(sheets_raw: dict, by_id: dict) -> str:
+    """One page listing every editable register, for working across several."""
+    path = "workspace.md"
+    parts = [BANNER.format(source="spreadsheets.yml")]
+    parts.append("# Workspace\n")
+    parts.append(
+        "Every register in the kit can be filled in directly in your browser — "
+        "no download, no account, nothing uploaded. Your rows are saved on this "
+        "device and can be exported to Excel or CSV at any time.\n"
+    )
+    parts.append(
+        '!!! info "Where your data lives"\n'
+        "    Each register is stored separately in this browser's local storage.\n"
+        "    Clearing your browser data, or using a different device or a\n"
+        "    private window, will lose it — so use **Save file** on anything you\n"
+        "    want to keep, and **Open file** to pick it back up later.\n"
+    )
+    parts.append("## The editable registers\n")
+    parts.append("| Register | What it records | Columns |")
+    parts.append("|---|---|---|")
+    for tid, spec in sheets_raw.items():
+        t = by_id[tid]
+        n = len(spec["columns"]) + sum(
+            len(s["columns"]) for s in spec.get("extra_sheets", []))
+        purpose = " ".join(t["purpose"].split())
+        if len(purpose) > 120:
+            purpose = purpose[:117].rsplit(" ", 1)[0] + "…"
+        parts.append(
+            f"| [{t['title']}]({rel_link(path, t['path'])}) | {purpose} | {n} |"
+        )
+    parts.append("")
+    parts.append(
+        SNIPPET_ASSESS.format(assess=rel_link(path, "assess/index.md"))
+    )
+    parts.append("## How it fits together\n")
+    parts.append(
+        "1. **[Take the assessment](" + rel_link(path, "assess/index.md") +
+        ")** to find your gaps.\n"
+        "2. Open the **Risk Register** — it offers to turn every open gap into a "
+        "draft risk, already scored, so you are editing rather than starting "
+        "from a blank page.\n"
+        "3. Fill in the **AI System Inventory** as you discover systems; it is "
+        "the register everything else depends on.\n"
+        "4. Export to Excel when you need to share, or print the report for a "
+        "board pack.\n"
+    )
     parts.append(SNIPPETS_CACHE["not_legal_advice"])
     return "\n".join(parts)
 
@@ -667,9 +738,11 @@ def build_assessment_json(roles, questions, templates, sections) -> dict:
     }
 
 
-def build_nav(sections, templates, examples, tasks, plans, crosswalk) -> str:
+def build_nav(sections, templates, examples, tasks, plans, crosswalk, workspace) -> str:
     lines = [NAV_START, "nav:", "  - Home: index.md", "  - Get started: getting-started.md",
              "  - Assessment: assess/index.md"]
+    if workspace:
+        lines.append("  - Workspace: workspace.md")
     if tasks:
         lines.append("  - I've been asked to…: tasks.md")
     if plans:
@@ -721,7 +794,8 @@ def main() -> int:
 
     SNIPPET_ASSESS = snippets["assess_callout"]
     SNIPPETS_CACHE.update(snippets)
-    SPREADSHEET_IDS.update((load("spreadsheets.yml") or {}).keys())
+    sheets_raw = load("spreadsheets.yml") or {}
+    SPREADSHEET_IDS.update(sheets_raw.keys())
 
     examples_data = load("examples.yml") or {}
     company = examples_data.get("company", {})
@@ -812,6 +886,11 @@ def main() -> int:
     )
     write(ROOT / "snippets" / "stats.md", stats, written, args.check)
 
+    # ---- workspace ----------------------------------------------------------
+    if sheets_raw:
+        write(DOCS / "workspace.md",
+              render_workspace_page(sheets_raw, by_id), written, args.check)
+
     # ---- task index, plans, crosswalk ---------------------------------------
     tasks = load("tasks.yml") or []
     if tasks:
@@ -834,6 +913,37 @@ def main() -> int:
             write(DOCS / e["path"],
                   render_example_page(e, company, by_id), written, args.check)
 
+    # ---- editable register data --------------------------------------------
+    # Same source as the .xlsx downloads, so the in-browser editor and the
+    # generated spreadsheet can never disagree about columns or dropdowns.
+    # sheets_raw is loaded near the top, alongside the other data files.
+    registers = {}
+    for tid, spec in sheets_raw.items():
+        tpl = by_id[tid]
+        registers[tid] = {
+            "id": tid,
+            "title": tpl["title"],
+            "url": rel_link("assess/index.md", tpl["path"]).replace(".md", "/"),
+            "main": {
+                "name": spec.get("sheet", tpl["title"]),
+                "intro": " ".join(spec.get("intro", "").split()),
+                "columns": spec["columns"],
+                "rows": spec.get("rows", []),
+            },
+            "extra_sheets": [
+                {
+                    "name": s["name"],
+                    "columns": s["columns"],
+                    "rows": s.get("rows", []),
+                }
+                for s in spec.get("extra_sheets", [])
+            ],
+        }
+    write(DOCS / "assess" / "register-data.json",
+          json.dumps({"version": 1, "registers": registers},
+                     indent=2, ensure_ascii=False) + "\n",
+          written, args.check)
+
     # ---- assessment data ----------------------------------------------------
     payload = build_assessment_json(roles, questions, templates, sections)
     write(DOCS / "assess" / "assessment-data.json",
@@ -842,7 +952,7 @@ def main() -> int:
     # ---- navigation in mkdocs.yml ------------------------------------------
     mk = ROOT / "mkdocs.yml"
     text = mk.read_text(encoding="utf-8")
-    nav = build_nav(sections, templates, examples, tasks, plans, crosswalk)
+    nav = build_nav(sections, templates, examples, tasks, plans, crosswalk, bool(sheets_raw))
     if NAV_START in text and NAV_END in text:
         new_text = re.sub(
             re.escape(NAV_START) + r".*?" + re.escape(NAV_END),

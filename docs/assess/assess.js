@@ -1013,6 +1013,11 @@
 
   function init(data) {
     DATA = data;
+    // Published so the register editor can turn a visitor's open assessment
+    // gaps into draft risk-register rows without refetching or duplicating the
+    // question bank.
+    window.GK_QUESTIONS = {};
+    data.questions.forEach(function (q) { window.GK_QUESTIONS[q.id] = q; });
     var saved = load();
     if (saved) {
       state.roles = (saved.roles || []).filter(function (id) {
