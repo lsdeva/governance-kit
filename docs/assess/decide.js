@@ -18,10 +18,13 @@
   "use strict";
 
   var LOG_KEY = "gk-decisions-v1";
+  var REGISTER_KEY = "gk-register-ai-system-inventory";
   var DATA = null;
+  var REGISTER_DEF = null;   // lazily fetched column definitions
   var host = null;
 
   var state = {
+    flash: null,       // one-shot confirmation after writing to the register
     decisionId: null,
     subject: "",
     path: [],        // [{qid, question, answer, label}]
@@ -100,6 +103,139 @@
     });
     saveLog(entries);
     return entries;
+  }
+
+  // -------------------------------------------- write-through to the register
+
+  /*
+   * Push a recorded risk-tier decision into the AI System Inventory.
+   *
+   * Shares localStorage with registers.js, so the shape must match exactly:
+   * {id, sheets: [[row, ...]], savedAt}, rows as arrays of strings whose length
+   * equals the column count. registers.js discards any sheet whose first row is
+   * the wrong width, so getting this wrong silently loses the user's data.
+   *
+   * Columns are addressed BY NAME. Indexes would break the moment anyone
+   * reorders data/spreadsheets.yml.
+   */
+  function registerColumns() {
+    return REGISTER_DEF && REGISTER_DEF.main ? REGISTER_DEF.main.columns : null;
+  }
+
+  function colIndex(columns, name) {
+    for (var i = 0; i < columns.length; i++) {
+      if (columns[i].name === name) return i;
+    }
+    return -1;
+  }
+
+  function loadRegister() {
+    try { return JSON.parse(localStorage.getItem(REGISTER_KEY)); }
+    catch (e) { return null; }
+  }
+
+  /* Next free AI-nnn, scanning whatever IDs are already in the sheet. */
+  function nextSystemId(rows, idIdx) {
+    var max = 0;
+    rows.forEach(function (r) {
+      var m = /^AI-(\d+)$/.exec(String(r[idIdx] || "").trim());
+      if (m) max = Math.max(max, parseInt(m[1], 10));
+    });
+    return "AI-" + String(max + 1).padStart(3, "0");
+  }
+
+  function isBlankRow(row) {
+    return row.every(function (c) { return String(c == null ? "" : c).trim() === ""; });
+  }
+
+  /* An operator-role verdict for the same subject, if the user has recorded one. */
+  function roleFor(subject) {
+    var want = String(subject || "").trim().toLowerCase();
+    if (!want) return "";
+    var match = loadLog().filter(function (e) {
+      return e.decisionId === "operator-role" &&
+        String(e.subject || "").trim().toLowerCase() === want;
+    });
+    if (!match.length) return "";
+    // Latest wins, and strip the parenthetical qualifier: the register's
+    // "Our role" column is a dropdown of Provider/Deployer/Importer/Distributor.
+    var verdict = match[match.length - 1].verdict || "";
+    return verdict.split("(")[0].trim();
+  }
+
+  function addToInventory(entry) {
+    var columns = registerColumns();
+    if (!columns) return { ok: false, why: "The register definition is not loaded." };
+
+    var saved = loadRegister();
+    var sheets;
+    if (saved && Array.isArray(saved.sheets) && saved.sheets.length &&
+        Array.isArray(saved.sheets[0]) && saved.sheets[0].length &&
+        saved.sheets[0][0].length === columns.length) {
+      sheets = saved.sheets;
+    } else if (saved && saved.sheets) {
+      // Existing data of an unexpected shape — refuse rather than overwrite it.
+      return {
+        ok: false,
+        why: "Your saved register has a different shape to the current " +
+             "template, so nothing was changed. Open the register and export " +
+             "it before trying again."
+      };
+    } else {
+      // Fresh start, matching what registers.js creates.
+      var blank = [];
+      for (var i = 0; i < 5; i++) {
+        blank.push(columns.map(function () { return ""; }));
+      }
+      sheets = [blank];
+      (REGISTER_DEF.extra_sheets || []).forEach(function (s) {
+        var rows = [];
+        for (var j = 0; j < 5; j++) {
+          rows.push(s.columns.map(function () { return ""; }));
+        }
+        sheets.push(rows);
+      });
+    }
+
+    var rows = sheets[0];
+    var idIdx = colIndex(columns, "System ID");
+    var row = columns.map(function () { return ""; });
+
+    function set(name, value) {
+      var i = colIndex(columns, name);
+      if (i !== -1 && value) row[i] = value;
+    }
+
+    var rationale = entry.path.map(function (p) {
+      return p.question + " " + p.answer;
+    }).join("; ");
+
+    set("System ID", idIdx === -1 ? "" : nextSystemId(rows, idIdx));
+    set("System name", entry.subject);
+    set("Purpose", entry.subject);
+    set("Risk tier", entry.verdict);
+    set("Tier rationale", rationale);
+    set("Annex ref", entry.ref || "");
+    set("Our role", roleFor(entry.subject));
+    set("Last reviewed", entry.date);
+
+    // Fill the first fully-blank row, else append. Never overwrite real data.
+    var placed = false;
+    for (var k = 0; k < rows.length; k++) {
+      if (isBlankRow(rows[k])) { rows[k] = row; placed = true; break; }
+    }
+    if (!placed) rows.push(row);
+
+    try {
+      localStorage.setItem(REGISTER_KEY, JSON.stringify({
+        id: "ai-system-inventory",
+        sheets: sheets,
+        savedAt: new Date().toISOString()
+      }));
+    } catch (e) {
+      return { ok: false, why: "This browser would not store the register." };
+    }
+    return { ok: true, systemId: row[idIdx] || "" };
   }
 
   function decision() {
@@ -433,14 +569,60 @@
       " recorded on this device."
     ]));
 
+    if (state.flash) {
+      var reg = DATA.templates && DATA.templates["ai-system-inventory"];
+      sec.appendChild(el("div", { class: "gk-flash" }, [
+        el("strong", {}, [state.flash + " "]),
+        reg ? el("a", { href: reg.url }, ["Open the AI System Inventory"]) : null,
+        el("span", { class: "gk-muted" }, [
+          " — the row is there, ready to complete."
+        ])
+      ]));
+      state.flash = null;
+    }
+
     var tbl = el("table", { class: "gk-table" });
     tbl.appendChild(el("thead", {}, [el("tr", {}, [
       el("th", {}, ["Ref"]), el("th", {}, ["Subject"]),
       el("th", {}, ["Decision"]), el("th", {}, ["Verdict"]),
-      el("th", {}, ["Basis"]), el("th", {}, ["Date"]), el("th", {}, [""])
+      el("th", {}, ["Basis"]), el("th", {}, ["Date"]),
+      el("th", {}, ["Actions"])
     ])]));
     var tb = el("tbody");
     entries.forEach(function (e, i) {
+      var actions = el("td", { class: "gk-log-actions" });
+
+      // A classification belongs in the inventory. Offer to put it there
+      // rather than making the user retype what the site already knows.
+      if (e.decisionId === "risk-tier" && registerColumns()) {
+        actions.appendChild(el("button", {
+          class: "gk-btn gk-btn-small", type: "button",
+          title: "Write this classification into your AI System Inventory",
+          onclick: function () {
+            var res = addToInventory(e);
+            if (!res.ok) { window.alert(res.why); return; }
+            var all = loadLog();
+            all[i].inventoried = res.systemId || true;
+            saveLog(all);
+            state.flash = "Added " + (res.systemId || "the system") +
+              " to your AI System Inventory.";
+            render();
+          }
+        }, [e.inventoried ? "Add again" : "Add to inventory"]));
+      }
+      if (e.inventoried) {
+        actions.appendChild(el("span", { class: "gk-log-done" }, [
+          typeof e.inventoried === "string" ? e.inventoried + " ✓" : "✓"
+        ]));
+      }
+      actions.appendChild(el("button", {
+        class: "gk-reg-x", type: "button", title: "Remove this entry",
+        onclick: function () {
+          if (!window.confirm("Remove " + e.id + " from the log?")) return;
+          var all = loadLog(); all.splice(i, 1); saveLog(all); render();
+        }
+      }, ["×"]));
+
       tb.appendChild(el("tr", {}, [
         el("td", {}, [e.id]),
         el("td", {}, [e.subject]),
@@ -448,13 +630,7 @@
         el("td", {}, [el("strong", {}, [e.verdict])]),
         el("td", {}, [e.ref || "—"]),
         el("td", {}, [e.date]),
-        el("td", {}, [el("button", {
-          class: "gk-reg-x", type: "button", title: "Remove this entry",
-          onclick: function () {
-            if (!window.confirm("Remove " + e.id + " from the log?")) return;
-            var all = loadLog(); all.splice(i, 1); saveLog(all); render();
-          }
-        }, ["×"])])
+        actions
       ]));
     });
     tbl.appendChild(tb);
@@ -545,12 +721,29 @@
     if (DATA) { render(); return; }
 
     var src = host.getAttribute("data-src") || "decision-data.json";
+    // The register definition sits beside the decision data. Needed so a
+    // recorded classification can be written into the AI System Inventory
+    // using the same columns registers.js uses. Its failure is non-fatal —
+    // the flows still work, only the inventory button is withheld.
+    var rsrc = src.replace(/decision-data\.json$/, "register-data.json");
+
     fetch(src, { credentials: "omit" })
       .then(function (r) {
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
-      .then(function (json) { DATA = json; render(); })
+      .then(function (json) {
+        DATA = json;
+        return fetch(rsrc, { credentials: "omit" })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function () { return null; });
+      })
+      .then(function (rjson) {
+        if (rjson && rjson.registers) {
+          REGISTER_DEF = rjson.registers["ai-system-inventory"] || null;
+        }
+        render();
+      })
       .catch(function (err) {
         host.innerHTML = "<p>The guided decisions could not load (" +
           esc(err.message) + ").</p>";

@@ -224,3 +224,33 @@
     break-inside: avoid;
   }
 }
+
+/* Decision-log row actions, and the confirmation after a write-through
+ * into the AI System Inventory. */
+.gk-log-actions {
+  white-space: nowrap;
+}
+
+.gk-btn-small {
+  font-size: .72rem;
+  padding: .2rem .5rem;
+  margin-right: .3rem;
+}
+
+.gk-log-done {
+  font-size: .72rem;
+  color: #1e7d34;
+  font-weight: 600;
+  margin-right: .3rem;
+}
+
+[data-md-color-scheme="slate"] .gk-log-done { color: #8fe0a3; }
+
+.gk-flash {
+  border-left: 3px solid #1e7d34;
+  background: var(--md-code-bg-color);
+  padding: .6rem .9rem;
+  border-radius: 0 .4rem .4rem 0;
+  margin: .75rem 0;
+  font-size: .88rem;
+}
