@@ -1099,6 +1099,20 @@ def main() -> int:
                     targets = [o["next"] for o in q["options"]]
                 else:
                     targets = [q.get(True), q.get(False)]
+                    # Which branch is the cautious one depends on the question.
+                    # On the Art. 6(3) derogation, YES grants an escape from
+                    # high-risk, so mapping "not sure" to yes would hand an
+                    # uncertain user the WEAKER obligations. Each yes/no
+                    # question may declare its safe branch; default is yes.
+                    if q.get("unsure") not in (None, "yes", "no"):
+                        raise SystemExit(
+                            f"ERROR: {d['id']}/{q['id']} has unsure="
+                            f"{q['unsure']!r}; must be 'yes' or 'no'")
+                    if q.get("unsure") == "no" and not q.get("unsure_note"):
+                        raise SystemExit(
+                            f"ERROR: {d['id']}/{q['id']} inverts the 'not sure' "
+                            "default but gives no unsure_note explaining why. "
+                            "A user needs to be told which way it resolved.")
                 for tgt in targets:
                     if tgt is None:
                         raise SystemExit(
@@ -1109,10 +1123,18 @@ def main() -> int:
                             raise SystemExit(
                                 f"ERROR: {d['id']}/{q['id']} points at unknown "
                                 f"question '{tgt}'")
-                    elif tgt.get("outcome") not in oids:
-                        raise SystemExit(
-                            f"ERROR: {d['id']}/{q['id']} points at unknown "
-                            f"outcome '{tgt.get('outcome')}'")
+                    else:
+                        if tgt.get("outcome") not in oids:
+                            raise SystemExit(
+                                f"ERROR: {d['id']}/{q['id']} points at unknown "
+                                f"outcome '{tgt.get('outcome')}'")
+                        # `then` settles the tier but keeps asking, because some
+                        # obligations stack (a high-risk chatbot also owes
+                        # Art. 50 disclosure).
+                        if tgt.get("then") and tgt["then"] not in qids:
+                            raise SystemExit(
+                                f"ERROR: {d['id']}/{q['id']} continues to "
+                                f"unknown question '{tgt['then']}'")
             for o in d["outcomes"]:
                 for tid in o.get("templates", []):
                     if tid not in by_id:
@@ -1165,6 +1187,8 @@ def main() -> int:
                         walk(tgt, depth + 1)
                     else:
                         reached_o.add(tgt["outcome"])
+                        if tgt.get("then"):
+                            walk(tgt["then"], depth + 1)
 
             walk(d["start"], 0)
             orphan_q = qids - reached_q

@@ -25,6 +25,7 @@
 
   var state = {
     flash: null,       // one-shot confirmation after writing to the register
+    primary: null,     // a settled tier while stacked duties are still asked
     decisionId: null,
     subject: "",
     path: [],        // [{qid, question, answer, label}]
@@ -92,8 +93,10 @@
       decision: d.title,
       decisionId: d.id,
       subject: state.subject || "(unnamed system)",
-      verdict: state.outcome.tier,
-      ref: state.outcome.ref || null,
+      verdict: state.outcome.tier +
+        (state.outcome.additional ? " + " + state.outcome.additional.tier : ""),
+      ref: [state.outcome.ref, state.outcome.additional &&
+            state.outcome.additional.ref].filter(Boolean).join("; ") || null,
       headline: state.outcome.headline,
       date: todayISO(),
       at: new Date().toISOString(),
@@ -303,6 +306,7 @@
     state.decisionId = id;
     state.path = [];
     state.outcome = null;
+    state.primary = null;
     if (!keepSubject) state.subject = "";
     state.current = decision().start;
     render();
@@ -317,8 +321,27 @@
       state.outcome = null;
     } else if (resultOrNext && resultOrNext.outcome) {
       var o = outcomeById(resultOrNext.outcome);
-      state.outcome = Object.assign({}, o, { ref: resultOrNext.ref || null });
-      state.current = null;
+      var reached = Object.assign({}, o, { ref: resultOrNext.ref || null });
+
+      // `then` means the tier is settled but the questioning continues, because
+      // some obligations stack: a high-risk chatbot owes Art. 50 disclosure as
+      // well as the full high-risk set. The tier is held and any further
+      // outcome is recorded as an ADDITIONAL duty rather than replacing it.
+      if (resultOrNext.then) {
+        state.primary = reached;
+        state.current = resultOrNext.then;
+        state.outcome = null;
+      } else if (state.primary) {
+        // A second outcome after a held tier: keep the tier, add the duty.
+        state.outcome = Object.assign({}, state.primary, {
+          additional: reached.tier === "Minimal" ? null : reached
+        });
+        state.primary = null;
+        state.current = null;
+      } else {
+        state.outcome = reached;
+        state.current = null;
+      }
     }
     render();
   }
@@ -328,6 +351,7 @@
     if (!state.path.length) return;
     var last = state.path.pop();
     state.outcome = null;
+    state.primary = null;   // re-derived by replaying from this question
     state.current = last.qid;
     render();
   }
@@ -518,18 +542,30 @@
         class: "gk-dec-opt is-no", type: "button",
         onclick: function () { answer(q, q["no"], "No"); }
       }, ["No"]));
+      // Which branch is SAFER depends on the question. On most, Yes means
+      // "this risk applies" and is the cautious answer. But on the Art. 6(3)
+      // derogation, Yes grants an escape from high-risk — so treating "not
+      // sure" as Yes there would hand an uncertain user the weaker obligations.
+      // Each question therefore declares its own safe branch.
+      var safe = q.unsure === "no" ? "no" : "yes";
       opts.appendChild(el("button", {
         class: "gk-dec-opt is-unsure", type: "button",
-        title: "Treated as Yes — over-classifying is the safer error",
-        onclick: function () { answer(q, q["yes"], "Not sure (treated as Yes)"); }
+        title: "Treated as " + (safe === "no" ? "No" : "Yes") +
+          " — the more cautious answer here",
+        onclick: function () {
+          answer(q, q[safe], "Not sure (treated as " +
+            (safe === "no" ? "No" : "Yes") + ")");
+        }
       }, ["Not sure"]));
     }
     wrap.appendChild(opts);
 
     if (q.options === undefined) {
+      var safeLabel = q.unsure === "no" ? "No" : "Yes";
       wrap.appendChild(el("p", { class: "gk-muted gk-dec-unsure" }, [
-        "Not sure? It counts as Yes. Over-classifying costs effort; " +
-        "under-classifying costs a great deal more."
+        q.unsure_note ||
+        ("Not sure? It counts as " + safeLabel + ". Over-classifying costs " +
+         "effort; under-classifying costs a great deal more.")
       ]));
     }
 
@@ -574,9 +610,27 @@
       ]));
     }
 
+    // Obligations stack: a high-risk chatbot owes Art. 50 disclosure on top of
+    // the high-risk set. Show the additional duty rather than letting the tier
+    // imply the obligation list is complete.
+    if (o.additional) {
+      wrap.appendChild(el("div", { class: "gk-verdict-extra" }, [
+        el("strong", {}, ["Transparency duties apply as well. "]),
+        el("span", {}, [o.additional.detail]),
+        o.additional.ref
+          ? el("span", { class: "gk-verdict-ref" }, [" " + o.additional.ref])
+          : null
+      ]));
+    }
+
     wrap.appendChild(el("h3", {}, ["What to do now"]));
     var ol = el("ol", { class: "gk-dec-actions" });
     o.actions.forEach(function (a) { ol.appendChild(el("li", {}, actionNodes(a))); });
+    if (o.additional) {
+      o.additional.actions.forEach(function (a) {
+        ol.appendChild(el("li", {}, actionNodes(a)));
+      });
+    }
     wrap.appendChild(ol);
 
     if (o.counsel) {

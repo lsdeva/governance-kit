@@ -119,7 +119,7 @@
       # Not an Annex III area and not an Annex I safety component, so the
       # Art. 6(3) narrowing is irrelevant — go straight to the transparency
       # questions.
-      yes: { outcome: high-risk, ref: "Annex I" }
+      yes: { outcome: high-risk, ref: "Annex I", then: lim-interaction }
       no: lim-interaction
 
     - id: hr-derogation
@@ -130,8 +130,34 @@
         over-claimed provision in the Act. Be honest: if the human who reviews
         the output almost always accepts it, the system is not merely
         preparatory — it is deciding.
-      yes: { outcome: high-risk-derogation, ref: "Art. 6(3)" }
-      no: { outcome: high-risk, ref: "Annex III" }
+      # On this question YES grants the escape from the full high-risk set, so
+      # the cautious answer is NO. Without this, "not sure" would hand an
+      # uncertain user the weaker obligations — the opposite of safe.
+      unsure: "no"
+      unsure_note: >-
+        Not sure means the derogation does not apply. The burden of showing it
+        does is on you, so treat the system as fully high-risk until you can
+        evidence otherwise.
+      yes: hr-profiling
+      no: { outcome: high-risk, ref: "Annex III", then: lim-interaction }
+
+    - id: hr-profiling
+      stage: High-risk areas
+      text: Does the system profile people — that is, does it evaluate or predict anything about an individual's characteristics, behaviour, performance, or circumstances?
+      help: >-
+        Ranking, scoring, or predicting anything about a person counts, even if
+        a human signs off afterwards. Screening job applicants, scoring credit
+        applicants, or predicting who will leave are all profiling. Detecting
+        duplicate records or extracting a date from a form is not.
+      # Art. 6(3) final subparagraph: a system that performs profiling of
+      # natural persons is ALWAYS high-risk, with no derogation available.
+      # So here YES removes the escape, and "not sure" must mean yes.
+      unsure: "yes"
+      unsure_note: >-
+        Not sure means treat it as profiling. The derogation is unavailable to
+        profiling systems with no exceptions, so this is the safer reading.
+      yes: { outcome: high-risk, ref: "Art. 6(3), final subparagraph", then: lim-interaction }
+      no: { outcome: high-risk-derogation, ref: "Art. 6(3)", then: lim-interaction }
 
     # --- Stage 3: transparency obligations (Art. 50). ---
     - id: lim-interaction
@@ -353,6 +379,8 @@
           next: { outcome: importer, ref: "Art. 3(6)" }
         - label: We make it available in the EU, but we did not build or import it
           next: { outcome: distributor, ref: "Art. 3(7)" }
+        - label: We built it, or had it built to our specification
+          next: { outcome: provider, ref: "Art. 3(3)" }
         - label: We only use it ourselves, personally and not for work
           next: { outcome: out-of-scope }
         - label: None of these — we do operate it ourselves
@@ -365,7 +393,7 @@
         Includes selling, licensing, or offering it free to EU users. If the
         answer is genuinely no on every count, the Act does not reach this
         system — but check with counsel before relying on that.
-      yes: { outcome: provider, ref: "Art. 2(1)(a)" }
+      yes: op-supply-chain
       no: { outcome: out-of-scope }
 
   outcomes:

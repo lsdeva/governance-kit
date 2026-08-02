@@ -111,7 +111,8 @@
           "help": "Think medical devices, machinery, lifts, vehicles, toys. If your product already carries a CE mark under its own regulation and this AI affects its safety, that is Annex I.",
           "yes": {
             "outcome": "high-risk",
-            "ref": "Annex I"
+            "ref": "Annex I",
+            "then": "lim-interaction"
           },
           "no": "lim-interaction"
         },
@@ -120,13 +121,31 @@
           "stage": "High-risk areas",
           "text": "Does the system only perform a narrow procedural task, improve the result of prior human work, detect patterns without replacing human assessment, or do preparatory work?",
           "help": "This is the Art. 6(3) narrowing, and it is the most commonly over-claimed provision in the Act. Be honest: if the human who reviews the output almost always accepts it, the system is not merely preparatory — it is deciding.",
-          "yes": {
-            "outcome": "high-risk-derogation",
-            "ref": "Art. 6(3)"
-          },
+          "unsure": "no",
+          "unsure_note": "Not sure means the derogation does not apply. The burden of showing it does is on you, so treat the system as fully high-risk until you can evidence otherwise.",
+          "yes": "hr-profiling",
           "no": {
             "outcome": "high-risk",
-            "ref": "Annex III"
+            "ref": "Annex III",
+            "then": "lim-interaction"
+          }
+        },
+        {
+          "id": "hr-profiling",
+          "stage": "High-risk areas",
+          "text": "Does the system profile people — that is, does it evaluate or predict anything about an individual's characteristics, behaviour, performance, or circumstances?",
+          "help": "Ranking, scoring, or predicting anything about a person counts, even if a human signs off afterwards. Screening job applicants, scoring credit applicants, or predicting who will leave are all profiling. Detecting duplicate records or extracting a date from a form is not.",
+          "unsure": "yes",
+          "unsure_note": "Not sure means treat it as profiling. The derogation is unavailable to profiling systems with no exceptions, so this is the safer reading.",
+          "yes": {
+            "outcome": "high-risk",
+            "ref": "Art. 6(3), final subparagraph",
+            "then": "lim-interaction"
+          },
+          "no": {
+            "outcome": "high-risk-derogation",
+            "ref": "Art. 6(3)",
+            "then": "lim-interaction"
           }
         },
         {
@@ -352,6 +371,13 @@
               }
             },
             {
+              "label": "We built it, or had it built to our specification",
+              "next": {
+                "outcome": "provider",
+                "ref": "Art. 3(3)"
+              }
+            },
+            {
               "label": "We only use it ourselves, personally and not for work",
               "next": {
                 "outcome": "out-of-scope"
@@ -371,10 +397,7 @@
           "stage": "Where you sit",
           "text": "Do you place this system on the EU market, or make it available to anyone in the EU?",
           "help": "Includes selling, licensing, or offering it free to EU users. If the answer is genuinely no on every count, the Act does not reach this system — but check with counsel before relying on that.",
-          "yes": {
-            "outcome": "provider",
-            "ref": "Art. 2(1)(a)"
-          },
+          "yes": "op-supply-chain",
           "no": {
             "outcome": "out-of-scope"
           }
