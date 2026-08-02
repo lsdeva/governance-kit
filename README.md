@@ -1,16 +1,16 @@
 <div align="center">
 
-# Open Data &amp; AI Governance Kit
+# GovKit
 
-**Board-ready data &amp; AI governance templates — given away free.**
+**Board-ready data &amp; AI governance — given away free.**
 
 Take a role-based readiness assessment, get a report you can present to a board
 or a regulator, and use the 25 templates that close your gaps.<br>
 No accounts, no paywall, no email capture — and nothing ever leaves your browser.
 
-[**Take the assessment →**](https://lsdeva.github.io/governance-kit/assess/) &nbsp;·&nbsp;
-[Browse the kit](https://lsdeva.github.io/governance-kit/) &nbsp;·&nbsp;
-[EU AI Act checklist](https://lsdeva.github.io/governance-kit/eu-ai-act/readiness-checklist/) &nbsp;·&nbsp;
+[**Take the assessment →**](https://govkit.soa.team/assess/) &nbsp;·&nbsp;
+[Browse the kit](https://govkit.soa.team/) &nbsp;·&nbsp;
+[EU AI Act checklist](https://govkit.soa.team/eu-ai-act/readiness-checklist/) &nbsp;·&nbsp;
 [Contributing](docs/contributing.md)
 
 [![Deploy site](https://github.com/lsdeva/governance-kit/actions/workflows/deploy.yml/badge.svg)](https://github.com/lsdeva/governance-kit/actions/workflows/deploy.yml)
@@ -48,7 +48,7 @@ states a recommended default *and* the condition for deviating from it
 ("quarterly, unless you run high-risk systems in production"). Accepting every
 default produces a coherent, defensible programme.
 
-**[Decide](https://lsdeva.github.io/governance-kit/decide/), don't just read.**
+**[Decide](https://govkit.soa.team/decide/), don't just read.**
 The hard judgements are guided one question at a time and end in a verdict —
 with its reasoning and date recorded, exportable as evidence. The EU AI Act,
 ISO/IEC 42001 and NIST AI RMF all ask for documented, reasoned decisions, so
@@ -59,7 +59,7 @@ judgement, not industry data, and the kit holds **no peer-comparison figures** �
 producing them honestly would mean collecting your answers on a server, which
 this project will not do. Instead the report tracks *your own* movement between
 dated snapshots, which is what a board asks about anyway.
-[How scoring works](https://lsdeva.github.io/governance-kit/scoring/) sets out
+[How scoring works](https://govkit.soa.team/scoring/) sets out
 the method, the weights, and the limitations in full.
 
 ## Why this exists
@@ -97,10 +97,10 @@ sells convenience, an open commons wins on trust, reach, and durability.
 | **[Risk &amp; Control](docs/risk/)** | 3 | AI risk assessment, model cards, control library &amp; assurance map |
 | **[Board &amp; Reporting](docs/board/)** | 2 | Board pack, KPI / KRI dashboard |
 | **[EU AI Act](docs/eu-ai-act/)** | 1 + timeline | 25-point readiness checklist, obligation timeline |
-| **[Assessment](https://lsdeva.github.io/governance-kit/assess/)** | 40 questions | 8 roles, 7 categories, audience-tailored report |
-| **[Worked examples](https://lsdeva.github.io/governance-kit/examples/)** | 4 | The same templates filled in for a fictional mid-size company |
-| **[30/60/90-day plans](https://lsdeva.github.io/governance-kit/plans/)** | 4 paths | Sequenced, with effort estimates and a small-org variant |
-| **[Standards crosswalk](https://lsdeva.github.io/governance-kit/crosswalk/)** | 15 themes | ISO/IEC 42001 · NIST AI RMF · Singapore · EU AI Act |
+| **[Assessment](https://govkit.soa.team/assess/)** | 40 questions | 8 roles, 7 categories, audience-tailored report |
+| **[Worked examples](https://govkit.soa.team/examples/)** | 4 | The same templates filled in for a fictional mid-size company |
+| **[30/60/90-day plans](https://govkit.soa.team/plans/)** | 4 paths | Sequenced, with effort estimates and a small-org variant |
+| **[Standards crosswalk](https://govkit.soa.team/crosswalk/)** | 15 themes | ISO/IEC 42001 · NIST AI RMF · Singapore · EU AI Act |
 
 **Every template downloads as Word, and the registers and scoring tools as
 Excel** — with frozen headers, dropdown validation, working formulas, and
@@ -132,7 +132,7 @@ still makes them sharper — [corrections and sector variants are welcome](docs/
 | Watching AI land faster than governance | [EU AI Act Readiness Checklist](docs/eu-ai-act/readiness-checklist.md) → [AI System Inventory](docs/registers/ai-system-inventory.md) |
 | Being asked questions by a board or regulator | [Board Pack](docs/board/board-pack.md) → [Risk Register](docs/registers/risk-register.md) → [KPI / KRI Dashboard](docs/board/kpi-dashboard.md) |
 
-Full walkthrough: **[Get started](https://lsdeva.github.io/governance-kit/getting-started/)**.
+Full walkthrough: **[Get started](https://govkit.soa.team/getting-started/)**.
 
 ## Run it locally
 
@@ -310,7 +310,7 @@ Dual-licensed, the standard pattern for open content-plus-code projects:
 
 Suggested attribution:
 
-> Based on the [Open Data &amp; AI Governance Kit](https://lsdeva.github.io/governance-kit/), CC BY 4.0.
+> Based on the [Open Data &amp; AI Governance Kit](https://govkit.soa.team/), CC BY 4.0.
 
 <div align="center">
 <br>

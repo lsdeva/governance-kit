@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+
+<!--
+  Designed 404. Material serves 404.html from the site root for any unmatched
+  path, so this must not rely on relative links — every href uses the `url`
+  filter, which resolves against site_url.
+-->
+
+{% block container %}
+<div class="gk-home gk-404">
+  <div class="gk-wrap">
+    <span class="gk-eyebrow">404 · Not found</span>
+
+    <h1 class="gk-h1 gk-404-h1">
+      This page moved,<br>
+      <span class="gk-grad">or never existed.</span>
+    </h1>
+
+    <p class="gk-sub">
+      The kit is generated from data files, so pages do occasionally move when a
+      template is renamed. Nothing is lost — one of these will get you there.
+    </p>
+
+    <div class="gk-cta">
+      <a class="gk-btn-lg gk-btn-primary" href="{{ 'tasks/' | url }}">
+        I've been asked to… <span aria-hidden="true">→</span>
+      </a>
+      <a class="gk-btn-lg" href="{{ 'getting-started/' | url }}">Browse the templates</a>
+      <a class="gk-btn-lg" href="{{ '' | url }}">Back to the home page</a>
+    </div>
+
+    <div class="gk-404-links">
+      <a href="{{ 'decide/' | url }}">Classify a system</a>
+      <a href="{{ 'assess/' | url }}">Take the assessment</a>
+      <a href="{{ 'workspace/' | url }}">Fill in a register</a>
+      <a href="{{ 'eu-ai-act/timeline/' | url }}">EU AI Act timeline</a>
+      <a href="{{ 'contributing/' | url }}">Report a broken link</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}{% endblock %}

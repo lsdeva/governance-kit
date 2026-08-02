@@ -657,3 +657,37 @@
 }
 
 .md-tabs__list::-webkit-scrollbar { display: none; }
+
+/* -------------------------------------------------------------------- 404 --
+ * Minimal, in the same identity. Short page, so it centres in the viewport
+ * rather than sitting under the header with dead space below.
+ */
+.gk-404 {
+  display: flex;
+  align-items: center;
+  min-height: 62vh;
+  padding: 48px 0 72px;
+}
+
+.gk-404-h1 { font-size: clamp(32px, 4.4vw, 50px); margin-top: 16px; }
+
+.gk-404-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--gk-hairline);
+}
+
+.gk-404-links a {
+  font-size: 13.5px;
+  color: var(--gk-ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.gk-404-links a:hover {
+  color: var(--gk-brand);
+  border-bottom-color: var(--gk-brand);
+}
