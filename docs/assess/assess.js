@@ -431,6 +431,15 @@
     card.appendChild(el("p", { class: "gk-q-text" }, [q.text]));
     card.appendChild(el("p", { class: "gk-q-help" }, [q.help]));
 
+    // What an auditor would accept. Shown while answering so "yes" means the
+    // same thing to everyone, and carried into the report as an evidence list.
+    if (q.evidence) {
+      card.appendChild(el("p", { class: "gk-q-ev" }, [
+        el("span", { class: "gk-q-ev-label" }, ["Evidence: "]),
+        q.evidence
+      ]));
+    }
+
     var opts = el("div", { class: "gk-opts", role: "group", "aria-label": q.text });
     ANSWERS.forEach(function (opt) {
       var on = a.value === opt.value;
@@ -654,7 +663,8 @@
     var tbl = el("table", { class: "gk-table" });
     tbl.appendChild(el("thead", {}, [el("tr", {}, [
       el("th", {}, ["Gap"]), el("th", {}, ["Severity"]),
-      el("th", {}, ["Status"]), el("th", {}, ["Fix with"])
+      el("th", {}, ["Status"]), el("th", {}, ["Evidence needed"]),
+      el("th", {}, ["Fix with"])
     ])]));
     var tb = el("tbody");
     top.forEach(function (g) {
@@ -674,6 +684,7 @@
         ]),
         el("td", {}, [sevLabel(g.q.weight)]),
         el("td", {}, [g.answer === "no" ? "Not in place" : "Partial"]),
+        el("td", { class: "gk-ev-cell" }, [g.q.evidence || "—"]),
         tpl
       ]));
     });
@@ -812,8 +823,8 @@
     if (!s.gaps.length) {
       L.push("No gaps recorded in the answers given.");
     } else {
-      L.push("| Gap | Severity | Status | Obligation | Fix with |");
-      L.push("|---|---|---|---|---|");
+      L.push("| Gap | Severity | Status | Obligation | Evidence needed | Fix with |");
+      L.push("|---|---|---|---|---|---|");
       s.gaps.slice(0, 10).forEach(function (g) {
         var tpl = (g.q.templates || []).slice(0, 2).map(function (tid) {
           var t = DATA.templates[tid];
@@ -821,7 +832,8 @@
         }).filter(Boolean).join(" · ");
         L.push("| " + g.q.text.replace(/\|/g, "\\|") + " | " + sevLabel(g.q.weight) +
           " | " + (g.answer === "no" ? "Not in place" : "Partial") + " | " +
-          ((g.q.obligation && g.q.obligation.ref) || "—") + " | " + tpl + " |");
+          ((g.q.obligation && g.q.obligation.ref) || "—") + " | " +
+          (g.q.evidence || "—").replace(/\|/g, "\\|") + " | " + tpl + " |");
       });
     }
     L.push("");
@@ -935,7 +947,8 @@
     if (!s.gaps.length) {
       H.push("<p>No gaps recorded in the answers given.</p>");
     } else {
-      H.push("<table><tr><th>Gap</th><th>Severity</th><th>Status</th><th>Fix with</th></tr>");
+      H.push("<table><tr><th>Gap</th><th>Severity</th><th>Status</th>" +
+        "<th>Evidence needed</th><th>Fix with</th></tr>");
       s.gaps.slice(0, 10).forEach(function (g) {
         var tpl = (g.q.templates || []).slice(0, 2).map(function (tid) {
           var t = DATA.templates[tid];
@@ -946,7 +959,8 @@
           (g.q.obligation && g.q.obligation.ref
             ? "<div class='muted'>" + esc(g.q.obligation.ref) + "</div>" : "") +
           "</td><td>" + sevLabel(g.q.weight) + "</td><td>" +
-          (g.answer === "no" ? "Not in place" : "Partial") + "</td><td>" + tpl + "</td></tr>");
+          (g.answer === "no" ? "Not in place" : "Partial") + "</td><td class='muted'>" +
+          esc(g.q.evidence || "—") + "</td><td>" + tpl + "</td></tr>");
       });
       H.push("</table>");
     }

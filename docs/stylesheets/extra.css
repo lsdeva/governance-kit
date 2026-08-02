@@ -30,6 +30,29 @@
   box-shadow: 0 2px 12px rgba(0,0,0,.06);
 }
 
+/* Generated counts under the hero buttons */
+.gk-stats p {
+  margin: 1.1rem 0 0;
+  font-size: .82rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* Version / last-reviewed metadata beside the status pill */
+.gk-meta {
+  font-size: .72rem;
+  color: var(--md-default-fg-color--light);
+  letter-spacing: .01em;
+}
+
+/* "Evidence:" line under each checklist item */
+.gk-ev {
+  display: inline-block;
+  margin-top: .15rem;
+  padding-left: .5rem;
+  border-left: 2px solid var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color--light);
+}
+
 /* Download buttons on template pages */
 .gk-downloads {
   display: flex;

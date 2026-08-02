@@ -1,0 +1,94 @@
+# The "I've been asked to…" index.
+#
+# Most visitors arrive with a task, not a browsing intent — someone has asked
+# them for something and they need to know where to start. This maps the
+# request as it is actually phrased to the templates that answer it.
+#
+# Fields:
+#   ask       - the request, in the words it usually arrives in
+#   who       - who typically asks
+#   effort    - rough first-pass effort, so people can plan
+#   start     - template ids, in the order to work through them
+#   note      - the one thing worth knowing before starting
+
+- ask: "Tell the board how exposed we are to the EU AI Act"
+  who: Board, CEO, or Audit Committee
+  effort: 1–2 days for a first pass
+  start: [ai-system-inventory, eu-ai-act-readiness-checklist, board-pack]
+  note: >-
+    Take the assessment first and export the Board view — it produces most of
+    the pack. Do not present a readiness percentage without an inventory behind
+    it; the first question will be "how many systems is that out of?"
+
+- ask: "Find out what AI we're actually using"
+  who: Governance, Security, or Legal
+  effort: 2–3 days including a discovery sweep
+  start: [ai-system-inventory, third-party-ai-risk-policy]
+  note: >-
+    Ask teams, then check SaaS release notes, expense claims, and SSO logs.
+    Expect to find two to three times what people report.
+
+- ask: "Write us an AI policy"
+  who: Exec team or HR
+  effort: Half a day to draft, 2 weeks to socialise
+  start: [acceptable-ai-use-policy, data-classification-policy]
+  note: >-
+    Publish a usable one-pager this week rather than a complete one next
+    quarter. Staff are already using AI; the policy is catching up, not
+    getting ahead.
+
+- ask: "Prove our AI isn't discriminating"
+  who: Legal, DPO, or a customer
+  effort: 1–2 weeks per system
+  start: [ai-risk-assessment, model-card, data-quality-standard]
+  note: >-
+    Test subgroups, not just aggregate accuracy. A 95% accurate system can be
+    systematically wrong about one group, and that group is who complains.
+
+- ask: "Set up an AI governance committee"
+  who: Exec sponsor
+  effort: 1 week to charter, first meeting within a month
+  start: [committee-charter, governance-charter, raci, decision-rights]
+  note: >-
+    Settle quorum and the right to halt a system before the first meeting. A
+    committee that cannot stop anything is advisory.
+
+- ask: "Do a DPIA for an AI system"
+  who: DPO or Legal
+  effort: 1–2 weeks
+  start: [processing-dpia-log, ai-risk-assessment, data-classification-policy]
+  note: >-
+    Run it alongside the AI risk assessment and cross-reference them. Decide
+    your answer on erasure before you build, not after.
+
+- ask: "Assess an AI vendor before we sign"
+  who: Procurement or Security
+  effort: 2–3 days
+  start: [third-party-ai-risk-policy, ai-system-inventory]
+  note: >-
+    The two questions that matter most are whether your data trains their
+    model, and whether you are told when the model changes.
+
+- ask: "Show an auditor our AI controls work"
+  who: Internal Audit or an external assessor
+  effort: 1–2 weeks to assemble
+  start: [control-library, risk-register, incident-log]
+  note: >-
+    Take the assessment and export the Regulator view — it lists what evidence
+    each obligation needs. Assemble against that list rather than guessing.
+
+- ask: "Document a model before it goes live"
+  who: ML lead or a release gate
+  effort: 1–2 days per model
+  start: [model-card, ai-development-standard]
+  note: >-
+    Write the limitations section first and honestly. A model card with no
+    limitations tells a reader you did not look.
+
+- ask: "Work out where to start with all of this"
+  who: You, having just been handed the brief
+  effort: Half a day
+  start: [maturity-assessment, ai-system-inventory, governance-charter]
+  note: >-
+    Baseline honestly, then get a mandate in writing. An optimistic baseline
+    destroys the credibility of every improvement you later report.

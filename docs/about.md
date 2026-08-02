@@ -23,6 +23,34 @@ size, and risk appetite all change what "good" looks like. Use these as a head
 start, then make them yours and have the material bits reviewed by qualified
 counsel.
 
+## Who maintains it
+
+Maintained by **Lali Devamanthri**.
+
+[:fontawesome-brands-linkedin: LinkedIn](https://www.linkedin.com/in/lalisd/){ .md-button }
+[:material-web: ai.soa.team](https://ai.soa.team){ .md-button }
+[:fontawesome-brands-github: GitHub](https://github.com/lsdeva/governance-kit){ .md-button }
+
+Corrections and contributions from other practitioners are welcome and credited
+in the repository history — see [Contributing](contributing.md).
+
+## How current is this?
+
+Regulation moves, and the EU AI Act pages are the most likely part of this kit
+to age.
+
+- The **[EU AI Act timeline](eu-ai-act/timeline.md)** and
+  **[readiness checklist](eu-ai-act/readiness-checklist.md)** carry a
+  **last-reviewed date and version** at the top of the page.
+- Both cite **primary sources on EUR-Lex** alongside secondary commentary.
+  Where the two disagree, the official text wins.
+- Every page is generated from versioned data files in the public repository, so
+  you can see exactly what changed and when in the
+  [commit history](https://github.com/lsdeva/governance-kit/commits/main).
+
+If you spot something stale, [open an issue](https://github.com/lsdeva/governance-kit/issues)
+— that is the fastest way to get it fixed.
+
 ## How it's built
 
 A static site generated with

@@ -96,6 +96,7 @@
       "id": "Q01",
       "text": "We have a named executive owner accountable for AI Act compliance.",
       "help": "One person, by name, not a committee and not \"the CTO's team\". If something went wrong tomorrow, this is who the board would call. If two people would both say \"not me\", answer No.",
+      "evidence": "A board minute, terms of reference, or role description naming the individual and the accountability.",
       "category": "Oversight",
       "roles": [
         "exec-sponsor",
@@ -120,6 +121,7 @@
       "id": "Q02",
       "text": "AI governance is a standing agenda item at a committee that minutes its decisions.",
       "help": "A recurring forum with terms of reference, a quorum, and written minutes. Ad-hoc conversations, however senior, do not count — the evidence is the minute, not the meeting.",
+      "evidence": "Committee terms of reference plus the last two sets of minutes showing AI decisions taken.",
       "category": "Oversight",
       "roles": [
         "exec-sponsor",
@@ -142,6 +144,7 @@
       "id": "Q03",
       "text": "We know which role we play for each system — provider, deployer, importer, or distributor.",
       "help": "Build it yourself and put your name on it, you are likely a provider. Use someone else's tool, you are likely a deployer. The obligations differ sharply, and you can be both for different systems. Fine-tuning or rebranding a third-party model can make you a provider.",
+      "evidence": "The role determination recorded per system in the AI inventory, with the reasoning.",
       "category": "Inventory",
       "roles": [
         "legal-dpo",
@@ -165,6 +168,7 @@
       "id": "Q04",
       "text": "We have assessed which parts of the Act apply given our EU market exposure.",
       "help": "The Act reaches you if you place a system on the EU market, or if its output is used in the EU — regardless of where you are established. Being outside the EU is not by itself an exemption.",
+      "evidence": "A written scope assessment covering EU market placement and where system output is used.",
       "category": "Inventory",
       "roles": [
         "legal-dpo",
@@ -187,6 +191,7 @@
       "id": "Q05",
       "text": "Every AI system in use or development is captured in a central inventory.",
       "help": "One list, owned by a named person, covering built, bought, and embedded AI — including AI features switched on inside SaaS you already licence. If you cannot say where the list lives, answer No.",
+      "evidence": "The inventory itself, plus evidence of how it is kept current (intake gate, discovery sweep).",
       "category": "Inventory",
       "roles": [
         "governance-lead",
@@ -211,6 +216,7 @@
       "id": "Q06",
       "text": "Each system is classified by risk tier — prohibited, high-risk, limited, or minimal.",
       "help": "Classification is a decision with a date and an owner, recorded against the system. \"We think most of ours are low risk\" is not a classification.",
+      "evidence": "Classification recorded against each system with a date, an owner, and the rationale.",
       "category": "Inventory",
       "roles": [
         "governance-lead",
@@ -235,6 +241,7 @@
       "id": "Q07",
       "text": "General-purpose AI models we build or integrate are identified, with their obligations mapped.",
       "help": "Covers foundation models you train and, more commonly, commercial LLMs you build on. Integrating GPAI into a product can pull you into provider duties for the resulting system.",
+      "evidence": "A list of GPAI models in use, mapped to the obligations each attracts.",
       "category": "Inventory",
       "roles": [
         "ml-data-science",
@@ -259,6 +266,7 @@
       "id": "Q08",
       "text": "The inventory records purpose, data sources, model or vendor, and lifecycle stage.",
       "help": "A list of system names is not an inventory. The test: could you answer a regulator's \"what does it do, on what data, from whom, and is it live?\" without going to ask around.",
+      "evidence": "Inventory export showing the fields populated for a sample of systems, not just the headers.",
       "category": "Inventory",
       "roles": [
         "governance-lead",
@@ -282,6 +290,7 @@
       "id": "Q09",
       "text": "We have confirmed that no system performs a prohibited practice.",
       "help": "Social scoring, manipulative or exploitative techniques, untargeted scraping of facial images, emotion inference in workplaces or schools, and most real-time remote biometric identification in public. This needed to be true from February 2025.",
+      "evidence": "A completed prohibited-practice screen per system, signed off and dated.",
       "category": "Risk",
       "roles": [
         "legal-dpo",
@@ -307,6 +316,7 @@
       "id": "Q10",
       "text": "We screen new use cases against the prohibited list before development starts.",
       "help": "A gate at intake, not a review at launch. The point is to stop work before money is spent, so it must sit early enough that someone can still say no.",
+      "evidence": "The intake process document plus screening records for recent new use cases.",
       "category": "Risk",
       "roles": [
         "governance-lead",
@@ -331,6 +341,7 @@
       "id": "Q11",
       "text": "High-risk systems have a documented risk management process across the lifecycle.",
       "help": "Continuous, not a one-off sign-off: identify, evaluate, mitigate, then keep checking once the system is live and its inputs drift.",
+      "evidence": "A risk assessment per high-risk system, with review dates that have actually been met.",
       "category": "Risk",
       "roles": [
         "governance-lead",
@@ -355,6 +366,7 @@
       "id": "Q12",
       "text": "Data governance for training, validation, and test data addresses relevance, representativeness, and bias.",
       "help": "Do you know where training data came from, whether you may lawfully use it, who it does and does not represent, and what you did when you found a skew?",
+      "evidence": "Data documentation covering source, licence, representativeness testing, and bias findings.",
       "category": "Documentation",
       "roles": [
         "ml-data-science",
@@ -379,6 +391,7 @@
       "id": "Q13",
       "text": "Technical documentation is maintained and current for each high-risk system.",
       "help": "Annex IV sets out what it must contain. The failure mode is not absence but staleness — documentation written at launch and never touched again.",
+      "evidence": "Technical documentation per Annex IV, with a version history showing it is maintained.",
       "category": "Documentation",
       "roles": [
         "ml-data-science",
@@ -401,6 +414,7 @@
       "id": "Q14",
       "text": "Systems automatically log events sufficient for traceability.",
       "help": "Machine-generated logs, retained long enough to reconstruct what a system did and why on a given date. Application logs often do not capture the model inputs and outputs that actually matter here.",
+      "evidence": "Log configuration and a retention policy, plus a sample log proving inputs and outputs are captured.",
       "category": "Documentation",
       "roles": [
         "ml-data-science",
@@ -424,6 +438,7 @@
       "id": "Q15",
       "text": "Human oversight measures are designed in and genuinely operable by real people.",
       "help": "The honest test: can the named human actually understand the output, and do they have the authority, time, and confidence to override it? A reviewer approving 400 decisions an hour is not oversight.",
+      "evidence": "Oversight design documentation, override statistics, and the reviewer's training record.",
       "category": "Oversight",
       "roles": [
         "product-owner",
@@ -448,6 +463,7 @@
       "id": "Q16",
       "text": "Systems meet expected accuracy, robustness, and cybersecurity levels, with evidence.",
       "help": "Declared metrics with test results behind them, including behaviour under adversarial input and on edge cases. \"It performed well in testing\" without numbers is a No.",
+      "evidence": "Test results with declared metrics, subgroup performance, and adversarial testing evidence.",
       "category": "Risk",
       "roles": [
         "ml-data-science",
@@ -471,6 +487,7 @@
       "id": "Q17",
       "text": "A conformity assessment route is identified and planned before the applicable deadline.",
       "help": "Know whether your route is self-assessment or a notified body, and how long it takes. Notified-body capacity is finite and the queue will not be shorter closer to the deadline.",
+      "evidence": "A conformity assessment plan naming the route, the body if applicable, and the target date.",
       "category": "Documentation",
       "roles": [
         "legal-dpo",
@@ -493,6 +510,7 @@
       "id": "Q18",
       "text": "Post-market monitoring and a serious-incident reporting process exist.",
       "help": "Someone watches live performance, and there is a defined path — with a clock on it — for reporting serious incidents to the relevant authority.",
+      "evidence": "The monitoring configuration and a documented incident reporting procedure with named owners.",
       "category": "Oversight",
       "roles": [
         "governance-lead",
@@ -517,6 +535,7 @@
       "id": "Q19",
       "text": "People are told when they are interacting with an AI system.",
       "help": "Clear at the point of interaction, not buried in terms of service. Applies to chatbots and AI-driven assistants unless it is obvious to a reasonable person.",
+      "evidence": "Screenshots or UI evidence of the disclosure at the point of interaction.",
       "category": "Transparency",
       "roles": [
         "product-owner",
@@ -539,6 +558,7 @@
       "id": "Q20",
       "text": "AI-generated or manipulated content is marked or watermarked.",
       "help": "Synthetic audio, image, video, and text intended to inform the public must be machine-readably marked. This includes marketing material your teams generate.",
+      "evidence": "Marking or watermarking configuration, plus samples of generated content showing it applied.",
       "category": "Transparency",
       "roles": [
         "product-owner",
@@ -561,6 +581,7 @@
       "id": "Q21",
       "text": "Emotion recognition or biometric categorisation, if used, is disclosed to affected people.",
       "help": "If you use neither, answer Not applicable. Note that emotion inference in workplaces and education is prohibited outright, not merely restricted.",
+      "evidence": "Disclosure notices, or a documented confirmation that neither technique is used.",
       "category": "Transparency",
       "roles": [
         "legal-dpo",
@@ -584,6 +605,7 @@
       "id": "Q22",
       "text": "For GPAI we use, we hold provider documentation and understand training-data transparency expectations.",
       "help": "Do you actually have the model documentation from your vendor, or do you just assume it exists? \"It is on their website\" only counts if someone has read it and filed it.",
+      "evidence": "The provider documentation you actually hold on file, not a link to a vendor website.",
       "category": "Third-party",
       "roles": [
         "ml-data-science",
@@ -607,6 +629,7 @@
       "id": "Q23",
       "text": "Vendor contracts flow down AI Act obligations and evidence rights.",
       "help": "Right to obtain documentation, to be told about material model changes, and to audit or receive assurance. Standard SaaS terms almost never include these unless you asked.",
+      "evidence": "Executed contracts or amendments containing the AI clauses, for your critical vendors.",
       "category": "Third-party",
       "roles": [
         "legal-dpo",
@@ -630,6 +653,7 @@
       "id": "Q24",
       "text": "Where personal data is involved, a DPIA or equivalent assessment is completed and linked.",
       "help": "AI Act compliance does not discharge GDPR. High-risk AI touching personal data will almost always need a DPIA, and the two assessments should reference each other rather than sit in separate drawers.",
+      "evidence": "The completed DPIA, the DPO's recorded opinion, and its cross-reference to the AI assessment.",
       "category": "Documentation",
       "roles": [
         "legal-dpo",
@@ -653,6 +677,7 @@
       "id": "Q25",
       "text": "Staff who build, buy, or operate AI have AI literacy appropriate to their role.",
       "help": "A live obligation since February 2025, and one of the few that applies to everyone regardless of risk tier. Proportionate to role: a procurement lead needs different literacy from an ML engineer.",
+      "evidence": "Training completion records by role, plus the syllabus showing it is role-appropriate.",
       "category": "Literacy",
       "roles": [
         "people-hr",
@@ -677,6 +702,7 @@
       "id": "Q26",
       "text": "A current data governance framework defines ownership of data domains.",
       "help": "Named owners for each significant data domain, not just a platform team who happen to host the tables.",
+      "evidence": "The framework document plus a domain list with named owners who know they hold the role.",
       "category": "Oversight",
       "roles": [
         "governance-lead",
@@ -700,6 +726,7 @@
       "id": "Q27",
       "text": "Data is classified by sensitivity, with handling rules for each class.",
       "help": "People need to know what they may paste into an external AI tool. Without a classification scheme, that judgement gets made individually and badly.",
+      "evidence": "The classification policy and evidence of labels applied in at least one production system.",
       "category": "Documentation",
       "roles": [
         "security",
@@ -722,6 +749,7 @@
       "id": "Q28",
       "text": "We measure data quality against defined dimensions and thresholds.",
       "help": "Completeness, accuracy, timeliness, consistency, validity, uniqueness — with thresholds and a named owner who acts when one is breached.",
+      "evidence": "Quality reports against defined thresholds, showing measurement over several periods.",
       "category": "Documentation",
       "roles": [
         "ml-data-science",
@@ -744,6 +772,7 @@
       "id": "Q29",
       "text": "A risk register captures AI and data risks with owners and treatment plans.",
       "help": "Risks with named owners, agreed treatments, and review dates — not a spreadsheet last updated at the previous audit.",
+      "evidence": "The risk register, with owners, treatment plans, and evidence of review at committee.",
       "category": "Risk",
       "roles": [
         "governance-lead",
@@ -768,6 +797,7 @@
       "id": "Q30",
       "text": "There is a defined process for logging and responding to AI incidents.",
       "help": "People know what counts as an AI incident, where to report it, and what happens next. Test it: could a support engineer name the process?",
+      "evidence": "The incident procedure plus the incident log, including at least one worked example.",
       "category": "Oversight",
       "roles": [
         "security",
@@ -791,6 +821,7 @@
       "id": "Q31",
       "text": "Decision rights and escalation paths are documented and understood.",
       "help": "Who can approve a high-risk deployment, who can halt one, and what happens when two functions disagree. The real test is whether it has survived a live disagreement.",
+      "evidence": "The decision rights matrix, plus a real escalation that followed it.",
       "category": "Oversight",
       "roles": [
         "governance-lead",
@@ -814,6 +845,7 @@
       "id": "Q32",
       "text": "A RACI or equivalent makes governance responsibilities explicit.",
       "help": "Each significant activity has exactly one accountable party. Two accountable parties means nobody is.",
+      "evidence": "The RACI, validated so every row has exactly one accountable party.",
       "category": "Oversight",
       "roles": [
         "governance-lead",
@@ -836,6 +868,7 @@
       "id": "Q33",
       "text": "Model documentation exists for material models, covering intended use and limitations.",
       "help": "A model card or equivalent: what it is for, what it should not be used for, how it performs across groups, and its known failure modes.",
+      "evidence": "Model cards for material models, covering intended use, limitations, and subgroup performance.",
       "category": "Documentation",
       "roles": [
         "ml-data-science",
@@ -858,6 +891,7 @@
       "id": "Q34",
       "text": "Controls are mapped to obligations, with named owners and assurance evidence.",
       "help": "A control library that links each obligation to the control that satisfies it, who owns it, and how you would evidence it operating.",
+      "evidence": "The control library mapping obligations to controls, with owners and test results.",
       "category": "Documentation",
       "roles": [
         "internal-audit",
@@ -880,6 +914,7 @@
       "id": "Q35",
       "text": "Internal Audit or an equivalent independent function reviews AI governance.",
       "help": "Independent of the people who built and run the systems. A second-line review is valuable but is not the same as independent assurance.",
+      "evidence": "An audit report or assurance plan covering AI, produced independently of the delivery teams.",
       "category": "Oversight",
       "roles": [
         "internal-audit",
@@ -902,6 +937,7 @@
       "id": "Q36",
       "text": "The board receives regular, structured reporting on AI and data governance.",
       "help": "A recurring pack with risk posture, movement since last time, and explicit decisions being asked for — not an occasional verbal update.",
+      "evidence": "The last two board packs, showing risk posture and decisions sought.",
       "category": "Oversight",
       "roles": [
         "exec-sponsor",
@@ -924,6 +960,7 @@
       "id": "Q37",
       "text": "We track KPIs and KRIs that show whether governance is actually working.",
       "help": "Coverage, quality, incident, and readiness measures with a trend. Activity counts such as \"policies published\" tell you nothing about effectiveness.",
+      "evidence": "A metrics pack with trend over at least three periods, not a single snapshot.",
       "category": "Oversight",
       "roles": [
         "governance-lead",
@@ -945,6 +982,7 @@
       "id": "Q38",
       "text": "AI used in recruitment, performance, or other employment decisions is identified and governed.",
       "help": "CV screening, interview scoring, performance ranking, and workforce allocation are Annex III high-risk uses. Answer Not applicable only if you are certain no such tool is in use anywhere, including inside your HR SaaS.",
+      "evidence": "The inventory entry, risk assessment, and DPIA for each employment-related AI system.",
       "category": "Risk",
       "roles": [
         "people-hr",
@@ -968,6 +1006,7 @@
       "id": "Q39",
       "text": "Staff have clear, current guidance on acceptable use of AI tools at work.",
       "help": "Practical and specific: which tools are approved, what may never be pasted into them, and who to ask. If people are quietly using unapproved tools, the guidance has already failed.",
+      "evidence": "The published guidance, the approved tool list, and evidence staff can find both.",
       "category": "Literacy",
       "roles": [
         "people-hr",
@@ -991,6 +1030,7 @@
       "id": "Q40",
       "text": "Security controls cover model and training-data specific threats.",
       "help": "Prompt injection, training-data poisoning, model extraction, and unintended disclosure through outputs. Conventional application security does not cover these by default.",
+      "evidence": "Threat model or security test results covering injection, poisoning, and extraction.",
       "category": "Risk",
       "roles": [
         "security",

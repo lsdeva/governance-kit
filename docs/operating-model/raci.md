@@ -12,6 +12,10 @@
 [:material-language-markdown: Markdown](../downloads/raci.md.txt){ .md-button .gk-dl download="raci.md" }
 </div>
 
+!!! example "See this filled in"
+    A [worked example](../examples/raci.md) shows this
+    template completed for a fictional mid-size company.
+
 **Purpose.** Removes ambiguity about who does what. For every significant governance activity it names exactly one accountable party, so decisions have an owner and gaps become visible before they become incidents.
 
 **When to use it.** Agree it when you stand up the operating model, and revisit whenever roles change or an escalation reveals that nobody owned something.

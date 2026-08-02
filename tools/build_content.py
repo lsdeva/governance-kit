@@ -136,6 +136,11 @@ def build_checklist_body(questions: list, templates_by_id: dict, page_path: str)
             n = q["checklist"]
             out.append(f"- [ ] **{n}.** {q['text']}")
             out.append(f"    <br><small>{q['help'].strip()}</small>")
+            if q.get("evidence"):
+                out.append(
+                    "    <br><small class=\"gk-ev\">**Evidence:** "
+                    + " ".join(q["evidence"].split()) + "</small>"
+                )
             tpl = [templates_by_id[t] for t in q.get("templates", []) if t in templates_by_id]
             if tpl:
                 links = " · ".join(
@@ -160,7 +165,18 @@ def render_template_page(t: dict, by_id: dict, snippets: dict, questions: list) 
     path = t["path"]
     parts = [BANNER.format(source="templates.yml")]
     parts.append(f"# {t['title']}\n")
-    parts.append(status_pill(t["status"]) + "\n")
+
+    # Status pill, plus review metadata where a page carries it. Time-sensitive
+    # pages say when they were last checked, so a reader can judge staleness
+    # rather than assume currency.
+    meta = [status_pill(t["status"])]
+    if t.get("version"):
+        meta.append(f'<span class="gk-meta">v{t["version"]}</span>')
+    if t.get("reviewed"):
+        meta.append(
+            f'<span class="gk-meta">Last reviewed <strong>{t["reviewed"]}</strong></span>'
+        )
+    parts.append(" &nbsp;·&nbsp; ".join(meta) + "\n")
 
     if t["status"] == "stub":
         parts.append(
@@ -189,6 +205,14 @@ def render_template_page(t: dict, by_id: dict, snippets: dict, questions: list) 
     )
     parts.append('<div class="gk-downloads" markdown>\n'
                  + "\n".join(buttons) + "\n</div>\n")
+
+    ex = EXAMPLE_OF.get(t["id"])
+    if ex:
+        parts.append(
+            f'!!! example "See this filled in"\n'
+            f"    A [worked example]({rel_link(path, ex['path'])}) shows this\n"
+            f"    template completed for a fictional mid-size company.\n"
+        )
 
     parts.append(f"**Purpose.** {resolve_links(t['purpose'].strip(), path, by_id)}\n")
     parts.append(f"**When to use it.** {resolve_links(t['when_to_use'].strip(), path, by_id)}\n")
@@ -234,6 +258,109 @@ def render_template_page(t: dict, by_id: dict, snippets: dict, questions: list) 
     return "\n".join(parts)
 
 
+def render_example_page(ex: dict, company: dict, by_id: dict) -> str:
+    """A worked example: the same template, filled in for the fictional company."""
+    path = ex["path"]
+    tpl = by_id[ex["of"]]
+    parts = [BANNER.format(source="examples.yml")]
+    parts.append(f"# {ex['title']}\n")
+    parts.append(
+        f'!!! info "A worked example, not a template"\n'
+        f"    This shows {company['name']} — a fictional company — using the\n"
+        f"    [{tpl['title']}]({rel_link(path, tpl['path'])}). To start your own,\n"
+        f"    use the blank template. Details here are illustrative.\n"
+    )
+    parts.append(resolve_links(ex["intro"].strip(), path, by_id) + "\n")
+    parts.append("---\n")
+    parts.append(resolve_links(ex["body"].rstrip(), path, by_id) + "\n")
+    parts.append("---\n")
+    parts.append("## What to take from this\n")
+    for t_ in ex["takeaways"]:
+        parts.append(f"- {resolve_links(' '.join(t_.split()), path, by_id)}")
+    parts.append("")
+    parts.append(
+        f"[Use the blank {tpl['title']}]({rel_link(path, tpl['path'])})"
+        "{ .md-button .md-button--primary }\n"
+    )
+    parts.append(SNIPPETS_CACHE["not_legal_advice"])
+    return "\n".join(parts)
+
+
+def render_examples_index(examples: list, company: dict, by_id: dict) -> str:
+    path = "examples/index.md"
+    parts = [BANNER.format(source="examples.yml")]
+    parts.append("# Worked examples\n")
+    parts.append(
+        "Blank templates tell you what to fill in; they do not tell you what "
+        "*good* looks like, or how much detail is expected. These are the same "
+        "templates completed for one fictional company, so you can see the "
+        "level of detail that makes an artefact defensible.\n"
+    )
+    parts.append(
+        '!!! tip "Deliberately imperfect"\n'
+        "    These examples include an amber board pack, a risk being tolerated,\n"
+        "    a control that was failing in practice, and an outstanding action\n"
+        "    past its owner. A worked example where everything is green teaches\n"
+        "    nothing.\n"
+    )
+    parts.append(f"## {company['name']}\n")
+    parts.append(company["profile"].rstrip() + "\n")
+    parts.append("## The examples\n")
+    parts.append("| Worked example | Illustrates |")
+    parts.append("|---|---|")
+    for ex in examples:
+        tpl = by_id[ex["of"]]
+        parts.append(
+            f"| [{ex['title']}]({rel_link(path, ex['path'])}) "
+            f"| [{tpl['title']}]({rel_link(path, tpl['path'])}) |"
+        )
+    parts.append("")
+    parts.append(SNIPPETS_CACHE["not_legal_advice"])
+    return "\n".join(parts)
+
+
+def render_tasks_page(tasks: list, by_id: dict) -> str:
+    """The "I've been asked to…" index.
+
+    Most people arrive with a request from someone else, not a browsing intent.
+    This maps the ask, in the words it usually arrives in, to a starting order.
+    """
+    path = "tasks.md"
+    parts = [BANNER.format(source="tasks.yml")]
+    parts.append("# I've been asked to…\n")
+    parts.append(
+        "Most people land here because someone asked them for something. Find "
+        "the request below and start where it points.\n"
+    )
+    parts.append(
+        SNIPPET_ASSESS.format(assess=rel_link(path, "assess/index.md"))
+    )
+    for t in tasks:
+        parts.append(f'## "{t["ask"]}"\n')
+        parts.append(
+            f"**Usually asked by:** {t['who']}  \n"
+            f"**Rough effort:** {t['effort']}\n"
+        )
+        parts.append("**Start here, in this order:**\n")
+        for n, tid in enumerate(t["start"], start=1):
+            tpl = by_id.get(tid)
+            if tpl is None:
+                raise SystemExit(
+                    f"ERROR: task {t['ask']!r} references unknown template '{tid}'"
+                )
+            parts.append(
+                f"{n}. [{tpl['title']}]({rel_link(path, tpl['path'])})"
+                f" — {' '.join(tpl['purpose'].split())[:110].rsplit(' ', 1)[0]}…"
+            )
+        parts.append("")
+        parts.append(
+            f'!!! tip "Before you start"\n'
+            f"    {' '.join(t['note'].split())}\n"
+        )
+    parts.append(SNIPPETS_CACHE["not_legal_advice"])
+    return "\n".join(parts)
+
+
 def render_markdown_download(t: dict, by_id: dict, questions: list) -> str:
     """The template as standalone Markdown, for pasting into a wiki.
 
@@ -262,7 +389,10 @@ def render_markdown_download(t: dict, by_id: dict, questions: list) -> str:
                 current = q["category"]
                 out.append(f"\n## {current}\n")
             out.append(f"- [ ] **{q['checklist']}.** {q['text']}")
-            out.append(f"  <!-- {' '.join(q['help'].split())} -->")
+            out.append(f"      *{' '.join(q['help'].split())}*")
+            if q.get("evidence"):
+                out.append(f"      **Evidence:** {' '.join(q['evidence'].split())}")
+            out.append("")
         out.append("")
     else:
         # Admonitions are MkDocs-specific; flatten them to blockquotes so the
@@ -328,6 +458,8 @@ def render_section_index(section: dict, templates: list, by_id: dict) -> str:
 
 
 SNIPPET_ASSESS = ""  # filled from snippets.yml at runtime
+SNIPPETS_CACHE = {}  # ditto; used by the example renderers
+EXAMPLE_OF = {}      # template id -> worked example, for the "see it filled in" link
 
 
 def build_assessment_json(roles, questions, templates, sections) -> dict:
@@ -359,6 +491,7 @@ def build_assessment_json(roles, questions, templates, sections) -> dict:
                 "id": q["id"],
                 "text": q["text"],
                 "help": " ".join(q["help"].split()),
+                "evidence": " ".join((q.get("evidence") or "").split()),
                 "category": q["category"],
                 "roles": q["applies_to"],
                 "weight": q["weight"],
@@ -394,15 +527,22 @@ def build_assessment_json(roles, questions, templates, sections) -> dict:
     }
 
 
-def build_nav(sections, templates) -> str:
+def build_nav(sections, templates, examples, tasks) -> str:
     lines = [NAV_START, "nav:", "  - Home: index.md", "  - Get started: getting-started.md",
              "  - Assessment: assess/index.md"]
+    if tasks:
+        lines.append("  - I've been asked to…: tasks.md")
     for s in sections:
         lines.append(f"  - {s['nav']}:")
         lines.append(f"      - Overview: {s['id']}/index.md")
         for t in templates:
             if t["section"] == s["id"]:
                 lines.append(f"      - {t.get('nav', t['title'])}: {t['path']}")
+    if examples:
+        lines.append("  - Worked examples:")
+        lines.append("      - Overview: examples/index.md")
+        for e in examples:
+            lines.append(f"      - {e.get('nav', e['title'])}: {e['path']}")
     lines.append("  - Contributing: contributing.md")
     lines.append("  - About: about.md")
     lines.append(NAV_END)
@@ -436,7 +576,13 @@ def main() -> int:
     snippets = load("snippets.yml")
 
     SNIPPET_ASSESS = snippets["assess_callout"]
+    SNIPPETS_CACHE.update(snippets)
     SPREADSHEET_IDS.update((load("spreadsheets.yml") or {}).keys())
+
+    examples_data = load("examples.yml") or {}
+    company = examples_data.get("company", {})
+    examples = examples_data.get("examples", [])
+    EXAMPLE_OF.update({e["of"]: e for e in examples})
 
     by_id = {t["id"]: t for t in templates}
 
@@ -465,6 +611,12 @@ def main() -> int:
             raise SystemExit(f"ERROR: {q['id']} weight {q['weight']} outside 1-5")
         if not q["applies_to"]:
             raise SystemExit(f"ERROR: {q['id']} applies to no roles")
+        if not q.get("evidence"):
+            raise SystemExit(
+                f"ERROR: {q['id']} has no `evidence:`. Every question must say "
+                "what would satisfy an auditor, or the exported report cannot "
+                "double as an evidence list."
+            )
 
     cl = [q["checklist"] for q in questions if q.get("checklist")]
     if sorted(cl) != list(range(1, len(cl) + 1)):
@@ -474,6 +626,13 @@ def main() -> int:
         n = sum(1 for q in questions if r["id"] in q["applies_to"])
         if n < 5:
             raise SystemExit(f"ERROR: role '{r['id']}' has only {n} questions (minimum 5)")
+
+    for e in examples:
+        if e["of"] not in by_id:
+            raise SystemExit(f"ERROR: example '{e['id']}' illustrates unknown template '{e['of']}'")
+    ex_dupes = [i for i, c in Counter(e["of"] for e in examples).items() if c > 1]
+    if ex_dupes:
+        raise SystemExit(f"ERROR: more than one example for template(s): {ex_dupes}")
 
     written: list[Path] = []
 
@@ -496,6 +655,32 @@ def main() -> int:
         write(DOCS / s["id"] / "index.md",
               render_section_index(s, in_section, by_id), written, args.check)
 
+    # ---- generated stats snippet -------------------------------------------
+    # Counts injected into hand-written pages, so a claim like "25 of 26 fully
+    # drafted" cannot drift from what the data actually says.
+    # Written to the repo root, not docs/, because any .md under docs/ becomes
+    # a page. pymdownx.snippets pulls it into the landing page.
+    n_ready = sum(1 for t in templates if t["status"] == "ready")
+    stats = (
+        f"{len(templates)} templates · **{n_ready} of {len(templates)} fully "
+        f"drafted** · {len(questions)} assessment questions across "
+        f"{len(roles)} roles · {len(examples)} worked examples\n"
+    )
+    write(ROOT / "snippets" / "stats.md", stats, written, args.check)
+
+    # ---- task index ---------------------------------------------------------
+    tasks = load("tasks.yml") or []
+    if tasks:
+        write(DOCS / "tasks.md", render_tasks_page(tasks, by_id), written, args.check)
+
+    # ---- worked examples ----------------------------------------------------
+    if examples:
+        write(DOCS / "examples" / "index.md",
+              render_examples_index(examples, company, by_id), written, args.check)
+        for e in examples:
+            write(DOCS / e["path"],
+                  render_example_page(e, company, by_id), written, args.check)
+
     # ---- assessment data ----------------------------------------------------
     payload = build_assessment_json(roles, questions, templates, sections)
     write(DOCS / "assess" / "assessment-data.json",
@@ -504,7 +689,7 @@ def main() -> int:
     # ---- navigation in mkdocs.yml ------------------------------------------
     mk = ROOT / "mkdocs.yml"
     text = mk.read_text(encoding="utf-8")
-    nav = build_nav(sections, templates)
+    nav = build_nav(sections, templates, examples, tasks)
     if NAV_START in text and NAV_END in text:
         new_text = re.sub(
             re.escape(NAV_START) + r".*?" + re.escape(NAV_END),

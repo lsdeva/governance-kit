@@ -1,6 +1,15 @@
 # MkDocs build output
 site/
 
+# Generated downloads. Binaries are rebuilt byte-differently on every run
+# (timestamps, zip ordering), so committing them would produce noisy diffs and
+# could false-fail the "generated content is up to date" check in CI.
+# The workflow builds them before deploying; run tools/build_downloads.py to
+# preview locally. The .md.txt files ARE committed — they are text, diffable,
+# and generated deterministically.
+docs/downloads/*.docx
+docs/downloads/*.xlsx
+
 # Python
 .venv/
 venv/

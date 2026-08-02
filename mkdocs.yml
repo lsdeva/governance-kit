@@ -70,6 +70,11 @@ markdown_extensions:
       permalink: true
   - pymdownx.details
   - pymdownx.superfences
+  # Pulls generated counts (snippets/stats.md) into hand-written pages so
+  # claims like "25 of 26 fully drafted" cannot drift from the data.
+  - pymdownx.snippets:
+      base_path: [snippets]
+      check_paths: true
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
@@ -92,6 +97,7 @@ nav:
   - Home: index.md
   - Get started: getting-started.md
   - Assessment: assess/index.md
+  - I've been asked to…: tasks.md
   - Frameworks:
       - Overview: frameworks/index.md
       - Data Governance Framework: frameworks/data-governance-framework.md
@@ -132,6 +138,12 @@ nav:
       - Overview: eu-ai-act/index.md
       - Readiness Checklist (25-point): eu-ai-act/readiness-checklist.md
       - Timeline (2026 Digital Omnibus): eu-ai-act/timeline.md
+  - Worked examples:
+      - Overview: examples/index.md
+      - AI System Inventory: examples/ai-system-inventory.md
+      - AI Risk Assessment: examples/ai-risk-assessment.md
+      - Board Pack: examples/board-pack.md
+      - RACI Matrix: examples/raci.md
   - Contributing: contributing.md
   - About: about.md
 # NAV:END

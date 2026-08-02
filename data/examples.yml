@@ -1,0 +1,410 @@
+# Worked examples — the same templates, filled in for one fictional company.
+#
+# Blank templates with [placeholders] stall adoption: people cannot tell what
+# "good" looks like or how much detail is expected. Each example below shows a
+# realistic completed version, warts included — an amber RAG, an unresolved
+# gap, a risk being tolerated. A worked example where everything is green
+# teaches nothing.
+#
+# One company runs through every example so the artefacts cross-reference each
+# other exactly as they would in a real organisation.
+#
+# Fields mirror templates.yml: id, title, path, of (the template it illustrates),
+# intro, body, takeaways.
+
+company:
+  name: Meridian Health Analytics
+  short: >-
+    A fictional mid-size company used across every worked example, so the
+    artefacts reference each other exactly as they would in a real organisation.
+  profile: |
+    **Meridian Health Analytics** is a fictional 340-person company selling
+    analytics software to NHS trusts and private healthcare providers in the UK
+    and EU.
+
+    | | |
+    |---|---|
+    | **Size** | 340 staff; ~£42m revenue |
+    | **Sector** | Health technology (B2B software) |
+    | **Markets** | UK, Ireland, Netherlands, Germany |
+    | **AI footprint** | 3 systems built in-house, 4 bought, 6 embedded in existing SaaS |
+    | **Regulatory exposure** | EU AI Act (deployer and provider), UK & EU GDPR, NHS DSPT |
+    | **Governance maturity** | Level 2 — documented, inconsistently applied |
+
+    Meridian is deliberately mid-size and imperfect. It has a governance
+    committee that meets but sometimes lacks quorum, an inventory that was
+    incomplete until a discovery sweep found six embedded AI features nobody had
+    registered, and one high-risk system — a triage prioritisation tool — that
+    is the reason its board started asking questions.
+
+examples:
+  - id: example-ai-system-inventory
+    title: AI System Inventory — worked example
+    nav: AI System Inventory
+    of: ai-system-inventory
+    path: examples/ai-system-inventory.md
+    intro: >-
+      Meridian's inventory after its first discovery sweep. Note that six of the
+      thirteen systems were found inside software the company had already
+      bought — nobody had procured them as AI, so nobody had assessed them.
+    body: |
+      ### The inventory
+
+      | ID | System | Owner | Source | Role | Tier | Personal data | Stage | Next review |
+      |---|---|---|---|---|---|---|---|---|
+      | AI-001 | Referral triage prioritisation | R. Okafor (Clinical Dir.) | Build | **Provider** | **High-risk** | Yes | Live | 2026-10-01 |
+      | AI-002 | Bed-demand forecasting | S. Lindqvist (Ops) | Build | Provider | Minimal | No | Live | 2027-01-15 |
+      | AI-003 | Clinical coding assistant | R. Okafor | Build | Provider | Limited | Yes | Development | 2026-09-01 |
+      | AI-004 | CV screening (recruitment) | J. Mensah (People) | Buy | Deployer | **High-risk** | Yes | Live | 2026-09-15 |
+      | AI-005 | Support ticket summarisation | T. Bianchi (Support) | Buy | Deployer | Limited | Yes | Live | 2026-11-01 |
+      | AI-006 | Sales forecasting | M. Duarte (Revenue) | Buy | Deployer | Minimal | No | Live | 2027-02-01 |
+      | AI-007 | Contract review assistant | A. Whitfield (Legal) | Buy | Deployer | Limited | Yes | Pilot | 2026-09-30 |
+      | AI-008 | CRM "next best action" | M. Duarte | **Embedded** | Deployer | Minimal | Yes | Live | 2027-01-10 |
+      | AI-009 | HR sentiment analysis | J. Mensah | **Embedded** | Deployer | **Prohibited — disabled** | Yes | Retired | — |
+      | AI-010 | Helpdesk auto-reply | T. Bianchi | **Embedded** | Deployer | Limited | Yes | Live | 2026-12-01 |
+      | AI-011 | Meeting transcription & summary | IT | **Embedded** | Deployer | Limited | Yes | Live | 2026-12-01 |
+      | AI-012 | Code completion assistant | K. Ivanov (Eng) | **Embedded** | Deployer | Minimal | No | Live | 2027-03-01 |
+      | AI-013 | Marketing copy generation | M. Duarte | **Embedded** | Deployer | Limited | No | Live | 2027-01-20 |
+
+      !!! danger "AI-009 was switched off"
+          Meridian's HR platform shipped a "team sentiment" feature that inferred
+          employee mood from message tone. That is **emotion inference in the
+          workplace — prohibited under Art. 5**, not merely high-risk. It was
+          disabled within 48 hours of discovery and logged as INC-004. Nobody had
+          procured it; it arrived in a vendor release.
+
+      ### Classification decision record
+
+      | System | Tier | Rationale | Decided by | Date | Challenged? |
+      |---|---|---|---|---|---|
+      | AI-001 | High-risk | Annex III(5)(a) — access to essential public services; prioritises patient referrals | Committee | 2026-03-12 | Yes — Clinical argued decision-support only. Committee held that it materially determines order of access. |
+      | AI-004 | High-risk | Annex III(4)(a) — employment; screens candidates | Committee | 2026-03-12 | No |
+      | AI-009 | Prohibited | Art. 5(1)(f) — emotion inference in the workplace | Committee (emergency) | 2026-04-02 | No |
+      | AI-005 | Limited | Art. 50 transparency; summarises but does not decide | Gov Lead | 2026-03-19 | No |
+
+      !!! tip "The challenge on AI-001 is the important row"
+          Clinical services argued the tool was "only decision support" because a
+          coordinator reviews every output. The committee disagreed: the
+          coordinator accepted the ranking in 96% of cases, so in practice the
+          system determined the order. **Recording the challenge, and who
+          overruled whom, is what makes the classification defensible later.**
+
+      ### What the discovery sweep found
+
+      | Where they looked | Systems found | Notes |
+      |---|---|---|
+      | Asked each team | 5 | What people thought of as "our AI" |
+      | SaaS contracts & release notes | **6** | Nobody had procured these as AI |
+      | Expense claims | 1 | An individual ChatGPT Plus subscription |
+      | SSO logs | 1 | A tool in use by two people, never approved |
+      | Code repositories | 0 | Already captured |
+
+      Initial estimate from department heads: **five systems.** Actual: **thirteen.**
+    takeaways:
+      - Ask departments *and* read your SaaS release notes. The gap between what
+        teams report and what is actually running is where the risk lives.
+      - Record the classification *rationale* and any challenge to it. A tier
+        label with no reasoning cannot be defended or sensibly reviewed.
+      - Expect to find at least one thing you must switch off.
+
+  - id: example-ai-risk-assessment
+    title: AI Risk Assessment — worked example
+    nav: AI Risk Assessment
+    of: ai-risk-assessment
+    path: examples/ai-risk-assessment.md
+    intro: >-
+      The assessment for AI-001, Meridian's referral triage tool. It is the
+      hardest of their systems: clinically useful, genuinely high-risk, and with
+      an oversight arrangement that looked fine on paper and was not.
+    body: |
+      ### System under assessment
+
+      | Field | Value |
+      |---|---|
+      | System ID / name | AI-001 — Referral triage prioritisation |
+      | Accountable owner | R. Okafor, Clinical Director |
+      | Purpose | Scores inbound referrals for clinical urgency and orders the review queue |
+      | Risk tier | **High-risk** — Annex III(5)(a) |
+      | Affects individuals? | Yes — determines the order in which patients are assessed |
+      | Assessment date / assessor | 2026-04-18 / P. Nakamura (Governance Lead) |
+
+      ### 1. Prohibited practice screen
+
+      All eight screened. **No prohibited practice identified.** Screening record
+      filed 2026-04-18, countersigned by Legal.
+
+      ### 2. Harms assessment
+
+      | Harm type | Could it occur? | Who is affected? | Severity | Likelihood | Rating |
+      |---|---|---|---|---|---|
+      | Discrimination / unfair outcome | **Yes** | Patients whose presentations are under-represented in training data | 5 | 3 | **15** |
+      | Loss of opportunity | **Yes** | Patients de-prioritised in error — delayed treatment | 5 | 2 | **10** |
+      | Physical or psychological harm | **Yes** | Patients whose deterioration is not caught by the ranking | 5 | 2 | **10** |
+      | Privacy intrusion | Possibly | Patients — health data processed at scale | 3 | 2 | 6 |
+      | Loss of autonomy / ability to contest | **Yes** | Patients unaware their referral was ranked | 3 | 4 | **12** |
+      | Exclusion of a group | **Yes** | Non-English-speaking patients — referral letters are free text | 4 | 3 | **12** |
+
+      !!! warning "The finding that mattered"
+          Subgroup testing showed the model performed **11 percentage points
+          worse** on referral letters written for patients requiring interpreters,
+          because those letters are shorter and use different phrasing. Aggregate
+          accuracy was 94%; for that group it was 83%. **The aggregate number had
+          hidden it for four months.**
+
+      ### 3. Technical risk
+
+      | Area | Assessment | Mitigation |
+      |---|---|---|
+      | Data quality | Training data covers 2021–2025, one region only | Flagged: expand to all regions before wider rollout |
+      | Bias | 11pp gap for interpreter-requiring referrals | Mitigating: re-weighting + mandatory human review for that cohort |
+      | Accuracy | 94% aggregate against clinician ranking | Declared; monitored monthly |
+      | Robustness | Degrades on referrals under 40 words | Threshold rule: short referrals bypass scoring |
+      | Drift | Referral language changed after a 2025 template update | Monthly distribution monitoring added |
+      | Explainability | Feature contributions available per referral | Surfaced to coordinators from v2.1 |
+      | Security | Prompt injection not applicable; access controlled | Standard controls |
+
+      ### 4. Human oversight
+
+      | Question | Answer |
+      |---|---|
+      | Who reviews the output? | Referral coordinator (band 5), before the queue is worked |
+      | What information do they see? | Rank, score, top three contributing factors, and a low-confidence flag |
+      | Can they realistically override? | Yes — drag to reorder, reason required |
+      | How long do they have per decision? | ~25 seconds per referral; ~180 referrals per shift |
+      | How would we know if they were rubber-stamping? | Override rate is monitored |
+      | What training have they had? | Two-hour session; refresher annually |
+
+      !!! danger "Oversight was failing in practice"
+          The **override rate was 0.4%** — roughly one referral per coordinator
+          per shift. Interviews found coordinators believed they needed a clinical
+          reason to override and did not feel qualified to second-guess the score.
+          Oversight existed in the interface and not in reality.
+
+          **Action taken:** the interface now shows the score *after* the
+          coordinator forms an initial view, low-confidence referrals are
+          presented unranked, and the override rate is reported to the committee
+          monthly. It rose to 6.2% over the following quarter.
+
+      ### 5. Transparency
+
+      - [x] Patients are informed that referrals are prioritised with algorithmic support — added to the referral acknowledgement letter
+      - [x] Clinicians are told when they are viewing a ranked queue
+      - [ ] **Route to contest a ranking is documented but not yet staffed** — open action, owner R. Okafor, due 2026-09-30
+      - [x] Explanation available on request
+
+      ### 6. Residual risk and decision
+
+      | Residual rating | Justification | Accepted by | Authority | Date |
+      |---|---|---|---|---|
+      | **Medium (9)** | Bias gap mitigated by mandatory review for the affected cohort; oversight redesigned and evidenced; contest route outstanding | Governance Committee | Per decision rights — high-risk deployment | 2026-05-14 |
+
+      **Decision: Proceed with conditions.**
+
+      1. Mandatory human review for all interpreter-flagged referrals — **in place**
+      2. Monthly subgroup performance reporting to committee — **in place**
+      3. Contest route staffed and published — **due 2026-09-30, open**
+      4. Retrain on multi-region data before any expansion — **blocking condition**
+    takeaways:
+      - Aggregate accuracy hides concentrated harm. Meridian's 94% looked fine
+        until someone tested the subgroups.
+      - A 0.4% override rate is not a sign the model is excellent. Measure it, and
+        treat a very low number as a red flag.
+      - >-
+        "Proceed with conditions" is a legitimate outcome — provided the
+        conditions have owners and dates, and someone chases them.
+
+  - id: example-board-pack
+    title: Board Pack — worked example
+    nav: Board Pack
+    of: board-pack
+    path: examples/board-pack.md
+    intro: >-
+      Meridian's Q2 2026 board report — the one written after the prohibited
+      HR feature was found. It is deliberately an amber pack with a real ask.
+    body: |
+      ---
+
+      ## Data & AI Governance — Board Report
+
+      **Period:** Q2 2026 · **Prepared by:** P. Nakamura, Governance Lead ·
+      **Date:** 2026-07-08 · **Classification:** Confidential
+
+      ### 1. Executive summary
+
+      **Overall posture:** 🟡 **Amber**
+
+      Our AI estate is now fully catalogued for the first time — thirteen systems,
+      against the five we believed we had in March. One system was found to
+      perform a practice **prohibited** under the EU AI Act and was disabled within
+      48 hours. Two systems are high-risk and both now have completed assessments.
+      The principal residual concern is that our highest-risk system, referral
+      triage, depends on human oversight that we have evidenced was not working as
+      designed and have since rebuilt.
+
+      **Decisions sought this session:**
+
+      1. Approve 0.5 FTE for a governance analyst — see section 7
+      2. Approve the December 2027 readiness plan and its £180k budget
+
+      ### 2. Risk posture
+
+      | Risk | Rating | Movement | Owner | Commentary |
+      |---|---|---|---|---|
+      | Triage bias against interpreter-requiring patients | High (15→9) | ↓ | R. Okafor | Mandatory review in place; retraining required before expansion |
+      | Unassessed embedded AI in vendor products | High (16→8) | ↓ | P. Nakamura | Sweep complete; quarterly release-note review now standing |
+      | Human oversight not effective in practice | High (12→6) | ↓ | R. Okafor | Interface redesigned; override rate 0.4%→6.2% |
+      | Annex III readiness by Dec 2027 | Medium (9) | → | P. Nakamura | On track but dependent on the resource ask below |
+      | Vendor contracts lack AI clauses | Medium (9) | ↑ | A. Whitfield | 2 of 7 renegotiated; remainder at renewal |
+
+      **Appetite:** Within appetite, with the exception of vendor contractual
+      exposure, which is **outside** appetite until the four critical vendors are
+      renegotiated. Expected within appetite by Q4.
+
+      ### 3. What changed this period
+
+      | Area | Change | Implication |
+      |---|---|---|
+      | AI estate | 13 systems catalogued (was 5 believed); 1 disabled | We now know what we operate |
+      | Regulation | Digital Omnibus deferred Annex III to Dec 2027 | 16 months more, not a reprieve |
+      | Policy | Acceptable AI Use Policy adopted; 91% attestation | Shadow AI reduced but not eliminated |
+      | Capability | Governance Lead appointed (Mar); no analyst support | The constraint behind decision 1 |
+
+      ### 4. Incidents
+
+      | ID | Severity | Summary | Status | Reportable? | Lesson |
+      |---|---|---|---|---|---|
+      | INC-004 | **S1** | HR platform enabled workplace emotion inference in a vendor release | Closed | Assessed — not reportable; disabled before any employment decision relied on it | Vendor release notes now reviewed quarterly |
+      | INC-007 | S2 | Patient referral letter pasted into a public AI tool by a staff member | Closed | Yes — DPA notified | Self-reported within 2 hours; DLP rule added |
+      | INC-009 | S3 | Triage subgroup performance gap identified in testing | Closed | No | Subgroup metrics now mandatory pre-release |
+
+      !!! note "INC-007 was self-reported"
+          The individual reported it themselves within two hours. Our policy
+          treats self-reported mistakes far more leniently than concealed ones,
+          and this is the behaviour we want. It was handled as a training matter,
+          not a disciplinary one.
+
+      ### 5. EU AI Act readiness
+
+      **Readiness: 68%** (27 of 40 assessed obligations met) — ↑ from 41% in Q1
+
+      | Area | Status | Gap | Action | By |
+      |---|---|---|---|---|
+      | Inventory & classification | 🟢 | — | — | — |
+      | Prohibited practices | 🟢 | — | Quarterly re-screen | Ongoing |
+      | Risk management | 🟡 | Assessments done; review cycle unproven | First annual review cycle | 2027-04 |
+      | Documentation | 🔴 | No Annex IV technical file for AI-001 | Draft with vendor support | 2026-11-30 |
+      | Human oversight | 🟢 | — | Monthly override reporting | Ongoing |
+      | Transparency | 🟡 | Contest route not staffed | Assign and publish | 2026-09-30 |
+      | Third-party | 🔴 | 5 of 7 vendor contracts lack AI clauses | Renegotiate at renewal | 2027-03-31 |
+      | AI literacy | 🟢 | 91% complete | Remaining 9% chased | 2026-08-31 |
+
+      **Next milestone:** 2 Dec 2026 — watermarking grace period ends for Art. 50.
+      **On track.**
+
+      ### 6. Metrics
+
+      | Metric | Now | Last | Target | Trend |
+      |---|---|---|---|---|
+      | AI systems registered | 13/13 (100%) | 5/13 (38%) | 100% | ↑ |
+      | High-risk systems assessed | 2/2 (100%) | 0/2 | 100% | ↑ |
+      | Documentation complete | 0/2 (0%) | 0/2 | 100% | → |
+      | Staff trained (AI literacy) | 91% | 12% | 90% | ↑ |
+      | Open high risks | 2 | 5 | 0 | ↓ |
+      | Human override rate (AI-001) | 6.2% | 0.4% | 2–20% | ↑ |
+
+      ### 7. Decisions sought
+
+      | # | Decision | Recommendation | Rationale | Impact if deferred |
+      |---|---|---|---|---|
+      | 1 | 0.5 FTE governance analyst | **Approve** | One person is running governance for 13 systems across 4 jurisdictions. Documentation is the red item and is a capacity problem, not a knowledge one. | Annex IV documentation slips past Q4; Dec 2027 readiness becomes at risk |
+      | 2 | £180k Dec 2027 readiness plan | **Approve** | Covers technical documentation, conformity assessment prep, and triage retraining | Conformity assessment capacity is finite; late engagement risks missing the deadline |
+
+      ### 8. Appendices
+
+      A. Risk register extract · B. AI inventory (13 systems) ·
+      C. INC-004 incident report · D. Triage subgroup analysis
+    takeaways:
+      - An amber pack with a specific ask beats a green pack with none. The board
+        can only act on decisions you put in front of them.
+      - Lead with what changed and what you need, not with how busy you were.
+      - Report the uncomfortable numbers. The 0.4% override rate is the most
+        credible thing in this pack.
+
+  - id: example-raci
+    title: RACI Matrix — worked example
+    nav: RACI Matrix
+    of: raci
+    path: examples/raci.md
+    intro: >-
+      Meridian's RACI after the argument that produced it. Two rows were disputed
+      for a fortnight, which is the useful part — those are exactly the rows that
+      would have failed during an incident.
+    body: |
+      ### The matrix
+
+      Roles are real people at Meridian. **A** = accountable, one per row.
+
+      | Activity | Board | Committee | Gov Lead (Nakamura) | Data Owner | AI Owner | Eng (Ivanov) | Legal (Whitfield) | Security | Audit |
+      |---|---|---|---|---|---|---|---|---|---|
+      | **Strategy** | | | | | | | | | |
+      | Approve governance charter | **A** | R | R | C | C | I | C | C | I |
+      | Set risk appetite | **A** | R | C | C | C | I | C | C | I |
+      | Approve policies | I | **A** | R | C | C | C | C | C | I |
+      | **Inventory** | | | | | | | | | |
+      | Maintain AI inventory | I | I | **A** | C | R | R | I | C | I |
+      | Classify risk tier | I | C | **A** | C | R | C | C | C | I |
+      | Quarterly SaaS release-note sweep | I | I | **A** | I | I | R | I | R | I |
+      | **Risk** | | | | | | | | | |
+      | Screen prohibited practices | I | C | **A** | I | R | R | C | I | I |
+      | Complete AI risk assessment | I | C | C | C | **A** | R | C | C | I |
+      | Accept residual risk (high-risk) | I | **A** | R | C | C | I | C | C | I |
+      | **Build & operate** | | | | | | | | | |
+      | Approve data for training | I | I | C | **A** | C | R | C | C | I |
+      | Approve high-risk deployment | I | **A** | R | C | R | C | C | C | I |
+      | Design human oversight | I | C | C | I | **A** | R | C | I | I |
+      | Monitor override rates | I | I | C | I | **A** | R | I | I | I |
+      | **Suspend a live system** | I | I | **A** | I | R | R | I | R | I |
+      | **Third party** | | | | | | | | | |
+      | Assess vendor AI risk | I | I | C | C | C | C | C | **A** | I |
+      | Negotiate AI contract terms | I | I | C | I | C | I | **A** | R | I |
+      | **Assurance** | | | | | | | | | |
+      | Report to board | **A** | R | R | I | I | I | C | C | C |
+      | Independent assurance | I | C | I | I | I | I | I | I | **A** |
+
+      ### The two rows that were argued about
+
+      !!! warning "\"Complete AI risk assessment\" — Governance vs. the AI Owner"
+          Governance initially held the **A**, on the basis that it owned the
+          process. The clinical AI owner objected: they were being made
+          responsible for a system's safety while someone else was accountable for
+          assessing it.
+
+          **Resolved in favour of the AI Owner holding A**, with Governance as C.
+          The person accountable for the system's outcomes should be accountable
+          for understanding its risks. Governance owns the *method*, not the
+          *conclusion*.
+
+      !!! warning "\"Suspend a live system\" — everyone wanted someone else to hold it"
+          Nobody wanted to be accountable for stopping a clinical system. The
+          committee initially held the **A**, which would have meant a system
+          causing harm stayed live until a quorum could be convened.
+
+          **Resolved: Gov Lead holds A, with Security and the AI Owner both able
+          to act (R).** Any of the three can stop a system without permission;
+          notification follows within 24 hours. The accountability for *having a
+          working suspension capability* sits with one person.
+
+      ### Validation
+
+      - [x] Every row has exactly one **A**
+      - [x] No one person is **A** on more than 6 rows — Nakamura holds 5
+      - [x] Every **A** has budget and authority to deliver
+      - [x] Audit is **A** only on independent assurance, never on an activity it assures
+      - [x] Every named role has a real person in post today
+    takeaways:
+      - The argument is the deliverable. Rows nobody disputes are rows nobody has
+        thought about.
+      - Accountability for assessing a risk belongs with whoever is accountable
+        for the outcome, not with the team that owns the process.
+      - Distribute the right to stop a system. If suspension needs a meeting, it
+        will not happen in time.

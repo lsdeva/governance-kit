@@ -306,11 +306,22 @@ def render_checklist_docx(doc, items):
         r.font.size = Pt(10.5)
         h = doc.add_paragraph()
         h.paragraph_format.left_indent = Inches(0.45)
-        h.paragraph_format.space_after = Pt(6)
+        h.paragraph_format.space_after = Pt(2)
         hr = h.add_run(" ".join(q["help"].split()))
         hr.font.size = Pt(9)
         hr.font.color.rgb = GREY
         hr.font.italic = True
+        if q.get("evidence"):
+            e = doc.add_paragraph()
+            e.paragraph_format.left_indent = Inches(0.45)
+            e.paragraph_format.space_after = Pt(7)
+            lbl = e.add_run("Evidence: ")
+            lbl.font.size = Pt(9)
+            lbl.font.bold = True
+            lbl.font.color.rgb = GREY
+            ev = e.add_run(" ".join(q["evidence"].split()))
+            ev.font.size = Pt(9)
+            ev.font.color.rgb = GREY
 
 
 # -------------------------------------------------------------------- Excel

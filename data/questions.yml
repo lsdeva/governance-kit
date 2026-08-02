@@ -34,6 +34,9 @@
     One person, by name, not a committee and not "the CTO's team". If something
     went wrong tomorrow, this is who the board would call. If two people would
     both say "not me", answer No.
+  evidence: >-
+    A board minute, terms of reference, or role description naming the
+    individual and the accountability.
   category: Oversight
   applies_to: [exec-sponsor, governance-lead, legal-dpo, internal-audit]
   weight: 5
@@ -52,6 +55,9 @@
     A recurring forum with terms of reference, a quorum, and written minutes.
     Ad-hoc conversations, however senior, do not count — the evidence is the
     minute, not the meeting.
+  evidence: >-
+    Committee terms of reference plus the last two sets of minutes showing
+    AI decisions taken.
   category: Oversight
   applies_to: [exec-sponsor, governance-lead, internal-audit]
   weight: 4
@@ -71,6 +77,9 @@
     someone else's tool, you are likely a deployer. The obligations differ
     sharply, and you can be both for different systems. Fine-tuning or
     rebranding a third-party model can make you a provider.
+  evidence: >-
+    The role determination recorded per system in the AI inventory, with the
+    reasoning.
   category: Inventory
   applies_to: [legal-dpo, governance-lead, product-owner, ml-data-science]
   weight: 5
@@ -88,6 +97,9 @@
     The Act reaches you if you place a system on the EU market, or if its output
     is used in the EU — regardless of where you are established. Being outside
     the EU is not by itself an exemption.
+  evidence: >-
+    A written scope assessment covering EU market placement and where system
+    output is used.
   category: Inventory
   applies_to: [legal-dpo, governance-lead, exec-sponsor]
   weight: 4
@@ -110,6 +122,9 @@
     One list, owned by a named person, covering built, bought, and embedded AI —
     including AI features switched on inside SaaS you already licence. If you
     cannot say where the list lives, answer No.
+  evidence: >-
+    The inventory itself, plus evidence of how it is kept current (intake
+    gate, discovery sweep).
   category: Inventory
   applies_to: [governance-lead, ml-data-science, security, internal-audit, product-owner]
   weight: 5
@@ -127,6 +142,9 @@
   help: >-
     Classification is a decision with a date and an owner, recorded against the
     system. "We think most of ours are low risk" is not a classification.
+  evidence: >-
+    Classification recorded against each system with a date, an owner, and
+    the rationale.
   category: Inventory
   applies_to: [governance-lead, legal-dpo, ml-data-science, product-owner]
   weight: 5
@@ -144,6 +162,8 @@
     Covers foundation models you train and, more commonly, commercial LLMs you
     build on. Integrating GPAI into a product can pull you into provider duties
     for the resulting system.
+  evidence: >-
+    A list of GPAI models in use, mapped to the obligations each attracts.
   category: Inventory
   applies_to: [ml-data-science, legal-dpo, governance-lead, security]
   weight: 4
@@ -161,6 +181,9 @@
     A list of system names is not an inventory. The test: could you answer a
     regulator's "what does it do, on what data, from whom, and is it live?"
     without going to ask around.
+  evidence: >-
+    Inventory export showing the fields populated for a sample of systems,
+    not just the headers.
   category: Inventory
   applies_to: [governance-lead, ml-data-science, security]
   weight: 3
@@ -183,6 +206,8 @@
     of facial images, emotion inference in workplaces or schools, and most
     real-time remote biometric identification in public. This needed to be true
     from February 2025.
+  evidence: >-
+    A completed prohibited-practice screen per system, signed off and dated.
   category: Risk
   applies_to: [legal-dpo, governance-lead, product-owner, ml-data-science, exec-sponsor]
   weight: 5
@@ -200,6 +225,9 @@
   help: >-
     A gate at intake, not a review at launch. The point is to stop work before
     money is spent, so it must sit early enough that someone can still say no.
+  evidence: >-
+    The intake process document plus screening records for recent new use
+    cases.
   category: Risk
   applies_to: [governance-lead, product-owner, ml-data-science, legal-dpo]
   weight: 4
@@ -220,6 +248,9 @@
   help: >-
     Continuous, not a one-off sign-off: identify, evaluate, mitigate, then keep
     checking once the system is live and its inputs drift.
+  evidence: >-
+    A risk assessment per high-risk system, with review dates that have
+    actually been met.
   category: Risk
   applies_to: [governance-lead, ml-data-science, security, internal-audit]
   weight: 5
@@ -236,6 +267,9 @@
   help: >-
     Do you know where training data came from, whether you may lawfully use it,
     who it does and does not represent, and what you did when you found a skew?
+  evidence: >-
+    Data documentation covering source, licence, representativeness testing,
+    and bias findings.
   category: Documentation
   applies_to: [ml-data-science, legal-dpo, governance-lead]
   weight: 5
@@ -252,6 +286,9 @@
   help: >-
     Annex IV sets out what it must contain. The failure mode is not absence but
     staleness — documentation written at launch and never touched again.
+  evidence: >-
+    Technical documentation per Annex IV, with a version history showing it
+    is maintained.
   category: Documentation
   applies_to: [ml-data-science, governance-lead, internal-audit]
   weight: 4
@@ -269,6 +306,9 @@
     Machine-generated logs, retained long enough to reconstruct what a system did
     and why on a given date. Application logs often do not capture the model
     inputs and outputs that actually matter here.
+  evidence: >-
+    Log configuration and a retention policy, plus a sample log proving
+    inputs and outputs are captured.
   category: Documentation
   applies_to: [ml-data-science, security, internal-audit]
   weight: 4
@@ -286,6 +326,9 @@
     The honest test: can the named human actually understand the output, and do
     they have the authority, time, and confidence to override it? A reviewer
     approving 400 decisions an hour is not oversight.
+  evidence: >-
+    Oversight design documentation, override statistics, and the reviewer's
+    training record.
   category: Oversight
   applies_to: [product-owner, governance-lead, ml-data-science, people-hr]
   weight: 5
@@ -304,6 +347,9 @@
     Declared metrics with test results behind them, including behaviour under
     adversarial input and on edge cases. "It performed well in testing" without
     numbers is a No.
+  evidence: >-
+    Test results with declared metrics, subgroup performance, and
+    adversarial testing evidence.
   category: Risk
   applies_to: [ml-data-science, security, internal-audit]
   weight: 4
@@ -321,6 +367,9 @@
     Know whether your route is self-assessment or a notified body, and how long
     it takes. Notified-body capacity is finite and the queue will not be shorter
     closer to the deadline.
+  evidence: >-
+    A conformity assessment plan naming the route, the body if applicable,
+    and the target date.
   category: Documentation
   applies_to: [legal-dpo, governance-lead, product-owner]
   weight: 3
@@ -338,6 +387,9 @@
   help: >-
     Someone watches live performance, and there is a defined path — with a clock
     on it — for reporting serious incidents to the relevant authority.
+  evidence: >-
+    The monitoring configuration and a documented incident reporting
+    procedure with named owners.
   category: Oversight
   applies_to: [governance-lead, ml-data-science, security, product-owner]
   weight: 4
@@ -358,6 +410,9 @@
   help: >-
     Clear at the point of interaction, not buried in terms of service. Applies to
     chatbots and AI-driven assistants unless it is obvious to a reasonable person.
+  evidence: >-
+    Screenshots or UI evidence of the disclosure at the point of
+    interaction.
   category: Transparency
   applies_to: [product-owner, legal-dpo, governance-lead]
   weight: 4
@@ -374,6 +429,9 @@
   help: >-
     Synthetic audio, image, video, and text intended to inform the public must be
     machine-readably marked. This includes marketing material your teams generate.
+  evidence: >-
+    Marking or watermarking configuration, plus samples of generated content
+    showing it applied.
   category: Transparency
   applies_to: [product-owner, ml-data-science, legal-dpo]
   weight: 3
@@ -390,6 +448,9 @@
   help: >-
     If you use neither, answer Not applicable. Note that emotion inference in
     workplaces and education is prohibited outright, not merely restricted.
+  evidence: >-
+    Disclosure notices, or a documented confirmation that neither technique
+    is used.
   category: Transparency
   applies_to: [legal-dpo, people-hr, product-owner, security]
   weight: 3
@@ -412,6 +473,9 @@
     Do you actually have the model documentation from your vendor, or do you just
     assume it exists? "It is on their website" only counts if someone has read it
     and filed it.
+  evidence: >-
+    The provider documentation you actually hold on file, not a link to a
+    vendor website.
   category: Third-party
   applies_to: [ml-data-science, legal-dpo, security, governance-lead]
   weight: 3
@@ -430,6 +494,9 @@
     Right to obtain documentation, to be told about material model changes, and
     to audit or receive assurance. Standard SaaS terms almost never include these
     unless you asked.
+  evidence: >-
+    Executed contracts or amendments containing the AI clauses, for your
+    critical vendors.
   category: Third-party
   applies_to: [legal-dpo, security, governance-lead, product-owner]
   weight: 4
@@ -447,6 +514,9 @@
     AI Act compliance does not discharge GDPR. High-risk AI touching personal
     data will almost always need a DPIA, and the two assessments should reference
     each other rather than sit in separate drawers.
+  evidence: >-
+    The completed DPIA, the DPO's recorded opinion, and its cross-reference
+    to the AI assessment.
   category: Documentation
   applies_to: [legal-dpo, governance-lead, ml-data-science]
   weight: 5
@@ -469,6 +539,9 @@
     A live obligation since February 2025, and one of the few that applies to
     everyone regardless of risk tier. Proportionate to role: a procurement lead
     needs different literacy from an ML engineer.
+  evidence: >-
+    Training completion records by role, plus the syllabus showing it is
+    role-appropriate.
   category: Literacy
   applies_to: [people-hr, governance-lead, exec-sponsor, product-owner]
   weight: 4
@@ -488,6 +561,9 @@
   help: >-
     Named owners for each significant data domain, not just a platform team who
     happen to host the tables.
+  evidence: >-
+    The framework document plus a domain list with named owners who know
+    they hold the role.
   category: Oversight
   applies_to: [governance-lead, ml-data-science, internal-audit]
   weight: 3
@@ -503,6 +579,9 @@
   help: >-
     People need to know what they may paste into an external AI tool. Without a
     classification scheme, that judgement gets made individually and badly.
+  evidence: >-
+    The classification policy and evidence of labels applied in at least one
+    production system.
   category: Documentation
   applies_to: [security, legal-dpo, governance-lead]
   weight: 4
@@ -518,6 +597,9 @@
   help: >-
     Completeness, accuracy, timeliness, consistency, validity, uniqueness — with
     thresholds and a named owner who acts when one is breached.
+  evidence: >-
+    Quality reports against defined thresholds, showing measurement over
+    several periods.
   category: Documentation
   applies_to: [ml-data-science, governance-lead]
   weight: 3
@@ -534,6 +616,9 @@
   help: >-
     Risks with named owners, agreed treatments, and review dates — not a
     spreadsheet last updated at the previous audit.
+  evidence: >-
+    The risk register, with owners, treatment plans, and evidence of review
+    at committee.
   category: Risk
   applies_to: [governance-lead, internal-audit, exec-sponsor, security]
   weight: 4
@@ -549,6 +634,9 @@
   help: >-
     People know what counts as an AI incident, where to report it, and what
     happens next. Test it: could a support engineer name the process?
+  evidence: >-
+    The incident procedure plus the incident log, including at least one
+    worked example.
   category: Oversight
   applies_to: [security, governance-lead, product-owner, ml-data-science]
   weight: 4
@@ -565,6 +653,8 @@
     Who can approve a high-risk deployment, who can halt one, and what happens
     when two functions disagree. The real test is whether it has survived a live
     disagreement.
+  evidence: >-
+    The decision rights matrix, plus a real escalation that followed it.
   category: Oversight
   applies_to: [governance-lead, exec-sponsor, product-owner]
   weight: 3
@@ -580,6 +670,8 @@
   help: >-
     Each significant activity has exactly one accountable party. Two accountable
     parties means nobody is.
+  evidence: >-
+    The RACI, validated so every row has exactly one accountable party.
   category: Oversight
   applies_to: [governance-lead, internal-audit, people-hr]
   weight: 3
@@ -595,6 +687,9 @@
   help: >-
     A model card or equivalent: what it is for, what it should not be used for,
     how it performs across groups, and its known failure modes.
+  evidence: >-
+    Model cards for material models, covering intended use, limitations, and
+    subgroup performance.
   category: Documentation
   applies_to: [ml-data-science, internal-audit, product-owner]
   weight: 4
@@ -610,6 +705,9 @@
   help: >-
     A control library that links each obligation to the control that satisfies
     it, who owns it, and how you would evidence it operating.
+  evidence: >-
+    The control library mapping obligations to controls, with owners and
+    test results.
   category: Documentation
   applies_to: [internal-audit, governance-lead, security]
   weight: 3
@@ -625,6 +723,9 @@
   help: >-
     Independent of the people who built and run the systems. A second-line review
     is valuable but is not the same as independent assurance.
+  evidence: >-
+    An audit report or assurance plan covering AI, produced independently of
+    the delivery teams.
   category: Oversight
   applies_to: [internal-audit, exec-sponsor, governance-lead]
   weight: 3
@@ -640,6 +741,8 @@
   help: >-
     A recurring pack with risk posture, movement since last time, and explicit
     decisions being asked for — not an occasional verbal update.
+  evidence: >-
+    The last two board packs, showing risk posture and decisions sought.
   category: Oversight
   applies_to: [exec-sponsor, governance-lead, internal-audit]
   weight: 4
@@ -655,6 +758,9 @@
   help: >-
     Coverage, quality, incident, and readiness measures with a trend. Activity
     counts such as "policies published" tell you nothing about effectiveness.
+  evidence: >-
+    A metrics pack with trend over at least three periods, not a single
+    snapshot.
   category: Oversight
   applies_to: [governance-lead, exec-sponsor]
   weight: 2
@@ -671,6 +777,9 @@
     CV screening, interview scoring, performance ranking, and workforce
     allocation are Annex III high-risk uses. Answer Not applicable only if you
     are certain no such tool is in use anywhere, including inside your HR SaaS.
+  evidence: >-
+    The inventory entry, risk assessment, and DPIA for each
+    employment-related AI system.
   category: Risk
   applies_to: [people-hr, legal-dpo, governance-lead]
   weight: 5
@@ -687,6 +796,9 @@
     Practical and specific: which tools are approved, what may never be pasted
     into them, and who to ask. If people are quietly using unapproved tools, the
     guidance has already failed.
+  evidence: >-
+    The published guidance, the approved tool list, and evidence staff can
+    find both.
   category: Literacy
   applies_to: [people-hr, security, governance-lead, product-owner]
   weight: 4
@@ -704,6 +816,9 @@
     Prompt injection, training-data poisoning, model extraction, and unintended
     disclosure through outputs. Conventional application security does not cover
     these by default.
+  evidence: >-
+    Threat model or security test results covering injection, poisoning, and
+    extraction.
   category: Risk
   applies_to: [security, ml-data-science]
   weight: 4

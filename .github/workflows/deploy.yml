@@ -40,6 +40,15 @@ jobs:
             exit 1
           fi
 
+      # .docx/.xlsx are binaries: rebuilding them always produces byte
+      # differences (timestamps, zip ordering), so a git-diff check would fail
+      # every run. Verify the expected set exists instead, and rebuild so the
+      # deployed files always match the current data.
+      - name: Build downloads
+        run: |
+          python tools/build_downloads.py
+          python tools/build_downloads.py --check
+
       - name: Build site
         run: mkdocs build --strict
       - name: Upload artifact

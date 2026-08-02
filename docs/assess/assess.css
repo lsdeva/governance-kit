@@ -310,6 +310,26 @@
   line-height: 1.55;
 }
 
+.gk-q-ev {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+  margin: -0.35rem 0 0.7rem;
+  padding-left: 0.6rem;
+  border-left: 2px solid var(--md-default-fg-color--lightest);
+  line-height: 1.5;
+}
+
+.gk-q-ev-label {
+  font-weight: 600;
+  color: var(--md-default-fg-color);
+}
+
+.gk-ev-cell {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+  max-width: 16rem;
+}
+
 .gk-opts {
   display: flex;
   flex-wrap: wrap;

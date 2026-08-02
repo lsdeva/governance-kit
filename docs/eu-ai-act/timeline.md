@@ -5,7 +5,7 @@
 
 # EU AI Act timeline (2026 Digital Omnibus)
 
-<span class="pill ready">Ready</span>
+<span class="pill ready">Ready</span> &nbsp;·&nbsp; <span class="gk-meta">v1.1</span> &nbsp;·&nbsp; <span class="gk-meta">Last reviewed <strong>2026-08-02</strong></span>
 
 <div class="gk-downloads" markdown>
 [:material-file-word: Word](../downloads/eu-ai-act-timeline.docx){ .md-button .gk-dl download }
@@ -87,6 +87,17 @@ A sensible sequencing:
     training data. That chain is comfortably an 18-month programme.
 
 ### Sources
+
+**Primary sources — check these first.** Commentary is useful for
+interpretation, but only the official text is authoritative.
+
+- [Regulation (EU) 2024/1689 — the AI Act, consolidated text on EUR-Lex](https://eur-lex.europa.eu/eli/reg/2024/1689/oj)
+- [EUR-Lex — AI Act procedure file and amendments](https://eur-lex.europa.eu/legal-content/EN/HIS/?uri=CELEX:32024R1689)
+- [European Commission — AI Act policy pages and implementing guidance](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai)
+- [European Commission — Digital Omnibus package](https://digital-strategy.ec.europa.eu/en/library/digital-omnibus)
+- [European AI Office](https://digital-strategy.ec.europa.eu/en/policies/ai-office)
+
+**Secondary commentary** — helpful summaries, but confirm against the above.
 
 - [Gibson Dunn — EU AI Act Omnibus Agreement: Postponed High-Risk Deadlines](https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes/)
 - [DLA Piper — The Digital AI Omnibus: proposed deferral of high-risk AI obligations](https://knowledge.dlapiper.com/dlapiperknowledge/globalemploymentlatestdevelopments/2026/The-Digital-AI-Omnibus-Proposed-deferral-of-high-risk-AI-obligations-under-the-AI-Act)

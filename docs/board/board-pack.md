@@ -12,6 +12,10 @@
 [:material-language-markdown: Markdown](../downloads/board-pack.md.txt){ .md-button .gk-dl download="board-pack.md" }
 </div>
 
+!!! example "See this filled in"
+    A [worked example](../examples/board-pack.md) shows this
+    template completed for a fictional mid-size company.
+
 **Purpose.** A structured report that gives the board what it needs to discharge its oversight duty: current posture, what changed, what went wrong, and what decisions are being asked of them.
 
 **When to use it.** Every board or risk committee cycle — typically quarterly. Also for an extraordinary session after a serious incident.

@@ -18,6 +18,11 @@ Omnibus dates.
 
 [Take the assessment](assess/index.md){ .md-button .md-button--primary }
 [Browse the templates](getting-started.md){ .md-button }
+[I've been asked to…](tasks.md){ .md-button }
+
+<div class="gk-stats" markdown>
+--8<-- "stats.md"
+</div>
 
 </div>
 
