@@ -93,18 +93,25 @@
         affected.
       options:
         - label: Employment — recruitment, screening, promotion, task allocation, or monitoring
+          annex: "Annex III(4)"
           next: hr-derogation
         - label: Education — admission, assessment, or proctoring
+          annex: "Annex III(3)"
           next: hr-derogation
         - label: Essential services — credit scoring, insurance pricing, or access to public benefits
+          annex: "Annex III(5)"
           next: hr-derogation
         - label: Healthcare triage, or emergency service dispatch
+          annex: "Annex III(5)(d)"
           next: hr-derogation
         - label: Law enforcement, migration, border control, or justice
+          annex: "Annex III(6)-(8)"
           next: hr-derogation
         - label: Biometric identification or categorisation (where not prohibited above)
+          annex: "Annex III(1)"
           next: hr-derogation
         - label: Critical infrastructure — safety in water, gas, electricity, or transport
+          annex: "Annex III(2)"
           next: hr-derogation
         - label: None of these
           next: hr-safety-component

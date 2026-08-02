@@ -297,3 +297,16 @@
   margin: 0 0 1rem;
   font-size: .9rem;
 }
+
+/* Stay on the outcome after recording, with the follow-up actions attached to
+ * the entry just created. Returning to the landing page here stranded the user. */
+.gk-recorded {
+  border-left: 3px solid #1e7d34;
+  background: var(--md-code-bg-color);
+  padding: .9rem 1.1rem;
+  border-radius: 0 .4rem .4rem 0;
+  margin-top: 1.5rem;
+}
+
+.gk-recorded p { margin: 0 0 .6rem; }
+.gk-recorded .gk-actions { margin: 0; }

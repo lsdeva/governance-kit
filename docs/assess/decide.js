@@ -26,6 +26,9 @@
   var state = {
     flash: null,       // one-shot confirmation after writing to the register
     primary: null,     // a settled tier while stacked duties are still asked
+    annex: null,       // the specific Annex III point the user selected
+    purpose: "",       // one-line description, for the inventory's Purpose column
+    recorded: null,    // the log entry just created, so follow-ups stay here
     decisionId: null,
     subject: "",
     path: [],        // [{qid, question, answer, label}]
@@ -93,6 +96,7 @@
       decision: d.title,
       decisionId: d.id,
       subject: state.subject || "(unnamed system)",
+      purpose: state.purpose || "",
       verdict: state.outcome.tier +
         (state.outcome.additional ? " + " + state.outcome.additional.tier : ""),
       ref: [state.outcome.ref, state.outcome.additional &&
@@ -105,6 +109,17 @@
       })
     });
     saveLog(entries);
+
+    // A role verdict recorded AFTER the system was already inventoried should
+    // still reach the register.
+    if (d.id === "operator-role") {
+      var role = String(state.outcome.tier || "").split("(")[0].trim();
+      var n = backfillRole(state.subject, role);
+      if (n) {
+        state.flash = "Also set \"Our role\" to " + role + " on " + n +
+          " inventory row" + (n === 1 ? "" : "s") + ".";
+      }
+    }
     return entries;
   }
 
@@ -215,7 +230,9 @@
 
     set("System ID", idIdx === -1 ? "" : nextSystemId(rows, idIdx));
     set("System name", entry.subject);
-    set("Purpose", entry.subject);
+    // Fall back to the name only if no purpose was given — a Purpose column
+    // that merely repeats the name tells a reader nothing.
+    set("Purpose", entry.purpose || entry.subject);
     set("Risk tier", entry.verdict);
     set("Tier rationale", rationale);
     set("Annex ref", entry.ref || "");
@@ -241,6 +258,43 @@
     return { ok: true, systemId: row[idIdx] || "" };
   }
 
+  /*
+   * Back-fill "Our role" onto an inventory row written before the role was
+   * decided. Without this, the order in which the user happened to run the two
+   * flows silently determined whether the column got filled — and it was never
+   * revisited.
+   */
+  function backfillRole(subject, role) {
+    var columns = registerColumns();
+    if (!columns || !role) return 0;
+    var saved = loadRegister();
+    if (!saved || !Array.isArray(saved.sheets) || !saved.sheets.length) return 0;
+    var rows = saved.sheets[0];
+    if (!rows.length || rows[0].length !== columns.length) return 0;
+
+    var nameIdx = colIndex(columns, "System name");
+    var roleIdx = colIndex(columns, "Our role");
+    if (nameIdx === -1 || roleIdx === -1) return 0;
+
+    var want = String(subject || "").trim().toLowerCase();
+    var n = 0;
+    rows.forEach(function (r) {
+      if (String(r[nameIdx] || "").trim().toLowerCase() !== want) return;
+      // Only fill a blank — never overwrite a role the user set themselves.
+      if (String(r[roleIdx] || "").trim() !== "") return;
+      r[roleIdx] = role;
+      n++;
+    });
+    if (!n) return 0;
+    try {
+      localStorage.setItem(REGISTER_KEY, JSON.stringify({
+        id: "ai-system-inventory", sheets: saved.sheets,
+        savedAt: new Date().toISOString()
+      }));
+    } catch (e) { return 0; }
+    return n;
+  }
+
   function decision() {
     return DATA.decisions.filter(function (d) {
       return d.id === state.decisionId;
@@ -257,6 +311,16 @@
       oninput: function (e) { state.subject = e.target.value; }
     });
     input.value = state.subject || "";
+    return input;
+  }
+
+  function purposeInput() {
+    var input = el("input", {
+      type: "text",
+      placeholder: "e.g. Ranks inbound job applications for shortlisting",
+      oninput: function (e) { state.purpose = e.target.value; }
+    });
+    input.value = state.purpose || "";
     return input;
   }
 
@@ -307,7 +371,9 @@
     state.path = [];
     state.outcome = null;
     state.primary = null;
-    if (!keepSubject) state.subject = "";
+    state.annex = null;
+    state.recorded = null;
+    if (!keepSubject) { state.subject = ""; state.purpose = ""; }
     state.current = decision().start;
     render();
   }
@@ -321,7 +387,10 @@
       state.outcome = null;
     } else if (resultOrNext && resultOrNext.outcome) {
       var o = outcomeById(resultOrNext.outcome);
-      var reached = Object.assign({}, o, { ref: resultOrNext.ref || null });
+      // A generic "Annex III" is replaced by the specific point the user chose.
+      var ref = resultOrNext.ref || null;
+      if (state.annex && ref === "Annex III") ref = state.annex;
+      var reached = Object.assign({}, o, { ref: ref });
 
       // `then` means the tier is settled but the questioning continues, because
       // some obligations stack: a high-risk chatbot owes Art. 50 disclosure as
@@ -352,6 +421,7 @@
     var last = state.path.pop();
     state.outcome = null;
     state.primary = null;   // re-derived by replaying from this question
+    state.recorded = null;
     state.current = last.qid;
     render();
   }
@@ -511,11 +581,14 @@
 
     if (state.path.length === 0) {
       wrap.appendChild(el("p", { class: "gk-muted" }, [d.intro]));
-      var nameWrap = el("label", { class: "gk-dec-subject" }, [
+      wrap.appendChild(el("label", { class: "gk-dec-subject" }, [
         el("span", {}, ["Which system are you classifying?"]),
         subjectInput()
-      ]);
-      wrap.appendChild(nameWrap);
+      ]));
+      wrap.appendChild(el("label", { class: "gk-dec-subject" }, [
+        el("span", {}, ["What does it do? (one line, optional)"]),
+        purposeInput()
+      ]));
     } else if (state.subject) {
       wrap.appendChild(el("p", { class: "gk-muted" }, [
         "Classifying: " + state.subject
@@ -530,7 +603,12 @@
       q.options.forEach(function (o) {
         opts.appendChild(el("button", {
           class: "gk-dec-opt", type: "button",
-          onclick: function () { answer(q, o.next, o.label); }
+          onclick: function () {
+            // P2: hold the specific Annex point (e.g. III(4)) so the verdict
+            // and the inventory record it instead of a generic "Annex III".
+            if (o.annex) state.annex = o.annex;
+            answer(q, o.next, o.label);
+          }
         }, [o.label]));
       });
     } else {
@@ -589,6 +667,77 @@
       }, ["Start over"])
     ]));
     return wrap;
+  }
+
+  /*
+   * After recording, keep the user on the outcome with the follow-up actions
+   * attached to the entry they just created — classify the role for the same
+   * system, push it into the inventory, or move on. Previously this returned
+   * to the landing page, stranding them.
+   */
+  function recordedPanel() {
+    var e = state.recorded;
+    var panel = el("div", { class: "gk-recorded" });
+    panel.appendChild(el("p", {}, [
+      el("strong", {}, ["Recorded as " + e.id + ". "]),
+      "Dated " + e.date + " with the full reasoning."
+    ]));
+
+    var bar = el("div", { class: "gk-actions" });
+
+    // Same system, the other flow — the obvious next question.
+    var other = DATA.decisions.filter(function (d) {
+      return d.id !== e.decisionId;
+    })[0];
+    var done = other && loadLog().some(function (x) {
+      return x.decisionId === other.id &&
+        String(x.subject || "").trim().toLowerCase() ===
+        String(e.subject || "").trim().toLowerCase();
+    });
+    if (other && !done) {
+      bar.appendChild(el("button", {
+        class: "gk-btn gk-btn-primary", type: "button",
+        onclick: function () {
+          var subject = e.subject;
+          state.recorded = null;
+          begin(other.id, true);
+          state.subject = subject;
+          render();
+        }
+      }, [other.id === "operator-role"
+          ? "Now: are we the provider or the deployer?"
+          : "Now: what risk tier is it?"]));
+    }
+
+    if (e.decisionId === "risk-tier" && registerColumns()) {
+      bar.appendChild(el("button", {
+        class: "gk-btn", type: "button",
+        onclick: function () {
+          var res = addToInventory(e);
+          if (!res.ok) { window.alert(res.why); return; }
+          var all = loadLog();
+          all.forEach(function (x) { if (x.id === e.id) x.inventoried = res.systemId || true; });
+          saveLog(all);
+          state.flash = "Added " + (res.systemId || "the system") +
+            " to your AI System Inventory.";
+          state.recorded = null;
+          state.decisionId = null;
+          render();
+        }
+      }, ["Add to AI System Inventory"]));
+    }
+
+    bar.appendChild(el("button", {
+      class: "gk-btn", type: "button",
+      onclick: function () {
+        state.recorded = null;
+        state.decisionId = null;
+        state.subject = "";
+        render();
+      }
+    }, ["Done — back to the list"]));
+    panel.appendChild(bar);
+    return panel;
   }
 
   function viewOutcome() {
@@ -666,18 +815,22 @@
       "ask you to produce."
     ]));
 
+    if (state.recorded) {
+      wrap.appendChild(recordedPanel());
+      return wrap;
+    }
+
     var bar = el("div", { class: "gk-actions" });
     bar.appendChild(el("button", {
       class: "gk-btn gk-btn-primary", type: "button",
       onclick: function () {
-        recordDecision();
-        state.decisionId = null;
-        state.subject = "";
-        state.path = [];
-        state.outcome = null;
+        var entries = recordDecision();
+        // Stay on the outcome and show what to do next. Returning to the
+        // landing page here lost the follow-up jump into the role flow — the
+        // user had recorded a classification and was dropped back at the start
+        // with no obvious next step.
+        state.recorded = entries[entries.length - 1];
         render();
-        var log = document.querySelector(".gk-log");
-        if (log) log.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }, ["Record this decision"]));
     bar.appendChild(el("button", {
