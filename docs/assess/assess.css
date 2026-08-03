@@ -722,3 +722,36 @@
     break-inside: avoid;
   }
 }
+
+/* Partial-result banner and the register vocabulary help text (Phase 1.5/1.6).
+   Both reuse existing tokens — no new colour or type. */
+.gk-partial {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  border-left: 3px solid var(--gk-warn);
+  background: var(--gk-warn-bg);
+  color: var(--gk-warn-text);
+  padding: .7rem 1rem;
+  border-radius: 0 var(--gk-r-md) var(--gk-r-md) 0;
+  margin: 0 0 1.25rem;
+  font-size: .88rem;
+  line-height: 1.5;
+}
+
+.gk-partial .gk-btn {
+  margin-left: auto;
+  font-size: .78rem;
+  padding: .25rem .6rem;
+  background: var(--gk-surface);
+}
+
+.gk-reg-help {
+  font-size: .8rem;
+  color: var(--gk-ink-2);
+  line-height: 1.55;
+  padding: .5rem .75rem .6rem;
+  margin: 0;
+  border-bottom: 1px solid var(--gk-hairline);
+}

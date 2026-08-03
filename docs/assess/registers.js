@@ -334,17 +334,17 @@
     actions.appendChild(el("button", {
       class: "gk-btn", type: "button",
       onclick: function () { self.exportXlsx(); }
-    }, ["Download Excel"]));
+    }, ["Export to Excel"]));
     actions.appendChild(el("button", {
       class: "gk-btn", type: "button",
       onclick: function () { self.exportCsv(); }
-    }, ["Download CSV"]));
+    }, ["Export to CSV"]));
     actions.appendChild(el("button", {
       class: "gk-btn", type: "button",
       onclick: function () { self.exportJson(); }
-    }, ["Save file"]));
+    }, ["Back up this register"]));
     actions.appendChild(el("label", { class: "gk-btn gk-file" }, [
-      "Open file",
+      "Restore this register",
       el("input", {
         type: "file", accept: ".json,application/json",
         onchange: function (e) { self.importJson(e); }
@@ -369,8 +369,19 @@
     wrap.appendChild(el("div", { class: "gk-reg-meta" }, [
       this.statusEl,
       el("span", { class: "gk-muted" }, [
-        " · Autosaved on this device only. Nothing is uploaded."
+        " · Autosaved in this browser as you type. Nothing is uploaded."
       ])
+    ]));
+
+    // Three different things, three different names. Users were conflating a
+    // shareable document with a restorable backup.
+    wrap.appendChild(el("p", { class: "gk-reg-help" }, [
+      el("strong", {}, ["Export"]),
+      " gives you an Excel or CSV file to share or work on offline. ",
+      el("strong", {}, ["Back up"]),
+      " gives you a file that restores this register here, on any device. " +
+      "Neither replaces the other, and clearing your browser data clears the " +
+      "autosave — so back up anything you want to keep."
     ]));
 
     // --- grid

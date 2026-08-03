@@ -442,14 +442,44 @@
     });
 
     var bar = el("div", { class: "gk-actions" });
-    bar.appendChild(el("button", {
-      class: "gk-btn gk-btn-primary", type: "button",
-      onclick: function () {
-        state.step = "report";
-        window.scrollTo(0, 0);
-        render();
-      }
-    }, [done ? "See your report" : "See report (answer some questions first)"]));
+    var remaining = qs.length - done;
+
+    function goToReport() {
+      state.step = "report";
+      window.scrollTo(0, 0);
+      render();
+    }
+
+    // With questions outstanding, the primary action is FINISHING them. A
+    // score that quietly omits whole categories is not a readiness score, and
+    // offering it as the main button invites people to act on it.
+    if (remaining > 0 && done > 0) {
+      bar.appendChild(el("button", {
+        class: "gk-btn gk-btn-primary", type: "button",
+        onclick: function () {
+          state.category = null;
+          var next = qs.filter(function (q) {
+            return !state.answers[q.id] || !state.answers[q.id].value;
+          })[0];
+          render();
+          if (next) {
+            var node = root.querySelector('[data-qid="' + next.id + '"]');
+            if (node) node.scrollIntoView({ block: "center" });
+          }
+        }
+      }, ["Finish " + remaining + " remaining question" +
+          (remaining === 1 ? "" : "s")]));
+      bar.appendChild(el("button", {
+        class: "gk-btn", type: "button", onclick: goToReport
+      }, ["Preview partial report"]));
+    } else {
+      bar.appendChild(el("button", {
+        class: "gk-btn gk-btn-primary", type: "button",
+        disabled: done ? null : "disabled",
+        onclick: goToReport
+      }, [done ? "See your report" : "Answer a question to see your report"]));
+    }
+
     bar.appendChild(el("button", {
       class: "gk-btn", type: "button",
       onclick: function () { state.step = "roles"; render(); }
@@ -468,7 +498,10 @@
 
   function questionCard(q) {
     var a = state.answers[q.id] || {};
-    var card = el("div", { class: "gk-q" + (a.value ? " is-answered" : "") });
+    var card = el("div", {
+      class: "gk-q" + (a.value ? " is-answered" : ""),
+      "data-qid": q.id
+    });
 
     var meta = el("div", { class: "gk-q-meta" }, [
       el("span", { class: "gk-q-id" }, [q.id]),
@@ -613,6 +646,26 @@
       ])
     ]);
     wrap.appendChild(scoreBox);
+
+    // Say plainly what the number does and does not cover. Unanswered areas
+    // are excluded from the maths entirely, so a partial score is not a
+    // readiness score and must not be presented as one.
+    var unanswered = s.total - s.answered;
+    if (unanswered > 0) {
+      wrap.appendChild(el("div", { class: "gk-partial" }, [
+        el("strong", {}, [
+          "Partial result — " + s.answered + " of " + s.total + " answered. "
+        ]),
+        el("span", {}, [
+          "Unanswered areas are not included in this score. This is not your " +
+          "final readiness score."
+        ]),
+        el("button", {
+          class: "gk-btn gk-btn-small", type: "button",
+          onclick: function () { state.step = "questions"; window.scrollTo(0, 0); render(); }
+        }, ["Finish the remaining " + unanswered])
+      ]));
+    }
 
     // Audience framing sentence.
     wrap.appendChild(el("p", { class: "gk-framing" }, [framingFor(state.audience, s)]));
