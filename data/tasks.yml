@@ -12,6 +12,7 @@
 #   note      - the one thing worth knowing before starting
 
 - ask: "Tell the board how exposed we are to the EU AI Act"
+  requesters: [board]
   who: Board, CEO, or Audit Committee
   effort: 1–2 days for a first pass
   start: [ai-system-inventory, eu-ai-act-readiness-checklist, board-pack]
@@ -21,6 +22,7 @@
     it; the first question will be "how many systems is that out of?"
 
 - ask: "Find out what AI we're actually using"
+  requesters: [internal-audit, security, business]
   who: Governance, Security, or Legal
   effort: 2–3 days including a discovery sweep
   start: [ai-system-inventory, third-party-ai-risk-policy]
@@ -29,6 +31,7 @@
     Expect to find two to three times what people report.
 
 - ask: "Write us an AI policy"
+  requesters: [board, business]
   who: Exec team or HR
   effort: Half a day to draft, 2 weeks to socialise
   start: [acceptable-ai-use-policy, data-classification-policy]
@@ -38,6 +41,7 @@
     getting ahead.
 
 - ask: "Prove our AI isn't discriminating"
+  requesters: [customer, regulator]
   who: Legal, DPO, or a customer
   effort: 1–2 weeks per system
   start: [ai-risk-assessment, model-card, data-quality-standard]
@@ -46,6 +50,7 @@
     systematically wrong about one group, and that group is who complains.
 
 - ask: "Set up an AI governance committee"
+  requesters: [board]
   who: Exec sponsor
   effort: 1 week to charter, first meeting within a month
   start: [committee-charter, governance-charter, raci, decision-rights]
@@ -54,6 +59,7 @@
     committee that cannot stop anything is advisory.
 
 - ask: "Do a DPIA for an AI system"
+  requesters: [regulator, internal-audit]
   who: DPO or Legal
   effort: 1–2 weeks
   start: [processing-dpia-log, ai-risk-assessment, data-classification-policy]
@@ -62,6 +68,7 @@
     your answer on erasure before you build, not after.
 
 - ask: "Assess an AI vendor before we sign"
+  requesters: [procurement, security]
   who: Procurement or Security
   effort: 2–3 days
   start: [third-party-ai-risk-policy, ai-system-inventory]
@@ -70,6 +77,7 @@
     model, and whether you are told when the model changes.
 
 - ask: "Show an auditor our AI controls work"
+  requesters: [internal-audit, regulator]
   who: Internal Audit or an external assessor
   effort: 1–2 weeks to assemble
   start: [control-library, risk-register, incident-log]
@@ -78,6 +86,7 @@
     each obligation needs. Assemble against that list rather than guessing.
 
 - ask: "Document a model before it goes live"
+  requesters: [business, security]
   who: ML lead or a release gate
   effort: 1–2 days per model
   start: [model-card, ai-development-standard]
@@ -86,6 +95,7 @@
     limitations tells a reader you did not look.
 
 - ask: "Work out where to start with all of this"
+  requesters: [business]
   who: You, having just been handed the brief
   effort: Half a day
   start: [maturity-assessment, ai-system-inventory, governance-charter]

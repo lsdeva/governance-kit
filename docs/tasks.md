@@ -7,12 +7,25 @@
 
 Most people land here because someone asked them for something. Find the request below and start where it points.
 
+<div class="gk-task-filter" id="gk-task-filter" role="group" aria-label="Filter by who is asking">
+<button class="gk-chip is-on" type="button" data-req="all">Everything</button>
+<button class="gk-chip" type="button" data-req="board">Board</button>
+<button class="gk-chip" type="button" data-req="regulator">Regulator</button>
+<button class="gk-chip" type="button" data-req="customer">Customer</button>
+<button class="gk-chip" type="button" data-req="procurement">Procurement</button>
+<button class="gk-chip" type="button" data-req="internal-audit">Internal audit</button>
+<button class="gk-chip" type="button" data-req="security">Security</button>
+<button class="gk-chip" type="button" data-req="business">Business team</button>
+</div>
+
 !!! tip "Not sure where you stand?"
     Take the [role-based assessment](assess/index.md) — answer questions relevant to
     your role and get a report showing which of these templates close your
     biggest gaps. Everything stays in your browser.
 
-## "Tell the board how exposed we are to the EU AI Act"
+<div class="gk-task" data-requesters="board" markdown>
+
+### "Tell the board how exposed we are to the EU AI Act"
 
 **Usually asked by:** Board, CEO, or Audit Committee  
 **Rough effort:** 1–2 days for a first pass
@@ -26,7 +39,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     Take the assessment first and export the Board view — it produces most of the pack. Do not present a readiness percentage without an inventory behind it; the first question will be "how many systems is that out of?"
 
-## "Find out what AI we're actually using"
+</div>
+
+<div class="gk-task" data-requesters="internal-audit security business" markdown>
+
+### "Find out what AI we're actually using"
 
 **Usually asked by:** Governance, Security, or Legal  
 **Rough effort:** 2–3 days including a discovery sweep
@@ -39,7 +56,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     Ask teams, then check SaaS release notes, expense claims, and SSO logs. Expect to find two to three times what people report.
 
-## "Write us an AI policy"
+</div>
+
+<div class="gk-task" data-requesters="board business" markdown>
+
+### "Write us an AI policy"
 
 **Usually asked by:** Exec team or HR  
 **Rough effort:** Half a day to draft, 2 weeks to socialise
@@ -52,7 +73,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     Publish a usable one-pager this week rather than a complete one next quarter. Staff are already using AI; the policy is catching up, not getting ahead.
 
-## "Prove our AI isn't discriminating"
+</div>
+
+<div class="gk-task" data-requesters="customer regulator" markdown>
+
+### "Prove our AI isn't discriminating"
 
 **Usually asked by:** Legal, DPO, or a customer  
 **Rough effort:** 1–2 weeks per system
@@ -66,7 +91,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     Test subgroups, not just aggregate accuracy. A 95% accurate system can be systematically wrong about one group, and that group is who complains.
 
-## "Set up an AI governance committee"
+</div>
+
+<div class="gk-task" data-requesters="board" markdown>
+
+### "Set up an AI governance committee"
 
 **Usually asked by:** Exec sponsor  
 **Rough effort:** 1 week to charter, first meeting within a month
@@ -81,7 +110,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     Settle quorum and the right to halt a system before the first meeting. A committee that cannot stop anything is advisory.
 
-## "Do a DPIA for an AI system"
+</div>
+
+<div class="gk-task" data-requesters="regulator internal-audit" markdown>
+
+### "Do a DPIA for an AI system"
 
 **Usually asked by:** DPO or Legal  
 **Rough effort:** 1–2 weeks
@@ -95,7 +128,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     Run it alongside the AI risk assessment and cross-reference them. Decide your answer on erasure before you build, not after.
 
-## "Assess an AI vendor before we sign"
+</div>
+
+<div class="gk-task" data-requesters="procurement security" markdown>
+
+### "Assess an AI vendor before we sign"
 
 **Usually asked by:** Procurement or Security  
 **Rough effort:** 2–3 days
@@ -108,7 +145,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     The two questions that matter most are whether your data trains their model, and whether you are told when the model changes.
 
-## "Show an auditor our AI controls work"
+</div>
+
+<div class="gk-task" data-requesters="internal-audit regulator" markdown>
+
+### "Show an auditor our AI controls work"
 
 **Usually asked by:** Internal Audit or an external assessor  
 **Rough effort:** 1–2 weeks to assemble
@@ -122,7 +163,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     Take the assessment and export the Regulator view — it lists what evidence each obligation needs. Assemble against that list rather than guessing.
 
-## "Document a model before it goes live"
+</div>
+
+<div class="gk-task" data-requesters="business security" markdown>
+
+### "Document a model before it goes live"
 
 **Usually asked by:** ML lead or a release gate  
 **Rough effort:** 1–2 days per model
@@ -135,7 +180,11 @@ Most people land here because someone asked them for something. Find the request
 !!! tip "Before you start"
     Write the limitations section first and honestly. A model card with no limitations tells a reader you did not look.
 
-## "Work out where to start with all of this"
+</div>
+
+<div class="gk-task" data-requesters="business" markdown>
+
+### "Work out where to start with all of this"
 
 **Usually asked by:** You, having just been handed the brief  
 **Rough effort:** Half a day
@@ -148,6 +197,8 @@ Most people land here because someone asked them for something. Find the request
 
 !!! tip "Before you start"
     Baseline honestly, then get a mandate in writing. An optimistic baseline destroys the credibility of every improvement you later report.
+
+</div>
 
 !!! warning "Not legal advice"
     These templates are a head start, not a substitute for professional

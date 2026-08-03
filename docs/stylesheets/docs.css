@@ -861,3 +861,32 @@
   .gk-role:hover,
   .gk-dec-card:hover { transform: none; }
 }
+
+/* ------------------------------------------------- Start page task filter --
+ * Phase 1.3. Reuses the existing .gk-chip component; the only additions are
+ * layout and the hidden state.
+ */
+.gk-task-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.25rem 0 .5rem;
+}
+
+.gk-task-status {
+  font-size: .8rem;
+  color: var(--gk-ink-3);
+  margin: 0 0 1.5rem;
+}
+
+.gk-task[hidden] { display: none; }
+
+.md-typeset .gk-task {
+  border-top: 1px solid var(--gk-hairline);
+  padding-top: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.md-typeset .gk-task:first-of-type { border-top: none; }
+
+.md-typeset .gk-task h3 { margin-top: 0; }

@@ -46,6 +46,19 @@ NAV_END = "# NAV:END"
 
 STATUS_LABELS = {"ready": "Ready", "draft": "Draft", "stub": "Stub"}
 
+# Who typically makes the ask, for the Start page filter. Controlled so a
+# typo in data/tasks.yml fails the build rather than silently producing a
+# filter chip that matches nothing.
+REQUESTERS = {
+    "board": "Board",
+    "regulator": "Regulator",
+    "customer": "Customer",
+    "procurement": "Procurement",
+    "internal-audit": "Internal audit",
+    "security": "Security",
+    "business": "Business team",
+}
+
 # Template ids that also get an .xlsx. Populated from data/spreadsheets.yml at
 # runtime so the download buttons cannot advertise a file that is not built.
 SPREADSHEET_IDS = set()
@@ -575,11 +588,35 @@ def render_tasks_page(tasks: list, by_id: dict) -> str:
         "Most people land here because someone asked them for something. Find "
         "the request below and start where it points.\n"
     )
+
+    # Requester filter. Chips are plain buttons with data attributes; the
+    # filtering happens client-side in docs/assets/tasks.js, so the page still
+    # lists everything with JavaScript off.
+    used = []
+    for t_ in tasks:
+        for r in t_.get("requesters", []):
+            if r not in used:
+                used.append(r)
+    order = [r for r in REQUESTERS if r in used]
+    chips = ['<button class="gk-chip is-on" type="button" data-req="all">'
+             "Everything</button>"]
+    for r in order:
+        chips.append(
+            f'<button class="gk-chip" type="button" data-req="{r}">'
+            f"{REQUESTERS[r]}</button>"
+        )
+    parts.append(
+        '<div class="gk-task-filter" id="gk-task-filter" '
+        'role="group" aria-label="Filter by who is asking">\n'
+        + "\n".join(chips) + "\n</div>\n"
+    )
     parts.append(
         SNIPPET_ASSESS.format(assess=rel_link(path, "assess/index.md"))
     )
     for t in tasks:
-        parts.append(f'## "{t["ask"]}"\n')
+        reqs = " ".join(t.get("requesters", []))
+        parts.append(f'<div class="gk-task" data-requesters="{reqs}" markdown>\n')
+        parts.append(f'### "{t["ask"]}"\n')
         parts.append(
             f"**Usually asked by:** {t['who']}  \n"
             f"**Rough effort:** {t['effort']}\n"
@@ -600,6 +637,7 @@ def render_tasks_page(tasks: list, by_id: dict) -> str:
             f'!!! tip "Before you start"\n'
             f"    {' '.join(t['note'].split())}\n"
         )
+        parts.append("</div>\n")
     parts.append(SNIPPETS_CACHE["not_legal_advice"])
     return "\n".join(parts)
 
@@ -1365,6 +1403,17 @@ def main() -> int:
 
     # ---- task index, plans, crosswalk ---------------------------------------
     tasks = load("tasks.yml") or []
+    for t_ in tasks:
+        if not t_.get("requesters"):
+            raise SystemExit(
+                f"ERROR: task {t_['ask']!r} has no `requesters`. Tag it with one "
+                f"or more of {sorted(REQUESTERS)} so the Start page filter can "
+                "find it.")
+        for r in t_["requesters"]:
+            if r not in REQUESTERS:
+                raise SystemExit(
+                    f"ERROR: task {t_['ask']!r} has unknown requester {r!r}. "
+                    f"Known: {sorted(REQUESTERS)}")
     if tasks:
         write(DOCS / "tasks.md", render_tasks_page(tasks, by_id), written, args.check)
 

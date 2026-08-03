@@ -69,6 +69,7 @@ extra_javascript:
   - assess/xlsx.js
   - assess/registers.js
   - assess/decide.js
+  - assets/tasks.js
 
 markdown_extensions:
   - admonition
