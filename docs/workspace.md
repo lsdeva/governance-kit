@@ -3,19 +3,21 @@
      Regenerate with: python tools/build_content.py -->
 
 
-# Workspace
+# Your workspace
 
-Every register in the kit can be filled in directly in your browser — no download, no account, nothing uploaded. Your rows are saved on this device and can be exported to Excel or CSV at any time.
+<div id="gk-dashboard" data-src="../assess/assessment-data.json"></div>
 
 !!! info "Where your data lives"
-    Each register is stored separately in this browser's local storage.
-    Clearing your browser data, or using a different device or a
-    private window, will lose it — so use **Back up this register**
-    on anything you want to keep, and **Restore this register** to
-    pick it back up later. Backing up is per register today; one
-    backup covering the whole workspace is coming.
+    Everything here is stored in this browser, on this device. No
+    accounts, no uploads. Clearing your browser data, or opening the
+    site on another device or in a private window, will not show it —
+    so use **Back up this register** on anything you want to keep and
+    **Restore this register** to reopen it elsewhere. Backing up is per
+    register today; one backup covering the whole workspace is coming.
 
-## The editable registers
+## All tools
+
+Every register can be filled in directly in the browser, and exported to Excel or CSV at any time.
 
 | Register | What it records | Columns |
 |---|---|---|

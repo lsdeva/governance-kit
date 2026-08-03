@@ -24,14 +24,20 @@
     roles: [],
     answers: {}, // qid -> {value: 'yes'|'partial'|'no'|'na', note: string}
     audience: "board",
-    category: null // active category filter in the questionnaire
+    category: null, // active category filter in the questionnaire
+    section: 0,     // index into the section list; one category per screen
+    viewAll: false  // expert escape hatch: the whole questionnaire at once
   };
 
   var ANSWERS = [
-    { value: "yes", label: "Yes", hint: "In place and operating" },
-    { value: "partial", label: "Partial", hint: "Started, or only in some areas" },
-    { value: "no", label: "No", hint: "Not in place" },
-    { value: "na", label: "N/A", hint: "Does not apply to us" }
+    { value: "yes", label: "Yes — fully in place",
+      hint: "In place and operating today" },
+    { value: "partial", label: "Partly — some elements exist",
+      hint: "Started, or only in some areas" },
+    { value: "no", label: "No — not in place",
+      hint: "Not in place today" },
+    { value: "na", label: "Not applicable",
+      hint: "Does not apply to us — say why" }
   ];
 
   var AUDIENCES = [
@@ -375,23 +381,43 @@
 
   // ------------------------------------------------------------ questionnaire
 
+  /* The ordered list of sections actually in play for the chosen roles. */
+  function sectionList() {
+    var qs = activeQuestions();
+    var cats = [];
+    qs.forEach(function (q) {
+      if (cats.indexOf(q.category) === -1) cats.push(q.category);
+    });
+    return cats.sort(function (a, b) {
+      return DATA.categories.indexOf(a) - DATA.categories.indexOf(b);
+    }).map(function (c) {
+      var inCat = qs.filter(function (q) { return q.category === c; });
+      return {
+        name: c,
+        questions: inCat,
+        done: inCat.filter(function (q) {
+          return state.answers[q.id] && state.answers[q.id].value;
+        }).length
+      };
+    });
+  }
+
   function viewQuestions() {
     var qs = activeQuestions();
+    var sections = sectionList();
     var wrap = el("div", { class: "gk-step" });
 
-    var cats = [];
-    qs.forEach(function (q) { if (cats.indexOf(q.category) === -1) cats.push(q.category); });
-    cats.sort(function (a, b) {
-      return DATA.categories.indexOf(a) - DATA.categories.indexOf(b);
-    });
+    // Clamp: a role change can shrink the section list under a stale index.
+    if (state.section >= sections.length) state.section = 0;
+    if (state.section < 0) state.section = 0;
 
     var done = qs.filter(function (q) {
       return state.answers[q.id] && state.answers[q.id].value;
     }).length;
     var pct = qs.length ? Math.round((done / qs.length) * 100) : 0;
+    var sec = sections[state.section];
 
     var head = el("div", { class: "gk-qhead" });
-    head.appendChild(el("h1", {}, ["Your questions"]));
     head.appendChild(el("p", { class: "gk-muted" }, [
       "Answering as: " + state.roles.map(function (id) {
         var r = DATA.roles.find(function (x) { return x.id === id; });
@@ -403,90 +429,127 @@
       }, ["Change"])
     ]));
 
-    var prog = el("div", { class: "gk-progress" }, [
+    if (state.viewAll) {
+      head.appendChild(el("h1", {}, ["All questions"]));
+    } else if (sec) {
+      head.appendChild(el("p", { class: "gk-sec-kicker" }, [
+        "Section " + (state.section + 1) + " of " + sections.length
+      ]));
+      head.appendChild(el("h1", {}, [sec.name]));
+      head.appendChild(el("p", { class: "gk-muted" }, [
+        sec.questions.length + " question" +
+        (sec.questions.length === 1 ? "" : "s") + " · about " +
+        Math.max(1, Math.round(sec.questions.length * 0.75)) + " min · " +
+        sec.done + " of " + sec.questions.length + " answered"
+      ]));
+    }
+
+    head.appendChild(el("div", { class: "gk-progress" }, [
       el("div", { class: "gk-progress-bar" }, [
         el("div", { class: "gk-progress-fill", style: "width:" + pct + "%" })
       ]),
-      el("div", { class: "gk-progress-label" }, [done + " of " + qs.length + " answered"])
-    ]);
-    head.appendChild(prog);
+      el("div", { class: "gk-progress-label" }, [
+        done + " of " + qs.length + " answered"
+      ])
+    ]));
     wrap.appendChild(head);
 
-    // Category filter
-    var filter = el("div", { class: "gk-filter" });
-    filter.appendChild(chip("All", state.category === null, function () {
-      state.category = null; render();
-    }, qs.length));
-    cats.forEach(function (c) {
-      var inCat = qs.filter(function (q) { return q.category === c; });
-      var cDone = inCat.filter(function (q) {
-        return state.answers[q.id] && state.answers[q.id].value;
-      }).length;
-      filter.appendChild(chip(c, state.category === c, function () {
-        state.category = c; render();
-      }, inCat.length, cDone === inCat.length));
+    // Section rail: shows where you are and lets you jump. Doubles as the
+    // category filter the previous design used.
+    var rail = el("div", { class: "gk-filter gk-sec-rail" });
+    sections.forEach(function (s, i) {
+      var complete = s.done === s.questions.length;
+      rail.appendChild(chip(
+        s.name,
+        !state.viewAll && i === state.section,
+        function () { state.viewAll = false; state.section = i; render();
+                      window.scrollTo(0, 0); },
+        s.questions.length, complete
+      ));
     });
-    wrap.appendChild(filter);
+    rail.appendChild(chip("View all questions", state.viewAll, function () {
+      state.viewAll = !state.viewAll; render(); window.scrollTo(0, 0);
+    }, qs.length));
+    wrap.appendChild(rail);
 
-    var shown = state.category
-      ? qs.filter(function (q) { return q.category === state.category; })
-      : qs;
-
+    var shown = state.viewAll ? qs : (sec ? sec.questions : []);
     var currentCat = null;
     shown.forEach(function (q) {
-      if (q.category !== currentCat) {
+      if (state.viewAll && q.category !== currentCat) {
         currentCat = q.category;
         wrap.appendChild(el("h2", { class: "gk-cat" }, [currentCat]));
       }
       wrap.appendChild(questionCard(q));
     });
 
-    var bar = el("div", { class: "gk-actions" });
-    var remaining = qs.length - done;
+    wrap.appendChild(sectionFooter(sections, qs, done));
+    wrap.appendChild(clearButton());
+    return wrap;
+  }
 
-    function goToReport() {
-      state.step = "report";
-      window.scrollTo(0, 0);
-      render();
+  /* Sticky footer: Back | n of m answered | Save & exit | Continue. */
+  function sectionFooter(sections, qs, done) {
+    var bar = el("div", { class: "gk-secfoot" });
+    var remaining = qs.length - done;
+    var last = state.viewAll || state.section >= sections.length - 1;
+
+    function goReport() {
+      state.step = "report"; window.scrollTo(0, 0); render();
     }
 
-    // With questions outstanding, the primary action is FINISHING them. A
-    // score that quietly omits whole categories is not a readiness score, and
-    // offering it as the main button invites people to act on it.
-    if (remaining > 0 && done > 0) {
+    if (!state.viewAll && state.section > 0) {
+      bar.appendChild(el("button", {
+        class: "gk-btn", type: "button",
+        onclick: function () {
+          state.section--; render(); window.scrollTo(0, 0);
+        }
+      }, ["← Back"]));
+    }
+
+    bar.appendChild(el("span", { class: "gk-secfoot-count" }, [
+      done + " of " + qs.length + " answered · saved in this browser"
+    ]));
+
+    // "Save & exit" is honest here: everything is already saved, so this is
+    // just a way out that says so.
+    bar.appendChild(el("a", {
+      class: "gk-btn gk-secfoot-exit",
+      href: (document.querySelector(".gk-home") ? "" : "../") + "workspace/"
+    }, ["Save & exit"]));
+
+    if (!last) {
+      var next = sections[state.section + 1];
       bar.appendChild(el("button", {
         class: "gk-btn gk-btn-primary", type: "button",
         onclick: function () {
-          state.category = null;
-          var next = qs.filter(function (q) {
-            return !state.answers[q.id] || !state.answers[q.id].value;
-          })[0];
-          render();
-          if (next) {
-            var node = root.querySelector('[data-qid="' + next.id + '"]');
-            if (node) node.scrollIntoView({ block: "center" });
+          state.section++; render(); window.scrollTo(0, 0);
+        }
+      }, ["Continue to " + (next ? next.name : "next") + " →"]));
+    } else if (remaining > 0 && done > 0) {
+      bar.appendChild(el("button", {
+        class: "gk-btn gk-btn-primary", type: "button",
+        onclick: function () {
+          // Jump to the first section that still has unanswered questions.
+          for (var i = 0; i < sections.length; i++) {
+            if (sections[i].done < sections[i].questions.length) {
+              state.viewAll = false; state.section = i; break;
+            }
           }
+          render(); window.scrollTo(0, 0);
         }
       }, ["Finish " + remaining + " remaining question" +
           (remaining === 1 ? "" : "s")]));
       bar.appendChild(el("button", {
-        class: "gk-btn", type: "button", onclick: goToReport
+        class: "gk-btn", type: "button", onclick: goReport
       }, ["Preview partial report"]));
     } else {
       bar.appendChild(el("button", {
         class: "gk-btn gk-btn-primary", type: "button",
         disabled: done ? null : "disabled",
-        onclick: goToReport
+        onclick: goReport
       }, [done ? "See your report" : "Answer a question to see your report"]));
     }
-
-    bar.appendChild(el("button", {
-      class: "gk-btn", type: "button",
-      onclick: function () { state.step = "roles"; render(); }
-    }, ["Back to roles"]));
-    wrap.appendChild(bar);
-    wrap.appendChild(clearButton());
-    return wrap;
+    return bar;
   }
 
   function chip(label, on, fn, count, complete) {
@@ -496,6 +559,17 @@
     }, [label, el("span", { class: "gk-chip-n" }, [String(count)])]);
   }
 
+  /* A collapsed section. Uses <details>, so it is keyboard-operable and
+     searchable by the browser's find-in-page without any extra wiring. */
+  function disclosure(summaryText, children, open) {
+    var d = el("details", { class: "gk-q-more" }, [
+      el("summary", {}, [summaryText])
+    ]);
+    if (open) d.setAttribute("open", "open");
+    children.forEach(function (c) { if (c) d.appendChild(c); });
+    return d;
+  }
+
   function questionCard(q) {
     var a = state.answers[q.id] || {};
     var card = el("div", {
@@ -503,25 +577,16 @@
       "data-qid": q.id
     });
 
-    var meta = el("div", { class: "gk-q-meta" }, [
+    // Severity stays visible — it is how a reader judges what matters — but
+    // the article reference moves into the disclosure with the rest of the
+    // legal detail.
+    card.appendChild(el("div", { class: "gk-q-meta" }, [
       el("span", { class: "gk-q-id" }, [q.id]),
       q.weight >= 5 ? el("span", { class: "gk-sev gk-sev-5" }, ["Critical"]) :
-        q.weight === 4 ? el("span", { class: "gk-sev gk-sev-4" }, ["High"]) : null,
-      q.obligation && q.obligation.ref
-        ? el("span", { class: "gk-q-ref" }, [q.obligation.ref]) : null
-    ]);
-    card.appendChild(meta);
+        q.weight === 4 ? el("span", { class: "gk-sev gk-sev-4" }, ["High"]) : null
+    ]));
     card.appendChild(el("p", { class: "gk-q-text" }, [q.text]));
     card.appendChild(el("p", { class: "gk-q-help" }, [q.help]));
-
-    // What an auditor would accept. Shown while answering so "yes" means the
-    // same thing to everyone, and carried into the report as an evidence list.
-    if (q.evidence) {
-      card.appendChild(el("p", { class: "gk-q-ev" }, [
-        el("span", { class: "gk-q-ev-label" }, ["Evidence: "]),
-        q.evidence
-      ]));
-    }
 
     var opts = el("div", { class: "gk-opts", role: "group", "aria-label": q.text });
     ANSWERS.forEach(function (opt) {
@@ -534,16 +599,58 @@
         onclick: function () {
           var cur = state.answers[q.id] || {};
           if (cur.value === opt.value) delete state.answers[q.id];
-          else state.answers[q.id] = { value: opt.value, note: cur.note || "" };
+          else state.answers[q.id] = {
+            value: opt.value, note: cur.note || "", naWhy: cur.naWhy || ""
+          };
           save(); render();
+          announce(q, state.answers[q.id]);
         }
       }, [opt.label]));
     });
     card.appendChild(opts);
 
+    // "Not applicable" without a reason is the least defensible answer in the
+    // set, so ask for one at the point of choosing it.
+    if (a.value === "na") {
+      var why = el("textarea", {
+        class: "gk-note gk-na-why", rows: "1",
+        "aria-label": "Explain why this does not apply",
+        placeholder: "Explain why this does not apply — this goes in the record",
+        oninput: function (e) {
+          var cur = state.answers[q.id] || { value: "na" };
+          cur.naWhy = e.target.value;
+          state.answers[q.id] = cur;
+          save();
+        }
+      });
+      why.value = a.naWhy || "";
+      card.appendChild(why);
+    }
+
+    // ---- everything below is collapsed by default --------------------------
+    var more = el("div", { class: "gk-q-more-row" });
+    card.appendChild(more);
+
+    if (q.obligation && (q.obligation.detail || q.obligation.ref)) {
+      more.appendChild(disclosure("Why this matters", [
+        el("p", { class: "gk-q-more-body" }, [
+          q.obligation.detail || q.obligation.label || ""
+        ]),
+        q.obligation.ref
+          ? el("p", { class: "gk-q-ref" }, [q.obligation.ref]) : null
+      ]));
+    }
+
+    if (q.evidence) {
+      more.appendChild(disclosure("What counts as evidence", [
+        el("p", { class: "gk-q-more-body" }, [q.evidence])
+      ]));
+    }
+
     var note = el("textarea", {
-      class: "gk-note", rows: "1",
-      placeholder: "Optional note — evidence, caveat, or who owns this",
+      class: "gk-note", rows: "2",
+      "aria-label": "Notes for " + q.id,
+      placeholder: "Evidence, caveat, or who owns this",
       oninput: function (e) {
         var cur = state.answers[q.id] || { value: "" };
         cur.note = e.target.value;
@@ -552,21 +659,41 @@
       }
     });
     note.value = a.note || "";
-    card.appendChild(note);
+    more.appendChild(disclosure(
+      a.note ? "Notes (added)" : "Add notes", [note], !!a.note));
 
     if (q.templates && q.templates.length) {
-      var links = el("div", { class: "gk-q-tpl" }, [
-        el("span", { class: "gk-muted" }, ["Fix with: "])
-      ]);
+      var links = el("div", { class: "gk-q-tpl" });
       q.templates.slice(0, 3).forEach(function (tid, i) {
-        var t = DATA.templates[tid];
-        if (!t) return;
+        var tpl = DATA.templates[tid];
+        if (!tpl) return;
         if (i) links.appendChild(document.createTextNode(" · "));
-        links.appendChild(el("a", { href: t.url }, [t.title]));
+        links.appendChild(el("a", { href: tpl.url }, [tpl.title]));
       });
-      card.appendChild(links);
+      more.appendChild(disclosure("Templates that help", [links]));
     }
+
     return card;
+  }
+
+  /* Announce an answer change for screen readers: the visual state change is
+     invisible to them otherwise. */
+  function announce(q, ans) {
+    var live = document.getElementById("gk-answer-live");
+    if (!live) {
+      live = el("p", {
+        id: "gk-answer-live", class: "gk-sr-only",
+        role: "status", "aria-live": "polite"
+      });
+      (root || document.body).appendChild(live);
+    }
+    var label = "cleared";
+    if (ans && ans.value) {
+      ANSWERS.forEach(function (o) {
+        if (o.value === ans.value) label = o.label;
+      });
+    }
+    live.textContent = q.id + " answered: " + label;
   }
 
   // -------------------------------------------------------------------- report
@@ -645,6 +772,10 @@
         ])
       ])
     ]);
+    // Actions come before the score for every audience.
+    var top3 = topActionsBlock(s);
+    if (top3) wrap.appendChild(top3);
+
     wrap.appendChild(scoreBox);
 
     // Say plainly what the number does and does not cover. Unanswered areas
@@ -680,11 +811,13 @@
       actions: actionsBlock(s)
     };
 
+    // Every audience now sees the three priority actions FIRST. A score
+    // without a next step is a number to argue about; an action list is work.
     var order;
-    if (state.audience === "board") order = ["gaps", "categories", "actions"];
+    if (state.audience === "board") order = ["gaps", "categories"];
     else if (state.audience === "regulator") order = ["obligations", "categories", "gaps"];
-    else if (state.audience === "team") order = ["actions", "gaps", "categories"];
-    else order = ["categories", "gaps", "actions"];
+    else if (state.audience === "team") order = ["gaps", "categories"];
+    else order = ["categories", "gaps"];
 
     order.forEach(function (k) { if (blocks[k]) wrap.appendChild(blocks[k]); });
 
@@ -931,6 +1064,85 @@
     tbl.appendChild(tb);
     sec.appendChild(tbl);
     return sec;
+  }
+
+  /* The three highest-value pieces of work, stated as work: who normally does
+     it, how long it takes, and what finishing it produces. */
+  function topActionsBlock(s) {
+    if (!s.gaps.length) return null;
+    var recs = recommendedTemplates(s.gaps).slice(0, 3);
+    if (!recs.length) return null;
+
+    var sec = el("section", { class: "gk-block gk-top3" });
+    sec.appendChild(el("h2", {}, ["Your three priority actions"]));
+    sec.appendChild(el("p", { class: "gk-muted" }, [
+      "Ranked by how much of your risk they close. Everything else is below."
+    ]));
+
+    var ol = el("ol", { class: "gk-top3-list" });
+    recs.forEach(function (r) {
+      var tpl = DATA.templates[r.id];
+      if (!tpl) return;
+      var crit = r.qs.filter(function (qid) {
+        var g = s.gaps.filter(function (x) { return x.q.id === qid; })[0];
+        return g && g.q.weight >= 5;
+      }).length;
+
+      var li = el("li", { class: "gk-card gk-top3-item" }, [
+        el("b", {}, [tpl.title]),
+        el("p", { class: "gk-top3-why" }, [
+          "Closes " + r.count + " gap" + (r.count === 1 ? "" : "s") +
+          (crit ? ", including " + crit + " critical" : "") + "."
+        ]),
+        el("dl", { class: "gk-top3-meta" }, [
+          el("dt", {}, ["Suggested owner"]), el("dd", {}, [tpl.owner || "—"]),
+          el("dt", {}, ["Estimated effort"]), el("dd", {}, [tpl.effort || "—"]),
+          el("dt", {}, ["Done when"]), el("dd", {}, [tpl.evidence || "—"])
+        ]),
+        el("div", { class: "gk-top3-cta" }, [
+          el("a", { class: "gk-btn gk-btn-primary", href: tpl.url },
+            ["Open " + tpl.title]),
+          el("button", {
+            class: "gk-btn", type: "button",
+            onclick: function (e) { addToPlan(tpl, r, crit, e.target); }
+          }, [inPlan(tpl.id) ? "In your plan ✓" : "Add to action plan"])
+        ])
+      ]);
+      ol.appendChild(li);
+    });
+    sec.appendChild(ol);
+    return sec;
+  }
+
+  /* The action plan lives beside the other workspace state, so the dashboard
+     can surface it. Same privacy stance: browser only. */
+  var PLAN_KEY = "gk-plan-v1";
+
+  function loadPlan() {
+    try { return JSON.parse(localStorage.getItem(PLAN_KEY)) || []; }
+    catch (e) { return []; }
+  }
+
+  function inPlan(id) {
+    return loadPlan().some(function (x) { return x.template === id; });
+  }
+
+  function addToPlan(tpl, rec, crit, btn) {
+    var plan = loadPlan();
+    if (plan.some(function (x) { return x.template === tpl.id; })) return;
+    plan.push({
+      template: tpl.id,
+      action: tpl.title,
+      owner: tpl.owner || "",
+      effort: tpl.effort || "",
+      evidence: tpl.evidence || "",
+      priority: crit ? "Critical" : "High",
+      closes: rec.count,
+      status: "open",
+      added: todayISO()
+    });
+    try { localStorage.setItem(PLAN_KEY, JSON.stringify(plan)); } catch (e) {}
+    if (btn) { btn.textContent = "In your plan ✓"; btn.disabled = true; }
   }
 
   function actionsBlock(s) {

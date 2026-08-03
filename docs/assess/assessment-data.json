@@ -1057,7 +1057,10 @@
       "section": "frameworks",
       "status": "ready",
       "url": "../frameworks/data-governance-framework/",
-      "purpose": "The reference that defines how your organisation governs data: what data you hold, who owns it, what quality is expected, and how decisions about it are made. It is the foundation the AI governance work sits on — most AI failures trace back to a data problem nobody owned."
+      "purpose": "The reference that defines how your organisation governs data: what data you hold, who owns it, what quality is expected, and how decisions about it are made. It is the foundation the AI governance work sits on — most AI failures trace back to a data problem nobody owned.",
+      "owner": "Governance lead, with data owners",
+      "effort": "3–5 days",
+      "evidence": "An approved framework with named owners for every data domain."
     },
     "ai-governance-framework": {
       "id": "ai-governance-framework",
@@ -1065,7 +1068,10 @@
       "section": "frameworks",
       "status": "ready",
       "url": "../frameworks/ai-governance-framework/",
-      "purpose": "A single reference that defines how your organisation governs AI across its lifecycle — who is accountable, what principles apply, how risk is tiered and controlled, and how it connects to data governance and the EU AI Act. It is the document you hand to a board, a regulator, or a new hire to explain \"how we do AI here\"."
+      "purpose": "A single reference that defines how your organisation governs AI across its lifecycle — who is accountable, what principles apply, how risk is tiered and controlled, and how it connects to data governance and the EU AI Act. It is the document you hand to a board, a regulator, or a new hire to explain \"how we do AI here\".",
+      "owner": "Governance lead, ratified by the committee",
+      "effort": "3–5 days",
+      "evidence": "An approved framework, with risk tiers and lifecycle gates agreed."
     },
     "governance-charter": {
       "id": "governance-charter",
@@ -1073,7 +1079,10 @@
       "section": "frameworks",
       "status": "draft",
       "url": "../frameworks/governance-charter/",
-      "purpose": "A short, board-approved mandate that establishes the governance programme: why it exists, what authority it has, what it covers, and how success is measured. It is what you point to when someone asks \"who says so?\"."
+      "purpose": "A short, board-approved mandate that establishes the governance programme: why it exists, what authority it has, what it covers, and how success is measured. It is what you point to when someone asks \"who says so?\".",
+      "owner": "Executive sponsor",
+      "effort": "1 week to draft and approve",
+      "evidence": "A board-approved mandate naming the sponsor and the authority to halt."
     },
     "maturity-assessment": {
       "id": "maturity-assessment",
@@ -1081,7 +1090,10 @@
       "section": "frameworks",
       "status": "ready",
       "url": "../frameworks/maturity-assessment/",
-      "purpose": "A structured baseline of how capable your governance actually is today, across the dimensions that matter, so you can prioritise honestly and show movement over time."
+      "purpose": "A structured baseline of how capable your governance actually is today, across the dimensions that matter, so you can prioritise honestly and show movement over time.",
+      "owner": "Governance lead",
+      "effort": "Half a day",
+      "evidence": "A dated baseline score with evidence against each dimension."
     },
     "data-governance-policy": {
       "id": "data-governance-policy",
@@ -1089,7 +1101,10 @@
       "section": "policies",
       "status": "ready",
       "url": "../policies/data-governance-policy/",
-      "purpose": "The mandatory rules for handling data. Where the framework explains how governance works, this policy states what people must and must not do, in language you can hold someone to."
+      "purpose": "The mandatory rules for handling data. Where the framework explains how governance works, this policy states what people must and must not do, in language you can hold someone to.",
+      "owner": "Governance lead, with Legal",
+      "effort": "2–3 days",
+      "evidence": "A published policy with numbered, enforceable statements."
     },
     "data-quality-standard": {
       "id": "data-quality-standard",
@@ -1097,7 +1112,10 @@
       "section": "policies",
       "status": "ready",
       "url": "../policies/data-quality-standard/",
-      "purpose": "Defines what \"good enough\" data means in measurable terms — the dimensions, how they are measured, the thresholds that apply, and who acts when a threshold is breached."
+      "purpose": "Defines what \"good enough\" data means in measurable terms — the dimensions, how they are measured, the thresholds that apply, and who acts when a threshold is breached.",
+      "owner": "Data owners",
+      "effort": "2–3 days",
+      "evidence": "Thresholds set and measured on your two most important domains."
     },
     "data-classification-policy": {
       "id": "data-classification-policy",
@@ -1105,7 +1123,10 @@
       "section": "policies",
       "status": "ready",
       "url": "../policies/data-classification-policy/",
-      "purpose": "Defines the sensitivity tiers your data falls into and the handling rules for each — including the rules that decide what may be pasted into an AI tool."
+      "purpose": "Defines the sensitivity tiers your data falls into and the handling rules for each — including the rules that decide what may be pasted into an AI tool.",
+      "owner": "Security, with Legal",
+      "effort": "2 days",
+      "evidence": "A published scheme with the AI-input rules staff can find."
     },
     "acceptable-ai-use-policy": {
       "id": "acceptable-ai-use-policy",
@@ -1113,7 +1134,10 @@
       "section": "policies",
       "status": "ready",
       "url": "../policies/acceptable-ai-use-policy/",
-      "purpose": "The staff-facing rules for using AI at work: what is encouraged, what needs approval, and what is never allowed. This is the most-read document in the kit, and usually the one that prevents the most damage."
+      "purpose": "The staff-facing rules for using AI at work: what is encouraged, what needs approval, and what is never allowed. This is the most-read document in the kit, and usually the one that prevents the most damage.",
+      "owner": "HR and Governance",
+      "effort": "Half a day to draft",
+      "evidence": "A one-page policy staff have attested to, with an approved-tool list."
     },
     "ai-development-standard": {
       "id": "ai-development-standard",
@@ -1121,7 +1145,10 @@
       "section": "policies",
       "status": "ready",
       "url": "../policies/ai-development-standard/",
-      "purpose": "The engineering-facing requirements for building, testing, deploying, and operating AI systems — the technical controls that make the framework's principles real inside a delivery pipeline."
+      "purpose": "The engineering-facing requirements for building, testing, deploying, and operating AI systems — the technical controls that make the framework's principles real inside a delivery pipeline.",
+      "owner": "ML lead",
+      "effort": "3–5 days",
+      "evidence": "Lifecycle gates enforced in the pipeline, producing evidence."
     },
     "third-party-ai-risk-policy": {
       "id": "third-party-ai-risk-policy",
@@ -1129,7 +1156,10 @@
       "section": "policies",
       "status": "ready",
       "url": "../policies/third-party-ai-risk-policy/",
-      "purpose": "How you assess, contract for, and monitor AI you did not build — including AI features that appear inside software you already licence. For most organisations this is the majority of their AI exposure."
+      "purpose": "How you assess, contract for, and monitor AI you did not build — including AI features that appear inside software you already licence. For most organisations this is the majority of their AI exposure.",
+      "owner": "Procurement, with Security",
+      "effort": "2–3 days",
+      "evidence": "An assessment on file for every critical AI vendor."
     },
     "raci": {
       "id": "raci",
@@ -1137,7 +1167,10 @@
       "section": "operating-model",
       "status": "ready",
       "url": "../operating-model/raci/",
-      "purpose": "Removes ambiguity about who does what. For every significant governance activity it names exactly one accountable party, so decisions have an owner and gaps become visible before they become incidents."
+      "purpose": "Removes ambiguity about who does what. For every significant governance activity it names exactly one accountable party, so decisions have an owner and gaps become visible before they become incidents.",
+      "owner": "Governance lead, agreed in a room",
+      "effort": "1 workshop",
+      "evidence": "One accountable party per activity, confirmed by the people named."
     },
     "committee-charter": {
       "id": "committee-charter",
@@ -1145,7 +1178,10 @@
       "section": "operating-model",
       "status": "ready",
       "url": "../operating-model/committee-charter/",
-      "purpose": "Establishes the forum where governance decisions are actually made: its authority, membership, quorum, cadence, and what it must decide rather than merely discuss."
+      "purpose": "Establishes the forum where governance decisions are actually made: its authority, membership, quorum, cadence, and what it must decide rather than merely discuss.",
+      "owner": "Executive sponsor",
+      "effort": "1 week",
+      "evidence": "Terms of reference with quorum and the right to halt a system."
     },
     "roles-responsibilities": {
       "id": "roles-responsibilities",
@@ -1153,7 +1189,10 @@
       "section": "operating-model",
       "status": "ready",
       "url": "../operating-model/roles-responsibilities/",
-      "purpose": "Defines each governance role in enough detail that it can be put in a job description, recruited for, and assessed against — rather than assumed."
+      "purpose": "Defines each governance role in enough detail that it can be put in a job description, recruited for, and assessed against — rather than assumed.",
+      "owner": "Governance lead",
+      "effort": "2 days",
+      "evidence": "Named holders who know they hold the role."
     },
     "decision-rights": {
       "id": "decision-rights",
@@ -1161,7 +1200,10 @@
       "section": "operating-model",
       "status": "ready",
       "url": "../operating-model/decision-rights/",
-      "purpose": "States who can decide what, at what threshold, and what happens when people disagree or a decision is needed urgently. It is the document that stops governance stalling."
+      "purpose": "States who can decide what, at what threshold, and what happens when people disagree or a decision is needed urgently. It is the document that stops governance stalling.",
+      "owner": "Governance lead, with the committee",
+      "effort": "2 days",
+      "evidence": "A decision matrix tested against a real past decision."
     },
     "data-asset-register": {
       "id": "data-asset-register",
@@ -1169,7 +1211,10 @@
       "section": "registers",
       "status": "ready",
       "url": "../registers/data-asset-register/",
-      "purpose": "The catalogue of what data you hold, who owns it, how sensitive it is, and where it lives. Almost every other governance control depends on it."
+      "purpose": "The catalogue of what data you hold, who owns it, how sensitive it is, and where it lives. Almost every other governance control depends on it.",
+      "owner": "Data owners",
+      "effort": "2–3 days for the first pass",
+      "evidence": "Your material data assets registered with owners and classification."
     },
     "ai-system-inventory": {
       "id": "ai-system-inventory",
@@ -1177,7 +1222,10 @@
       "section": "registers",
       "status": "ready",
       "url": "../registers/ai-system-inventory/",
-      "purpose": "The single list of every AI system you build, buy, or have embedded in something you already licence. It is the foundation of AI Act compliance: every other obligation applies per system, so a system you have not listed is one you cannot govern."
+      "purpose": "The single list of every AI system you build, buy, or have embedded in something you already licence. It is the foundation of AI Act compliance: every other obligation applies per system, so a system you have not listed is one you cannot govern.",
+      "owner": "Governance lead, with a discovery sweep",
+      "effort": "2–4 days",
+      "evidence": "Every AI system listed with a named owner, tier and rationale."
     },
     "risk-register": {
       "id": "risk-register",
@@ -1185,7 +1233,10 @@
       "section": "registers",
       "status": "ready",
       "url": "../registers/risk-register/",
-      "purpose": "The live record of data and AI risks: what could go wrong, how likely and how bad, what you are doing about it, and who owns it."
+      "purpose": "The live record of data and AI risks: what could go wrong, how likely and how bad, what you are doing about it, and who owns it.",
+      "owner": "Governance lead, with risk owners",
+      "effort": "1–2 days",
+      "evidence": "Risks written as cause-event-consequence, each with an owner."
     },
     "incident-log": {
       "id": "incident-log",
@@ -1193,7 +1244,10 @@
       "section": "registers",
       "status": "ready",
       "url": "../registers/incident-log/",
-      "purpose": "The record of what went wrong, what you did, and what changed as a result. It is both a management tool and the evidence base for serious-incident reporting duties."
+      "purpose": "The record of what went wrong, what you did, and what changed as a result. It is both a management tool and the evidence base for serious-incident reporting duties.",
+      "owner": "Security and Governance",
+      "effort": "1 day",
+      "evidence": "A defined route people can name, plus the log itself."
     },
     "processing-dpia-log": {
       "id": "processing-dpia-log",
@@ -1201,7 +1255,10 @@
       "section": "registers",
       "status": "ready",
       "url": "../registers/processing-dpia-log/",
-      "purpose": "The record of personal data processing activities and the impact assessments that cover them — the point where AI governance meets data protection law."
+      "purpose": "The record of personal data processing activities and the impact assessments that cover them — the point where AI governance meets data protection law.",
+      "owner": "DPO or Legal",
+      "effort": "1–2 weeks per assessment",
+      "evidence": "A completed DPIA with the DPO's recorded opinion."
     },
     "ai-risk-assessment": {
       "id": "ai-risk-assessment",
@@ -1209,7 +1266,10 @@
       "section": "risk",
       "status": "ready",
       "url": "../risk/ai-risk-assessment/",
-      "purpose": "A structured assessment of what could go wrong with a specific AI system, how bad it would be, and what you are doing about it. For high-risk systems it is the core evidence that Art. 9 risk management is operating."
+      "purpose": "A structured assessment of what could go wrong with a specific AI system, how bad it would be, and what you are doing about it. For high-risk systems it is the core evidence that Art. 9 risk management is operating.",
+      "owner": "System owner, facilitated by Governance",
+      "effort": "1–2 weeks per system",
+      "evidence": "A signed assessment with residual risk accepted at the right level."
     },
     "model-card": {
       "id": "model-card",
@@ -1217,7 +1277,10 @@
       "section": "risk",
       "status": "ready",
       "url": "../risk/model-card/",
-      "purpose": "Standard documentation for a model: what it is for, what it was trained on, how well it performs and for whom, and where it should not be used. Feeds both AI Act technical documentation and the instructions deployers rely on."
+      "purpose": "Standard documentation for a model: what it is for, what it was trained on, how well it performs and for whom, and where it should not be used. Feeds both AI Act technical documentation and the instructions deployers rely on.",
+      "owner": "ML lead",
+      "effort": "1–2 days per model",
+      "evidence": "Documentation covering intended use, limitations and subgroup results."
     },
     "control-library": {
       "id": "control-library",
@@ -1225,7 +1288,10 @@
       "section": "risk",
       "status": "ready",
       "url": "../risk/control-library/",
-      "purpose": "Maps obligations to the controls that satisfy them, names an owner for each, and records how you would evidence the control is operating. It turns \"we have a policy\" into \"here is what we do and how you can check\"."
+      "purpose": "Maps obligations to the controls that satisfy them, names an owner for each, and records how you would evidence the control is operating. It turns \"we have a policy\" into \"here is what we do and how you can check\".",
+      "owner": "Governance lead, with Internal Audit",
+      "effort": "1 week",
+      "evidence": "Obligations mapped to controls, each with an owner and evidence."
     },
     "board-pack": {
       "id": "board-pack",
@@ -1233,7 +1299,10 @@
       "section": "board",
       "status": "ready",
       "url": "../board/board-pack/",
-      "purpose": "A structured report that gives the board what it needs to discharge its oversight duty: current posture, what changed, what went wrong, and what decisions are being asked of them."
+      "purpose": "A structured report that gives the board what it needs to discharge its oversight duty: current posture, what changed, what went wrong, and what decisions are being asked of them.",
+      "owner": "Governance lead",
+      "effort": "1–2 days per cycle",
+      "evidence": "A pack the board reads, with the decisions being sought stated."
     },
     "kpi-dashboard": {
       "id": "kpi-dashboard",
@@ -1241,7 +1310,10 @@
       "section": "board",
       "status": "ready",
       "url": "../board/kpi-dashboard/",
-      "purpose": "The measures that show whether governance is actually working — coverage, quality, timeliness, and leading indicators of trouble — rather than how much documentation exists."
+      "purpose": "The measures that show whether governance is actually working — coverage, quality, timeliness, and leading indicators of trouble — rather than how much documentation exists.",
+      "owner": "Governance lead",
+      "effort": "1 day to set up",
+      "evidence": "A stable metric set with trend over at least three periods."
     },
     "eu-ai-act-readiness-checklist": {
       "id": "eu-ai-act-readiness-checklist",
@@ -1249,7 +1321,10 @@
       "section": "eu-ai-act",
       "status": "ready",
       "url": "../eu-ai-act/readiness-checklist/",
-      "purpose": "A fast self-assessment of where your organisation stands against the EU AI Act. Work through it, mark what is true today, and treat every unticked box as a backlog item."
+      "purpose": "A fast self-assessment of where your organisation stands against the EU AI Act. Work through it, mark what is true today, and treat every unticked box as a backlog item.",
+      "owner": "Governance lead",
+      "effort": "1–2 hours",
+      "evidence": "A dated position against all 25 points."
     },
     "eu-ai-act-timeline": {
       "id": "eu-ai-act-timeline",
@@ -1257,7 +1332,10 @@
       "section": "eu-ai-act",
       "status": "ready",
       "url": "../eu-ai-act/timeline/",
-      "purpose": "The dates that actually bind you, reflecting the 2026 Digital Omnibus amendments — what is already in force, what was deferred, and what to work backwards from."
+      "purpose": "The dates that actually bind you, reflecting the 2026 Digital Omnibus amendments — what is already in force, what was deferred, and what to work backwards from.",
+      "owner": "Governance lead",
+      "effort": "1 hour to plan against",
+      "evidence": "A roadmap working backwards from the binding dates."
     }
   },
   "categories": [

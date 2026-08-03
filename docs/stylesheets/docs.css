@@ -890,3 +890,72 @@
 .md-typeset .gk-task:first-of-type { border-top: none; }
 
 .md-typeset .gk-task h3 { margin-top: 0; }
+
+/* ------------------------------------------------------- workspace dashboard
+ * P1-3. Reuses the landing stat tiles and goal cards; no new components.
+ */
+.gk-dash-tiles { margin: 1.5rem 0 2rem; }
+
+.md-typeset .gk-next {
+  padding: 1.1rem 1.3rem;
+  margin: 0 0 2rem;
+  border-left: 3px solid var(--gk-brand);
+}
+
+.md-typeset .gk-next b { font-size: 1.05rem; display: block; margin: .2rem 0 .4rem; }
+.md-typeset .gk-next p { font-size: .88rem; color: var(--gk-ink-2); margin: 0 0 .9rem; max-width: 62ch; }
+.md-typeset .gk-next .gk-kicker { margin: 0; }
+
+.gk-dash-cont {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: .75rem;
+  margin: 1rem 0 2rem;
+}
+
+.md-typeset .gk-dash-cont .gk-goal { padding: .9rem 1rem; }
+.md-typeset .gk-dash-cont .gk-goal b { font-size: .95rem; margin-bottom: .2rem; }
+
+/* Report: the three priority actions, before the score. */
+.md-typeset .gk-top3-list { list-style: none; padding: 0; margin: 1rem 0 0; counter-reset: gk-a; }
+
+.md-typeset .gk-top3-item {
+  position: relative;
+  padding: 1.1rem 1.3rem 1.1rem 3.2rem;
+  margin-bottom: .85rem;
+  counter-increment: gk-a;
+}
+
+.md-typeset .gk-top3-item::before {
+  content: counter(gk-a);
+  position: absolute;
+  left: 1.15rem; top: 1.05rem;
+  width: 1.5rem; height: 1.5rem;
+  border-radius: 50%;
+  background: var(--gk-brand-soft);
+  color: var(--gk-brand-deep);
+  font-weight: 700;
+  font-size: .8rem;
+  display: grid;
+  place-items: center;
+}
+
+.md-typeset .gk-top3-item b { font-size: 1.02rem; }
+.gk-top3-why { font-size: .88rem; color: var(--gk-ink-2); margin: .25rem 0 .7rem; }
+
+.gk-top3-meta {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .2rem .9rem;
+  font-size: .82rem;
+  margin: 0 0 .9rem;
+}
+
+.gk-top3-meta dt { color: var(--gk-ink-3); }
+.gk-top3-meta dd { margin: 0; color: var(--gk-ink-2); }
+.gk-top3-cta { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+@media (max-width: 680px) {
+  .gk-top3-meta { grid-template-columns: 1fr; gap: 0 0; }
+  .gk-top3-meta dt { margin-top: .35rem; }
+}

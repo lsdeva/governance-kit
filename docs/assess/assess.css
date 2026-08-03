@@ -755,3 +755,174 @@
   margin: 0;
   border-bottom: 1px solid var(--gk-hairline);
 }
+
+/* ===================================================== P1: sectioned flow ===
+ * One category per screen with a sticky footer, plus progressive disclosure
+ * inside each question. Composed from existing tokens only.
+ */
+
+.gk-sec-kicker {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gk-brand);
+  margin: 0 0 .1rem;
+}
+
+.gk-sec-rail { margin-bottom: 1.5rem; }
+
+/* Sticky footer: progress and the way forward stay reachable without
+   scrolling back. */
+.gk-secfoot {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin: 1.5rem 0 0;
+  padding: .75rem 0;
+  border-top: 1px solid var(--gk-hairline);
+  background: var(--md-default-bg-color);
+}
+
+.gk-secfoot-count {
+  font-size: .78rem;
+  color: var(--gk-ink-3);
+  margin-right: auto;
+}
+
+.gk-secfoot-exit { text-decoration: none; }
+
+/* --- progressive disclosure ---------------------------------------------- */
+
+/* The docs stylesheet skins every <details> as an admonition card. Inside a
+   question that reads as four heavy boxes hiding one line each, so these are
+   deliberately quiet: text-only rows, no border, no shadow. */
+.md-typeset .gk-q-more,
+.gk-q-more {
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: .1rem 0 0 !important;
+  padding: 0 !important;
+  font-size: .82rem;
+}
+
+/* The row of collapsed links needs real separation — inline-block alone let
+   them run together into one unreadable string. */
+.gk-q-more-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem 1.25rem;
+  margin-top: .55rem;
+  padding-top: .45rem;
+  border-top: 1px dashed var(--gk-hairline);
+}
+
+.md-typeset .gk-q-more > summary,
+.gk-q-more > summary {
+  background: none !important;
+  padding: .15rem 0 !important;
+  font-weight: 600;
+  border: none;
+}
+
+.md-typeset .gk-q-more > summary::before { display: none !important; }
+.md-typeset .gk-q-more > summary::after { display: none !important; }
+
+/* Once opened it becomes a block so the body is readable. */
+.gk-q-more[open] { display: block; margin-right: 0 !important; }
+
+.gk-q-more > summary {
+  cursor: pointer;
+  color: var(--gk-brand);
+  font-weight: 600;
+  padding: .2rem 0;
+  list-style: revert;
+}
+
+.gk-q-more > summary:hover { color: var(--gk-brand-deep); }
+
+.gk-q-more-body {
+  margin: .3rem 0 .5rem;
+  color: var(--gk-ink-2);
+  line-height: 1.55;
+  font-size: .84rem;
+}
+
+.gk-na-why {
+  border-color: var(--gk-warn);
+  margin-bottom: .4rem;
+}
+
+/* --- accessibility polish ------------------------------------------------ */
+
+/* Visible focus on every custom control. Hover-only affordances leave keyboard
+   users guessing where they are. */
+.gk-opt:focus-visible,
+.gk-btn:focus-visible,
+.gk-chip:focus-visible,
+.gk-role:focus-visible,
+.gk-q-more > summary:focus-visible,
+.gk-reg-x:focus-visible,
+.gk-dec-opt:focus-visible {
+  outline: 3px solid var(--gk-brand);
+  outline-offset: 2px;
+  border-radius: var(--gk-r-sm);
+}
+
+/* Answer state must not rely on colour alone: the chosen option also carries
+   a check glyph and a heavier weight. */
+.gk-opt.is-on::before {
+  content: "✓ ";
+  font-weight: 700;
+}
+
+.gk-opt.is-on { font-weight: 650; }
+
+/* Severity likewise carries its word, not just a tint — already true, but
+   keep the label from being clipped on small screens. */
+.gk-sev { white-space: nowrap; }
+
+.gk-sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Touch targets: 44px minimum on the controls people tap most. */
+@media (pointer: coarse) {
+  .gk-opt, .gk-btn, .gk-dec-opt { min-height: 44px; }
+  .gk-reg-x { min-width: 44px; min-height: 44px; }
+}
+
+@media (max-width: 680px) {
+  .gk-secfoot { padding: .6rem 0; }
+  .gk-secfoot-count { width: 100%; margin-bottom: .2rem; }
+  .gk-opts { flex-direction: column; }
+  .gk-opt { width: 100%; text-align: left; }
+}
+
+/* An <a> styled as a primary button inherits the typeset link colour, which
+   is the same brand blue as its background — invisible text. Anchors used as
+   buttons must carry the button's foreground. */
+.md-typeset a.gk-btn {
+  text-decoration: none;
+  color: var(--gk-ink);
+}
+
+/* Declared AFTER the generic rule: same specificity, so source order decides,
+   and primary must win or the label is brand-on-brand. */
+.md-typeset a.gk-btn.gk-btn-primary,
+.md-typeset a.gk-btn.gk-btn-primary:hover,
+.md-typeset a.gk-btn.gk-btn-primary:focus {
+  color: #fff;
+}

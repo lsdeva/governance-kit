@@ -29,6 +29,10 @@
   section: frameworks
   path: frameworks/data-governance-framework.md
   status: ready
+  owner: Governance lead, with data owners
+  effort: 3–5 days
+  completion_evidence: >-
+    An approved framework with named owners for every data domain.
   purpose: >-
     The reference that defines how your organisation governs data: what data you
     hold, who owns it, what quality is expected, and how decisions about it are
@@ -148,6 +152,10 @@
   section: frameworks
   path: frameworks/ai-governance-framework.md
   status: ready
+  owner: Governance lead, ratified by the committee
+  effort: 3–5 days
+  completion_evidence: >-
+    An approved framework, with risk tiers and lifecycle gates agreed.
   purpose: >-
     A single reference that defines how your organisation governs AI across its
     lifecycle — who is accountable, what principles apply, how risk is tiered and
@@ -272,6 +280,10 @@
   section: frameworks
   path: frameworks/governance-charter.md
   status: draft
+  owner: Executive sponsor
+  effort: 1 week to draft and approve
+  completion_evidence: >-
+    A board-approved mandate naming the sponsor and the authority to halt.
   purpose: >-
     A short, board-approved mandate that establishes the governance programme:
     why it exists, what authority it has, what it covers, and how success is
@@ -368,6 +380,10 @@
   section: frameworks
   path: frameworks/maturity-assessment.md
   status: ready
+  owner: Governance lead
+  effort: Half a day
+  completion_evidence: >-
+    A dated baseline score with evidence against each dimension.
   purpose: >-
     A structured baseline of how capable your governance actually is today,
     across the dimensions that matter, so you can prioritise honestly and show
@@ -463,6 +479,10 @@
   section: policies
   path: policies/data-governance-policy.md
   status: ready
+  owner: Governance lead, with Legal
+  effort: 2–3 days
+  completion_evidence: >-
+    A published policy with numbered, enforceable statements.
   purpose: >-
     The mandatory rules for handling data. Where the framework explains how
     governance works, this policy states what people must and must not do, in
@@ -570,6 +590,10 @@
   section: policies
   path: policies/data-quality-standard.md
   status: ready
+  owner: Data owners
+  effort: 2–3 days
+  completion_evidence: >-
+    Thresholds set and measured on your two most important domains.
   purpose: >-
     Defines what "good enough" data means in measurable terms — the dimensions,
     how they are measured, the thresholds that apply, and who acts when a
@@ -666,6 +690,10 @@
   section: policies
   path: policies/data-classification-policy.md
   status: ready
+  owner: Security, with Legal
+  effort: 2 days
+  completion_evidence: >-
+    A published scheme with the AI-input rules staff can find.
   purpose: >-
     Defines the sensitivity tiers your data falls into and the handling rules for
     each — including the rules that decide what may be pasted into an AI tool.
@@ -756,6 +784,10 @@
   section: policies
   path: policies/acceptable-ai-use-policy.md
   status: ready
+  owner: HR and Governance
+  effort: Half a day to draft
+  completion_evidence: >-
+    A one-page policy staff have attested to, with an approved-tool list.
   purpose: >-
     The staff-facing rules for using AI at work: what is encouraged, what needs
     approval, and what is never allowed. This is the most-read document in the
@@ -873,6 +905,10 @@
   section: policies
   path: policies/ai-development-standard.md
   status: ready
+  owner: ML lead
+  effort: 3–5 days
+  completion_evidence: >-
+    Lifecycle gates enforced in the pipeline, producing evidence.
   purpose: >-
     The engineering-facing requirements for building, testing, deploying, and
     operating AI systems — the technical controls that make the framework's
@@ -990,6 +1026,10 @@
   section: policies
   path: policies/third-party-ai-risk-policy.md
   status: ready
+  owner: Procurement, with Security
+  effort: 2–3 days
+  completion_evidence: >-
+    An assessment on file for every critical AI vendor.
   purpose: >-
     How you assess, contract for, and monitor AI you did not build — including AI
     features that appear inside software you already licence. For most
@@ -1112,6 +1152,10 @@
   section: operating-model
   path: operating-model/raci.md
   status: ready
+  owner: Governance lead, agreed in a room
+  effort: 1 workshop
+  completion_evidence: >-
+    One accountable party per activity, confirmed by the people named.
   purpose: >-
     Removes ambiguity about who does what. For every significant governance
     activity it names exactly one accountable party, so decisions have an owner
@@ -1206,6 +1250,10 @@
   section: operating-model
   path: operating-model/committee-charter.md
   status: ready
+  owner: Executive sponsor
+  effort: 1 week
+  completion_evidence: >-
+    Terms of reference with quorum and the right to halt a system.
   purpose: >-
     Establishes the forum where governance decisions are actually made: its
     authority, membership, quorum, cadence, and what it must decide rather than
@@ -1314,6 +1362,10 @@
   section: operating-model
   path: operating-model/roles-responsibilities.md
   status: ready
+  owner: Governance lead
+  effort: 2 days
+  completion_evidence: >-
+    Named holders who know they hold the role.
   purpose: >-
     Defines each governance role in enough detail that it can be put in a job
     description, recruited for, and assessed against — rather than assumed.
@@ -1434,6 +1486,10 @@
   section: operating-model
   path: operating-model/decision-rights.md
   status: ready
+  owner: Governance lead, with the committee
+  effort: 2 days
+  completion_evidence: >-
+    A decision matrix tested against a real past decision.
   purpose: >-
     States who can decide what, at what threshold, and what happens when people
     disagree or a decision is needed urgently. It is the document that stops
@@ -1539,6 +1595,10 @@
   section: registers
   path: registers/data-asset-register.md
   status: ready
+  owner: Data owners
+  effort: 2–3 days for the first pass
+  completion_evidence: >-
+    Your material data assets registered with owners and classification.
   purpose: >-
     The catalogue of what data you hold, who owns it, how sensitive it is, and
     where it lives. Almost every other governance control depends on it.
@@ -1624,6 +1684,10 @@
   section: registers
   path: registers/ai-system-inventory.md
   status: ready
+  owner: Governance lead, with a discovery sweep
+  effort: 2–4 days
+  completion_evidence: >-
+    Every AI system listed with a named owner, tier and rationale.
   purpose: >-
     The single list of every AI system you build, buy, or have embedded in
     something you already licence. It is the foundation of AI Act compliance:
@@ -1730,6 +1794,10 @@
   section: registers
   path: registers/risk-register.md
   status: ready
+  owner: Governance lead, with risk owners
+  effort: 1–2 days
+  completion_evidence: >-
+    Risks written as cause-event-consequence, each with an owner.
   purpose: >-
     The live record of data and AI risks: what could go wrong, how likely and how
     bad, what you are doing about it, and who owns it.
@@ -1833,6 +1901,10 @@
   section: registers
   path: registers/incident-log.md
   status: ready
+  owner: Security and Governance
+  effort: 1 day
+  completion_evidence: >-
+    A defined route people can name, plus the log itself.
   purpose: >-
     The record of what went wrong, what you did, and what changed as a result.
     It is both a management tool and the evidence base for serious-incident
@@ -1921,6 +1993,10 @@
   section: registers
   path: registers/processing-dpia-log.md
   status: ready
+  owner: DPO or Legal
+  effort: 1–2 weeks per assessment
+  completion_evidence: >-
+    A completed DPIA with the DPO's recorded opinion.
   purpose: >-
     The record of personal data processing activities and the impact assessments
     that cover them — the point where AI governance meets data protection law.
@@ -2018,6 +2094,10 @@
   section: risk
   path: risk/ai-risk-assessment.md
   status: ready
+  owner: System owner, facilitated by Governance
+  effort: 1–2 weeks per system
+  completion_evidence: >-
+    A signed assessment with residual risk accepted at the right level.
   purpose: >-
     A structured assessment of what could go wrong with a specific AI system, how
     bad it would be, and what you are doing about it. For high-risk systems it is
@@ -2160,6 +2240,10 @@
   section: risk
   path: risk/model-card.md
   status: ready
+  owner: ML lead
+  effort: 1–2 days per model
+  completion_evidence: >-
+    Documentation covering intended use, limitations and subgroup results.
   purpose: >-
     Standard documentation for a model: what it is for, what it was trained on,
     how well it performs and for whom, and where it should not be used. Feeds
@@ -2292,6 +2376,10 @@
   section: risk
   path: risk/control-library.md
   status: ready
+  owner: Governance lead, with Internal Audit
+  effort: 1 week
+  completion_evidence: >-
+    Obligations mapped to controls, each with an owner and evidence.
   purpose: >-
     Maps obligations to the controls that satisfy them, names an owner for each,
     and records how you would evidence the control is operating. It turns "we
@@ -2390,6 +2478,10 @@
   section: board
   path: board/board-pack.md
   status: ready
+  owner: Governance lead
+  effort: 1–2 days per cycle
+  completion_evidence: >-
+    A pack the board reads, with the decisions being sought stated.
   purpose: >-
     A structured report that gives the board what it needs to discharge its
     oversight duty: current posture, what changed, what went wrong, and what
@@ -2519,6 +2611,10 @@
   section: board
   path: board/kpi-dashboard.md
   status: ready
+  owner: Governance lead
+  effort: 1 day to set up
+  completion_evidence: >-
+    A stable metric set with trend over at least three periods.
   purpose: >-
     The measures that show whether governance is actually working — coverage,
     quality, timeliness, and leading indicators of trouble — rather than how much
@@ -2634,6 +2730,10 @@
   section: eu-ai-act
   path: eu-ai-act/readiness-checklist.md
   status: ready
+  owner: Governance lead
+  effort: 1–2 hours
+  completion_evidence: >-
+    A dated position against all 25 points.
   reviewed: 2026-08-03
   version: "1.2"
   generate_body: checklist
@@ -2672,6 +2772,10 @@
   section: eu-ai-act
   path: eu-ai-act/timeline.md
   status: ready
+  owner: Governance lead
+  effort: 1 hour to plan against
+  completion_evidence: >-
+    A roadmap working backwards from the binding dates.
   reviewed: 2026-08-03
   version: "1.2"
   purpose: >-

@@ -531,41 +531,55 @@ def render_scoring_page(bm: dict, questions: list, bands: list) -> str:
 
 
 def render_workspace_page(sheets_raw: dict, by_id: dict) -> str:
-    """One page listing every editable register, for working across several."""
+    """The operational home of a governance programme.
+
+    Leads with a dashboard rendered client-side from whatever the user has
+    actually saved — counts, what to continue, and ONE recommended next action.
+    The register catalogue stays below it, because it is still the reference
+    people come back for.
+    """
     path = "workspace.md"
     parts = [BANNER.format(source="spreadsheets.yml")]
-    parts.append("# Workspace\n")
+    parts.append("# Your workspace\n")
+
+    # docs/assets/workspace.js fills this from localStorage. Empty and inert
+    # for a first-time visitor, so the page still reads as an introduction.
     parts.append(
-        "Every register in the kit can be filled in directly in your browser — "
-        "no download, no account, nothing uploaded. Your rows are saved on this "
-        "device and can be exported to Excel or CSV at any time.\n"
+        # Raw HTML attribute: MkDocs does not rewrite it the way it rewrites
+        # Markdown links, and /workspace/ publishes one level deep, so the
+        # path needs an explicit ../ prefix.
+        '<div id="gk-dashboard" data-src="../assess/assessment-data.json"></div>\n'
     )
+
     parts.append(
         '!!! info "Where your data lives"\n'
-        "    Each register is stored separately in this browser's local storage.\n"
-        "    Clearing your browser data, or using a different device or a\n"
-        "    private window, will lose it — so use **Back up this register**\n"
-        "    on anything you want to keep, and **Restore this register** to\n"
-        "    pick it back up later. Backing up is per register today; one\n"
-        "    backup covering the whole workspace is coming.\n"
+        "    Everything here is stored in this browser, on this device. No\n"
+        "    accounts, no uploads. Clearing your browser data, or opening the\n"
+        "    site on another device or in a private window, will not show it —\n"
+        "    so use **Back up this register** on anything you want to keep and\n"
+        "    **Restore this register** to reopen it elsewhere. Backing up is per\n"
+        "    register today; one backup covering the whole workspace is coming.\n"
     )
-    parts.append("## The editable registers\n")
+
+    parts.append("## All tools\n")
+    parts.append(
+        "Every register can be filled in directly in the browser, and exported "
+        "to Excel or CSV at any time.\n"
+    )
     parts.append("| Register | What it records | Columns |")
     parts.append("|---|---|---|")
     for tid, spec in sheets_raw.items():
-        t = by_id[tid]
+        t_ = by_id[tid]
         n = len(spec["columns"]) + sum(
             len(s["columns"]) for s in spec.get("extra_sheets", []))
-        purpose = " ".join(t["purpose"].split())
+        purpose = " ".join(t_["purpose"].split())
         if len(purpose) > 120:
             purpose = purpose[:117].rsplit(" ", 1)[0] + "…"
         parts.append(
-            f"| [{t['title']}]({rel_link(path, t['path'])}) | {purpose} | {n} |"
+            f"| [{t_['title']}]({rel_link(path, t_['path'])}) | {purpose} | {n} |"
         )
     parts.append("")
-    parts.append(
-        SNIPPET_ASSESS.format(assess=rel_link(path, "assess/index.md"))
-    )
+    parts.append(SNIPPET_ASSESS.format(assess=rel_link(path, "assess/index.md")))
     parts.append("## How it fits together\n")
     parts.append(
         "1. **[Take the assessment](" + rel_link(path, "assess/index.md") +
@@ -909,6 +923,10 @@ def build_assessment_json(roles, questions, templates, sections) -> dict:
             "status": t["status"],
             "url": rel_link("assess/index.md", t["path"]).replace(".md", "/"),
             "purpose": " ".join(t["purpose"].split()),
+            # Turns "closes 7 gaps" into a piece of work someone can pick up.
+            "owner": " ".join(str(t.get("owner", "")).split()),
+            "effort": " ".join(str(t.get("effort", "")).split()),
+            "evidence": " ".join(str(t.get("completion_evidence", "")).split()),
         }
 
     q_out = []
@@ -1111,6 +1129,13 @@ def main() -> int:
         for r in t.get("related", []):
             if r not in by_id:
                 raise SystemExit(f"ERROR: {t['id']} relates to unknown template '{r}'")
+        # The report presents these as the work to do; a template without them
+        # would render an action with no owner and no estimate.
+        for field in ("owner", "effort", "completion_evidence"):
+            if not str(t.get(field, "")).strip():
+                raise SystemExit(
+                    f"ERROR: template '{t['id']}' has no `{field}`. The "
+                    "assessment report needs it to present a concrete action.")
 
     qdupes = [i for i, c in Counter(q["id"] for q in questions).items() if c > 1]
     if qdupes:

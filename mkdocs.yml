@@ -70,6 +70,7 @@ extra_javascript:
   - assess/registers.js
   - assess/decide.js
   - assets/tasks.js
+  - assets/workspace.js
 
 markdown_extensions:
   - admonition
