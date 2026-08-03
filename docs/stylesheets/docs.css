@@ -94,10 +94,15 @@
   border-bottom-color: var(--gk-brand);
 }
 
+/* Material marks the LI with --active, not the link (see the theme's
+   partials/tabs-item.html), so the underline has to be addressed through the
+   parent. Targeting .md-tabs__link--active alone matched nothing. */
+.md-tabs__item--active > .md-tabs__link,
 .md-tabs__link--active {
   color: var(--gk-ink);
   font-weight: 650;
   border-bottom-color: var(--gk-brand);
+  opacity: 1;
 }
 
 /* Search: a quiet bordered input on the page colour, not a dark inset. */
@@ -151,31 +156,39 @@
 .md-source__repository { font-size: 13px; }
 
 /* --- mobile drawer ------------------------------------------------------ */
-/* At <=76.1875em Material swaps tabs for a drawer. It inherits the primary
-   colour by default, which no longer exists — give it the surface treatment
-   so it stays legible in both schemes. */
+/* Material's drawer inherits the primary colour for its title bar, which was
+ * the solid indigo block we replaced. These rules are not wrapped in a media
+ * query: .md-nav--primary only renders below the drawer breakpoint, so scoping
+ * by class is enough and cannot drift if Material changes the breakpoint.
+ */
 
-@media screen and (max-width: 76.1875em) {
-  .md-nav--primary .md-nav__title {
-    background: var(--gk-page);
-    color: var(--gk-ink);
-    border-bottom: 1px solid var(--gk-hairline);
-    box-shadow: none;
-  }
-
-  .md-nav--primary .md-nav__title .md-nav__button.md-logo :is(img, svg) {
-    color: var(--gk-brand);
-  }
-
-  .md-nav--primary,
-  .md-nav--primary .md-nav__source {
-    background: var(--gk-surface);
-    color: var(--gk-ink);
-  }
-
-  .md-nav--primary .md-nav__link { color: var(--gk-ink-2); }
-  .md-nav--primary .md-nav__link:is(:hover, :focus) { color: var(--gk-brand); }
+.md-nav--primary .md-nav__title {
+  background: var(--gk-page);
+  color: var(--gk-ink);
+  border-bottom: 1px solid var(--gk-hairline);
+  box-shadow: none;
 }
+
+.md-nav--primary .md-nav__title[for="__drawer"] {
+  background: var(--gk-page);
+  color: var(--gk-ink);
+}
+
+.md-nav--primary .md-nav__title .md-nav__button.md-logo :is(img, svg) {
+  color: var(--gk-brand);
+}
+
+.md-nav--primary,
+.md-nav--primary .md-nav__source {
+  background: var(--gk-surface);
+  color: var(--gk-ink);
+}
+
+.md-nav--primary .md-nav__link { color: var(--gk-ink-2); }
+.md-nav--primary .md-nav__link:is(:hover, :focus) { color: var(--gk-brand); }
+.md-nav--primary .md-nav__link--active { color: var(--gk-brand); }
+
+.md-nav--primary .md-nav__icon { color: var(--gk-ink-3); }
 
 /* ===========================================================================
  * 2. TYPOGRAPHY
@@ -699,4 +712,152 @@
   .md-typeset .gk-dochead-dl .md-button:is(:hover, :focus) {
     transform: none;
   }
+}
+
+/* ===========================================================================
+ * 6. APP WIDGETS (assess, decide, registers, checklist)
+ *
+ * The apps predate the token layer and use Material's --md-* variables for
+ * borders and radii. Re-point them at the GovKit tokens so they look native
+ * beside the re-skinned docs, without touching any behaviour.
+ * ======================================================================== */
+
+/* Cards, panels and grids share the surface + hairline + shadow language. */
+.gk-q,
+.gk-role,
+.gk-dec-card,
+.gk-reg,
+.gk-cl,
+.gk-privacy,
+.gk-counsel,
+.gk-flash,
+.gk-reg-link,
+.gk-verdict {
+  border-radius: var(--gk-r-md);
+}
+
+.gk-q,
+.gk-role,
+.gk-dec-card,
+.gk-reg {
+  background: var(--gk-surface);
+  border-color: var(--gk-hairline);
+  box-shadow: var(--gk-shadow-1);
+}
+
+.gk-role:hover,
+.gk-dec-card:hover {
+  border-color: var(--gk-brand);
+  box-shadow: var(--gk-shadow-2);
+}
+
+/* Buttons across all four apps take the landing's button treatment. */
+.gk-btn {
+  border-radius: var(--gk-r-sm);
+  border-color: var(--gk-hairline);
+  background: var(--gk-surface);
+  color: var(--gk-ink);
+  box-shadow: var(--gk-shadow-1);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.gk-btn:hover:not([disabled]) {
+  transform: translateY(-1px);
+  box-shadow: var(--gk-shadow-2);
+  border-color: var(--gk-brand);
+}
+
+.gk-btn-primary {
+  background: var(--gk-brand);
+  border-color: var(--gk-brand);
+  color: #fff;
+}
+
+.gk-btn-primary:hover:not([disabled]) {
+  background: var(--gk-brand-deep);
+  border-color: var(--gk-brand-deep);
+}
+
+.gk-btn-danger {
+  background: var(--gk-surface);
+  border-color: var(--gk-critical);
+  color: var(--gk-critical-text);
+}
+
+.gk-btn-danger:hover {
+  background: var(--gk-critical);
+  border-color: var(--gk-critical);
+  color: #fff;
+}
+
+/* Answer options and decision choices: same chip radius as the landing. */
+.gk-opt,
+.gk-dec-opt,
+.gk-chip {
+  border-radius: var(--gk-r-sm);
+  border-color: var(--gk-hairline);
+}
+
+.gk-chip { border-radius: 999px; }
+
+.gk-dec-opt:hover {
+  border-color: var(--gk-brand);
+  background: var(--gk-page);
+}
+
+/* Register grid: hairlines and surface, matching the docs tables. */
+.gk-reg-table th { background: var(--gk-page); color: var(--gk-ink); }
+
+.gk-reg-table th,
+.gk-reg-table td {
+  border-right-color: var(--gk-hairline);
+  border-bottom-color: var(--gk-hairline);
+}
+
+.gk-reg-bar,
+.gk-reg-meta,
+.gk-reg-link { border-bottom-color: var(--gk-hairline); }
+
+.gk-reg-bar { background: var(--gk-page); }
+
+/* Recommended-default spans read as an inline chip, like the landing's. */
+.gk-default > strong {
+  background: var(--gk-brand-soft);
+  border-bottom-color: var(--gk-brand);
+  color: var(--gk-brand-deep);
+}
+
+/* Report tables inside the assessment follow the docs table treatment. */
+.gk-table {
+  border: 1px solid var(--gk-hairline);
+  border-radius: var(--gk-r-md);
+  overflow: hidden;
+}
+
+.gk-table th {
+  background: var(--gk-page);
+  color: var(--gk-ink);
+  border-bottom-color: var(--gk-hairline);
+}
+
+.gk-table td { border-bottom-color: var(--gk-hairline); }
+
+/* The apps set their own measure; never inherit the prose cap. */
+.gk-reg-host,
+#gk-assess,
+#gk-decide,
+.gk-cl { max-width: none; }
+
+.md-typeset .gk-dec p,
+.md-typeset .gk-q p { max-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gk-btn,
+  .gk-role,
+  .gk-dec-card,
+  .gk-dec-opt { transition: none; }
+
+  .gk-btn:hover:not([disabled]),
+  .gk-role:hover,
+  .gk-dec-card:hover { transform: none; }
 }
