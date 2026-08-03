@@ -51,9 +51,13 @@ Binding law, risk-tiered, with penalties. The only entry here that can fine you.
 **Best for:** Anyone placing AI on the EU market or whose output is used in the EU.  
 **Worth knowing:** Obligations depend on your role (provider/deployer) and the system's risk tier. See the timeline for what applies when.
 
-## The crosswalk
+## Compare two or three frameworks
 
-Read a row across to see how each regime expresses the same obligation, then use the templates in the last column to satisfy all of them at once.
+<div id="gk-compare" data-src="../assess/crosswalk-data.json"></div>
+
+## The full crosswalk
+
+Every theme against every framework. Read a row across to see how each regime expresses the same obligation, then use the templates in the last column to satisfy all of them at once.
 
 | Theme | ISO/IEC 42001 | NIST AI RMF | Singapore Model AI Governance Framework | EU AI Act | Templates |
 |---|---|---|---|---|---|

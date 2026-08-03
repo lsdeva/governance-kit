@@ -763,11 +763,17 @@ def render_crosswalk_page(cw: dict, by_id: dict) -> str:
         parts.append(f"**Best for:** {' '.join(f['audience'].split())}  ")
         parts.append(f"**Worth knowing:** {' '.join(f['note'].split())}\n")
 
-    parts.append("## The crosswalk\n")
+    # Pick a theme and two or three frameworks; read them stacked rather than
+    # across six columns. The full table stays below.
+    parts.append("## Compare two or three frameworks\n")
     parts.append(
-        "Read a row across to see how each regime expresses the same "
-        "obligation, then use the templates in the last column to satisfy all "
-        "of them at once.\n"
+        '<div id="gk-compare" data-src="../assess/crosswalk-data.json"></div>\n')
+
+    parts.append("## The full crosswalk\n")
+    parts.append(
+        "Every theme against every framework. Read a row across to see how "
+        "each regime expresses the same obligation, then use the templates in "
+        "the last column to satisfy all of them at once.\n"
     )
 
     head = "| Theme | " + " | ".join(f["name"] for f in frameworks) + " | Templates |"
@@ -1558,6 +1564,40 @@ def main() -> int:
                      indent=2, ensure_ascii=False) + "\n",
           written, args.check)
 
+    # ---- crosswalk data -----------------------------------------------------
+    # A 6-column, 15-row table is a reference, not something you read on a
+    # phone. The comparison app renders any two or three frameworks for one
+    # theme as stacked cards; the table stays for people who want all of it.
+    if crosswalk:
+        cw_payload = {
+            "frameworks": [
+                {"id": f["id"], "name": f["name"], "full": f["full"],
+                 "url": f["url"], "audience": " ".join(f["audience"].split())}
+                for f in crosswalk["frameworks"]
+            ],
+            "rows": [],
+        }
+        for row in crosswalk["rows"]:
+            cw_payload["rows"].append({
+                "theme": row["theme"],
+                "cells": {f["id"]: row.get(f["id"], "")
+                          for f in crosswalk["frameworks"]},
+                "templates": [
+                    {"id": tid,
+                     "title": by_id[tid]["title"],
+                     # Consumed by JS from the published page /crosswalk/,
+                     # which is one directory deep — same reason as the plan
+                     # URLs above.
+                     "url": "../" + rel_link(
+                         "crosswalk.md", by_id[tid]["path"]).replace(".md", "/")}
+                    for tid in row["templates"]
+                ],
+            })
+        write(DOCS / "assess" / "crosswalk-data.json",
+              json.dumps({"version": 1, **cw_payload},
+                         indent=2, ensure_ascii=False) + "\n",
+              written, args.check)
+
     # ---- plan data ----------------------------------------------------------
     # The plans page prints all four paths. Adopting one turns it into a
     # tracked journey in the browser, so the app needs the same steps with the
@@ -1702,33 +1742,41 @@ def main() -> int:
                     "links, so this would 404 in the browser."
                 )
 
-    # ---- verify the plan JSON's links resolve from /plans/ ------------------
+    # ---- verify JSON-carried links resolve from their page ------------------
     # Same failure as data-src above, one step removed: these URLs are put into
-    # href by JS running on /plans/, so a path that looks right relative to the
-    # .md source silently 404s. Checked here rather than in a browser.
+    # href by JS running on /plans/ or /crosswalk/, so a path that looks right
+    # relative to the .md source silently 404s. Checked here, not in a browser.
+    def check_json_url(page: str, url: str, what: str) -> None:
+        segs = [page]
+        for part in url.split("/"):
+            if part in ("", "."):
+                continue
+            if part == "..":
+                if not segs:
+                    raise SystemExit(
+                        f"ERROR: {what} url {url!r} escapes the site root.")
+                segs.pop()
+            else:
+                segs.append(part)
+        target = "/".join(segs)
+        if not (DOCS / (target + ".md")).exists() and \
+           not (DOCS / target / "index.md").exists():
+            raise SystemExit(
+                f"ERROR: {what} has url {url!r}, which resolves to /{target}/ "
+                f"from the published page /{page}/ — no such page.")
+
     for _p in plan_payload:
         for _ph in _p["phases"]:
             for _s in _ph["steps"]:
-                segs = ["plans"]
-                for part in _s["url"].split("/"):
-                    if part in ("", "."):
-                        continue
-                    if part == "..":
-                        if not segs:
-                            raise SystemExit(
-                                f"ERROR: plan '{_p['id']}' step "
-                                f"{_s['template']!r} url {_s['url']!r} escapes "
-                                "the site root.")
-                        segs.pop()
-                    else:
-                        segs.append(part)
-                target = "/".join(segs)
-                if not (DOCS / (target + ".md")).exists() and \
-                   not (DOCS / target / "index.md").exists():
-                    raise SystemExit(
-                        f"ERROR: plan '{_p['id']}' step {_s['template']!r} has "
-                        f"url {_s['url']!r}, which resolves to /{target}/ from "
-                        "the published page /plans/ — no such page.")
+                check_json_url("plans", _s["url"],
+                               f"plan '{_p['id']}' step {_s['template']!r}")
+
+    if crosswalk:
+        for _row in cw_payload["rows"]:
+            for _t in _row["templates"]:
+                check_json_url("crosswalk", _t["url"],
+                               f"crosswalk row {_row['theme']!r} template "
+                               f"{_t['id']!r}")
 
     # ---- report -------------------------------------------------------------
     if args.check:

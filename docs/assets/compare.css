@@ -1,0 +1,118 @@
+/* Framework comparison on the crosswalk.
+ *
+ * Composed from existing tokens and components — cards, chips, the form field
+ * styling from the register editor. Nothing new but layout.
+ */
+
+.gk-compare {
+  margin: 1rem 0 1.5rem;
+}
+
+.gk-compare-lede {
+  margin: 0 0 1rem;
+  color: var(--gk-ink-2);
+}
+
+.gk-compare-controls {
+  margin: 0 0 .8rem;
+}
+
+.gk-compare-theme {
+  max-width: 24rem;
+}
+
+.gk-compare-picks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem;
+  margin: 0 0 1rem;
+}
+
+.gk-compare-picks-l {
+  font-size: .8rem;
+  font-weight: 600;
+  margin-right: .2rem;
+}
+
+.gk-compare-picks .gk-chip[disabled] {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.gk-compare-hint {
+  font-size: .74rem;
+  margin-left: .2rem;
+}
+
+/* Side by side where there is room; stacked where there is not — which is the
+ * case this whole component exists for. */
+.gk-compare-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: .7rem;
+  margin: 0 0 1rem;
+}
+
+.md-typeset .gk-compare-card {
+  margin: 0;
+  padding: .9rem 1rem;
+}
+
+.md-typeset .gk-compare-card > h3 {
+  margin: 0 0 .2rem;
+  font-size: .95rem;
+  text-transform: none;
+}
+
+.gk-compare-full {
+  margin: 0 0 .6rem !important;
+  font-size: .72rem;
+  color: var(--gk-ink-3);
+}
+
+.md-typeset .gk-compare-cell {
+  margin: 0;
+  font-size: .86rem;
+  line-height: 1.5;
+}
+
+.gk-compare-cell.is-none {
+  color: var(--gk-ink-3);
+  font-style: italic;
+}
+
+.gk-compare-tpl {
+  padding: .9rem 1rem;
+  border: 1px solid var(--gk-hairline);
+  border-left: 3px solid var(--gk-brand);
+  border-radius: var(--gk-r-md, .5rem);
+  background: var(--gk-seq-track);
+}
+
+[data-md-color-scheme="slate"] .gk-compare-tpl {
+  background: var(--md-code-bg-color);
+}
+
+.md-typeset .gk-compare-tpl > h3 {
+  margin: 0 0 .4rem;
+  font-size: .88rem;
+  text-transform: none;
+}
+
+.md-typeset .gk-compare-tpl ul {
+  margin: 0;
+}
+
+.gk-compare-foot {
+  margin: .8rem 0 0;
+  font-size: .78rem;
+}
+
+/* The full table is the printable artefact; the picker is not. */
+@media print {
+  .gk-compare-controls,
+  .gk-compare-picks {
+    display: none;
+  }
+}

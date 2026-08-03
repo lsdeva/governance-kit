@@ -62,6 +62,7 @@ extra_css:
   - assess/registers.css
   - assess/decide.css
   - assets/plans.css
+  - assets/compare.css
 
 extra_javascript:
   - assess/assess.js
@@ -73,6 +74,7 @@ extra_javascript:
   - assets/tasks.js
   - assets/workspace.js
   - assets/plans.js
+  - assets/compare.js
 
 markdown_extensions:
   - admonition

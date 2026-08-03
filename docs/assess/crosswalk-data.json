@@ -1,0 +1,430 @@
+{
+  "version": 1,
+  "frameworks": [
+    {
+      "id": "iso42001",
+      "name": "ISO/IEC 42001",
+      "full": "ISO/IEC 42001:2023 — AI management systems",
+      "url": "https://www.iso.org/standard/81230.html",
+      "audience": "Organisations wanting a certifiable, auditable management system."
+    },
+    {
+      "id": "nist",
+      "name": "NIST AI RMF",
+      "full": "NIST AI Risk Management Framework 1.0",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "audience": "US organisations, and anyone wanting a non-certifiable risk framework."
+    },
+    {
+      "id": "singapore",
+      "name": "Singapore Model AI Governance Framework",
+      "full": "Model AI Governance Framework (2nd ed.) & Model AI Governance Framework for Generative AI",
+      "url": "https://www.pdpc.gov.sg/help-and-resources/2020/01/model-ai-governance-framework",
+      "audience": "APAC organisations, and anyone wanting worked implementation guidance."
+    },
+    {
+      "id": "euaiact",
+      "name": "EU AI Act",
+      "full": "Regulation (EU) 2024/1689",
+      "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/oj",
+      "audience": "Anyone placing AI on the EU market or whose output is used in the EU."
+    }
+  ],
+  "rows": [
+    {
+      "theme": "Leadership & accountability",
+      "cells": {
+        "iso42001": "Cl. 5 Leadership; Cl. 5.3 Roles & responsibilities",
+        "nist": "GOVERN 1, GOVERN 2 — policies, accountability structures",
+        "singapore": "Internal governance structures & measures",
+        "euaiact": "Art. 3, Art. 26 — operator obligations; named accountability"
+      },
+      "templates": [
+        {
+          "id": "governance-charter",
+          "title": "Governance Charter",
+          "url": "../frameworks/governance-charter/"
+        },
+        {
+          "id": "roles-responsibilities",
+          "title": "Roles & Responsibilities",
+          "url": "../operating-model/roles-responsibilities/"
+        },
+        {
+          "id": "raci",
+          "title": "RACI Matrix",
+          "url": "../operating-model/raci/"
+        },
+        {
+          "id": "committee-charter",
+          "title": "Committee Charter (Terms of Reference)",
+          "url": "../operating-model/committee-charter/"
+        }
+      ]
+    },
+    {
+      "theme": "Policy & management system",
+      "cells": {
+        "iso42001": "Cl. 4-10 — the management system itself; A.2 AI policy",
+        "nist": "GOVERN 1.1 — legal and regulatory requirements understood",
+        "singapore": "Internal governance — policies and SOPs",
+        "euaiact": "Art. 17 — quality management system (providers)"
+      },
+      "templates": [
+        {
+          "id": "ai-governance-framework",
+          "title": "AI Governance Framework",
+          "url": "../frameworks/ai-governance-framework/"
+        },
+        {
+          "id": "data-governance-framework",
+          "title": "Data Governance Framework",
+          "url": "../frameworks/data-governance-framework/"
+        },
+        {
+          "id": "data-governance-policy",
+          "title": "Data Governance Policy",
+          "url": "../policies/data-governance-policy/"
+        },
+        {
+          "id": "acceptable-ai-use-policy",
+          "title": "Acceptable AI Use Policy",
+          "url": "../policies/acceptable-ai-use-policy/"
+        }
+      ]
+    },
+    {
+      "theme": "Inventory & classification",
+      "cells": {
+        "iso42001": "A.4 AI system impact assessment; A.6 AI system lifecycle",
+        "nist": "MAP 1, MAP 2 — context and categorisation",
+        "singapore": "Determining the level of human involvement",
+        "euaiact": "Art. 6, Annex III — risk classification; Art. 49 registration"
+      },
+      "templates": [
+        {
+          "id": "ai-system-inventory",
+          "title": "AI System Inventory",
+          "url": "../registers/ai-system-inventory/"
+        },
+        {
+          "id": "data-asset-register",
+          "title": "Data Asset Register",
+          "url": "../registers/data-asset-register/"
+        }
+      ]
+    },
+    {
+      "theme": "Risk assessment",
+      "cells": {
+        "iso42001": "Cl. 6.1 — risk and opportunity; A.5 impact assessment",
+        "nist": "MAP 5, MEASURE 2 — risk identification and analysis",
+        "singapore": "Risk management and internal controls",
+        "euaiact": "Art. 9 — risk management system; Art. 27 FRIA"
+      },
+      "templates": [
+        {
+          "id": "ai-risk-assessment",
+          "title": "AI Risk Assessment",
+          "url": "../risk/ai-risk-assessment/"
+        },
+        {
+          "id": "risk-register",
+          "title": "Risk Register",
+          "url": "../registers/risk-register/"
+        },
+        {
+          "id": "maturity-assessment",
+          "title": "Maturity Assessment",
+          "url": "../frameworks/maturity-assessment/"
+        }
+      ]
+    },
+    {
+      "theme": "Data governance & quality",
+      "cells": {
+        "iso42001": "A.7 Data for AI systems",
+        "nist": "MAP 2.3, MEASURE 2.2 — data quality and representativeness",
+        "singapore": "Good data accountability practices",
+        "euaiact": "Art. 10 — data and data governance"
+      },
+      "templates": [
+        {
+          "id": "data-governance-framework",
+          "title": "Data Governance Framework",
+          "url": "../frameworks/data-governance-framework/"
+        },
+        {
+          "id": "data-quality-standard",
+          "title": "Data Quality Standard",
+          "url": "../policies/data-quality-standard/"
+        },
+        {
+          "id": "data-classification-policy",
+          "title": "Data Classification & Handling Policy",
+          "url": "../policies/data-classification-policy/"
+        },
+        {
+          "id": "data-asset-register",
+          "title": "Data Asset Register",
+          "url": "../registers/data-asset-register/"
+        }
+      ]
+    },
+    {
+      "theme": "Documentation & traceability",
+      "cells": {
+        "iso42001": "Cl. 7.5 Documented information; A.6.2 documentation",
+        "nist": "MAP 4, MEASURE 1 — documentation of methods and results",
+        "singapore": "Traceability, reproducibility, auditability",
+        "euaiact": "Art. 11 & Annex IV — technical documentation; Art. 12 logging"
+      },
+      "templates": [
+        {
+          "id": "model-card",
+          "title": "Model Card / Model Risk Documentation",
+          "url": "../risk/model-card/"
+        },
+        {
+          "id": "ai-development-standard",
+          "title": "AI Development & Deployment Standard",
+          "url": "../policies/ai-development-standard/"
+        },
+        {
+          "id": "incident-log",
+          "title": "Issue & Incident Log",
+          "url": "../registers/incident-log/"
+        }
+      ]
+    },
+    {
+      "theme": "Human oversight",
+      "cells": {
+        "iso42001": "A.9.2 — human oversight of AI systems",
+        "nist": "GOVERN 3.2, MANAGE 2.1 — human-AI configuration",
+        "singapore": "Human-in-the-loop / over-the-loop / out-of-the-loop",
+        "euaiact": "Art. 14 — human oversight"
+      },
+      "templates": [
+        {
+          "id": "ai-governance-framework",
+          "title": "AI Governance Framework",
+          "url": "../frameworks/ai-governance-framework/"
+        },
+        {
+          "id": "decision-rights",
+          "title": "Decision Rights & Escalation",
+          "url": "../operating-model/decision-rights/"
+        },
+        {
+          "id": "ai-risk-assessment",
+          "title": "AI Risk Assessment",
+          "url": "../risk/ai-risk-assessment/"
+        }
+      ]
+    },
+    {
+      "theme": "Performance, robustness & security",
+      "cells": {
+        "iso42001": "A.6.2.4 verification & validation; A.10 third-party security",
+        "nist": "MEASURE 2.5-2.7 — validity, reliability, security, resilience",
+        "singapore": "Robustness, reproducibility, and testing",
+        "euaiact": "Art. 15 — accuracy, robustness, cybersecurity"
+      },
+      "templates": [
+        {
+          "id": "ai-development-standard",
+          "title": "AI Development & Deployment Standard",
+          "url": "../policies/ai-development-standard/"
+        },
+        {
+          "id": "model-card",
+          "title": "Model Card / Model Risk Documentation",
+          "url": "../risk/model-card/"
+        },
+        {
+          "id": "control-library",
+          "title": "Control Library & Assurance Map",
+          "url": "../risk/control-library/"
+        }
+      ]
+    },
+    {
+      "theme": "Fairness & bias",
+      "cells": {
+        "iso42001": "A.5.2, A.7.4 — impact on individuals and groups",
+        "nist": "MEASURE 2.11 — harmful bias and homogenisation",
+        "singapore": "Fairness — dataset and model bias",
+        "euaiact": "Art. 10(2)(f), Art. 15 — bias examination; Recital 27"
+      },
+      "templates": [
+        {
+          "id": "ai-risk-assessment",
+          "title": "AI Risk Assessment",
+          "url": "../risk/ai-risk-assessment/"
+        },
+        {
+          "id": "model-card",
+          "title": "Model Card / Model Risk Documentation",
+          "url": "../risk/model-card/"
+        },
+        {
+          "id": "data-quality-standard",
+          "title": "Data Quality Standard",
+          "url": "../policies/data-quality-standard/"
+        }
+      ]
+    },
+    {
+      "theme": "Transparency & explainability",
+      "cells": {
+        "iso42001": "A.8 Information for interested parties",
+        "nist": "MEASURE 2.8, MEASURE 2.9 — transparency and explainability",
+        "singapore": "Transparency, explainability, and communication",
+        "euaiact": "Art. 13 instructions for use; Art. 50 transparency to people"
+      },
+      "templates": [
+        {
+          "id": "acceptable-ai-use-policy",
+          "title": "Acceptable AI Use Policy",
+          "url": "../policies/acceptable-ai-use-policy/"
+        },
+        {
+          "id": "model-card",
+          "title": "Model Card / Model Risk Documentation",
+          "url": "../risk/model-card/"
+        },
+        {
+          "id": "ai-governance-framework",
+          "title": "AI Governance Framework",
+          "url": "../frameworks/ai-governance-framework/"
+        }
+      ]
+    },
+    {
+      "theme": "Third-party & supply chain",
+      "cells": {
+        "iso42001": "A.10 — third-party and customer relationships",
+        "nist": "MAP 4.1, MANAGE 3 — third-party risks",
+        "singapore": "Vendor and deployment considerations",
+        "euaiact": "Art. 25 — responsibilities along the value chain; Art. 53 GPAI"
+      },
+      "templates": [
+        {
+          "id": "third-party-ai-risk-policy",
+          "title": "Third-Party AI Risk Policy",
+          "url": "../policies/third-party-ai-risk-policy/"
+        },
+        {
+          "id": "ai-system-inventory",
+          "title": "AI System Inventory",
+          "url": "../registers/ai-system-inventory/"
+        }
+      ]
+    },
+    {
+      "theme": "Monitoring & incidents",
+      "cells": {
+        "iso42001": "Cl. 9 Performance evaluation; Cl. 10.2 Nonconformity",
+        "nist": "MANAGE 4 — monitoring, feedback, and incident response",
+        "singapore": "Monitoring and review; incident management",
+        "euaiact": "Art. 72 post-market monitoring; Art. 73 serious incidents"
+      },
+      "templates": [
+        {
+          "id": "incident-log",
+          "title": "Issue & Incident Log",
+          "url": "../registers/incident-log/"
+        },
+        {
+          "id": "kpi-dashboard",
+          "title": "KPI / KRI Dashboard",
+          "url": "../board/kpi-dashboard/"
+        },
+        {
+          "id": "control-library",
+          "title": "Control Library & Assurance Map",
+          "url": "../risk/control-library/"
+        }
+      ]
+    },
+    {
+      "theme": "Assurance & audit",
+      "cells": {
+        "iso42001": "Cl. 9.2 Internal audit; Cl. 9.3 Management review",
+        "nist": "GOVERN 4.1 — organisational risk culture and assurance",
+        "singapore": "Internal audit and independent review",
+        "euaiact": "Art. 43 conformity assessment; Art. 74 market surveillance"
+      },
+      "templates": [
+        {
+          "id": "control-library",
+          "title": "Control Library & Assurance Map",
+          "url": "../risk/control-library/"
+        },
+        {
+          "id": "maturity-assessment",
+          "title": "Maturity Assessment",
+          "url": "../frameworks/maturity-assessment/"
+        },
+        {
+          "id": "board-pack",
+          "title": "Board Pack Template",
+          "url": "../board/board-pack/"
+        }
+      ]
+    },
+    {
+      "theme": "Competence & literacy",
+      "cells": {
+        "iso42001": "Cl. 7.2 Competence; Cl. 7.3 Awareness",
+        "nist": "GOVERN 3, GOVERN 4 — workforce diversity and culture",
+        "singapore": "Staff training and capability",
+        "euaiact": "Art. 4 — AI literacy"
+      },
+      "templates": [
+        {
+          "id": "acceptable-ai-use-policy",
+          "title": "Acceptable AI Use Policy",
+          "url": "../policies/acceptable-ai-use-policy/"
+        },
+        {
+          "id": "roles-responsibilities",
+          "title": "Roles & Responsibilities",
+          "url": "../operating-model/roles-responsibilities/"
+        },
+        {
+          "id": "governance-charter",
+          "title": "Governance Charter",
+          "url": "../frameworks/governance-charter/"
+        }
+      ]
+    },
+    {
+      "theme": "Privacy & data protection",
+      "cells": {
+        "iso42001": "A.7.3 — privacy in AI data; links to ISO/IEC 27701",
+        "nist": "MEASURE 2.10 — privacy risk",
+        "singapore": "PDPA alignment; data minimisation",
+        "euaiact": "Art. 27 FRIA; interacts with GDPR Art. 35"
+      },
+      "templates": [
+        {
+          "id": "processing-dpia-log",
+          "title": "Processing & DPIA Log",
+          "url": "../registers/processing-dpia-log/"
+        },
+        {
+          "id": "data-classification-policy",
+          "title": "Data Classification & Handling Policy",
+          "url": "../policies/data-classification-policy/"
+        },
+        {
+          "id": "data-governance-policy",
+          "title": "Data Governance Policy",
+          "url": "../policies/data-governance-policy/"
+        }
+      ]
+    }
+  ]
+}
