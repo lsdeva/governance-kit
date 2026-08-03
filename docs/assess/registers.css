@@ -212,20 +212,34 @@
   white-space: nowrap;
 }
 
+/* At least 24x24, per WCAG 2.2 target size. It was ~20px of low-contrast
+ * glyph, which is a hard thing to hit deliberately and an easy one to hit by
+ * accident — the wrong way round for a destructive control. */
 .gk-reg-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  min-height: 1.6rem;
   border: 0;
   background: none;
-  color: var(--md-default-fg-color--lighter);
+  color: var(--gk-ink-3);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1;
-  padding: .2rem .3rem;
+  padding: 0;
   border-radius: .2rem;
 }
 
-.gk-reg-x:hover {
+.gk-reg-x:hover,
+.gk-reg-x:focus-visible {
   background: var(--gk-critical);
   color: #fff;
+}
+
+.gk-reg-x:focus-visible {
+  outline: 2px solid var(--gk-brand);
+  outline-offset: 1px;
 }
 
 .gk-reg-table tbody tr:hover .gk-reg-num,
