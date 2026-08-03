@@ -15,7 +15,7 @@
 
 {% block container %}
 {%- set L = config.extra.landing -%}
-<div class="gk-home">
+<div class="gk-home" data-gk-base="{{ '' | url }}">
 
   <!-- ============================ hero ============================ -->
   <header class="gk-hero">
@@ -35,13 +35,17 @@
         </p>
 
         <div class="gk-cta">
-          <a class="gk-btn-lg gk-btn-primary" href="{{ 'decide/' | url }}">
-            Classify a system <span aria-hidden="true">→</span>
+          <a class="gk-btn-lg gk-btn-primary" href="{{ 'assess/' | url }}">
+            Assess our organisation <span aria-hidden="true">→</span>
           </a>
-          <a class="gk-btn-lg" href="{{ 'assess/' | url }}">
-            Take the 10-min assessment
+          <a class="gk-btn-lg" href="{{ 'decide/' | url }}">
+            Review one AI system
           </a>
         </div>
+        <p class="gk-cta-note">
+          10–15 minutes · you get a prioritised gap report ·
+          progress is saved in this browser
+        </p>
 
         <div class="gk-trust-row">
           <span class="gk-trust">
@@ -100,6 +104,62 @@
       </div>
     </div>
   </header>
+
+  <!-- ======================= what are you trying to do ==================== -->
+  <section class="gk-wrap gk-section gk-goals-band">
+    <p class="gk-kicker">Start here</p>
+    <h2 class="gk-h2">What are you trying to do today?</h2>
+
+    <div class="gk-goals">
+      <a class="gk-card gk-goal" href="{{ 'assess/' | url }}">
+        <b>Assess our organisation</b>
+        <p>Find your gaps and get a prioritised plan you can act on.</p>
+        <span class="gk-goal-meta">10–15 min · saved in this browser</span>
+      </a>
+
+      <a class="gk-card gk-goal" href="{{ 'decide/' | url }}">
+        <b>Review an AI system</b>
+        <p>Work out its risk tier, what obligations attach, and who approves it.</p>
+        <span class="gk-goal-meta">~5 min · ends in a dated verdict</span>
+      </a>
+
+      <a class="gk-card gk-goal" href="{{ 'plans/' | url }}">
+        <b>Build our governance programme</b>
+        <p>Follow a 30/60/90-day plan sized to your organisation.</p>
+        <span class="gk-goal-meta">Pick a path · work through it over weeks</span>
+      </a>
+
+      <a class="gk-card gk-goal" href="{{ 'tasks/' | url }}">
+        <b>Respond to a request</b>
+        <p>Someone has asked you for something — a board, auditor, customer,
+           regulator or procurement team.</p>
+        <span class="gk-goal-meta">Find the ask · start in the right place</span>
+      </a>
+    </div>
+
+    <p class="gk-goals-more">
+      <a href="{{ 'getting-started/' | url }}">Browse all templates and guidance →</a>
+    </p>
+  </section>
+
+  <!-- ===================== continue your work (JS-populated) ============== -->
+  <!-- Rendered by docs/assets/home.js only when localStorage shows in-progress
+       work. Empty and inert otherwise, so a first-time visitor sees nothing. -->
+  <section class="gk-wrap gk-section gk-continue-band" id="gk-continue" hidden></section>
+
+  <!-- ========================= private by design ========================== -->
+  <section class="gk-wrap gk-section">
+    <div class="gk-card gk-private-strip">
+      <b>Private by design</b>
+      <p>Everything you type stays in this browser. No accounts, no uploads, no
+         analytics — which also means clearing your browser data clears your
+         work, so take a backup of anything you want to keep.</p>
+      <div class="gk-trust-links">
+        <a class="gk-btn-sm" href="{{ 'scoring/' | url }}">How storage works</a>
+        <a class="gk-btn-sm" href="{{ 'workspace/' | url }}">Download workspace backup</a>
+      </div>
+    </div>
+  </section>
 
   <!-- ============================ stat tiles ============================ -->
   <section class="gk-wrap gk-stats-band">

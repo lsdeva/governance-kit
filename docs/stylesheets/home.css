@@ -691,3 +691,92 @@
   color: var(--gk-brand);
   border-bottom-color: var(--gk-brand);
 }
+
+/* ---------------------------------------------------- task-first front door --
+ * Phase 1.1. Composed from the existing card/chip vocabulary — the goal cards
+ * reuse .gk-card and the feature-card hover treatment, so no new visual
+ * language is introduced.
+ */
+
+.gk-cta-note {
+  font-size: 12.5px;
+  color: var(--gk-ink-3);
+  margin: 10px 0 0;
+}
+
+.gk-goals-band { padding-top: 64px; }
+
+.gk-goals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.gk-goal {
+  display: block;
+  padding: 18px 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.gk-goal:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--gk-shadow-2);
+  border-color: var(--gk-brand);
+}
+
+.gk-goal b {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.gk-goal p {
+  font-size: 13.5px;
+  color: var(--gk-ink-2);
+  margin: 0 0 10px;
+  line-height: 1.55;
+}
+
+.gk-goal-meta {
+  display: block;
+  font-size: 12px;
+  color: var(--gk-ink-3);
+}
+
+.gk-goals-more {
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.gk-goals-more a {
+  color: var(--gk-brand);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.gk-goals-more a:hover { text-decoration: underline; }
+
+/* The continue strip stays hidden until home.js finds saved work. */
+.gk-continue-band[hidden] { display: none; }
+
+.gk-private-strip { padding: 20px 22px; }
+.gk-private-strip b { font-size: 15.5px; }
+
+.gk-private-strip p {
+  font-size: 13.5px;
+  color: var(--gk-ink-2);
+  margin: 6px 0 14px;
+  max-width: 62ch;
+}
+
+@media (max-width: 680px) {
+  .gk-goals { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gk-goal { transition: none; }
+  .gk-goal:hover { transform: none; }
+}
