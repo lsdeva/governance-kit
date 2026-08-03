@@ -8,36 +8,45 @@
       "main": {
         "name": "Data Asset Register",
         "intro": "One row per data asset. Start with personal, regulated, and AI-feeding data; a short accurate register beats an exhaustive stale one.",
+        "record_noun": "data asset",
         "columns": [
           {
             "name": "Asset ID",
             "width": 10,
-            "help": "Stable reference, e.g. DA-001. Other registers link to this."
+            "help": "Stable reference, e.g. DA-001. Other registers link to this.",
+            "preset": "essential"
           },
           {
             "name": "Asset name",
             "width": 26,
-            "help": "Business language, not a table name."
+            "help": "Business language, not a table name.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Description",
             "width": 34,
-            "help": "What it actually is, to someone outside the team."
+            "help": "What it actually is, to someone outside the team.",
+            "preset": "compliance"
           },
           {
             "name": "Domain",
             "width": 16,
-            "help": "The data domain it belongs to."
+            "help": "The data domain it belongs to.",
+            "preset": "essential"
           },
           {
             "name": "Data Owner",
             "width": 18,
-            "help": "Named accountable person, not a team."
+            "help": "Named accountable person, not a team.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Steward",
             "width": 18,
-            "help": "Day-to-day contact for meaning and quality."
+            "help": "Day-to-day contact for meaning and quality.",
+            "preset": "compliance"
           },
           {
             "name": "Classification",
@@ -48,61 +57,72 @@
               "Confidential",
               "Restricted"
             ],
-            "help": "Drives handling rules."
+            "help": "Drives handling rules.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Personal data?",
             "width": 14,
             "choices": [
-              true,
+              "Yes",
               "No",
               "Mixed"
             ],
-            "help": "Triggers lawful basis and DPIA questions."
+            "help": "Triggers lawful basis and DPIA questions.",
+            "preset": "essential"
           },
           {
             "name": "Special category?",
             "width": 16,
             "choices": [
-              true,
+              "Yes",
               "No"
             ],
-            "help": "Health, biometrics, beliefs, etc. Default to Restricted."
+            "help": "Health, biometrics, beliefs, etc. Default to Restricted.",
+            "preset": "compliance"
           },
           {
             "name": "System of record",
             "width": 20,
-            "help": "Where the authoritative copy lives."
+            "help": "Where the authoritative copy lives.",
+            "preset": "technical"
           },
           {
             "name": "Source",
             "width": 20,
-            "help": "Where it came from; licence if external."
+            "help": "Where it came from; licence if external.",
+            "preset": "compliance"
           },
           {
             "name": "Lawful basis",
             "width": 20,
-            "help": "Required where personal data is involved."
+            "help": "Required where personal data is involved.",
+            "preset": "compliance"
           },
           {
             "name": "Used in AI?",
             "width": 16,
-            "help": "System IDs from the AI inventory. This column earns its keep during an incident."
+            "help": "System IDs from the AI inventory. This column earns its keep during an incident.",
+            "preset": "compliance"
           },
           {
             "name": "Retention",
             "width": 14,
-            "help": "How long, and under what rule."
+            "help": "How long, and under what rule.",
+            "preset": "compliance"
           },
           {
             "name": "Last reviewed",
             "width": 14,
-            "help": "Date."
+            "help": "Date.",
+            "preset": "compliance"
           },
           {
             "name": "Next review",
             "width": 14,
-            "help": "Date. Makes staleness visible."
+            "help": "Date. Makes staleness visible.",
+            "preset": "compliance"
           }
         ],
         "rows": [
@@ -114,7 +134,7 @@
             "[name]",
             "[name]",
             "Confidential",
-            true,
+            "Yes",
             "No",
             "[CRM]",
             "Direct collection",
@@ -132,8 +152,8 @@
             "[name]",
             "[name]",
             "Confidential",
-            true,
-            true,
+            "Yes",
+            "Yes",
             "[HRIS]",
             "Direct collection",
             "Legal obligation",
@@ -153,31 +173,40 @@
       "main": {
         "name": "AI System Inventory",
         "intro": "One row per AI system — built, bought, or embedded in software you already licence. Expect the real count to be two to three times the first estimate.",
+        "record_noun": "AI system",
         "columns": [
           {
             "name": "System ID",
             "width": 10,
-            "help": "Stable reference, e.g. AI-001."
+            "help": "Stable reference, e.g. AI-001.",
+            "preset": "essential"
           },
           {
             "name": "System name",
             "width": 24,
-            "help": "What people call it."
+            "help": "What people call it.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Purpose",
             "width": 34,
-            "help": "What it does and what decisions it drives."
+            "help": "What it does and what decisions it drives.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Business owner",
             "width": 20,
-            "help": "The named AI Accountable Owner. Not a team."
+            "help": "The named AI Accountable Owner. Not a team.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Technical owner",
             "width": 18,
-            "help": "Who operates it day to day."
+            "help": "Who operates it day to day.",
+            "preset": "technical"
           },
           {
             "name": "Source",
@@ -188,12 +217,14 @@
               "Embedded",
               "Fine-tuned"
             ],
-            "help": "Determines which policy applies."
+            "help": "Determines which policy applies.",
+            "preset": "essential"
           },
           {
             "name": "Vendor / product",
             "width": 20,
-            "help": "For bought or embedded systems."
+            "help": "For bought or embedded systems.",
+            "preset": "technical"
           },
           {
             "name": "Our role",
@@ -204,7 +235,8 @@
               "Importer",
               "Distributor"
             ],
-            "help": "Fine-tuning or rebranding can make you the provider."
+            "help": "Fine-tuning or rebranding can make you the provider.",
+            "preset": "compliance"
           },
           {
             "name": "Risk tier",
@@ -216,45 +248,52 @@
               "Minimal",
               "Unclassified"
             ],
-            "help": "Classify before deployment."
+            "help": "Classify before deployment.",
+            "preset": "compliance"
           },
           {
             "name": "Tier rationale",
             "width": 32,
-            "help": "WHY. A label without reasoning cannot be defended or reviewed."
+            "help": "WHY. A label without reasoning cannot be defended or reviewed.",
+            "preset": "compliance"
           },
           {
             "name": "Annex ref",
             "width": 14,
-            "help": "If high-risk, which Annex III point."
+            "help": "If high-risk, which Annex III point.",
+            "preset": "compliance"
           },
           {
             "name": "Model / technique",
             "width": 20,
-            "help": "e.g. GPT-class LLM, gradient boosting."
+            "help": "e.g. GPT-class LLM, gradient boosting.",
+            "preset": "technical"
           },
           {
             "name": "Data sources",
             "width": 20,
-            "help": "Asset IDs from the data asset register."
+            "help": "Asset IDs from the data asset register.",
+            "preset": "technical"
           },
           {
             "name": "Personal data?",
             "width": 14,
             "choices": [
-              true,
+              "Yes",
               "No"
             ],
-            "help": "Triggers DPIA."
+            "help": "Triggers DPIA.",
+            "preset": "compliance"
           },
           {
             "name": "Affects individuals?",
             "width": 16,
             "choices": [
-              true,
+              "Yes",
               "No"
             ],
-            "help": "Triggers oversight and transparency duties."
+            "help": "Triggers oversight and transparency duties.",
+            "preset": "compliance"
           },
           {
             "name": "Lifecycle stage",
@@ -265,32 +304,38 @@
               "Live",
               "Retired"
             ],
-            "help": "Register at ideation, not at launch."
+            "help": "Register at ideation, not at launch.",
+            "preset": "essential"
           },
           {
             "name": "Human oversight",
             "width": 24,
-            "help": "How, and by whom."
+            "help": "How, and by whom.",
+            "preset": "compliance"
           },
           {
             "name": "Documentation",
             "width": 18,
-            "help": "Link to the model card."
+            "help": "Link to the model card.",
+            "preset": "technical"
           },
           {
             "name": "Risk assessment",
             "width": 18,
-            "help": "Link to the AI risk assessment."
+            "help": "Link to the AI risk assessment.",
+            "preset": "compliance"
           },
           {
             "name": "Last reviewed",
             "width": 14,
-            "help": "Date."
+            "help": "Date.",
+            "preset": "compliance"
           },
           {
             "name": "Next review",
             "width": 14,
-            "help": "Date."
+            "help": "Date.",
+            "preset": "compliance"
           }
         ],
         "rows": [
@@ -331,8 +376,8 @@
             "Annex III(4)",
             "Vendor proprietary",
             "DA-002",
-            true,
-            true,
+            "Yes",
+            "Yes",
             "Live",
             "Recruiter reviews every rejection",
             "",
@@ -351,16 +396,20 @@
       "main": {
         "name": "Risk Register",
         "intro": "Write risks as cause, event, and consequence. Rating and residual columns calculate automatically from likelihood and impact.",
+        "record_noun": "risk",
         "columns": [
           {
             "name": "Risk ID",
             "width": 10,
-            "help": "Stable reference, e.g. R-001."
+            "help": "Stable reference, e.g. R-001.",
+            "preset": "essential"
           },
           {
             "name": "Risk description",
             "width": 52,
-            "help": "Because [cause], [event] may happen, leading to [consequence]."
+            "help": "Because [cause], [event] may happen, leading to [consequence].",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Category",
@@ -374,7 +423,8 @@
               "Financial",
               "Privacy"
             ],
-            "help": "Risk type."
+            "help": "Risk type.",
+            "preset": "essential"
           },
           {
             "name": "Likelihood",
@@ -386,7 +436,8 @@
               "4",
               "5"
             ],
-            "help": "1 Rare … 5 Almost certain."
+            "help": "1 Rare … 5 Almost certain.",
+            "preset": "essential"
           },
           {
             "name": "Impact",
@@ -398,24 +449,29 @@
               "4",
               "5"
             ],
-            "help": "1 Negligible … 5 Severe."
+            "help": "1 Negligible … 5 Severe.",
+            "preset": "essential"
           },
           {
             "name": "Rating",
             "width": 10,
             "formula": "=IF(AND(ISNUMBER({Likelihood}),ISNUMBER({Impact})),{Likelihood}*{Impact},\"\")",
-            "help": "Likelihood x Impact. Calculated."
+            "help": "Likelihood x Impact. Calculated.",
+            "preset": "technical"
           },
           {
             "name": "Level",
             "width": 12,
             "formula": "=IF({Rating}=\"\",\"\",IF({Rating}>=15,\"Critical\",IF({Rating}>=10,\"High\",IF({Rating}>=5,\"Medium\",\"Low\"))))",
-            "help": "Calculated from the rating."
+            "help": "Calculated from the rating.",
+            "preset": "technical"
           },
           {
             "name": "Owner",
             "width": 18,
-            "help": "Named person accountable for treating it."
+            "help": "Named person accountable for treating it.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Treatment",
@@ -426,37 +482,44 @@
               "Transfer",
               "Terminate"
             ],
-            "help": "Tolerate requires a named acceptor."
+            "help": "Tolerate requires a named acceptor.",
+            "preset": "compliance"
           },
           {
             "name": "Controls / actions",
             "width": 40,
-            "help": "What is actually being done."
+            "help": "What is actually being done.",
+            "preset": "compliance"
           },
           {
             "name": "Target rating",
             "width": 12,
-            "help": "Where you expect to get to."
+            "help": "Where you expect to get to.",
+            "preset": "technical"
           },
           {
             "name": "Residual rating",
             "width": 14,
-            "help": "Where you actually are after treatment."
+            "help": "Where you actually are after treatment.",
+            "preset": "technical"
           },
           {
             "name": "Accepted by",
             "width": 18,
-            "help": "Required if tolerating. Risk tolerated by nobody has been ignored."
+            "help": "Required if tolerating. Risk tolerated by nobody has been ignored.",
+            "preset": "compliance"
           },
           {
             "name": "Date accepted",
             "width": 14,
-            "help": "Date."
+            "help": "Date.",
+            "preset": "compliance"
           },
           {
             "name": "Next review",
             "width": 14,
-            "help": "Critical monthly, High quarterly, Medium half-yearly, Low annually."
+            "help": "Critical monthly, High quarterly, Medium half-yearly, Low annually.",
+            "preset": "compliance"
           }
         ],
         "rows": [
@@ -505,36 +568,44 @@
       "main": {
         "name": "Issue & Incident Log",
         "intro": "Log every AI issue and incident. The gap between \"occurred\" and \"detected\" is itself a finding worth tracking.",
+        "record_noun": "issue or incident",
         "columns": [
           {
             "name": "Incident ID",
             "width": 12,
-            "help": "e.g. INC-001."
+            "help": "e.g. INC-001.",
+            "preset": "essential"
           },
           {
             "name": "Date occurred",
             "width": 14,
-            "help": "When it actually happened."
+            "help": "When it actually happened.",
+            "preset": "essential"
           },
           {
             "name": "Date detected",
             "width": 14,
-            "help": "When you found out. The gap matters."
+            "help": "When you found out. The gap matters.",
+            "preset": "compliance"
           },
           {
             "name": "Date reported",
             "width": 14,
-            "help": "When it was raised internally."
+            "help": "When it was raised internally.",
+            "preset": "compliance"
           },
           {
             "name": "Title",
             "width": 30,
-            "help": "One line, factual."
+            "help": "One line, factual.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "System",
             "width": 14,
-            "help": "System ID from the AI inventory."
+            "help": "System ID from the AI inventory.",
+            "preset": "essential"
           },
           {
             "name": "Severity",
@@ -545,7 +616,9 @@
               "S3 Moderate",
               "S4 Minor"
             ],
-            "help": "S1 triggers immediate committee and regulator assessment."
+            "help": "S1 triggers immediate committee and regulator assessment.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Type",
@@ -562,67 +635,78 @@
               "Third-party",
               "Regulatory"
             ],
-            "help": "Incident category."
+            "help": "Incident category.",
+            "preset": "compliance"
           },
           {
             "name": "Description",
             "width": 44,
-            "help": "What happened. Factual, no blame."
+            "help": "What happened. Factual, no blame.",
+            "preset": "compliance"
           },
           {
             "name": "Reported by",
             "width": 16,
-            "help": "Who raised it."
+            "help": "Who raised it.",
+            "preset": "compliance"
           },
           {
             "name": "Owner",
             "width": 16,
-            "help": "Who is handling it."
+            "help": "Who is handling it.",
+            "preset": "compliance"
           },
           {
             "name": "People affected",
             "width": 15,
-            "help": "How many, and who."
+            "help": "How many, and who.",
+            "preset": "compliance"
           },
           {
             "name": "Personal data?",
             "width": 14,
             "choices": [
-              true,
+              "Yes",
               "No",
               "Unknown"
             ],
-            "help": "May trigger breach notification."
+            "help": "May trigger breach notification.",
+            "preset": "compliance"
           },
           {
             "name": "Reportable?",
             "width": 16,
             "choices": [
-              true,
+              "Yes",
               "No",
               "Under assessment"
             ],
-            "help": "Art. 73 clock starts when you establish the link, not when you finish investigating."
+            "help": "Art. 73 clock starts when you establish the link, not when you finish investigating.",
+            "preset": "compliance"
           },
           {
             "name": "Immediate action",
             "width": 32,
-            "help": "Including whether the system was suspended."
+            "help": "Including whether the system was suspended.",
+            "preset": "compliance"
           },
           {
             "name": "Root cause",
             "width": 32,
-            "help": "The real one, not the proximate one."
+            "help": "The real one, not the proximate one.",
+            "preset": "compliance"
           },
           {
             "name": "Remediation",
             "width": 32,
-            "help": "Actions, owners, dates."
+            "help": "Actions, owners, dates.",
+            "preset": "compliance"
           },
           {
             "name": "Lessons / changes",
             "width": 32,
-            "help": "What changed so it cannot recur."
+            "help": "What changed so it cannot recur.",
+            "preset": "compliance"
           },
           {
             "name": "Status",
@@ -632,12 +716,14 @@
               "In progress",
               "Closed"
             ],
-            "help": "Current state."
+            "help": "Current state.",
+            "preset": "essential"
           },
           {
             "name": "Date closed",
             "width": 14,
-            "help": "Date."
+            "help": "Date.",
+            "preset": "compliance"
           }
         ],
         "rows": [
@@ -654,7 +740,7 @@
             "[name]",
             "[name]",
             "",
-            true,
+            "Yes",
             "Under assessment",
             "[action taken]",
             "",
@@ -674,21 +760,26 @@
       "main": {
         "name": "Processing Activities",
         "intro": "Extend your existing Art. 30 record rather than starting a second list. The DPIA tab tracks assessments against these activities.",
+        "record_noun": "processing activity",
         "columns": [
           {
             "name": "Ref",
             "width": 10,
-            "help": "e.g. P-001."
+            "help": "e.g. P-001.",
+            "preset": "essential"
           },
           {
             "name": "Activity",
             "width": 26,
-            "help": "The processing activity."
+            "help": "The processing activity.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Purpose",
             "width": 32,
-            "help": "Why you process it."
+            "help": "Why you process it.",
+            "preset": "essential"
           },
           {
             "name": "Lawful basis",
@@ -701,51 +792,61 @@
               "Public task",
               "Legitimate interests"
             ],
-            "help": "Must be identified BEFORE processing begins."
+            "help": "Must be identified BEFORE processing begins.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Categories of data",
             "width": 28,
-            "help": "What data, in categories."
+            "help": "What data, in categories.",
+            "preset": "compliance"
           },
           {
             "name": "Data subjects",
             "width": 20,
-            "help": "Whose data."
+            "help": "Whose data.",
+            "preset": "essential"
           },
           {
             "name": "Special category?",
             "width": 16,
             "choices": [
-              true,
+              "Yes",
               "No"
             ],
-            "help": "Triggers additional conditions."
+            "help": "Triggers additional conditions.",
+            "preset": "compliance"
           },
           {
             "name": "Recipients",
             "width": 22,
-            "help": "Who else sees it, including processors."
+            "help": "Who else sees it, including processors.",
+            "preset": "compliance"
           },
           {
             "name": "Transfers",
             "width": 18,
-            "help": "Outside the UK/EEA, and the safeguard used."
+            "help": "Outside the UK/EEA, and the safeguard used.",
+            "preset": "compliance"
           },
           {
             "name": "Retention",
             "width": 16,
-            "help": "How long."
+            "help": "How long.",
+            "preset": "compliance"
           },
           {
             "name": "AI system",
             "width": 14,
-            "help": "System ID, if AI is involved."
+            "help": "System ID, if AI is involved.",
+            "preset": "compliance"
           },
           {
             "name": "DPIA ref",
             "width": 12,
-            "help": "Link to the DPIA row."
+            "help": "Link to the DPIA row.",
+            "preset": "compliance"
           }
         ],
         "rows": [
@@ -768,31 +869,37 @@
       "extra_sheets": [
         {
           "name": "DPIA Log",
+          "record_noun": "DPIA",
           "columns": [
             {
               "name": "DPIA ref",
               "width": 12,
-              "help": "e.g. DPIA-001."
+              "help": "e.g. DPIA-001.",
+              "preset": "essential"
             },
             {
               "name": "System",
               "width": 14,
-              "help": "AI system ID."
+              "help": "AI system ID.",
+              "preset": "essential"
             },
             {
               "name": "Processing",
               "width": 28,
-              "help": "What is being assessed."
+              "help": "What is being assessed.",
+              "preset": "essential"
             },
             {
               "name": "Started",
               "width": 12,
-              "help": "Date."
+              "help": "Date.",
+              "preset": "compliance"
             },
             {
               "name": "Completed",
               "width": 12,
-              "help": "Date."
+              "help": "Date.",
+              "preset": "compliance"
             },
             {
               "name": "Outcome",
@@ -803,7 +910,8 @@
                 "Do not proceed",
                 "Under review"
               ],
-              "help": "The decision."
+              "help": "The decision.",
+              "preset": "essential"
             },
             {
               "name": "Residual risk",
@@ -813,27 +921,31 @@
                 "Medium",
                 "High"
               ],
-              "help": "After mitigation. High may require prior consultation."
+              "help": "After mitigation. High may require prior consultation.",
+              "preset": "technical"
             },
             {
               "name": "DPO opinion",
               "width": 26,
-              "help": "Must be recorded. Proceeding against it must be justified."
+              "help": "Must be recorded. Proceeding against it must be justified.",
+              "preset": "compliance"
             },
             {
               "name": "Authority consulted?",
               "width": 18,
               "choices": [
-                true,
+                "Yes",
                 "No",
                 "Not required"
               ],
-              "help": "Required where high risk remains after mitigation."
+              "help": "Required where high risk remains after mitigation.",
+              "preset": "compliance"
             },
             {
               "name": "Next review",
               "width": 14,
-              "help": "Date."
+              "help": "Date.",
+              "preset": "compliance"
             }
           ],
           "rows": [
@@ -860,21 +972,27 @@
       "main": {
         "name": "Control Library",
         "intro": "Map obligations to controls. The Assurance Map tab exposes obligations nobody is assuring — look for the blank cells.",
+        "record_noun": "control",
         "columns": [
           {
             "name": "Control ID",
             "width": 11,
-            "help": "e.g. C-01."
+            "help": "e.g. C-01.",
+            "preset": "essential"
           },
           {
             "name": "Obligation",
             "width": 26,
-            "help": "The requirement — regulatory, contractual, or internal."
+            "help": "The requirement — regulatory, contractual, or internal.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Control description",
             "width": 46,
-            "help": "What you actually do to satisfy it."
+            "help": "What you actually do to satisfy it.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Type",
@@ -884,7 +1002,8 @@
               "Detective",
               "Corrective"
             ],
-            "help": "Control type."
+            "help": "Control type.",
+            "preset": "essential"
           },
           {
             "name": "Frequency",
@@ -898,17 +1017,21 @@
               "Quarterly",
               "Annual"
             ],
-            "help": "How often it operates."
+            "help": "How often it operates.",
+            "preset": "technical"
           },
           {
             "name": "Owner",
             "width": 18,
-            "help": "Named, first line."
+            "help": "Named, first line.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Evidence",
             "width": 32,
-            "help": "What you would show to prove it operated."
+            "help": "What you would show to prove it operated.",
+            "preset": "compliance"
           },
           {
             "name": "Assurance by",
@@ -919,17 +1042,20 @@
               "3L audit",
               "External"
             ],
-            "help": "Who checks."
+            "help": "Who checks.",
+            "preset": "compliance"
           },
           {
             "name": "Assurance frequency",
             "width": 18,
-            "help": "How often it is checked."
+            "help": "How often it is checked.",
+            "preset": "compliance"
           },
           {
             "name": "Last tested",
             "width": 13,
-            "help": "Date."
+            "help": "Date.",
+            "preset": "compliance"
           },
           {
             "name": "Test result",
@@ -940,12 +1066,14 @@
               "Not effective",
               "Not tested"
             ],
-            "help": "Design and operating effectiveness."
+            "help": "Design and operating effectiveness.",
+            "preset": "compliance"
           },
           {
             "name": "Next test",
             "width": 13,
-            "help": "Date."
+            "help": "Date.",
+            "preset": "compliance"
           }
         ],
         "rows": [
@@ -996,31 +1124,37 @@
       "extra_sheets": [
         {
           "name": "Assurance Map",
+          "record_noun": "obligation area",
           "columns": [
             {
               "name": "Obligation area",
               "width": 28,
-              "help": "Grouped obligation."
+              "help": "Grouped obligation.",
+              "preset": "essential"
             },
             {
               "name": "1L — does it",
               "width": 22,
-              "help": "Who performs the control."
+              "help": "Who performs the control.",
+              "preset": "compliance"
             },
             {
               "name": "2L — challenges",
               "width": 22,
-              "help": "Who reviews and challenges."
+              "help": "Who reviews and challenges.",
+              "preset": "compliance"
             },
             {
               "name": "3L — assures",
               "width": 22,
-              "help": "Who provides independent assurance."
+              "help": "Who provides independent assurance.",
+              "preset": "compliance"
             },
             {
               "name": "Gap?",
               "width": 26,
-              "help": "A blank column is an obligation you are trusting without checking."
+              "help": "A blank column is an obligation you are trusting without checking.",
+              "preset": "essential"
             }
           ],
           "rows": [
@@ -1098,16 +1232,20 @@
       "main": {
         "name": "Maturity Assessment",
         "intro": "Score each dimension 0-4 against the descriptors on the Levels tab. Score what is true, not what is intended. The average calculates automatically.",
+        "record_noun": "dimension",
         "columns": [
           {
             "name": "#",
             "width": 5,
-            "help": "Dimension number."
+            "help": "Dimension number.",
+            "preset": "essential"
           },
           {
             "name": "Dimension",
             "width": 34,
-            "help": "The capability being assessed."
+            "help": "The capability being assessed.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Score (0-4)",
@@ -1119,12 +1257,14 @@
               "3",
               "4"
             ],
-            "help": "0 Absent, 1 Initial, 2 Developing, 3 Defined, 4 Managed."
+            "help": "0 Absent, 1 Initial, 2 Developing, 3 Defined, 4 Managed.",
+            "preset": "essential"
           },
           {
             "name": "Evidence",
             "width": 44,
-            "help": "What proves this score. A score without evidence is an opinion."
+            "help": "What proves this score. A score without evidence is an opinion.",
+            "preset": "essential"
           },
           {
             "name": "Target",
@@ -1136,23 +1276,27 @@
               "3",
               "4"
             ],
-            "help": "Where you want to be."
+            "help": "Where you want to be.",
+            "preset": "technical"
           },
           {
             "name": "Gap",
             "width": 8,
             "formula": "=IF(AND(ISNUMBER({Score (0-4)}),ISNUMBER({Target})),{Target}-{Score (0-4)},\"\")",
-            "help": "Target minus score. Calculated."
+            "help": "Target minus score. Calculated.",
+            "preset": "compliance"
           },
           {
             "name": "Owner",
             "width": 18,
-            "help": "Who moves it."
+            "help": "Who moves it.",
+            "preset": "compliance"
           },
           {
             "name": "Notes",
             "width": 32,
-            "help": "Context."
+            "help": "Context.",
+            "preset": "compliance"
           }
         ],
         "rows": [
@@ -1331,18 +1475,22 @@
       "extra_sheets": [
         {
           "name": "Levels",
+          "record_noun": "level",
           "columns": [
             {
               "name": "Level",
-              "width": 8
+              "width": 8,
+              "preset": "essential"
             },
             {
               "name": "Name",
-              "width": 16
+              "width": 16,
+              "preset": "essential"
             },
             {
               "name": "Description",
-              "width": 62
+              "width": 62,
+              "preset": "compliance"
             }
           ],
           "rows": [
@@ -1382,11 +1530,14 @@
       "main": {
         "name": "KPI Dashboard",
         "intro": "Hold the metric set stable — trend is the point. Variance calculates automatically against target.",
+        "record_noun": "measure",
         "columns": [
           {
             "name": "Metric",
             "width": 34,
-            "help": "What is measured."
+            "help": "What is measured.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Type",
@@ -1395,33 +1546,39 @@
               "KPI",
               "KRI"
             ],
-            "help": "KPI = is it working. KRI = is something about to go wrong."
+            "help": "KPI = is it working. KRI = is something about to go wrong.",
+            "preset": "essential"
           },
           {
             "name": "Definition",
             "width": 40,
-            "help": "Exactly how it is calculated."
+            "help": "Exactly how it is calculated.",
+            "preset": "compliance"
           },
           {
             "name": "Current",
             "width": 11,
-            "help": "This period."
+            "help": "This period.",
+            "preset": "essential"
           },
           {
             "name": "Previous",
             "width": 11,
-            "help": "Last period."
+            "help": "Last period.",
+            "preset": "compliance"
           },
           {
             "name": "Target",
             "width": 11,
-            "help": "Where it should be."
+            "help": "Where it should be.",
+            "preset": "essential"
           },
           {
             "name": "Variance",
             "width": 11,
             "formula": "=IF(AND(ISNUMBER({Current}),ISNUMBER({Target})),{Current}-{Target},\"\")",
-            "help": "Current minus target. Calculated."
+            "help": "Current minus target. Calculated.",
+            "preset": "technical"
           },
           {
             "name": "Trend",
@@ -1431,7 +1588,8 @@
               "Flat",
               "Worsening"
             ],
-            "help": "Direction matters more than level."
+            "help": "Direction matters more than level.",
+            "preset": "technical"
           },
           {
             "name": "RAG",
@@ -1441,17 +1599,20 @@
               "Amber",
               "Red"
             ],
-            "help": "Define thresholds once and keep them fixed."
+            "help": "Define thresholds once and keep them fixed.",
+            "preset": "compliance"
           },
           {
             "name": "Owner",
             "width": 16,
-            "help": "Who acts on it."
+            "help": "Who acts on it.",
+            "preset": "compliance"
           },
           {
             "name": "Commentary",
             "width": 40,
-            "help": "One line per amber or red, naming the action and owner."
+            "help": "One line per amber or red, naming the action and owner.",
+            "preset": "compliance"
           }
         ],
         "rows": [
@@ -1609,26 +1770,31 @@
       "main": {
         "name": "Harms Assessment",
         "intro": "Complete the prohibited-practice screen on the Screen tab FIRST. Any yes there stops the assessment. Assess harm to people before harm to the organisation.",
+        "record_noun": "potential harm",
         "columns": [
           {
             "name": "Harm type",
             "width": 34,
-            "help": "The category of harm."
+            "help": "The category of harm.",
+            "preset": "essential",
+            "required": true
           },
           {
             "name": "Could it occur?",
             "width": 15,
             "choices": [
-              true,
+              "Yes",
               "No",
               "Possibly"
             ],
-            "help": "Be honest."
+            "help": "Be honest.",
+            "preset": "essential"
           },
           {
             "name": "Who is affected?",
             "width": 28,
-            "help": "Which people, and are any of them vulnerable?"
+            "help": "Which people, and are any of them vulnerable?",
+            "preset": "compliance"
           },
           {
             "name": "Severity",
@@ -1640,7 +1806,8 @@
               "4",
               "5"
             ],
-            "help": "1 Negligible … 5 Severe."
+            "help": "1 Negligible … 5 Severe.",
+            "preset": "essential"
           },
           {
             "name": "Likelihood",
@@ -1652,28 +1819,33 @@
               "4",
               "5"
             ],
-            "help": "1 Rare … 5 Almost certain."
+            "help": "1 Rare … 5 Almost certain.",
+            "preset": "essential"
           },
           {
             "name": "Rating",
             "width": 10,
             "formula": "=IF(AND(ISNUMBER({Severity}),ISNUMBER({Likelihood})),{Severity}*{Likelihood},\"\")",
-            "help": "Severity x Likelihood. Calculated."
+            "help": "Severity x Likelihood. Calculated.",
+            "preset": "technical"
           },
           {
             "name": "Mitigation",
             "width": 40,
-            "help": "What reduces it."
+            "help": "What reduces it.",
+            "preset": "compliance"
           },
           {
             "name": "Residual",
             "width": 11,
-            "help": "After mitigation."
+            "help": "After mitigation.",
+            "preset": "technical"
           },
           {
             "name": "Owner",
             "width": 16,
-            "help": "Who owns the mitigation."
+            "help": "Who owns the mitigation.",
+            "preset": "essential"
           }
         ],
         "rows": [
@@ -1792,22 +1964,26 @@
       "extra_sheets": [
         {
           "name": "Screen",
+          "record_noun": "screening answer",
           "columns": [
             {
               "name": "Prohibited practice screen — any Yes stops the assessment",
-              "width": 74
+              "width": 74,
+              "preset": "essential"
             },
             {
               "name": "Answer",
               "width": 12,
               "choices": [
-                true,
+                "Yes",
                 "No"
-              ]
+              ],
+              "preset": "essential"
             },
             {
               "name": "Notes",
-              "width": 40
+              "width": 40,
+              "preset": "compliance"
             }
           ],
           "rows": [
@@ -1855,14 +2031,17 @@
         },
         {
           "name": "Oversight",
+          "record_noun": "oversight measure",
           "columns": [
             {
               "name": "Question",
-              "width": 46
+              "width": 46,
+              "preset": "essential"
             },
             {
               "name": "Answer",
-              "width": 52
+              "width": 52,
+              "preset": "essential"
             }
           ],
           "rows": [

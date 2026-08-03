@@ -25,3 +25,8 @@ Thumbs.db
 # Design mock — reference only, not part of the site (do not commit)
 govkitlandingmock.html
 design/
+
+# Verification screenshots and download probes written into the repo root
+# during development. Throwaway artefacts, never part of the site.
+/*.png
+/dl/

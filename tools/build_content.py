@@ -1077,6 +1077,58 @@ def main() -> int:
     sheets_raw = load("spreadsheets.yml") or {}
     SPREADSHEET_IDS.update(sheets_raw.keys())
 
+    # Field presets drive the form-first entry view. A typo would silently drop
+    # a column out of every preset, and a sheet with no essential column would
+    # render an Add form with nothing in it — so the vocabulary is closed and
+    # every sheet is checked, extra sheets included.
+    PRESETS = ("essential", "compliance", "technical")
+    for _rid, _spec in sheets_raw.items():
+        if not str(_spec.get("record_noun", "")).strip():
+            raise SystemExit(
+                f"ERROR: register '{_rid}' has no record_noun. The Add button "
+                "needs to name what a row is, e.g. record_noun: \"risk\".")
+        _sheets = [(_spec.get("sheet", _rid), _spec)] + [
+            (s["name"], s) for s in (_spec.get("extra_sheets") or [])]
+        for _name, _sheet in _sheets:
+            for _col in _sheet["columns"]:
+                if _col.get("preset") not in PRESETS:
+                    raise SystemExit(
+                        f"ERROR: register '{_rid}' sheet {_name!r} column "
+                        f"{_col['name']!r} has preset={_col.get('preset')!r}; "
+                        f"must be one of {list(PRESETS)}.")
+            if not any(c.get("preset") == "essential"
+                       for c in _sheet["columns"]):
+                raise SystemExit(
+                    f"ERROR: register '{_rid}' sheet {_name!r} has no "
+                    "essential columns, so the Add-record form would be "
+                    "empty.")
+        for _s in (_spec.get("extra_sheets") or []):
+            if not str(_s.get("record_noun", "")).strip():
+                raise SystemExit(
+                    f"ERROR: register '{_rid}' extra sheet {_s['name']!r} has "
+                    "no record_noun; its rows are a different kind of thing "
+                    "from the main sheet's.")
+
+        # Unquoted Yes/No are booleans in YAML 1.1, so `choices: [Yes, "No"]`
+        # silently became [True, "No"] and the dropdown offered "true".
+        for _name, _sheet in _sheets:
+            for _col in _sheet["columns"]:
+                for _ch in _col.get("choices") or []:
+                    if isinstance(_ch, bool):
+                        raise SystemExit(
+                            f"ERROR: register '{_rid}' sheet {_name!r} column "
+                            f"{_col['name']!r} has the boolean {_ch} among its "
+                            "choices. Quote it — YAML reads a bare Yes/No/On/"
+                            "Off as a boolean, and the dropdown then shows "
+                            "'true'.")
+            for _row in _sheet.get("rows") or []:
+                for _v in _row:
+                    if isinstance(_v, bool):
+                        raise SystemExit(
+                            f"ERROR: register '{_rid}' sheet {_name!r} has the "
+                            f"boolean {_v} in an example row. Quote it, for the "
+                            "same reason as the choices above.")
+
     # Loaded here rather than later: the landing tiles count the guided
     # decisions, and the tiles are emitted before the decision pages are.
     decisions = load("decisions.yml") or []
@@ -1480,12 +1532,16 @@ def main() -> int:
             "main": {
                 "name": spec.get("sheet", tpl["title"]),
                 "intro": " ".join(spec.get("intro", "").split()),
+                # What one row is, for the Add button. Stripping words off the
+                # title gives you "Add control library & assurance map".
+                "record_noun": spec["record_noun"],
                 "columns": spec["columns"],
                 "rows": spec.get("rows", []),
             },
             "extra_sheets": [
                 {
                     "name": s["name"],
+                    "record_noun": s["record_noun"],
                     "columns": s["columns"],
                     "rows": s.get("rows", []),
                 }

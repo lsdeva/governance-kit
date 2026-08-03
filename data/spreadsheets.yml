@@ -15,182 +15,190 @@
 #   choices - if present, becomes a dropdown (data validation)
 
 data-asset-register:
+  record_noun: "data asset"
   sheet: Data Asset Register
   intro: >-
     One row per data asset. Start with personal, regulated, and AI-feeding data;
     a short accurate register beats an exhaustive stale one.
   columns:
-    - {name: "Asset ID", width: 10, help: "Stable reference, e.g. DA-001. Other registers link to this."}
-    - {name: "Asset name", width: 26, help: "Business language, not a table name."}
-    - {name: "Description", width: 34, help: "What it actually is, to someone outside the team."}
-    - {name: "Domain", width: 16, help: "The data domain it belongs to."}
-    - {name: "Data Owner", width: 18, help: "Named accountable person, not a team."}
-    - {name: "Steward", width: 18, help: "Day-to-day contact for meaning and quality."}
-    - {name: "Classification", width: 15, choices: [Public, Internal, Confidential, Restricted], help: "Drives handling rules."}
-    - {name: "Personal data?", width: 14, choices: [Yes, "No", Mixed], help: "Triggers lawful basis and DPIA questions."}
-    - {name: "Special category?", width: 16, choices: [Yes, "No"], help: "Health, biometrics, beliefs, etc. Default to Restricted."}
-    - {name: "System of record", width: 20, help: "Where the authoritative copy lives."}
-    - {name: "Source", width: 20, help: "Where it came from; licence if external."}
-    - {name: "Lawful basis", width: 20, help: "Required where personal data is involved."}
-    - {name: "Used in AI?", width: 16, help: "System IDs from the AI inventory. This column earns its keep during an incident."}
-    - {name: "Retention", width: 14, help: "How long, and under what rule."}
-    - {name: "Last reviewed", width: 14, help: "Date."}
-    - {name: "Next review", width: 14, help: "Date. Makes staleness visible."}
+    - {name: "Asset ID", width: 10, help: "Stable reference, e.g. DA-001. Other registers link to this.", preset: essential}
+    - {name: "Asset name", width: 26, help: "Business language, not a table name.", preset: essential, required: true}
+    - {name: "Description", width: 34, help: "What it actually is, to someone outside the team.", preset: compliance}
+    - {name: "Domain", width: 16, help: "The data domain it belongs to.", preset: essential}
+    - {name: "Data Owner", width: 18, help: "Named accountable person, not a team.", preset: essential, required: true}
+    - {name: "Steward", width: 18, help: "Day-to-day contact for meaning and quality.", preset: compliance}
+    - {name: "Classification", width: 15, choices: [Public, Internal, Confidential, Restricted], help: "Drives handling rules.", preset: essential, required: true}
+    - {name: "Personal data?", width: 14, choices: ["Yes", "No", Mixed], help: "Triggers lawful basis and DPIA questions.", preset: essential}
+    - {name: "Special category?", width: 16, choices: ["Yes", "No"], help: "Health, biometrics, beliefs, etc. Default to Restricted.", preset: compliance}
+    - {name: "System of record", width: 20, help: "Where the authoritative copy lives.", preset: technical}
+    - {name: "Source", width: 20, help: "Where it came from; licence if external.", preset: compliance}
+    - {name: "Lawful basis", width: 20, help: "Required where personal data is involved.", preset: compliance}
+    - {name: "Used in AI?", width: 16, help: "System IDs from the AI inventory. This column earns its keep during an incident.", preset: compliance}
+    - {name: "Retention", width: 14, help: "How long, and under what rule.", preset: compliance}
+    - {name: "Last reviewed", width: 14, help: "Date.", preset: compliance}
+    - {name: "Next review", width: 14, help: "Date. Makes staleness visible.", preset: compliance}
   rows:
-    - [DA-001, Customer master, "Golden record for customer identity and contact", Customer, "[name]", "[name]", Confidential, Yes, "No", "[CRM]", Direct collection, Contract, AI-003, 7 years, "", ""]
-    - [DA-002, Employee records, "HR records for current and former staff", Employee, "[name]", "[name]", Confidential, Yes, Yes, "[HRIS]", Direct collection, Legal obligation, AI-004, 6 years post-exit, "", ""]
+    - [DA-001, Customer master, "Golden record for customer identity and contact", Customer, "[name]", "[name]", Confidential, "Yes", "No", "[CRM]", Direct collection, Contract, AI-003, 7 years, "", ""]
+    - [DA-002, Employee records, "HR records for current and former staff", Employee, "[name]", "[name]", Confidential, "Yes", "Yes", "[HRIS]", Direct collection, Legal obligation, AI-004, 6 years post-exit, "", ""]
 
 ai-system-inventory:
+  record_noun: "AI system"
   sheet: AI System Inventory
   intro: >-
     One row per AI system — built, bought, or embedded in software you already
     licence. Expect the real count to be two to three times the first estimate.
   columns:
-    - {name: "System ID", width: 10, help: "Stable reference, e.g. AI-001."}
-    - {name: "System name", width: 24, help: "What people call it."}
-    - {name: "Purpose", width: 34, help: "What it does and what decisions it drives."}
-    - {name: "Business owner", width: 20, help: "The named AI Accountable Owner. Not a team."}
-    - {name: "Technical owner", width: 18, help: "Who operates it day to day."}
-    - {name: "Source", width: 14, choices: [Build, Buy, Embedded, Fine-tuned], help: "Determines which policy applies."}
-    - {name: "Vendor / product", width: 20, help: "For bought or embedded systems."}
-    - {name: "Our role", width: 14, choices: [Provider, Deployer, Importer, Distributor], help: "Fine-tuning or rebranding can make you the provider."}
-    - {name: "Risk tier", width: 14, choices: [Prohibited, High-risk, Limited, Minimal, Unclassified], help: "Classify before deployment."}
-    - {name: "Tier rationale", width: 32, help: "WHY. A label without reasoning cannot be defended or reviewed."}
-    - {name: "Annex ref", width: 14, help: "If high-risk, which Annex III point."}
-    - {name: "Model / technique", width: 20, help: "e.g. GPT-class LLM, gradient boosting."}
-    - {name: "Data sources", width: 20, help: "Asset IDs from the data asset register."}
-    - {name: "Personal data?", width: 14, choices: [Yes, "No"], help: "Triggers DPIA."}
-    - {name: "Affects individuals?", width: 16, choices: [Yes, "No"], help: "Triggers oversight and transparency duties."}
-    - {name: "Lifecycle stage", width: 15, choices: [Ideation, Development, Live, Retired], help: "Register at ideation, not at launch."}
-    - {name: "Human oversight", width: 24, help: "How, and by whom."}
-    - {name: "Documentation", width: 18, help: "Link to the model card."}
-    - {name: "Risk assessment", width: 18, help: "Link to the AI risk assessment."}
-    - {name: "Last reviewed", width: 14, help: "Date."}
-    - {name: "Next review", width: 14, help: "Date."}
+    - {name: "System ID", width: 10, help: "Stable reference, e.g. AI-001.", preset: essential}
+    - {name: "System name", width: 24, help: "What people call it.", preset: essential, required: true}
+    - {name: "Purpose", width: 34, help: "What it does and what decisions it drives.", preset: essential, required: true}
+    - {name: "Business owner", width: 20, help: "The named AI Accountable Owner. Not a team.", preset: essential, required: true}
+    - {name: "Technical owner", width: 18, help: "Who operates it day to day.", preset: technical}
+    - {name: "Source", width: 14, choices: [Build, Buy, Embedded, Fine-tuned], help: "Determines which policy applies.", preset: essential}
+    - {name: "Vendor / product", width: 20, help: "For bought or embedded systems.", preset: technical}
+    - {name: "Our role", width: 14, choices: [Provider, Deployer, Importer, Distributor], help: "Fine-tuning or rebranding can make you the provider.", preset: compliance}
+    - {name: "Risk tier", width: 14, choices: [Prohibited, High-risk, Limited, Minimal, Unclassified], help: "Classify before deployment.", preset: compliance}
+    - {name: "Tier rationale", width: 32, help: "WHY. A label without reasoning cannot be defended or reviewed.", preset: compliance}
+    - {name: "Annex ref", width: 14, help: "If high-risk, which Annex III point.", preset: compliance}
+    - {name: "Model / technique", width: 20, help: "e.g. GPT-class LLM, gradient boosting.", preset: technical}
+    - {name: "Data sources", width: 20, help: "Asset IDs from the data asset register.", preset: technical}
+    - {name: "Personal data?", width: 14, choices: ["Yes", "No"], help: "Triggers DPIA.", preset: compliance}
+    - {name: "Affects individuals?", width: 16, choices: ["Yes", "No"], help: "Triggers oversight and transparency duties.", preset: compliance}
+    - {name: "Lifecycle stage", width: 15, choices: [Ideation, Development, Live, Retired], help: "Register at ideation, not at launch.", preset: essential}
+    - {name: "Human oversight", width: 24, help: "How, and by whom.", preset: compliance}
+    - {name: "Documentation", width: 18, help: "Link to the model card.", preset: technical}
+    - {name: "Risk assessment", width: 18, help: "Link to the AI risk assessment.", preset: compliance}
+    - {name: "Last reviewed", width: 14, help: "Date.", preset: compliance}
+    - {name: "Next review", width: 14, help: "Date.", preset: compliance}
   rows:
     - [AI-001, Demand forecasting, "Forecasts weekly demand by SKU", "[name]", "[name]", Build, "", Provider, Minimal, "No effect on individuals; internal planning only", "", Gradient boosting, DA-003, "No", "No", Live, "Planner reviews before ordering", "", "", "", ""]
-    - [AI-004, CV screening, "Ranks applicants for shortlisting", "[name]", "[name]", Buy, "[vendor]", Deployer, High-risk, "Annex III(4) — employment; screens candidates", "Annex III(4)", Vendor proprietary, DA-002, Yes, Yes, Live, "Recruiter reviews every rejection", "", "", "", ""]
+    - [AI-004, CV screening, "Ranks applicants for shortlisting", "[name]", "[name]", Buy, "[vendor]", Deployer, High-risk, "Annex III(4) — employment; screens candidates", "Annex III(4)", Vendor proprietary, DA-002, "Yes", "Yes", Live, "Recruiter reviews every rejection", "", "", "", ""]
 
 risk-register:
+  record_noun: "risk"
   sheet: Risk Register
   intro: >-
     Write risks as cause, event, and consequence. Rating and residual columns
     calculate automatically from likelihood and impact.
   columns:
-    - {name: "Risk ID", width: 10, help: "Stable reference, e.g. R-001."}
-    - {name: "Risk description", width: 52, help: "Because [cause], [event] may happen, leading to [consequence]."}
-    - {name: "Category", width: 16, choices: [Compliance, Fairness, Security, Operational, Reputational, Financial, Privacy], help: "Risk type."}
-    - {name: "Likelihood", width: 12, choices: ["1", "2", "3", "4", "5"], help: "1 Rare … 5 Almost certain."}
-    - {name: "Impact", width: 10, choices: ["1", "2", "3", "4", "5"], help: "1 Negligible … 5 Severe."}
-    - {name: "Rating", width: 10, formula: "=IF(AND(ISNUMBER({Likelihood}),ISNUMBER({Impact})),{Likelihood}*{Impact},\"\")", help: "Likelihood x Impact. Calculated."}
-    - {name: "Level", width: 12, formula: "=IF({Rating}=\"\",\"\",IF({Rating}>=15,\"Critical\",IF({Rating}>=10,\"High\",IF({Rating}>=5,\"Medium\",\"Low\"))))", help: "Calculated from the rating."}
-    - {name: "Owner", width: 18, help: "Named person accountable for treating it."}
-    - {name: "Treatment", width: 14, choices: [Treat, Tolerate, Transfer, Terminate], help: "Tolerate requires a named acceptor."}
-    - {name: "Controls / actions", width: 40, help: "What is actually being done."}
-    - {name: "Target rating", width: 12, help: "Where you expect to get to."}
-    - {name: "Residual rating", width: 14, help: "Where you actually are after treatment."}
-    - {name: "Accepted by", width: 18, help: "Required if tolerating. Risk tolerated by nobody has been ignored."}
-    - {name: "Date accepted", width: 14, help: "Date."}
-    - {name: "Next review", width: 14, help: "Critical monthly, High quarterly, Medium half-yearly, Low annually."}
+    - {name: "Risk ID", width: 10, help: "Stable reference, e.g. R-001.", preset: essential}
+    - {name: "Risk description", width: 52, help: "Because [cause], [event] may happen, leading to [consequence].", preset: essential, required: true}
+    - {name: "Category", width: 16, choices: [Compliance, Fairness, Security, Operational, Reputational, Financial, Privacy], help: "Risk type.", preset: essential}
+    - {name: "Likelihood", width: 12, choices: ["1", "2", "3", "4", "5"], help: "1 Rare … 5 Almost certain.", preset: essential}
+    - {name: "Impact", width: 10, choices: ["1", "2", "3", "4", "5"], help: "1 Negligible … 5 Severe.", preset: essential}
+    - {name: "Rating", width: 10, formula: "=IF(AND(ISNUMBER({Likelihood}),ISNUMBER({Impact})),{Likelihood}*{Impact},\"\")", help: "Likelihood x Impact. Calculated.", preset: technical}
+    - {name: "Level", width: 12, formula: "=IF({Rating}=\"\",\"\",IF({Rating}>=15,\"Critical\",IF({Rating}>=10,\"High\",IF({Rating}>=5,\"Medium\",\"Low\"))))", help: "Calculated from the rating.", preset: technical}
+    - {name: "Owner", width: 18, help: "Named person accountable for treating it.", preset: essential, required: true}
+    - {name: "Treatment", width: 14, choices: [Treat, Tolerate, Transfer, Terminate], help: "Tolerate requires a named acceptor.", preset: compliance}
+    - {name: "Controls / actions", width: 40, help: "What is actually being done.", preset: compliance}
+    - {name: "Target rating", width: 12, help: "Where you expect to get to.", preset: technical}
+    - {name: "Residual rating", width: 14, help: "Where you actually are after treatment.", preset: technical}
+    - {name: "Accepted by", width: 18, help: "Required if tolerating. Risk tolerated by nobody has been ignored.", preset: compliance}
+    - {name: "Date accepted", width: 14, help: "Date.", preset: compliance}
+    - {name: "Next review", width: 14, help: "Critical monthly, High quarterly, Medium half-yearly, Low annually.", preset: compliance}
   rows:
     - [R-001, "Because AI systems are procured without governance review, unassessed high-risk systems may go live, leading to regulatory breach and enforcement", Compliance, "4", "4", "", "", "[name]", Treat, "Mandatory intake gate; quarterly SaaS sweep", "8", "", "", "", ""]
     - [R-002, "Because training data under-represents some groups, the model may produce discriminatory outcomes, leading to harm and legal claims", Fairness, "3", "5", "", "", "[name]", Treat, "Representativeness testing at G4; subgroup metrics", "6", "", "", "", ""]
 
 incident-log:
+  record_noun: "issue or incident"
   sheet: Issue & Incident Log
   intro: >-
     Log every AI issue and incident. The gap between "occurred" and "detected"
     is itself a finding worth tracking.
   columns:
-    - {name: "Incident ID", width: 12, help: "e.g. INC-001."}
-    - {name: "Date occurred", width: 14, help: "When it actually happened."}
-    - {name: "Date detected", width: 14, help: "When you found out. The gap matters."}
-    - {name: "Date reported", width: 14, help: "When it was raised internally."}
-    - {name: "Title", width: 30, help: "One line, factual."}
-    - {name: "System", width: 14, help: "System ID from the AI inventory."}
-    - {name: "Severity", width: 12, choices: [S1 Critical, S2 Major, S3 Moderate, S4 Minor], help: "S1 triggers immediate committee and regulator assessment."}
-    - {name: "Type", width: 18, choices: [Fairness/bias, Accuracy/drift, Data leak, Unauthorised use, Security, Availability, Transparency, Oversight failure, Third-party, Regulatory], help: "Incident category."}
-    - {name: "Description", width: 44, help: "What happened. Factual, no blame."}
-    - {name: "Reported by", width: 16, help: "Who raised it."}
-    - {name: "Owner", width: 16, help: "Who is handling it."}
-    - {name: "People affected", width: 15, help: "How many, and who."}
-    - {name: "Personal data?", width: 14, choices: [Yes, "No", Unknown], help: "May trigger breach notification."}
-    - {name: "Reportable?", width: 16, choices: [Yes, "No", Under assessment], help: "Art. 73 clock starts when you establish the link, not when you finish investigating."}
-    - {name: "Immediate action", width: 32, help: "Including whether the system was suspended."}
-    - {name: "Root cause", width: 32, help: "The real one, not the proximate one."}
-    - {name: "Remediation", width: 32, help: "Actions, owners, dates."}
-    - {name: "Lessons / changes", width: 32, help: "What changed so it cannot recur."}
-    - {name: "Status", width: 12, choices: [Open, In progress, Closed], help: "Current state."}
-    - {name: "Date closed", width: 14, help: "Date."}
+    - {name: "Incident ID", width: 12, help: "e.g. INC-001.", preset: essential}
+    - {name: "Date occurred", width: 14, help: "When it actually happened.", preset: essential}
+    - {name: "Date detected", width: 14, help: "When you found out. The gap matters.", preset: compliance}
+    - {name: "Date reported", width: 14, help: "When it was raised internally.", preset: compliance}
+    - {name: "Title", width: 30, help: "One line, factual.", preset: essential, required: true}
+    - {name: "System", width: 14, help: "System ID from the AI inventory.", preset: essential}
+    - {name: "Severity", width: 12, choices: [S1 Critical, S2 Major, S3 Moderate, S4 Minor], help: "S1 triggers immediate committee and regulator assessment.", preset: essential, required: true}
+    - {name: "Type", width: 18, choices: [Fairness/bias, Accuracy/drift, Data leak, Unauthorised use, Security, Availability, Transparency, Oversight failure, Third-party, Regulatory], help: "Incident category.", preset: compliance}
+    - {name: "Description", width: 44, help: "What happened. Factual, no blame.", preset: compliance}
+    - {name: "Reported by", width: 16, help: "Who raised it.", preset: compliance}
+    - {name: "Owner", width: 16, help: "Who is handling it.", preset: compliance}
+    - {name: "People affected", width: 15, help: "How many, and who.", preset: compliance}
+    - {name: "Personal data?", width: 14, choices: ["Yes", "No", Unknown], help: "May trigger breach notification.", preset: compliance}
+    - {name: "Reportable?", width: 16, choices: ["Yes", "No", Under assessment], help: "Art. 73 clock starts when you establish the link, not when you finish investigating.", preset: compliance}
+    - {name: "Immediate action", width: 32, help: "Including whether the system was suspended.", preset: compliance}
+    - {name: "Root cause", width: 32, help: "The real one, not the proximate one.", preset: compliance}
+    - {name: "Remediation", width: 32, help: "Actions, owners, dates.", preset: compliance}
+    - {name: "Lessons / changes", width: 32, help: "What changed so it cannot recur.", preset: compliance}
+    - {name: "Status", width: 12, choices: [Open, In progress, Closed], help: "Current state.", preset: essential}
+    - {name: "Date closed", width: 14, help: "Date.", preset: compliance}
   rows:
-    - [INC-001, "", "", "", "Model returned biased ranking", AI-004, S2 Major, Fairness/bias, "[what happened]", "[name]", "[name]", "", Yes, Under assessment, "[action taken]", "", "", "", Open, ""]
+    - [INC-001, "", "", "", "Model returned biased ranking", AI-004, S2 Major, Fairness/bias, "[what happened]", "[name]", "[name]", "", "Yes", Under assessment, "[action taken]", "", "", "", Open, ""]
 
 processing-dpia-log:
+  record_noun: "processing activity"
   sheet: Processing Activities
   intro: >-
     Extend your existing Art. 30 record rather than starting a second list.
     The DPIA tab tracks assessments against these activities.
   columns:
-    - {name: "Ref", width: 10, help: "e.g. P-001."}
-    - {name: "Activity", width: 26, help: "The processing activity."}
-    - {name: "Purpose", width: 32, help: "Why you process it."}
-    - {name: "Lawful basis", width: 20, choices: [Consent, Contract, Legal obligation, Vital interests, Public task, Legitimate interests], help: "Must be identified BEFORE processing begins."}
-    - {name: "Categories of data", width: 28, help: "What data, in categories."}
-    - {name: "Data subjects", width: 20, help: "Whose data."}
-    - {name: "Special category?", width: 16, choices: [Yes, "No"], help: "Triggers additional conditions."}
-    - {name: "Recipients", width: 22, help: "Who else sees it, including processors."}
-    - {name: "Transfers", width: 18, help: "Outside the UK/EEA, and the safeguard used."}
-    - {name: "Retention", width: 16, help: "How long."}
-    - {name: "AI system", width: 14, help: "System ID, if AI is involved."}
-    - {name: "DPIA ref", width: 12, help: "Link to the DPIA row."}
+    - {name: "Ref", width: 10, help: "e.g. P-001.", preset: essential}
+    - {name: "Activity", width: 26, help: "The processing activity.", preset: essential, required: true}
+    - {name: "Purpose", width: 32, help: "Why you process it.", preset: essential}
+    - {name: "Lawful basis", width: 20, choices: [Consent, Contract, Legal obligation, Vital interests, Public task, Legitimate interests], help: "Must be identified BEFORE processing begins.", preset: essential, required: true}
+    - {name: "Categories of data", width: 28, help: "What data, in categories.", preset: compliance}
+    - {name: "Data subjects", width: 20, help: "Whose data.", preset: essential}
+    - {name: "Special category?", width: 16, choices: ["Yes", "No"], help: "Triggers additional conditions.", preset: compliance}
+    - {name: "Recipients", width: 22, help: "Who else sees it, including processors.", preset: compliance}
+    - {name: "Transfers", width: 18, help: "Outside the UK/EEA, and the safeguard used.", preset: compliance}
+    - {name: "Retention", width: 16, help: "How long.", preset: compliance}
+    - {name: "AI system", width: 14, help: "System ID, if AI is involved.", preset: compliance}
+    - {name: "DPIA ref", width: 12, help: "Link to the DPIA row.", preset: compliance}
   rows:
     - [P-001, Customer support triage, "Route and summarise inbound tickets", Legitimate interests, "Contact details, ticket content", Customers, "No", "[vendor]", "[country]", 3 years, AI-002, DPIA-002]
   extra_sheets:
     - name: DPIA Log
+      record_noun: "DPIA"
       columns:
-        - {name: "DPIA ref", width: 12, help: "e.g. DPIA-001."}
-        - {name: "System", width: 14, help: "AI system ID."}
-        - {name: "Processing", width: 28, help: "What is being assessed."}
-        - {name: "Started", width: 12, help: "Date."}
-        - {name: "Completed", width: 12, help: "Date."}
-        - {name: "Outcome", width: 22, choices: [Proceed, Proceed with controls, Do not proceed, Under review], help: "The decision."}
-        - {name: "Residual risk", width: 14, choices: [Low, Medium, High], help: "After mitigation. High may require prior consultation."}
-        - {name: "DPO opinion", width: 26, help: "Must be recorded. Proceeding against it must be justified."}
-        - {name: "Authority consulted?", width: 18, choices: [Yes, "No", Not required], help: "Required where high risk remains after mitigation."}
-        - {name: "Next review", width: 14, help: "Date."}
+        - {name: "DPIA ref", width: 12, help: "e.g. DPIA-001.", preset: essential}
+        - {name: "System", width: 14, help: "AI system ID.", preset: essential}
+        - {name: "Processing", width: 28, help: "What is being assessed.", preset: essential}
+        - {name: "Started", width: 12, help: "Date.", preset: compliance}
+        - {name: "Completed", width: 12, help: "Date.", preset: compliance}
+        - {name: "Outcome", width: 22, choices: [Proceed, Proceed with controls, Do not proceed, Under review], help: "The decision.", preset: essential}
+        - {name: "Residual risk", width: 14, choices: [Low, Medium, High], help: "After mitigation. High may require prior consultation.", preset: technical}
+        - {name: "DPO opinion", width: 26, help: "Must be recorded. Proceeding against it must be justified.", preset: compliance}
+        - {name: "Authority consulted?", width: 18, choices: ["Yes", "No", Not required], help: "Required where high risk remains after mitigation.", preset: compliance}
+        - {name: "Next review", width: 14, help: "Date.", preset: compliance}
       rows:
         - [DPIA-001, AI-004, Candidate screening, "", "", Proceed with controls, Medium, "", "No", ""]
 
 control-library:
+  record_noun: "control"
   sheet: Control Library
   intro: >-
     Map obligations to controls. The Assurance Map tab exposes obligations
     nobody is assuring — look for the blank cells.
   columns:
-    - {name: "Control ID", width: 11, help: "e.g. C-01."}
-    - {name: "Obligation", width: 26, help: "The requirement — regulatory, contractual, or internal."}
-    - {name: "Control description", width: 46, help: "What you actually do to satisfy it."}
-    - {name: "Type", width: 13, choices: [Preventive, Detective, Corrective], help: "Control type."}
-    - {name: "Frequency", width: 15, choices: [Continuous, Per system, Per release, Per event, Monthly, Quarterly, Annual], help: "How often it operates."}
-    - {name: "Owner", width: 18, help: "Named, first line."}
-    - {name: "Evidence", width: 32, help: "What you would show to prove it operated."}
-    - {name: "Assurance by", width: 16, choices: [1L self-assessment, 2L review, 3L audit, External], help: "Who checks."}
-    - {name: "Assurance frequency", width: 18, help: "How often it is checked."}
-    - {name: "Last tested", width: 13, help: "Date."}
-    - {name: "Test result", width: 16, choices: [Effective, Partially effective, Not effective, Not tested], help: "Design and operating effectiveness."}
-    - {name: "Next test", width: 13, help: "Date."}
+    - {name: "Control ID", width: 11, help: "e.g. C-01.", preset: essential}
+    - {name: "Obligation", width: 26, help: "The requirement — regulatory, contractual, or internal.", preset: essential, required: true}
+    - {name: "Control description", width: 46, help: "What you actually do to satisfy it.", preset: essential, required: true}
+    - {name: "Type", width: 13, choices: [Preventive, Detective, Corrective], help: "Control type.", preset: essential}
+    - {name: "Frequency", width: 15, choices: [Continuous, Per system, Per release, Per event, Monthly, Quarterly, Annual], help: "How often it operates.", preset: technical}
+    - {name: "Owner", width: 18, help: "Named, first line.", preset: essential, required: true}
+    - {name: "Evidence", width: 32, help: "What you would show to prove it operated.", preset: compliance}
+    - {name: "Assurance by", width: 16, choices: [1L self-assessment, 2L review, 3L audit, External], help: "Who checks.", preset: compliance}
+    - {name: "Assurance frequency", width: 18, help: "How often it is checked.", preset: compliance}
+    - {name: "Last tested", width: 13, help: "Date.", preset: compliance}
+    - {name: "Test result", width: 16, choices: [Effective, Partially effective, Not effective, Not tested], help: "Design and operating effectiveness.", preset: compliance}
+    - {name: "Next test", width: 13, help: "Date.", preset: compliance}
   rows:
     - [C-01, "Art. 5 — prohibited practices", "Intake screen at G1 blocks prohibited use cases", Preventive, Per system, "[Gov Lead]", "Screening record in inventory", 2L review, Quarterly, "", Not tested, ""]
     - [C-02, "Art. 6 — classification", "Every system classified with recorded rationale before build", Preventive, Per system, "[Gov Lead]", "AI system inventory", 2L review, Quarterly, "", Not tested, ""]
     - [C-06, "Art. 12 — logging", "Automatic logging enabled and retained", Detective, Continuous, "[Tech Owner]", "Log configuration; retention proof", 2L review, Quarterly, "", Not tested, ""]
   extra_sheets:
     - name: Assurance Map
+      record_noun: "obligation area"
       columns:
-        - {name: "Obligation area", width: 28, help: "Grouped obligation."}
-        - {name: "1L — does it", width: 22, help: "Who performs the control."}
-        - {name: "2L — challenges", width: 22, help: "Who reviews and challenges."}
-        - {name: "3L — assures", width: 22, help: "Who provides independent assurance."}
-        - {name: "Gap?", width: 26, help: "A blank column is an obligation you are trusting without checking."}
+        - {name: "Obligation area", width: 28, help: "Grouped obligation.", preset: essential}
+        - {name: "1L — does it", width: 22, help: "Who performs the control.", preset: compliance}
+        - {name: "2L — challenges", width: 22, help: "Who reviews and challenges.", preset: compliance}
+        - {name: "3L — assures", width: 22, help: "Who provides independent assurance.", preset: compliance}
+        - {name: "Gap?", width: 26, help: "A blank column is an obligation you are trusting without checking.", preset: essential}
       rows:
         - ["Prohibited practices", "Product / ML", Governance, Audit, ""]
         - ["Classification", "[Gov Lead]", Legal, Audit, ""]
@@ -203,19 +211,20 @@ control-library:
         - [Literacy, HR, Governance, Audit, ""]
 
 maturity-assessment:
+  record_noun: "dimension"
   sheet: Maturity Assessment
   intro: >-
     Score each dimension 0-4 against the descriptors on the Levels tab. Score
     what is true, not what is intended. The average calculates automatically.
   columns:
-    - {name: "#", width: 5, help: "Dimension number."}
-    - {name: "Dimension", width: 34, help: "The capability being assessed."}
-    - {name: "Score (0-4)", width: 12, choices: ["0", "1", "2", "3", "4"], help: "0 Absent, 1 Initial, 2 Developing, 3 Defined, 4 Managed."}
-    - {name: "Evidence", width: 44, help: "What proves this score. A score without evidence is an opinion."}
-    - {name: "Target", width: 10, choices: ["0", "1", "2", "3", "4"], help: "Where you want to be."}
-    - {name: "Gap", width: 8, formula: "=IF(AND(ISNUMBER({Score (0-4)}),ISNUMBER({Target})),{Target}-{Score (0-4)},\"\")", help: "Target minus score. Calculated."}
-    - {name: "Owner", width: 18, help: "Who moves it."}
-    - {name: "Notes", width: 32, help: "Context."}
+    - {name: "#", width: 5, help: "Dimension number.", preset: essential}
+    - {name: "Dimension", width: 34, help: "The capability being assessed.", preset: essential, required: true}
+    - {name: "Score (0-4)", width: 12, choices: ["0", "1", "2", "3", "4"], help: "0 Absent, 1 Initial, 2 Developing, 3 Defined, 4 Managed.", preset: essential}
+    - {name: "Evidence", width: 44, help: "What proves this score. A score without evidence is an opinion.", preset: essential}
+    - {name: "Target", width: 10, choices: ["0", "1", "2", "3", "4"], help: "Where you want to be.", preset: technical}
+    - {name: "Gap", width: 8, formula: "=IF(AND(ISNUMBER({Score (0-4)}),ISNUMBER({Target})),{Target}-{Score (0-4)},\"\")", help: "Target minus score. Calculated.", preset: compliance}
+    - {name: "Owner", width: 18, help: "Who moves it.", preset: compliance}
+    - {name: "Notes", width: 32, help: "Context.", preset: compliance}
   rows:
     - ["1", "Governance mandate & sponsorship", "", "", "", "", "", ""]
     - ["2", "Committee & decision rights", "", "", "", "", "", ""]
@@ -236,10 +245,11 @@ maturity-assessment:
     - ["17", "Regulatory readiness (EU AI Act)", "", "", "", "", "", ""]
   extra_sheets:
     - name: Levels
+      record_noun: "level"
       columns:
-        - {name: "Level", width: 8}
-        - {name: "Name", width: 16}
-        - {name: "Description", width: 62}
+        - {name: "Level", width: 8, preset: essential}
+        - {name: "Name", width: 16, preset: essential}
+        - {name: "Description", width: 62, preset: compliance}
       rows:
         - ["0", Absent, "Nothing in place."]
         - ["1", Initial, "Ad hoc, individual effort, undocumented."]
@@ -248,22 +258,23 @@ maturity-assessment:
         - ["4", Managed, "Measured, reviewed, and improved on evidence."]
 
 kpi-dashboard:
+  record_noun: "measure"
   sheet: KPI Dashboard
   intro: >-
     Hold the metric set stable — trend is the point. Variance calculates
     automatically against target.
   columns:
-    - {name: "Metric", width: 34, help: "What is measured."}
-    - {name: "Type", width: 10, choices: [KPI, KRI], help: "KPI = is it working. KRI = is something about to go wrong."}
-    - {name: "Definition", width: 40, help: "Exactly how it is calculated."}
-    - {name: "Current", width: 11, help: "This period."}
-    - {name: "Previous", width: 11, help: "Last period."}
-    - {name: "Target", width: 11, help: "Where it should be."}
-    - {name: "Variance", width: 11, formula: "=IF(AND(ISNUMBER({Current}),ISNUMBER({Target})),{Current}-{Target},\"\")", help: "Current minus target. Calculated."}
-    - {name: "Trend", width: 10, choices: ["Improving", "Flat", "Worsening"], help: "Direction matters more than level."}
-    - {name: "RAG", width: 8, choices: [Green, Amber, Red], help: "Define thresholds once and keep them fixed."}
-    - {name: "Owner", width: 16, help: "Who acts on it."}
-    - {name: "Commentary", width: 40, help: "One line per amber or red, naming the action and owner."}
+    - {name: "Metric", width: 34, help: "What is measured.", preset: essential, required: true}
+    - {name: "Type", width: 10, choices: [KPI, KRI], help: "KPI = is it working. KRI = is something about to go wrong.", preset: essential}
+    - {name: "Definition", width: 40, help: "Exactly how it is calculated.", preset: compliance}
+    - {name: "Current", width: 11, help: "This period.", preset: essential}
+    - {name: "Previous", width: 11, help: "Last period.", preset: compliance}
+    - {name: "Target", width: 11, help: "Where it should be.", preset: essential}
+    - {name: "Variance", width: 11, formula: "=IF(AND(ISNUMBER({Current}),ISNUMBER({Target})),{Current}-{Target},\"\")", help: "Current minus target. Calculated.", preset: technical}
+    - {name: "Trend", width: 10, choices: ["Improving", "Flat", "Worsening"], help: "Direction matters more than level.", preset: technical}
+    - {name: "RAG", width: 8, choices: [Green, Amber, Red], help: "Define thresholds once and keep them fixed.", preset: compliance}
+    - {name: "Owner", width: 16, help: "Who acts on it.", preset: compliance}
+    - {name: "Commentary", width: 40, help: "One line per amber or red, naming the action and owner.", preset: compliance}
   rows:
     - ["AI systems registered (%)", KPI, "Registered / known to exist", "", "", "100", "", "", "", "", ""]
     - ["High-risk systems assessed (%)", KPI, "With current risk assessment", "", "", "100", "", "", "", "", ""]
@@ -278,21 +289,22 @@ kpi-dashboard:
     - ["Incidents detected externally", KRI, "Found by someone outside the organisation", "", "", "0", "", "", "", "", ""]
 
 ai-risk-assessment:
+  record_noun: "potential harm"
   sheet: Harms Assessment
   intro: >-
     Complete the prohibited-practice screen on the Screen tab FIRST. Any yes
     there stops the assessment. Assess harm to people before harm to the
     organisation.
   columns:
-    - {name: "Harm type", width: 34, help: "The category of harm."}
-    - {name: "Could it occur?", width: 15, choices: [Yes, "No", Possibly], help: "Be honest."}
-    - {name: "Who is affected?", width: 28, help: "Which people, and are any of them vulnerable?"}
-    - {name: "Severity", width: 11, choices: ["1", "2", "3", "4", "5"], help: "1 Negligible … 5 Severe."}
-    - {name: "Likelihood", width: 12, choices: ["1", "2", "3", "4", "5"], help: "1 Rare … 5 Almost certain."}
-    - {name: "Rating", width: 10, formula: "=IF(AND(ISNUMBER({Severity}),ISNUMBER({Likelihood})),{Severity}*{Likelihood},\"\")", help: "Severity x Likelihood. Calculated."}
-    - {name: "Mitigation", width: 40, help: "What reduces it."}
-    - {name: "Residual", width: 11, help: "After mitigation."}
-    - {name: "Owner", width: 16, help: "Who owns the mitigation."}
+    - {name: "Harm type", width: 34, help: "The category of harm.", preset: essential, required: true}
+    - {name: "Could it occur?", width: 15, choices: ["Yes", "No", Possibly], help: "Be honest.", preset: essential}
+    - {name: "Who is affected?", width: 28, help: "Which people, and are any of them vulnerable?", preset: compliance}
+    - {name: "Severity", width: 11, choices: ["1", "2", "3", "4", "5"], help: "1 Negligible … 5 Severe.", preset: essential}
+    - {name: "Likelihood", width: 12, choices: ["1", "2", "3", "4", "5"], help: "1 Rare … 5 Almost certain.", preset: essential}
+    - {name: "Rating", width: 10, formula: "=IF(AND(ISNUMBER({Severity}),ISNUMBER({Likelihood})),{Severity}*{Likelihood},\"\")", help: "Severity x Likelihood. Calculated.", preset: technical}
+    - {name: "Mitigation", width: 40, help: "What reduces it.", preset: compliance}
+    - {name: "Residual", width: 11, help: "After mitigation.", preset: technical}
+    - {name: "Owner", width: 16, help: "Who owns the mitigation.", preset: essential}
   rows:
     - ["Discrimination / unfair outcome", "", "", "", "", "", "", "", ""]
     - ["Loss of opportunity (job, credit, service)", "", "", "", "", "", "", "", ""]
@@ -306,10 +318,11 @@ ai-risk-assessment:
     - ["Reputational damage", "", "", "", "", "", "", "", ""]
   extra_sheets:
     - name: Screen
+      record_noun: "screening answer"
       columns:
-        - {name: "Prohibited practice screen — any Yes stops the assessment", width: 74}
-        - {name: "Answer", width: 12, choices: [Yes, "No"]}
-        - {name: "Notes", width: 40}
+        - {name: "Prohibited practice screen — any Yes stops the assessment", width: 74, preset: essential}
+        - {name: "Answer", width: 12, choices: ["Yes", "No"], preset: essential}
+        - {name: "Notes", width: 40, preset: compliance}
       rows:
         - ["Deploys subliminal, manipulative, or exploitative techniques", "", ""]
         - ["Exploits vulnerability by age, disability, or social/economic situation", "", ""]
@@ -320,9 +333,10 @@ ai-risk-assessment:
         - ["Performs biometric categorisation to infer protected characteristics", "", ""]
         - ["Performs real-time remote biometric identification in public spaces", "", ""]
     - name: Oversight
+      record_noun: "oversight measure"
       columns:
-        - {name: "Question", width: 46}
-        - {name: "Answer", width: 52}
+        - {name: "Question", width: 46, preset: essential}
+        - {name: "Answer", width: 52, preset: essential}
       rows:
         - ["Who reviews the output?", ""]
         - ["What information do they see?", ""]

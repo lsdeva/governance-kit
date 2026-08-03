@@ -9,9 +9,15 @@
  *  - Reads register-data.json, generated from the same YAML that produces the
  *    .xlsx downloads. Columns, dropdowns, help text and formulas are never
  *    duplicated here.
- *  - A real editable grid, not a form: click a cell and type, Tab/arrows to
- *    move, Enter for the next row. Anyone who has used a spreadsheet already
- *    knows how to drive it.
+ *  - Two views over the same rows. The default is a guided form: one record at
+ *    a time, essential fields first, the rest folded behind their group. A
+ *    22-column grid is efficient for a specialist and hostile to everyone
+ *    else, so the grid — click a cell and type, Tab/arrows to move, Enter for
+ *    the next row — is one click away as "Advanced table view", and the
+ *    choice is remembered per register.
+ *  - Which fields count as essential is data, not a guess here: every column
+ *    carries a preset (essential / compliance / technical) in the YAML, and
+ *    the build refuses a sheet with no essential column.
  *  - Formulas defined in the YAML are evaluated live for the small set of
  *    arithmetic we actually use (multiply, subtract, banding), so a Risk
  *    Register scores itself as you type. On export the real Excel formula is
@@ -148,12 +154,36 @@
 
   // ----------------------------------------------------------------- editor
 
+  var VIEW_KEY = "gk-regview-v1";
+
+  function loadPrefs() {
+    try { return JSON.parse(localStorage.getItem(VIEW_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+
+  function savePref(id, patch) {
+    var all = loadPrefs();
+    var cur = all[id] || {};
+    for (var k in patch) { if (patch.hasOwnProperty(k)) cur[k] = patch[k]; }
+    all[id] = cur;
+    try { localStorage.setItem(VIEW_KEY, JSON.stringify(all)); } catch (e) {}
+  }
+
+  function isBlank(row) {
+    return !row.some(function (c) { return String(c).trim() !== ""; });
+  }
+
   function Editor(host, def) {
     this.host = host;
     this.def = def;
     this.key = KEY_PREFIX + def.id;
     this.sheets = [def.main].concat(def.extra_sheets || []);
     this.active = 0;
+    var pref = loadPrefs()[def.id] || {};
+    // Form first. The grid is the specialist's tool, not the default one.
+    this.mode = pref.mode === "grid" ? "grid" : "form";
+    this.preset = pref.preset || "essential";
+    this.editing = null;   // index of the row being edited, null = new record
     this.rows = null;
     this.dirty = false;
     this.load();
@@ -191,6 +221,10 @@
         id: this.def.id, sheets: this.data, savedAt: new Date().toISOString()
       }));
     } catch (e) { /* private mode or quota — keep working in memory */ }
+    // Saving a record re-renders the form, which rebuilds the status line from
+    // this flag. Without it the label reverted to "Nothing saved yet" over
+    // data that had just been written.
+    this.restored = true;
     this.updateStatus("Saved to this browser");
   };
 
@@ -289,6 +323,298 @@
     this.updateStatus(gaps.length + " draft risks added");
   };
 
+  /* What one row is, for buttons: "Add risk", "Add AI system". Each sheet
+   * names its own — an Assurance Map row is an obligation area, not a
+   * control — and the build refuses a sheet that does not name it. */
+  Editor.prototype.recordNoun = function () {
+    var s = this.sheets[this.active];
+    return (s && s.record_noun) || "record";
+  };
+
+  /* Columns shown under the current preset. Essential is always included. */
+  Editor.prototype.visibleColumns = function (sheet) {
+    var p = this.preset;
+    if (p === "all") return sheet.columns;
+    return sheet.columns.filter(function (c) {
+      return c.preset === "essential" || c.preset === p;
+    });
+  };
+
+  Editor.prototype.presetChips = function (sheet) {
+    var self = this;
+    var counts = { essential: 0, compliance: 0, technical: 0 };
+    sheet.columns.forEach(function (c) {
+      if (counts.hasOwnProperty(c.preset)) counts[c.preset]++;
+    });
+    var opts = [
+      ["essential", "Essential", counts.essential],
+      ["compliance", "Compliance", counts.essential + counts.compliance],
+      ["technical", "Technical", counts.essential + counts.technical],
+      ["all", "All fields", sheet.columns.length]
+    ];
+    var row = el("div", { class: "gk-reg-presets" }, [
+      el("span", { class: "gk-muted" }, ["Fields: "])
+    ]);
+    opts.forEach(function (o) {
+      row.appendChild(el("button", {
+        class: "gk-chip" + (self.preset === o[0] ? " is-on" : ""),
+        type: "button",
+        "aria-pressed": self.preset === o[0] ? "true" : "false",
+        onclick: function () {
+          self.preset = o[0];
+          savePref(self.def.id, { preset: o[0] });
+          self.render();
+        }
+      }, [o[1] + " (" + o[2] + ")"]));
+    });
+    return row;
+  };
+
+  /* One record as a form, grouped so the essentials come first. */
+  Editor.prototype.renderForm = function (wrap, sheet) {
+    var self = this;
+    var isNew = this.editing === null;
+    var src = isNew ? this.blankRow(sheet)
+                    : (this.data[this.active][this.editing] || this.blankRow(sheet));
+    var row = src.slice();
+
+    var form = el("form", { class: "gk-recform", novalidate: "novalidate" });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      self.saveForm(sheet, row, isNew);
+    });
+
+    form.appendChild(el("h3", { class: "gk-recform-title" }, [
+      (isNew ? "Add " : "Edit ") + self.recordNoun()
+    ]));
+
+    [["Essential", "essential"],
+     ["Compliance and audit", "compliance"],
+     ["Technical detail", "technical"]].forEach(function (g) {
+      var cols = sheet.columns.filter(function (c) { return c.preset === g[1]; });
+      if (!cols.length) return;
+
+      var body = el("div", { class: "gk-recform-fields" });
+      cols.forEach(function (c) {
+        body.appendChild(self.renderField(sheet, c, row));
+      });
+
+      // The chosen preset decides what opens. Essential is always open;
+      // a group the preset names opens with it, so "Compliance (16)" and the
+      // form agree about how many fields you are being asked for.
+      var open = g[1] === "essential" || self.preset === "all" ||
+                 self.preset === g[1];
+      if (open) {
+        form.appendChild(el("div", { class: "gk-recform-group" }, [
+          el("h4", {}, [g[0]]), body
+        ]));
+      } else {
+        // Folded, not hidden: a details element keeps it findable and keyboard
+        // reachable without making the first screen 22 fields long.
+        var det = el("details", { class: "gk-recform-group gk-recform-more" }, [
+          el("summary", {}, [
+            g[0] + " · " + cols.length + " field" + (cols.length === 1 ? "" : "s")
+          ]),
+          body
+        ]);
+        form.appendChild(det);
+      }
+    });
+
+    var err = el("p", { class: "gk-recform-error", role: "alert" });
+    this._err = err;
+    form.appendChild(err);
+
+    var buttons = [
+      el("button", { class: "gk-btn gk-btn-primary", type: "submit" },
+        [isNew ? "Save " + self.recordNoun() : "Save changes"])
+    ];
+    if (!isNew) {
+      buttons.push(el("button", {
+        class: "gk-btn", type: "button",
+        onclick: function () { self.editing = null; self.render(); }
+      }, ["Cancel"]));
+    }
+    form.appendChild(el("div", { class: "gk-recform-actions" }, buttons));
+    wrap.appendChild(form);
+  };
+
+  Editor.prototype.renderField = function (sheet, c, row) {
+    var idx = sheet.columns.indexOf(c);
+    var id = "gkf-" + this.def.id + "-" + this.active + "-" + idx;
+    var field = el("div", { class: "gk-field" });
+    var label = el("label", { for: id }, [c.name]);
+    if (c.required) {
+      label.appendChild(el("span", { class: "gk-req", title: "Required" }, ["*"]));
+    }
+    field.appendChild(label);
+
+    var input;
+    if (c.formula) {
+      // Calculated: shown so the user sees the consequence, never editable.
+      input = el("input", { id: id, type: "text", class: "gk-field-input" });
+      input.readOnly = true;
+      input.value = String(evalFormula(c.formula, row, sheet.columns) || "—");
+      field.classList.add("is-calc");
+    } else if (c.choices && c.choices.length) {
+      input = el("select", { id: id, class: "gk-field-input" });
+      input.appendChild(el("option", { value: "" }, ["— choose —"]));
+      c.choices.forEach(function (o) {
+        var opt = el("option", { value: String(o) }, [String(o)]);
+        if (String(row[idx]) === String(o)) opt.selected = true;
+        input.appendChild(opt);
+      });
+    } else {
+      input = el("input", { id: id, type: "text", class: "gk-field-input" });
+      input.value = row[idx] == null ? "" : row[idx];
+    }
+
+    if (c.required) input.setAttribute("aria-required", "true");
+    if (!c.formula) {
+      input.addEventListener("input", function () {
+        row[idx] = input.value;
+        input.classList.remove("is-invalid");
+      });
+      input.addEventListener("change", function () { row[idx] = input.value; });
+    }
+    input.setAttribute("data-col", String(idx));
+    field.appendChild(input);
+
+    // In the grid this guidance was a hover tooltip, so it reached nobody on a
+    // phone and nobody using a keyboard. Here it is always visible.
+    if (c.help) {
+      field.appendChild(el("p", { class: "gk-field-help", id: id + "-h" }, [c.help]));
+      input.setAttribute("aria-describedby", id + "-h");
+    }
+    return field;
+  };
+
+  /* The column most likely to name the thing — used for duplicate warnings. */
+  Editor.prototype.nameIndex = function (sheet) {
+    for (var i = 0; i < sheet.columns.length; i++) {
+      var n = sheet.columns[i].name.toLowerCase();
+      if (/(^|\s)(name|title|activity|dimension|metric|obligation|harm type|risk description)/
+          .test(n)) return i;
+    }
+    return -1;
+  };
+
+  Editor.prototype.saveForm = function (sheet, row, isNew) {
+    var self = this;
+    var missing = [];
+    sheet.columns.forEach(function (c, i) {
+      if (c.required && String(row[i] || "").trim() === "") missing.push(c);
+    });
+    if (missing.length) {
+      this._err.textContent = "Add " +
+        missing.map(function (c) { return c.name; }).join(", ") +
+        " before saving. Everything else can wait.";
+      var first = this.host.querySelector(
+        '.gk-field-input[data-col="' + sheet.columns.indexOf(missing[0]) + '"]');
+      if (first) {
+        first.classList.add("is-invalid");
+        // The missing field may sit inside a folded group.
+        var det = first.closest("details");
+        if (det) det.open = true;
+        first.focus();
+      }
+      return;
+    }
+
+    var ni = this.nameIndex(sheet);
+    if (ni !== -1 && String(row[ni] || "").trim()) {
+      var dupe = this.data[this.active].some(function (r, i) {
+        return i !== self.editing &&
+          String(r[ni] || "").trim().toLowerCase() ===
+          String(row[ni]).trim().toLowerCase();
+      });
+      if (dupe && !window.confirm(
+            'There is already a row called "' + row[ni] +
+            '". Two entries for the same thing usually means one gets missed.' +
+            "\n\nAdd it anyway?")) {
+        return;
+      }
+    }
+
+    if (isNew) {
+      var placed = false;
+      for (var i = 0; i < this.data[this.active].length; i++) {
+        if (isBlank(this.data[this.active][i])) {
+          this.data[this.active][i] = row;
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) this.data[this.active].push(row);
+    } else {
+      this.data[this.active][this.editing] = row;
+    }
+    this.editing = null;
+    this.save();
+    this.render();
+    this.updateStatus(isNew ? "Saved to this browser" : "Changes saved");
+  };
+
+  /* Saved records as readable cards rather than a spreadsheet. */
+  Editor.prototype.renderCards = function (wrap, sheet) {
+    var self = this;
+    var rows = [];
+    this.data[this.active].forEach(function (r, i) {
+      if (!isBlank(r)) rows.push({ row: r, i: i });
+    });
+
+    if (!rows.length) {
+      wrap.appendChild(el("p", { class: "gk-muted gk-reg-empty" }, [
+        "Nothing recorded yet. The form above adds your first record."
+      ]));
+      return;
+    }
+
+    wrap.appendChild(el("h3", { class: "gk-reccards-title" }, [
+      rows.length + " recorded"
+    ]));
+
+    var vis = this.visibleColumns(sheet);
+    var ni = this.nameIndex(sheet);
+    var head = ni !== -1 ? sheet.columns[ni] : vis[0];
+    var list = el("div", { class: "gk-reccards" });
+
+    rows.forEach(function (x) {
+      var card = el("div", { class: "gk-card gk-reccard" });
+      card.appendChild(el("h4", {}, [
+        String(x.row[sheet.columns.indexOf(head)] || "").trim() || "(unnamed)"
+      ]));
+      var dl = el("dl", { class: "gk-reccard-meta" });
+      vis.forEach(function (c) {
+        if (c === head) return;
+        var idx = sheet.columns.indexOf(c);
+        var v = c.formula ? evalFormula(c.formula, x.row, sheet.columns)
+                          : x.row[idx];
+        if (String(v == null ? "" : v).trim() === "") return;
+        dl.appendChild(el("dt", {}, [c.name]));
+        dl.appendChild(el("dd", {}, [String(v)]));
+      });
+      if (dl.childNodes.length) card.appendChild(dl);
+      card.appendChild(el("div", { class: "gk-reccard-actions" }, [
+        el("button", {
+          class: "gk-btn", type: "button",
+          onclick: function () {
+            self.editing = x.i;
+            self.render();
+            var f = self.host.querySelector(".gk-recform");
+            if (f) f.scrollIntoView({ block: "start" });
+          }
+        }, ["Edit"]),
+        el("button", {
+          class: "gk-btn gk-btn-danger", type: "button",
+          onclick: function () { self.deleteRow(x.i); }
+        }, ["Delete"])
+      ]));
+      list.appendChild(card);
+    });
+    wrap.appendChild(list);
+  };
+
   Editor.prototype.render = function () {
     var self = this;
     this.host.innerHTML = "";
@@ -327,10 +653,17 @@
     }
 
     var actions = el("div", { class: "gk-reg-actions" });
-    actions.appendChild(el("button", {
-      class: "gk-btn gk-btn-primary", type: "button",
-      onclick: function () { self.addRow(); }
-    }, ["+ Add row"]));
+    if (this.mode === "grid") {
+      actions.appendChild(el("button", {
+        class: "gk-btn gk-btn-primary", type: "button",
+        onclick: function () { self.addRow(); }
+      }, ["+ Add row"]));
+    } else if (this.editing !== null) {
+      actions.appendChild(el("button", {
+        class: "gk-btn gk-btn-primary", type: "button",
+        onclick: function () { self.editing = null; self.render(); }
+      }, ["+ Add another " + this.recordNoun()]));
+    }
     actions.appendChild(el("button", {
       class: "gk-btn", type: "button",
       onclick: function () { self.exportXlsx(); }
@@ -383,6 +716,32 @@
       "Neither replaces the other, and clearing your browser data clears the " +
       "autosave — so back up anything you want to keep."
     ]));
+
+    // --- the two views
+    wrap.appendChild(el("div", { class: "gk-reg-views" }, [
+      el("button", {
+        class: "gk-btn" + (this.mode === "form" ? " is-on" : ""),
+        type: "button", "aria-pressed": this.mode === "form" ? "true" : "false",
+        onclick: function () {
+          self.mode = "form"; savePref(self.def.id, { mode: "form" }); self.render();
+        }
+      }, ["Guided form"]),
+      el("button", {
+        class: "gk-btn" + (this.mode === "grid" ? " is-on" : ""),
+        type: "button", "aria-pressed": this.mode === "grid" ? "true" : "false",
+        onclick: function () {
+          self.mode = "grid"; savePref(self.def.id, { mode: "grid" }); self.render();
+        }
+      }, ["Advanced table view"]),
+      this.presetChips(sheet)
+    ]));
+
+    if (this.mode === "form") {
+      this.renderForm(wrap, sheet);
+      this.renderCards(wrap, sheet);
+      this.host.appendChild(wrap);
+      return;
+    }
 
     // --- grid
     var scroll = el("div", { class: "gk-reg-scroll" });
