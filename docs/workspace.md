@@ -10,8 +10,10 @@ Every register in the kit can be filled in directly in your browser — no downl
 !!! info "Where your data lives"
     Each register is stored separately in this browser's local storage.
     Clearing your browser data, or using a different device or a
-    private window, will lose it — so use **Save file** on anything you
-    want to keep, and **Open file** to pick it back up later.
+    private window, will lose it — so use **Back up this register**
+    on anything you want to keep, and **Restore this register** to
+    pick it back up later. Backing up is per register today; one
+    backup covering the whole workspace is coming.
 
 ## The editable registers
 

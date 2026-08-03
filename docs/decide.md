@@ -1,13 +1,13 @@
-<!-- GENERATED FILE — DO NOT EDIT.
-     Source: data/decisions.yml
-     Regenerate with: python tools/build_content.py -->
-
-
 ---
 title: Decide
 hide:
   - toc
 ---
+
+<!-- GENERATED FILE — DO NOT EDIT.
+     Source: data/decisions.yml
+     Regenerate with: python tools/build_content.py -->
+
 
 # Decide
 

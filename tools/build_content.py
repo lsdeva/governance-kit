@@ -402,9 +402,14 @@ def render_examples_index(examples: list, company: dict, by_id: dict) -> str:
 
 
 def render_decide_page(decisions: list) -> str:
-    """Mount point for the guided decisions and the decision log."""
-    parts = [BANNER.format(source="decisions.yml")]
-    parts.append("---\ntitle: Decide\nhide:\n  - toc\n---\n")
+    """Mount point for the guided decisions and the decision log.
+
+    Front matter MUST be the first bytes of the file: MkDocs only parses a
+    YAML block that starts at line 1. With the generated banner above it the
+    block was treated as body text and rendered visibly on the page.
+    """
+    parts = ["---\ntitle: Decide\nhide:\n  - toc\n---\n"]
+    parts.append(BANNER.format(source="decisions.yml"))
     parts.append("# Decide\n")
     parts.append(
         "The rest of this kit tells you what the options are. This page walks "
@@ -539,8 +544,10 @@ def render_workspace_page(sheets_raw: dict, by_id: dict) -> str:
         '!!! info "Where your data lives"\n'
         "    Each register is stored separately in this browser's local storage.\n"
         "    Clearing your browser data, or using a different device or a\n"
-        "    private window, will lose it — so use **Save file** on anything you\n"
-        "    want to keep, and **Open file** to pick it back up later.\n"
+        "    private window, will lose it — so use **Back up this register**\n"
+        "    on anything you want to keep, and **Restore this register** to\n"
+        "    pick it back up later. Backing up is per register today; one\n"
+        "    backup covering the whole workspace is coming.\n"
     )
     parts.append("## The editable registers\n")
     parts.append("| Register | What it records | Columns |")
@@ -1495,6 +1502,26 @@ def main() -> int:
         if not args.check:
             mk.write_text(new_text, encoding="utf-8", newline="\n")
         written.append(mk)
+
+    # ---- verify front matter is the first bytes of the file -----------------
+    # MkDocs only parses a YAML block starting at line 1. A generated banner
+    # above it turns the whole block into visible body text on the published
+    # page — which is exactly what happened to decide.md.
+    for md in DOCS.rglob("*.md"):
+        lines = md.read_text(encoding="utf-8").split("\n")
+        for i, line in enumerate(lines[:40]):
+            if line.strip() != "---":
+                continue
+            nxt = lines[i + 1] if i + 1 < len(lines) else ""
+            if not re.match(r"^[a-z_]+:", nxt):
+                break          # a horizontal rule, not front matter
+            if i > 0:
+                raise SystemExit(
+                    f"ERROR: {md.relative_to(ROOT)} has YAML front matter at "
+                    f"line {i + 1}, not line 1. MkDocs renders it as visible "
+                    "text. Emit the front matter before the generated banner."
+                )
+            break
 
     # ---- verify raw-HTML data-src attributes resolve ------------------------
     # MkDocs rewrites Markdown links but NOT raw HTML attributes, so a data-src

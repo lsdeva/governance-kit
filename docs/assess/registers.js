@@ -623,7 +623,7 @@
       savedAt: new Date().toISOString(),
       sheets: this.data
     }, null, 2)], { type: "application/json" }), this.basename() + ".json");
-    this.updateStatus("Save file downloaded");
+    this.updateStatus("Register backup downloaded");
   };
 
   Editor.prototype.importJson = function (e) {
