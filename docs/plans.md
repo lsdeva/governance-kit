@@ -12,7 +12,9 @@ Knowing which templates you need is not the same as knowing what order to do the
     is not their only job. They cover a competent first pass — not a
     polished, audited version.
 
-## Pick your path
+<div id="gk-journey" data-src="../assess/plan-data.json"></div>
+
+## Compare the paths
 
 | Path | When it fits | Total effort |
 |---|---|---|

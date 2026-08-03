@@ -1,0 +1,554 @@
+{
+  "version": 1,
+  "plans": [
+    {
+      "id": "new-programme",
+      "name": "Standing up a programme from nothing",
+      "when": "Nobody owns AI governance yet, or someone has just been handed the brief.",
+      "assumes": "You can get a decision-maker in a room, and you have a few days a week.",
+      "total": "~18–24 person-days over 90 days",
+      "small_org": false,
+      "phases": [
+        {
+          "window": "Days 1–30",
+          "goal": "Know what you have and get a mandate.",
+          "effort": "6–8 days",
+          "steps": [
+            {
+              "do": "Baseline honestly with the maturity assessment",
+              "template": "maturity-assessment",
+              "title": "Maturity Assessment",
+              "url": "../frameworks/maturity-assessment/",
+              "effort": "1 day",
+              "owner": "Governance lead",
+              "evidence": "A dated baseline score with evidence against each dimension.",
+              "note": "Score what is true, not what is intended. This number is the benchmark every later improvement is measured against."
+            },
+            {
+              "do": "Run a discovery sweep and build the AI inventory",
+              "template": "ai-system-inventory",
+              "title": "AI System Inventory",
+              "url": "../registers/ai-system-inventory/",
+              "effort": "3–4 days",
+              "owner": "Governance lead, with a discovery sweep",
+              "evidence": "Every AI system listed with a named owner, tier and rationale.",
+              "note": "Ask teams, then check SaaS release notes, expenses, and SSO logs. Budget for finding two to three times what people report."
+            },
+            {
+              "do": "Screen everything for prohibited practices",
+              "template": "ai-risk-assessment",
+              "title": "AI Risk Assessment",
+              "url": "../risk/ai-risk-assessment/",
+              "effort": "1 day",
+              "owner": "System owner, facilitated by Governance",
+              "evidence": "A signed assessment with residual risk accepted at the right level.",
+              "note": "Prohibited practices have been in force since February 2025. If you find one, this becomes urgent and everything else waits."
+            },
+            {
+              "do": "Get a written mandate",
+              "template": "governance-charter",
+              "title": "Governance Charter",
+              "url": "../frameworks/governance-charter/",
+              "effort": "1–2 days",
+              "owner": "Executive sponsor",
+              "evidence": "A board-approved mandate naming the sponsor and the authority to halt.",
+              "note": "Two pages. The clauses that matter are the authority to halt a system and a named executive sponsor."
+            }
+          ],
+          "done": [
+            "You can name every AI system in the organisation",
+            "Someone senior has signed something saying you own this",
+            "You know whether you have a prohibited-practice problem"
+          ]
+        },
+        {
+          "window": "Days 31–60",
+          "goal": "Put the rules and the decision-making in place.",
+          "effort": "6–8 days",
+          "steps": [
+            {
+              "do": "Publish the acceptable AI use policy",
+              "template": "acceptable-ai-use-policy",
+              "title": "Acceptable AI Use Policy",
+              "url": "../policies/acceptable-ai-use-policy/",
+              "effort": "1 day to draft",
+              "owner": "HR and Governance",
+              "evidence": "A one-page policy staff have attested to, with an approved-tool list.",
+              "note": "The highest-value document in the kit for the effort. Staff are already using AI; this is catching up, not getting ahead."
+            },
+            {
+              "do": "Classify every system by risk tier",
+              "template": "ai-system-inventory",
+              "title": "AI System Inventory",
+              "url": "../registers/ai-system-inventory/",
+              "effort": "2 days",
+              "owner": "Governance lead, with a discovery sweep",
+              "evidence": "Every AI system listed with a named owner, tier and rationale.",
+              "note": "Record the rationale, not just the label."
+            },
+            {
+              "do": "Stand up the committee and agree decision rights",
+              "template": "committee-charter",
+              "title": "Committee Charter (Terms of Reference)",
+              "url": "../operating-model/committee-charter/",
+              "effort": "2 days",
+              "owner": "Executive sponsor",
+              "evidence": "Terms of reference with quorum and the right to halt a system.",
+              "note": "Settle quorum and who can halt a live system before the first meeting, not during the first incident."
+            },
+            {
+              "do": "Agree the RACI",
+              "template": "raci",
+              "title": "RACI Matrix",
+              "url": "../operating-model/raci/",
+              "effort": "1–2 days",
+              "owner": "Governance lead, agreed in a room",
+              "evidence": "One accountable party per activity, confirmed by the people named.",
+              "note": "Do it in a room with the actual people. The argument is the point."
+            }
+          ],
+          "done": [
+            "Staff know what they may and may not do",
+            "Every system has a tier and a named owner",
+            "A forum exists that can actually decide things"
+          ]
+        },
+        {
+          "window": "Days 61–90",
+          "goal": "Assess the risky ones and make it visible.",
+          "effort": "6–8 days",
+          "steps": [
+            {
+              "do": "Assess your high-risk systems properly",
+              "template": "ai-risk-assessment",
+              "title": "AI Risk Assessment",
+              "url": "../risk/ai-risk-assessment/",
+              "effort": "2–3 days each",
+              "owner": "System owner, facilitated by Governance",
+              "evidence": "A signed assessment with residual risk accepted at the right level.",
+              "note": "Test subgroups, not just aggregate accuracy, and check whether human oversight is real by looking at the override rate."
+            },
+            {
+              "do": "Open the risk register and incident log",
+              "template": "risk-register",
+              "title": "Risk Register",
+              "url": "../registers/risk-register/",
+              "effort": "1 day",
+              "owner": "Governance lead, with risk owners",
+              "evidence": "Risks written as cause-event-consequence, each with an owner.",
+              "note": "You need the incident route defined before the first incident, not during it."
+            },
+            {
+              "do": "Take the first board pack",
+              "template": "board-pack",
+              "title": "Board Pack Template",
+              "url": "../board/board-pack/",
+              "effort": "2 days",
+              "owner": "Governance lead",
+              "evidence": "A pack the board reads, with the decisions being sought stated.",
+              "note": "Take the assessment and export the Board view — it writes most of it. Lead with what you need, not what you did."
+            }
+          ],
+          "done": [
+            "High-risk systems have completed assessments with owners",
+            "The board has seen a posture and been asked for something",
+            "You have a repeatable cycle rather than a project"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai-landing-fast",
+      "name": "AI is landing faster than governance",
+      "when": "The business is shipping AI and you are trying to get in front of it.",
+      "assumes": "Governance exists in some form; the problem is pace, not mandate.",
+      "total": "~14–18 person-days over 90 days",
+      "small_org": false,
+      "phases": [
+        {
+          "window": "Days 1–30",
+          "goal": "Stop the bleeding.",
+          "effort": "5–6 days",
+          "steps": [
+            {
+              "do": "Publish the acceptable AI use policy immediately",
+              "template": "acceptable-ai-use-policy",
+              "title": "Acceptable AI Use Policy",
+              "url": "../policies/acceptable-ai-use-policy/",
+              "effort": "1 day",
+              "owner": "HR and Governance",
+              "evidence": "A one-page policy staff have attested to, with an approved-tool list.",
+              "note": "Ship a one-page version this week. A perfect policy next quarter is worth less than a usable one now."
+            },
+            {
+              "do": "Build the inventory, starting with what is already live",
+              "template": "ai-system-inventory",
+              "title": "AI System Inventory",
+              "url": "../registers/ai-system-inventory/",
+              "effort": "3 days",
+              "owner": "Governance lead, with a discovery sweep",
+              "evidence": "Every AI system listed with a named owner, tier and rationale.",
+              "note": "Live systems first; pipeline second."
+            },
+            {
+              "do": "Add an intake gate so new systems get screened",
+              "template": "ai-development-standard",
+              "title": "AI Development & Deployment Standard",
+              "url": "../policies/ai-development-standard/",
+              "effort": "1–2 days",
+              "owner": "ML lead",
+              "evidence": "Lifecycle gates enforced in the pipeline, producing evidence.",
+              "note": "One gate at intake beats a review at launch, because at launch the money is already spent."
+            }
+          ],
+          "done": [
+            "Nothing new goes live unscreened",
+            "You know what is already running"
+          ]
+        },
+        {
+          "window": "Days 31–60",
+          "goal": "Assess what is live and govern what is coming.",
+          "effort": "5–7 days",
+          "steps": [
+            {
+              "do": "Run the EU AI Act readiness checklist",
+              "template": "eu-ai-act-readiness-checklist",
+              "title": "EU AI Act — 25-point readiness checklist",
+              "url": "../eu-ai-act/readiness-checklist/",
+              "effort": "Half a day",
+              "owner": "Governance lead",
+              "evidence": "A dated position against all 25 points.",
+              "note": ""
+            },
+            {
+              "do": "Classify and assess high-risk systems",
+              "template": "ai-risk-assessment",
+              "title": "AI Risk Assessment",
+              "url": "../risk/ai-risk-assessment/",
+              "effort": "2–3 days each",
+              "owner": "System owner, facilitated by Governance",
+              "evidence": "A signed assessment with residual risk accepted at the right level.",
+              "note": ""
+            },
+            {
+              "do": "Bring vendor AI under control",
+              "template": "third-party-ai-risk-policy",
+              "title": "Third-Party AI Risk Policy",
+              "url": "../policies/third-party-ai-risk-policy/",
+              "effort": "2 days",
+              "owner": "Procurement, with Security",
+              "evidence": "An assessment on file for every critical AI vendor.",
+              "note": "Most of your exposure is AI switched on inside software you already bought. Start with the release notes."
+            }
+          ],
+          "done": [
+            "Every live system has a tier",
+            "Vendor AI is assessed rather than assumed"
+          ]
+        },
+        {
+          "window": "Days 61–90",
+          "goal": "Make it sustainable.",
+          "effort": "4–5 days",
+          "steps": [
+            {
+              "do": "Document your material models",
+              "template": "model-card",
+              "title": "Model Card / Model Risk Documentation",
+              "url": "../risk/model-card/",
+              "effort": "1–2 days each",
+              "owner": "ML lead",
+              "evidence": "Documentation covering intended use, limitations and subgroup results.",
+              "note": ""
+            },
+            {
+              "do": "Set up monitoring and the incident route",
+              "template": "incident-log",
+              "title": "Issue & Incident Log",
+              "url": "../registers/incident-log/",
+              "effort": "1 day",
+              "owner": "Security and Governance",
+              "evidence": "A defined route people can name, plus the log itself.",
+              "note": ""
+            },
+            {
+              "do": "Start reporting a small metric set",
+              "template": "kpi-dashboard",
+              "title": "KPI / KRI Dashboard",
+              "url": "../board/kpi-dashboard/",
+              "effort": "1 day",
+              "owner": "Governance lead",
+              "evidence": "A stable metric set with trend over at least three periods.",
+              "note": "Six metrics held stable beats twenty that change every quarter — trend is the point."
+            }
+          ],
+          "done": [
+            "Governance runs at the pace of delivery rather than behind it"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "being-asked",
+      "name": "A regulator or board is asking questions",
+      "when": "Something has prompted scrutiny and you need a defensible answer soon.",
+      "assumes": "You have limited time and need evidence, not documents.",
+      "total": "~10–14 person-days over 90 days",
+      "small_org": false,
+      "phases": [
+        {
+          "window": "Days 1–30",
+          "goal": "Be able to answer the question.",
+          "effort": "5–6 days",
+          "steps": [
+            {
+              "do": "Take the assessment, Regulator view, and export it",
+              "template": "eu-ai-act-readiness-checklist",
+              "title": "EU AI Act — 25-point readiness checklist",
+              "url": "../eu-ai-act/readiness-checklist/",
+              "effort": "1 day",
+              "owner": "Governance lead",
+              "evidence": "A dated position against all 25 points.",
+              "note": "The export lists what evidence each obligation needs. Assemble against that list rather than guessing what they will ask for."
+            },
+            {
+              "do": "Produce the inventory, however imperfect",
+              "template": "ai-system-inventory",
+              "title": "AI System Inventory",
+              "url": "../registers/ai-system-inventory/",
+              "effort": "2–3 days",
+              "owner": "Governance lead, with a discovery sweep",
+              "evidence": "Every AI system listed with a named owner, tier and rationale.",
+              "note": "\"We are still completing it, here is what we have and when it will be finished\" is a far better answer than silence."
+            },
+            {
+              "do": "Assemble a board pack from what exists",
+              "template": "board-pack",
+              "title": "Board Pack Template",
+              "url": "../board/board-pack/",
+              "effort": "1–2 days",
+              "owner": "Governance lead",
+              "evidence": "A pack the board reads, with the decisions being sought stated.",
+              "note": "Be honest about the gaps. An amber pack with a plan lands better than a green one that unravels."
+            }
+          ],
+          "done": [
+            "You can state your position with evidence behind it"
+          ]
+        },
+        {
+          "window": "Days 31–60",
+          "goal": "Close the gaps that were exposed.",
+          "effort": "3–5 days",
+          "steps": [
+            {
+              "do": "Build the control library and assurance map",
+              "template": "control-library",
+              "title": "Control Library & Assurance Map",
+              "url": "../risk/control-library/",
+              "effort": "2 days",
+              "owner": "Governance lead, with Internal Audit",
+              "evidence": "Obligations mapped to controls, each with an owner and evidence.",
+              "note": "The blank cells are the finding — obligations nobody is assuring."
+            },
+            {
+              "do": "Formalise the risk register",
+              "template": "risk-register",
+              "title": "Risk Register",
+              "url": "../registers/risk-register/",
+              "effort": "1 day",
+              "owner": "Governance lead, with risk owners",
+              "evidence": "Risks written as cause-event-consequence, each with an owner.",
+              "note": ""
+            },
+            {
+              "do": "Fix the highest-severity gaps from the assessment",
+              "template": "ai-risk-assessment",
+              "title": "AI Risk Assessment",
+              "url": "../risk/ai-risk-assessment/",
+              "effort": "2–3 days",
+              "owner": "System owner, facilitated by Governance",
+              "evidence": "A signed assessment with residual risk accepted at the right level.",
+              "note": ""
+            }
+          ],
+          "done": [
+            "Every obligation has a control, an owner, and evidence"
+          ]
+        },
+        {
+          "window": "Days 61–90",
+          "goal": "Show movement.",
+          "effort": "2–3 days",
+          "steps": [
+            {
+              "do": "Re-run the assessment and show the delta",
+              "template": "maturity-assessment",
+              "title": "Maturity Assessment",
+              "url": "../frameworks/maturity-assessment/",
+              "effort": "Half a day",
+              "owner": "Governance lead",
+              "evidence": "A dated baseline score with evidence against each dimension.",
+              "note": "Movement is more persuasive than any absolute score. Keep the first export so you can show the before."
+            },
+            {
+              "do": "Report progress to the board",
+              "template": "board-pack",
+              "title": "Board Pack Template",
+              "url": "../board/board-pack/",
+              "effort": "1 day",
+              "owner": "Governance lead",
+              "evidence": "A pack the board reads, with the decisions being sought stated.",
+              "note": ""
+            },
+            {
+              "do": "Set the ongoing review cadence",
+              "template": "committee-charter",
+              "title": "Committee Charter (Terms of Reference)",
+              "url": "../operating-model/committee-charter/",
+              "effort": "1 day",
+              "owner": "Executive sponsor",
+              "evidence": "Terms of reference with quorum and the right to halt a system.",
+              "note": ""
+            }
+          ],
+          "done": [
+            "Scrutiny has become a routine reporting cycle"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "small-org",
+      "name": "Small or flat organisation",
+      "when": "Fewer than ~150 people, no committee, no dedicated governance role, and this is somebody's third priority.",
+      "assumes": "Nothing. This path deliberately does not require a committee to exist.",
+      "total": "~6–9 person-days over 90 days",
+      "small_org": true,
+      "phases": [
+        {
+          "window": "Days 1–30",
+          "goal": "The two things that actually reduce risk.",
+          "effort": "2–3 days",
+          "steps": [
+            {
+              "do": "List your AI systems in a spreadsheet",
+              "template": "ai-system-inventory",
+              "title": "AI System Inventory",
+              "url": "../registers/ai-system-inventory/",
+              "effort": "1 day",
+              "owner": "Governance lead, with a discovery sweep",
+              "evidence": "Every AI system listed with a named owner, tier and rationale.",
+              "note": "Owner, source, tier, rationale. Four columns is enough. Do not buy a tool."
+            },
+            {
+              "do": "Publish a one-page AI use policy",
+              "template": "acceptable-ai-use-policy",
+              "title": "Acceptable AI Use Policy",
+              "url": "../policies/acceptable-ai-use-policy/",
+              "effort": "Half a day",
+              "owner": "HR and Governance",
+              "evidence": "A one-page policy staff have attested to, with an approved-tool list.",
+              "note": "Sections 2, 3 and 4 of the template only — the short version, approved tools, and what is never allowed."
+            },
+            {
+              "do": "Check nothing is prohibited",
+              "template": "ai-risk-assessment",
+              "title": "AI Risk Assessment",
+              "url": "../risk/ai-risk-assessment/",
+              "effort": "Half a day",
+              "owner": "System owner, facilitated by Governance",
+              "evidence": "A signed assessment with residual risk accepted at the right level.",
+              "note": "The eight-item screen. This is the one check with no proportionality argument available."
+            }
+          ],
+          "done": [
+            "You know what you run and staff know the rules"
+          ]
+        },
+        {
+          "window": "Days 31–60",
+          "goal": "Accountability without bureaucracy.",
+          "effort": "2–3 days",
+          "steps": [
+            {
+              "do": "Name one accountable person per system",
+              "template": "roles-responsibilities",
+              "title": "Roles & Responsibilities",
+              "url": "../operating-model/roles-responsibilities/",
+              "effort": "Half a day",
+              "owner": "Governance lead",
+              "evidence": "Named holders who know they hold the role.",
+              "note": "One person can hold several roles. The only split you must keep is that nobody assures their own work."
+            },
+            {
+              "do": "Write down who can stop a system",
+              "template": "decision-rights",
+              "title": "Decision Rights & Escalation",
+              "url": "../operating-model/decision-rights/",
+              "effort": "Half a day",
+              "owner": "Governance lead, with the committee",
+              "evidence": "A decision matrix tested against a real past decision.",
+              "note": "Two levels is enough: who decides day to day, and who they escalate to. Keep suspension distributed."
+            },
+            {
+              "do": "Assess anything that affects people",
+              "template": "ai-risk-assessment",
+              "title": "AI Risk Assessment",
+              "url": "../risk/ai-risk-assessment/",
+              "effort": "1–2 days",
+              "owner": "System owner, facilitated by Governance",
+              "evidence": "A signed assessment with residual risk accepted at the right level.",
+              "note": "Sections 1, 2 and 4 only — is it allowed, who could it hurt, who is watching. That fits on two pages."
+            }
+          ],
+          "done": [
+            "Every system has a named human, and stopping one is possible"
+          ]
+        },
+        {
+          "window": "Days 61–90",
+          "goal": "Enough evidence to answer a customer or auditor.",
+          "effort": "2–3 days",
+          "steps": [
+            {
+              "do": "Start an incident log, even if it is empty",
+              "template": "incident-log",
+              "title": "Issue & Incident Log",
+              "url": "../registers/incident-log/",
+              "effort": "Half a day",
+              "owner": "Security and Governance",
+              "evidence": "A defined route people can name, plus the log itself.",
+              "note": "An empty log with a defined route beats no route. You need it before the first incident."
+            },
+            {
+              "do": "Keep a short risk list",
+              "template": "risk-register",
+              "title": "Risk Register",
+              "url": "../registers/risk-register/",
+              "effort": "Half a day",
+              "owner": "Governance lead, with risk owners",
+              "evidence": "Risks written as cause-event-consequence, each with an owner.",
+              "note": "A 3x3 matrix and five risks you actually review."
+            },
+            {
+              "do": "Do a half-day review every quarter",
+              "template": "board-pack",
+              "title": "Board Pack Template",
+              "url": "../board/board-pack/",
+              "effort": "Half a day per quarter",
+              "owner": "Governance lead",
+              "evidence": "A pack the board reads, with the decisions being sought stated.",
+              "note": "A standing 45-minute item on an existing leadership meeting, with real minutes, beats a committee that quietly stops meeting."
+            }
+          ],
+          "done": [
+            "You can evidence governance proportionate to your size",
+            "The cycle survives the person who set it up leaving"
+          ]
+        }
+      ]
+    }
+  ]
+}

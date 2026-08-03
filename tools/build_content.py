@@ -679,7 +679,12 @@ def render_plans_page(plans: list, by_id: dict) -> str:
         "    is not their only job. They cover a competent first pass — not a\n"
         "    polished, audited version.\n"
     )
-    parts.append("## Pick your path\n")
+    # The journey app takes over here: pick one path and it becomes tracked
+    # work. Everything below is the fallback — no JS, print, and comparing
+    # paths before committing to one.
+    parts.append('<div id="gk-journey" data-src="../assess/plan-data.json"></div>\n')
+
+    parts.append("## Compare the paths\n")
     parts.append("| Path | When it fits | Total effort |")
     parts.append("|---|---|---|")
     for p in plans:
@@ -1553,6 +1558,53 @@ def main() -> int:
                      indent=2, ensure_ascii=False) + "\n",
           written, args.check)
 
+    # ---- plan data ----------------------------------------------------------
+    # The plans page prints all four paths. Adopting one turns it into a
+    # tracked journey in the browser, so the app needs the same steps with the
+    # template titles and links already resolved — the page and the journey
+    # can then never disagree about what a path contains.
+    plan_payload = []
+    for p in plans:
+        phases = []
+        for ph in p["phases"]:
+            steps = []
+            for s in ph["steps"]:
+                tpl = by_id[s["template"]]
+                steps.append({
+                    "do": " ".join(s["do"].split()),
+                    "template": s["template"],
+                    "title": tpl["title"],
+                    # Consumed by JS from the published page /plans/, which is
+                    # one directory deep — the same reason the data-src above
+                    # carries a ../. rel_link is relative to the source file,
+                    # so it needs the extra hop.
+                    "url": "../" + rel_link("plans.md", tpl["path"]).replace(".md", "/"),
+                    "effort": s["effort"],
+                    "owner": tpl.get("owner", ""),
+                    "evidence": tpl.get("completion_evidence", ""),
+                    "note": " ".join(s.get("note", "").split()),
+                })
+            phases.append({
+                "window": ph["window"],
+                "goal": ph["goal"],
+                "effort": ph["effort"],
+                "steps": steps,
+                "done": [" ".join(d.split()) for d in ph["done"]],
+            })
+        plan_payload.append({
+            "id": p["id"],
+            "name": p["name"],
+            "when": " ".join(p["when"].split()),
+            "assumes": " ".join(p["assumes"].split()),
+            "total": p["total"],
+            "small_org": bool(p.get("small_org")),
+            "phases": phases,
+        })
+    write(DOCS / "assess" / "plan-data.json",
+          json.dumps({"version": 1, "plans": plan_payload},
+                     indent=2, ensure_ascii=False) + "\n",
+          written, args.check)
+
     # ---- assessment data ----------------------------------------------------
     payload = build_assessment_json(roles, questions, templates, sections)
     write(DOCS / "assess" / "assessment-data.json",
@@ -1649,6 +1701,34 @@ def main() -> int:
                     "rewrite raw HTML attributes the way it rewrites Markdown "
                     "links, so this would 404 in the browser."
                 )
+
+    # ---- verify the plan JSON's links resolve from /plans/ ------------------
+    # Same failure as data-src above, one step removed: these URLs are put into
+    # href by JS running on /plans/, so a path that looks right relative to the
+    # .md source silently 404s. Checked here rather than in a browser.
+    for _p in plan_payload:
+        for _ph in _p["phases"]:
+            for _s in _ph["steps"]:
+                segs = ["plans"]
+                for part in _s["url"].split("/"):
+                    if part in ("", "."):
+                        continue
+                    if part == "..":
+                        if not segs:
+                            raise SystemExit(
+                                f"ERROR: plan '{_p['id']}' step "
+                                f"{_s['template']!r} url {_s['url']!r} escapes "
+                                "the site root.")
+                        segs.pop()
+                    else:
+                        segs.append(part)
+                target = "/".join(segs)
+                if not (DOCS / (target + ".md")).exists() and \
+                   not (DOCS / target / "index.md").exists():
+                    raise SystemExit(
+                        f"ERROR: plan '{_p['id']}' step {_s['template']!r} has "
+                        f"url {_s['url']!r}, which resolves to /{target}/ from "
+                        "the published page /plans/ — no such page.")
 
     # ---- report -------------------------------------------------------------
     if args.check:

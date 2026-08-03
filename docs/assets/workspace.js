@@ -106,6 +106,17 @@
     }).length;
   }
 
+  /* Where the open plan items came from, so the tile does not misattribute
+     work adopted from a 30/60/90 path to the assessment report. */
+  function planSource(plan) {
+    var open = plan.filter(function (x) { return x.status !== "done"; });
+    if (!open.length) return "nothing open";
+    var fromPath = open.filter(function (x) { return x.path; }).length;
+    if (fromPath === open.length) return "from your chosen path";
+    if (fromPath) return "from your path and report";
+    return "from your report";
+  }
+
   function tile(value, label, note, tone) {
     return el("div", { class: "gk-stat" }, [
       el("div", { class: "gk-stat-v" }, [String(value)]),
@@ -165,10 +176,14 @@
       var first = plan.filter(function (x) { return x.status !== "done"; })[0];
       return {
         title: first.action,
-        why: "From your action plan. Suggested owner: " + (first.owner || "—") +
-             " · " + (first.effort || "—"),
+        why: (first.path ? "From your chosen path." : "From your action plan.") +
+             " Suggested owner: " + (first.owner || "—") +
+             " · " + (first.effort || "—") +
+             (first.due ? " · target " + first.due : ""),
         cta: "Open the template",
-        href: base + "workspace/"
+        // Items adopted from a path carry their template's URL. Older items
+        // from the assessment do not, so those still land on the plan itself.
+        href: first.url || (base + "workspace/")
       };
     }
     if (regs.length) {
@@ -220,7 +235,10 @@
     grid.appendChild(tile(
       plan.filter(function (x) { return x.status !== "done"; }).length,
       "Open plan actions",
-      openCritical() ? openCritical() + " critical" : "from your report",
+      // Plan items arrive from two places now — the assessment report and an
+      // adopted 30/60/90 path — so the note says which, rather than always
+      // claiming the report.
+      openCritical() ? openCritical() + " critical" : planSource(plan),
       openCritical() ? "warn" : null));
     host.appendChild(grid);
 
