@@ -5,12 +5,13 @@
 
 # Data Asset Register
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/data-asset-register.docx){ .md-button .gk-dl download }
-[:material-file-excel: Excel](../downloads/data-asset-register.xlsx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/data-asset-register.md.txt){ .md-button .gk-dl download="data-asset-register.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/data-asset-register.docx){ .md-button .gk-dl download } [:material-file-excel: Excel](../downloads/data-asset-register.xlsx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/data-asset-register.md.txt){ .md-button .gk-dl download="data-asset-register.md" }
+</span>
 </div>
 
 **Purpose.** The catalogue of what data you hold, who owns it, how sensitive it is, and where it lives. Almost every other governance control depends on it.

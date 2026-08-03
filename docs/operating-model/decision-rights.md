@@ -5,11 +5,13 @@
 
 # Decision Rights & Escalation
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/decision-rights.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/decision-rights.md.txt){ .md-button .gk-dl download="decision-rights.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/decision-rights.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/decision-rights.md.txt){ .md-button .gk-dl download="decision-rights.md" }
+</span>
 </div>
 
 **Purpose.** States who can decide what, at what threshold, and what happens when people disagree or a decision is needed urgently. It is the document that stops governance stalling.

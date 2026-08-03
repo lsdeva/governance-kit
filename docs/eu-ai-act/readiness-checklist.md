@@ -5,11 +5,13 @@
 
 # EU AI Act — 25-point readiness checklist
 
-<span class="pill ready">Ready</span> &nbsp;·&nbsp; <span class="gk-meta">v1.2</span> &nbsp;·&nbsp; <span class="gk-meta">Last reviewed <strong>2026-08-03</strong></span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/eu-ai-act-readiness-checklist.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/eu-ai-act-readiness-checklist.md.txt){ .md-button .gk-dl download="eu-ai-act-readiness-checklist.md" }
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
+<span class="pill ready">Ready</span> <span class="gk-meta">v1.2</span> <span class="gk-meta">Reviewed 2026-08-03</span>
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/eu-ai-act-readiness-checklist.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/eu-ai-act-readiness-checklist.md.txt){ .md-button .gk-dl download="eu-ai-act-readiness-checklist.md" }
+</span>
 </div>
 
 **Purpose.** A fast self-assessment of where your organisation stands against the EU AI Act. Work through it, mark what is true today, and treat every unticked box as a backlog item.

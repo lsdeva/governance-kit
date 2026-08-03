@@ -5,12 +5,13 @@
 
 # AI System Inventory
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/ai-system-inventory.docx){ .md-button .gk-dl download }
-[:material-file-excel: Excel](../downloads/ai-system-inventory.xlsx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/ai-system-inventory.md.txt){ .md-button .gk-dl download="ai-system-inventory.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/ai-system-inventory.docx){ .md-button .gk-dl download } [:material-file-excel: Excel](../downloads/ai-system-inventory.xlsx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/ai-system-inventory.md.txt){ .md-button .gk-dl download="ai-system-inventory.md" }
+</span>
 </div>
 
 !!! example "See this filled in"

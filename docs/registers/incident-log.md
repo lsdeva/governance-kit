@@ -5,12 +5,13 @@
 
 # Issue & Incident Log
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/incident-log.docx){ .md-button .gk-dl download }
-[:material-file-excel: Excel](../downloads/incident-log.xlsx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/incident-log.md.txt){ .md-button .gk-dl download="incident-log.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/incident-log.docx){ .md-button .gk-dl download } [:material-file-excel: Excel](../downloads/incident-log.xlsx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/incident-log.md.txt){ .md-button .gk-dl download="incident-log.md" }
+</span>
 </div>
 
 **Purpose.** The record of what went wrong, what you did, and what changed as a result. It is both a management tool and the evidence base for serious-incident reporting duties.

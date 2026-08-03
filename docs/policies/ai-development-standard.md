@@ -5,11 +5,13 @@
 
 # AI Development & Deployment Standard
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/ai-development-standard.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/ai-development-standard.md.txt){ .md-button .gk-dl download="ai-development-standard.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/ai-development-standard.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/ai-development-standard.md.txt){ .md-button .gk-dl download="ai-development-standard.md" }
+</span>
 </div>
 
 **Purpose.** The engineering-facing requirements for building, testing, deploying, and operating AI systems — the technical controls that make the framework's principles real inside a delivery pipeline.

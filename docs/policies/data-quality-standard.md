@@ -5,11 +5,13 @@
 
 # Data Quality Standard
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/data-quality-standard.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/data-quality-standard.md.txt){ .md-button .gk-dl download="data-quality-standard.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/data-quality-standard.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/data-quality-standard.md.txt){ .md-button .gk-dl download="data-quality-standard.md" }
+</span>
 </div>
 
 **Purpose.** Defines what "good enough" data means in measurable terms — the dimensions, how they are measured, the thresholds that apply, and who acts when a threshold is breached.

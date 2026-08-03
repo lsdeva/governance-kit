@@ -1,0 +1,702 @@
+/* ===========================================================================
+ * GovKit — internal (docs) pages.
+ *
+ * The landing page is the spec. This file makes the reading pages wear the
+ * same identity — chrome, type, components — while keeping Material's docs
+ * LAYOUT, because sidebar + TOC + search is right for reading templates.
+ *
+ * Landing-only decoration stays on the landing: no scroll reveals, no gradient
+ * mesh, no gradient text here. Hover transitions and the re-skin are enough.
+ *
+ * Every colour is a token from extra.css. Nothing new is invented.
+ * ======================================================================== */
+
+/* ===========================================================================
+ * 1. HEADER, TABS, SEARCH, ANNOUNCEMENT
+ * ======================================================================== */
+
+/* Announcement: the landing's violet -> brand gradient. */
+.md-banner {
+  background: linear-gradient(90deg, var(--gk-violet), var(--gk-brand));
+  color: #fff;
+}
+
+/* The link sits on the gradient, so it must not inherit the typeset brand
+   colour — that would be dark blue on blue. */
+.md-banner a,
+.md-banner .gk-announce-in a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.md-banner a:is(:hover, :focus) { color: #fff; opacity: .85; }
+
+/* The header is translucent page colour with a blur, like the landing nav —
+   not Material's solid primary block. Dark ink on light, light ink on dark. */
+.md-header {
+  background: color-mix(in srgb, var(--gk-page) 82%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--gk-ink);
+  border-bottom: 1px solid var(--gk-hairline);
+  box-shadow: none;
+}
+
+/* Older engines without color-mix still need a readable header. */
+@supports not (background: color-mix(in srgb, red 50%, transparent)) {
+  .md-header { background: var(--gk-page); }
+}
+
+.md-header--shadow { box-shadow: none; }
+
+.md-header__title,
+.md-header__topic,
+.md-header__button {
+  color: var(--gk-ink);
+}
+
+/* Wordmark: weight and tracking to match the landing's brand lockup. */
+.md-header__topic > .md-ellipsis {
+  font-weight: 750;
+  letter-spacing: -.01em;
+  font-size: 18px;
+}
+
+.md-header__button.md-logo :is(img, svg) {
+  width: 26px;
+  height: 26px;
+  color: var(--gk-brand);
+}
+
+/* Tabs read as the landing's navlinks: muted ink, 2px brand underline. */
+.md-tabs {
+  background: transparent;
+  color: var(--gk-ink-2);
+  border-bottom: 1px solid var(--gk-hairline);
+  /* The header already blurs; a second layer would double-darken the seam. */
+}
+
+.md-tabs__link {
+  color: var(--gk-ink-2);
+  opacity: 1;
+  font-size: 14.5px;
+  margin-top: 0;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: color .15s ease, border-color .15s ease;
+}
+
+.md-tabs__item { padding: 0 12px; }
+
+.md-tabs__link:is(:hover, :focus) {
+  color: var(--gk-ink);
+  border-bottom-color: var(--gk-brand);
+}
+
+.md-tabs__link--active {
+  color: var(--gk-ink);
+  font-weight: 650;
+  border-bottom-color: var(--gk-brand);
+}
+
+/* Search: a quiet bordered input on the page colour, not a dark inset. */
+.md-search__form {
+  background: var(--gk-surface);
+  border: 1px solid var(--gk-hairline);
+  border-radius: var(--gk-r-sm);
+  box-shadow: none;
+}
+
+.md-search__form:hover {
+  background: var(--gk-surface);
+  border-color: var(--gk-brand);
+}
+
+.md-search__input {
+  color: var(--gk-ink);
+}
+
+.md-search__input::placeholder { color: var(--gk-ink-3); }
+
+.md-search__icon,
+.md-search__options .md-icon {
+  color: var(--gk-ink-3);
+}
+
+/* The results panel is a surface card. */
+.md-search__output {
+  border-radius: 0 0 var(--gk-r-sm) var(--gk-r-sm);
+}
+
+.md-search__scrollwrap { background: var(--gk-surface); }
+
+.md-search-result__meta {
+  background: var(--gk-page);
+  color: var(--gk-ink-2);
+  border-bottom: 1px solid var(--gk-hairline);
+}
+
+.md-search-result__article,
+.md-search-result__more summary {
+  color: var(--gk-ink);
+}
+
+.md-search-result__item { border-bottom: 1px solid var(--gk-hairline); }
+
+/* The repo link sits in the header, so it needs header ink not primary-bg. */
+.md-header__source,
+.md-source { color: var(--gk-ink-2); }
+.md-source:hover { color: var(--gk-ink); opacity: 1; }
+.md-source__repository { font-size: 13px; }
+
+/* --- mobile drawer ------------------------------------------------------ */
+/* At <=76.1875em Material swaps tabs for a drawer. It inherits the primary
+   colour by default, which no longer exists — give it the surface treatment
+   so it stays legible in both schemes. */
+
+@media screen and (max-width: 76.1875em) {
+  .md-nav--primary .md-nav__title {
+    background: var(--gk-page);
+    color: var(--gk-ink);
+    border-bottom: 1px solid var(--gk-hairline);
+    box-shadow: none;
+  }
+
+  .md-nav--primary .md-nav__title .md-nav__button.md-logo :is(img, svg) {
+    color: var(--gk-brand);
+  }
+
+  .md-nav--primary,
+  .md-nav--primary .md-nav__source {
+    background: var(--gk-surface);
+    color: var(--gk-ink);
+  }
+
+  .md-nav--primary .md-nav__link { color: var(--gk-ink-2); }
+  .md-nav--primary .md-nav__link:is(:hover, :focus) { color: var(--gk-brand); }
+}
+
+/* ===========================================================================
+ * 2. TYPOGRAPHY
+ * ======================================================================== */
+
+.md-typeset {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--gk-ink);
+}
+
+/* Prose keeps a comfortable measure without stranding the column. 78ch lands
+   near 780px at this size — long enough to use the space, short enough to read.
+   Tables, cards and the app widgets are not capped. */
+.md-typeset > :is(p, ul, ol, blockquote) { max-width: 78ch; }
+
+.md-typeset h1 {
+  font-size: 36px;
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--gk-ink);
+  margin: 0 0 .5rem;
+}
+
+.md-typeset h2 {
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 750;
+  letter-spacing: -.015em;
+  color: var(--gk-ink);
+  margin: 3rem 0 .9rem;
+  padding-top: 0;
+}
+
+.md-typeset h3 {
+  font-size: 19px;
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -.008em;
+  color: var(--gk-ink);
+  margin: 2rem 0 .6rem;
+}
+
+.md-typeset h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gk-ink);
+  margin: 1.5rem 0 .5rem;
+}
+
+.md-typeset a { color: var(--gk-brand); }
+.md-typeset a:is(:hover, :focus) { color: var(--gk-brand-deep); }
+
+.md-typeset hr { border-bottom-color: var(--gk-hairline); }
+
+/* --- sidebar and TOC ---------------------------------------------------- */
+
+.md-nav { font-size: 13.5px; }
+.md-nav__title { color: var(--gk-ink-3); font-size: 12px; letter-spacing: .04em; }
+.md-nav__link { color: var(--gk-ink-2); }
+.md-nav__link:is(:hover, :focus) { color: var(--gk-brand); }
+
+/* Active item: brand ink plus a 2px left accent, replacing Material's plain
+   colour change. Applied to the link itself so it survives instant nav. */
+.md-nav__link--active,
+.md-nav__link--active:is(:hover, :focus),
+.md-nav__item .md-nav__link--active {
+  color: var(--gk-brand);
+  font-weight: 650;
+}
+
+.md-sidebar--secondary .md-nav__link--active,
+.md-sidebar--primary .md-nav__link--active {
+  border-left: 2px solid var(--gk-brand);
+  padding-left: .6rem;
+  margin-left: -.62rem;
+}
+
+.md-sidebar__scrollwrap { scrollbar-color: var(--gk-hairline) transparent; }
+
+/* ===========================================================================
+ * 3. DOCUMENT HEADER BAND
+ * ======================================================================== */
+
+/* The generator emits .gk-dochead wrapping the status pill, the version /
+   reviewed stamp, and the download buttons in one row under the title. */
+.md-typeset .gk-dochead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 1.75rem;
+  padding: 0 0 1.1rem;
+  border-bottom: 1px solid var(--gk-hairline);
+  max-width: none;
+}
+
+.md-typeset .gk-dochead-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Push the downloads to the right on wide screens, wrap beneath on narrow. */
+.md-typeset .gk-dochead-dl {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.md-typeset .gk-dochead-dl .md-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: var(--gk-r-sm);
+  border: 1px solid var(--gk-hairline);
+  background: var(--gk-surface);
+  color: var(--gk-ink);
+  box-shadow: var(--gk-shadow-1);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.md-typeset .gk-dochead-dl .md-button:is(:hover, :focus) {
+  transform: translateY(-1px);
+  box-shadow: var(--gk-shadow-2);
+  border-color: var(--gk-brand);
+  color: var(--gk-ink);
+  background: var(--gk-surface);
+}
+
+.md-typeset .gk-dochead-dl .md-button svg {
+  width: 15px;
+  height: 15px;
+  fill: var(--gk-ink-3);
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .gk-dochead-dl { margin-left: 0; }
+}
+
+/* ===========================================================================
+ * 4. COMPONENTS
+ * ======================================================================== */
+
+/* --- status pills ------------------------------------------------------- */
+
+.md-typeset .pill,
+.pill {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.pill.ready { background: var(--gk-good-bg); color: var(--gk-good-text); }
+.pill.draft { background: var(--gk-warn-bg); color: var(--gk-warn-text); }
+.pill.stub  { background: var(--gk-neutral-bg); color: var(--gk-neutral-text); }
+
+.gk-meta {
+  font-size: 12px;
+  color: var(--gk-ink-3);
+}
+
+/* --- admonitions -------------------------------------------------------- */
+/* Surface card with a 3px accent, replacing Material's stock teal block.
+ *
+ * Material scopes each type as `.md-typeset .tip > .admonition-title` and
+ * hardcodes its colour (#00bfa5 for tip), so every override below has to match
+ * that specificity — a plain `.admonition` rule loses.
+ */
+
+.md-typeset :is(.admonition, details) {
+  background: var(--gk-surface);
+  border-style: solid;
+  border-width: 1px 1px 1px 3px;
+  border-color: var(--gk-hairline) var(--gk-hairline) var(--gk-hairline) var(--gk-brand);
+  border-radius: var(--gk-r-md);
+  box-shadow: var(--gk-shadow-1);
+  font-size: 14.5px;
+  max-width: 78ch;
+}
+
+.md-typeset :is(.admonition-title, summary) {
+  background: transparent;
+  border: none;
+  font-weight: 700;
+  padding-top: .7rem;
+  padding-bottom: .3rem;
+}
+
+.md-typeset .admonition > :last-child { padding-bottom: .8rem; }
+
+/* Per-type accent, icon and title tint.
+ *
+ * Material targets `.md-typeset .admonition.tip` — TWO classes on the element,
+ * so a `.md-typeset :is(.tip)` rule loses on specificity even though it loads
+ * later. These selectors match that shape exactly.
+ */
+.md-typeset .admonition.note,
+.md-typeset details.note,
+.md-typeset .admonition.info,
+.md-typeset details.info,
+.md-typeset .admonition.todo,
+.md-typeset details.todo,
+.md-typeset .admonition.abstract,
+.md-typeset details.abstract,
+.md-typeset .admonition.tip,
+.md-typeset details.tip,
+.md-typeset .admonition.hint,
+.md-typeset details.hint,
+.md-typeset .admonition.example,
+.md-typeset details.example,
+.md-typeset .admonition.quote,
+.md-typeset details.quote,
+.md-typeset .admonition.cite,
+.md-typeset details.cite {
+  border-color: var(--gk-hairline) var(--gk-hairline) var(--gk-hairline)
+                var(--gk-brand);
+}
+.md-typeset .admonition.note > :is(.admonition-title, summary),
+.md-typeset details.note > :is(.admonition-title, summary),
+.md-typeset .admonition.info > :is(.admonition-title, summary),
+.md-typeset details.info > :is(.admonition-title, summary),
+.md-typeset .admonition.todo > :is(.admonition-title, summary),
+.md-typeset details.todo > :is(.admonition-title, summary),
+.md-typeset .admonition.abstract > :is(.admonition-title, summary),
+.md-typeset details.abstract > :is(.admonition-title, summary),
+.md-typeset .admonition.tip > :is(.admonition-title, summary),
+.md-typeset details.tip > :is(.admonition-title, summary),
+.md-typeset .admonition.hint > :is(.admonition-title, summary),
+.md-typeset details.hint > :is(.admonition-title, summary),
+.md-typeset .admonition.example > :is(.admonition-title, summary),
+.md-typeset details.example > :is(.admonition-title, summary),
+.md-typeset .admonition.quote > :is(.admonition-title, summary),
+.md-typeset details.quote > :is(.admonition-title, summary),
+.md-typeset .admonition.cite > :is(.admonition-title, summary),
+.md-typeset details.cite > :is(.admonition-title, summary) {
+  background-color: transparent;
+}
+.md-typeset .admonition.note > :is(.admonition-title, summary)::before,
+.md-typeset details.note > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.info > :is(.admonition-title, summary)::before,
+.md-typeset details.info > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.todo > :is(.admonition-title, summary)::before,
+.md-typeset details.todo > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.abstract > :is(.admonition-title, summary)::before,
+.md-typeset details.abstract > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.tip > :is(.admonition-title, summary)::before,
+.md-typeset details.tip > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.hint > :is(.admonition-title, summary)::before,
+.md-typeset details.hint > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.example > :is(.admonition-title, summary)::before,
+.md-typeset details.example > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.quote > :is(.admonition-title, summary)::before,
+.md-typeset details.quote > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.cite > :is(.admonition-title, summary)::before,
+.md-typeset details.cite > :is(.admonition-title, summary)::before {
+  background-color: var(--gk-brand);
+}
+
+.md-typeset .admonition.success,
+.md-typeset details.success,
+.md-typeset .admonition.check,
+.md-typeset details.check,
+.md-typeset .admonition.done,
+.md-typeset details.done {
+  border-color: var(--gk-hairline) var(--gk-hairline) var(--gk-hairline)
+                var(--gk-good);
+}
+.md-typeset .admonition.success > :is(.admonition-title, summary),
+.md-typeset details.success > :is(.admonition-title, summary),
+.md-typeset .admonition.check > :is(.admonition-title, summary),
+.md-typeset details.check > :is(.admonition-title, summary),
+.md-typeset .admonition.done > :is(.admonition-title, summary),
+.md-typeset details.done > :is(.admonition-title, summary) {
+  background-color: transparent;
+}
+.md-typeset .admonition.success > :is(.admonition-title, summary)::before,
+.md-typeset details.success > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.check > :is(.admonition-title, summary)::before,
+.md-typeset details.check > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.done > :is(.admonition-title, summary)::before,
+.md-typeset details.done > :is(.admonition-title, summary)::before {
+  background-color: var(--gk-good);
+}
+
+.md-typeset .admonition.warning,
+.md-typeset details.warning,
+.md-typeset .admonition.caution,
+.md-typeset details.caution,
+.md-typeset .admonition.attention,
+.md-typeset details.attention {
+  border-color: var(--gk-hairline) var(--gk-hairline) var(--gk-hairline)
+                var(--gk-warn);
+}
+.md-typeset .admonition.warning > :is(.admonition-title, summary),
+.md-typeset details.warning > :is(.admonition-title, summary),
+.md-typeset .admonition.caution > :is(.admonition-title, summary),
+.md-typeset details.caution > :is(.admonition-title, summary),
+.md-typeset .admonition.attention > :is(.admonition-title, summary),
+.md-typeset details.attention > :is(.admonition-title, summary) {
+  background-color: transparent;
+}
+.md-typeset .admonition.warning > :is(.admonition-title, summary)::before,
+.md-typeset details.warning > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.caution > :is(.admonition-title, summary)::before,
+.md-typeset details.caution > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.attention > :is(.admonition-title, summary)::before,
+.md-typeset details.attention > :is(.admonition-title, summary)::before {
+  background-color: var(--gk-warn);
+}
+
+.md-typeset .admonition.danger,
+.md-typeset details.danger,
+.md-typeset .admonition.error,
+.md-typeset details.error,
+.md-typeset .admonition.failure,
+.md-typeset details.failure,
+.md-typeset .admonition.missing,
+.md-typeset details.missing,
+.md-typeset .admonition.bug,
+.md-typeset details.bug {
+  border-color: var(--gk-hairline) var(--gk-hairline) var(--gk-hairline)
+                var(--gk-critical);
+}
+.md-typeset .admonition.danger > :is(.admonition-title, summary),
+.md-typeset details.danger > :is(.admonition-title, summary),
+.md-typeset .admonition.error > :is(.admonition-title, summary),
+.md-typeset details.error > :is(.admonition-title, summary),
+.md-typeset .admonition.failure > :is(.admonition-title, summary),
+.md-typeset details.failure > :is(.admonition-title, summary),
+.md-typeset .admonition.missing > :is(.admonition-title, summary),
+.md-typeset details.missing > :is(.admonition-title, summary),
+.md-typeset .admonition.bug > :is(.admonition-title, summary),
+.md-typeset details.bug > :is(.admonition-title, summary) {
+  background-color: transparent;
+}
+.md-typeset .admonition.danger > :is(.admonition-title, summary)::before,
+.md-typeset details.danger > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.error > :is(.admonition-title, summary)::before,
+.md-typeset details.error > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.failure > :is(.admonition-title, summary)::before,
+.md-typeset details.failure > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.missing > :is(.admonition-title, summary)::before,
+.md-typeset details.missing > :is(.admonition-title, summary)::before,
+.md-typeset .admonition.bug > :is(.admonition-title, summary)::before,
+.md-typeset details.bug > :is(.admonition-title, summary)::before {
+  background-color: var(--gk-critical);
+}
+
+/* The fold arrow on <details> follows the ink, never a type colour. */
+.md-typeset :is(.admonition-title, summary)::after { color: var(--gk-ink-3); }
+
+/* --- tables ------------------------------------------------------------- */
+/* One surface card, hairline row separators, tinted header. No double borders. */
+
+.md-typeset .md-typeset__table { padding: 0; }
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--gk-hairline);
+  border-radius: var(--gk-r-md);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  box-shadow: var(--gk-shadow-1);
+  font-size: 14px;
+}
+
+.md-typeset table:not([class]) th {
+  background: var(--gk-page);
+  color: var(--gk-ink);
+  font-weight: 650;
+  border-bottom: 1px solid var(--gk-hairline);
+}
+
+.md-typeset table:not([class]) td {
+  border-top: none;
+  border-bottom: 1px solid var(--gk-hairline);
+  color: var(--gk-ink-2);
+  vertical-align: top;
+}
+
+.md-typeset table:not([class]) tr:last-child td { border-bottom: none; }
+
+.md-typeset table:not([class]) tbody tr:hover {
+  background: color-mix(in srgb, var(--gk-page) 60%, transparent);
+  box-shadow: none;
+}
+
+/* --- grid cards --------------------------------------------------------- */
+/* Section index and getting-started grids get the landing feature-card look. */
+
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  background: var(--gk-surface);
+  border: 1px solid var(--gk-hairline);
+  border-radius: var(--gk-r-md);
+  box-shadow: var(--gk-shadow-1);
+  padding: 18px;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.md-typeset .grid.cards > ul > li:is(:hover, :focus-within),
+.md-typeset .grid > .card:is(:hover, :focus-within) {
+  transform: translateY(-2px);
+  box-shadow: var(--gk-shadow-2);
+  border-color: var(--gk-brand);
+}
+
+/* --- buttons ------------------------------------------------------------ */
+
+.md-typeset .md-button {
+  border-radius: var(--gk-r-sm);
+  border: 1px solid var(--gk-hairline);
+  background: var(--gk-surface);
+  color: var(--gk-ink);
+  font-weight: 650;
+  font-size: 14px;
+  padding: 10px 18px;
+  box-shadow: var(--gk-shadow-1);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease,
+              background .15s ease;
+}
+
+.md-typeset .md-button:is(:hover, :focus) {
+  transform: translateY(-1px);
+  box-shadow: var(--gk-shadow-2);
+  border-color: var(--gk-brand);
+  background: var(--gk-surface);
+  color: var(--gk-ink);
+}
+
+.md-typeset .md-button--primary {
+  background: var(--gk-brand);
+  border-color: var(--gk-brand);
+  color: #fff;
+}
+
+.md-typeset .md-button--primary:is(:hover, :focus) {
+  background: var(--gk-brand-deep);
+  border-color: var(--gk-brand-deep);
+  color: #fff;
+}
+
+/* --- code, quotes ------------------------------------------------------- */
+
+.md-typeset :is(code, pre) { border-radius: var(--gk-r-sm); }
+
+.md-typeset blockquote {
+  border-left: 3px solid var(--gk-hairline);
+  color: var(--gk-ink-2);
+}
+
+/* --- footer ------------------------------------------------------------- */
+/* Quiet, like the landing's columned footer — not Material's heavy dark slab. */
+
+.md-footer {
+  background: var(--gk-page);
+  color: var(--gk-ink-2);
+  border-top: 1px solid var(--gk-hairline);
+}
+
+.md-footer-meta { background: transparent; }
+
+.md-footer__link {
+  color: var(--gk-ink-2);
+  opacity: 1;
+}
+
+.md-footer__link:is(:hover, :focus) { color: var(--gk-brand); }
+
+.md-footer__title { color: var(--gk-ink); font-weight: 650; }
+.md-footer__direction { color: var(--gk-ink-3); }
+
+.md-footer-meta__inner { border-top: 1px solid var(--gk-hairline); }
+
+.md-copyright,
+.md-copyright__highlight { color: var(--gk-ink-3); }
+
+/* The copyright line carries a CC BY link. It inherits the typeset brand
+   colour, which is too dark against the footer tint — lift it to body ink with
+   an underline so it reads as a link without shouting. */
+.md-copyright a,
+.md-footer-meta a {
+  color: var(--gk-ink-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.md-copyright a:is(:hover, :focus),
+.md-footer-meta a:is(:hover, :focus) { color: var(--gk-brand); }
+
+.md-social__link { color: var(--gk-ink-3); }
+.md-social__link:hover { color: var(--gk-brand); }
+
+/* ===========================================================================
+ * 5. RESTRAINT
+ * ======================================================================== */
+
+/* Hover transitions may remain under reduced motion, but nothing may move or
+   animate on load. The landing's reveal is scoped to .gk-home and never runs
+   here; this only neutralises the hover lifts. */
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .md-button,
+  .md-typeset .grid.cards > ul > li,
+  .md-typeset .gk-dochead-dl .md-button {
+    transition: none;
+  }
+
+  .md-typeset .md-button:is(:hover, :focus),
+  .md-typeset .grid.cards > ul > li:hover,
+  .md-typeset .gk-dochead-dl .md-button:is(:hover, :focus) {
+    transform: none;
+  }
+}

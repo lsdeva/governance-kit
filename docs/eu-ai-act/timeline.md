@@ -5,11 +5,13 @@
 
 # EU AI Act timeline (2026 Digital Omnibus)
 
-<span class="pill ready">Ready</span> &nbsp;·&nbsp; <span class="gk-meta">v1.2</span> &nbsp;·&nbsp; <span class="gk-meta">Last reviewed <strong>2026-08-03</strong></span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/eu-ai-act-timeline.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/eu-ai-act-timeline.md.txt){ .md-button .gk-dl download="eu-ai-act-timeline.md" }
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
+<span class="pill ready">Ready</span> <span class="gk-meta">v1.2</span> <span class="gk-meta">Reviewed 2026-08-03</span>
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/eu-ai-act-timeline.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/eu-ai-act-timeline.md.txt){ .md-button .gk-dl download="eu-ai-act-timeline.md" }
+</span>
 </div>
 
 **Purpose.** The dates that actually bind you, reflecting the 2026 Digital Omnibus amendments — what is already in force, what was deferred, and what to work backwards from.

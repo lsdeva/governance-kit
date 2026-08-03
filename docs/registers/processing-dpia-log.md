@@ -5,12 +5,13 @@
 
 # Processing & DPIA Log
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/processing-dpia-log.docx){ .md-button .gk-dl download }
-[:material-file-excel: Excel](../downloads/processing-dpia-log.xlsx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/processing-dpia-log.md.txt){ .md-button .gk-dl download="processing-dpia-log.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/processing-dpia-log.docx){ .md-button .gk-dl download } [:material-file-excel: Excel](../downloads/processing-dpia-log.xlsx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/processing-dpia-log.md.txt){ .md-button .gk-dl download="processing-dpia-log.md" }
+</span>
 </div>
 
 **Purpose.** The record of personal data processing activities and the impact assessments that cover them — the point where AI governance meets data protection law.

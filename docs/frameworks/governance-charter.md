@@ -5,16 +5,18 @@
 
 # Governance Charter
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill draft">Draft</span>
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/governance-charter.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/governance-charter.md.txt){ .md-button .gk-dl download="governance-charter.md" }
+</span>
+</div>
 
 !!! note "Draft"
     This page is usable but has not had a full review pass. Corrections and
     improvements are welcome — see [Contributing](../contributing.md).
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/governance-charter.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/governance-charter.md.txt){ .md-button .gk-dl download="governance-charter.md" }
-</div>
 
 **Purpose.** A short, board-approved mandate that establishes the governance programme: why it exists, what authority it has, what it covers, and how success is measured. It is what you point to when someone asks "who says so?".
 

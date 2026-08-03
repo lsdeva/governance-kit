@@ -5,11 +5,13 @@
 
 # Board Pack Template
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/board-pack.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/board-pack.md.txt){ .md-button .gk-dl download="board-pack.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/board-pack.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/board-pack.md.txt){ .md-button .gk-dl download="board-pack.md" }
+</span>
 </div>
 
 !!! example "See this filled in"

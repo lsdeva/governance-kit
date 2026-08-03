@@ -206,25 +206,15 @@ def render_template_page(t: dict, by_id: dict, snippets: dict, questions: list) 
     parts = [BANNER.format(source="templates.yml")]
     parts.append(f"# {t['title']}\n")
 
-    # Status pill, plus review metadata where a page carries it. Time-sensitive
-    # pages say when they were last checked, so a reader can judge staleness
-    # rather than assume currency.
+    # One header band under the title: status pill, review stamp, and the
+    # download chips on a single row. Previously these stacked as three loose
+    # blocks; the landing's chip language wants them read together.
     meta = [status_pill(t["status"])]
     if t.get("version"):
         meta.append(f'<span class="gk-meta">v{t["version"]}</span>')
     if t.get("reviewed"):
         meta.append(
-            f'<span class="gk-meta">Last reviewed <strong>{t["reviewed"]}</strong></span>'
-        )
-    parts.append(" &nbsp;·&nbsp; ".join(meta) + "\n")
-
-    if t["status"] == "stub":
-        parts.append(
-            snippets["stub_invite"].format(contributing=rel_link(path, "contributing.md"))
-        )
-    elif t["status"] == "draft":
-        parts.append(
-            snippets["draft_note"].format(contributing=rel_link(path, "contributing.md"))
+            f'<span class="gk-meta">Reviewed {t["reviewed"]}</span>'
         )
 
     # Download buttons. build_downloads.py writes one .docx per template and a
@@ -243,8 +233,26 @@ def render_template_page(t: dict, by_id: dict, snippets: dict, questions: list) 
         f'[:material-language-markdown: Markdown]({dl}/{t["id"]}.md.txt)'
         f'{{ .md-button .gk-dl download="{t["id"]}.md" }}'
     )
-    parts.append('<div class="gk-downloads" markdown>\n'
-                 + "\n".join(buttons) + "\n</div>\n")
+
+    parts.append(
+        '<div class="gk-dochead" markdown>\n'
+        '<span class="gk-dochead-meta" markdown>\n'
+        + " ".join(meta) + "\n"
+        "</span>\n"
+        '<span class="gk-dochead-dl" markdown>\n'
+        + " ".join(buttons) + "\n"
+        "</span>\n"
+        "</div>\n"
+    )
+
+    if t["status"] == "stub":
+        parts.append(
+            snippets["stub_invite"].format(contributing=rel_link(path, "contributing.md"))
+        )
+    elif t["status"] == "draft":
+        parts.append(
+            snippets["draft_note"].format(contributing=rel_link(path, "contributing.md"))
+        )
 
     ex = EXAMPLE_OF.get(t["id"])
     if ex:

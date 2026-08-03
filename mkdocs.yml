@@ -57,6 +57,7 @@ theme:
 extra_css:
   - stylesheets/extra.css
   - stylesheets/home.css
+  - stylesheets/docs.css
   - assess/assess.css
   - assess/registers.css
   - assess/decide.css

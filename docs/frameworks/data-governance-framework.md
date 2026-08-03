@@ -5,11 +5,13 @@
 
 # Data Governance Framework
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/data-governance-framework.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/data-governance-framework.md.txt){ .md-button .gk-dl download="data-governance-framework.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/data-governance-framework.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/data-governance-framework.md.txt){ .md-button .gk-dl download="data-governance-framework.md" }
+</span>
 </div>
 
 **Purpose.** The reference that defines how your organisation governs data: what data you hold, who owns it, what quality is expected, and how decisions about it are made. It is the foundation the AI governance work sits on — most AI failures trace back to a data problem nobody owned.

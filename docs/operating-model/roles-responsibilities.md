@@ -5,11 +5,13 @@
 
 # Roles & Responsibilities
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/roles-responsibilities.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/roles-responsibilities.md.txt){ .md-button .gk-dl download="roles-responsibilities.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/roles-responsibilities.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/roles-responsibilities.md.txt){ .md-button .gk-dl download="roles-responsibilities.md" }
+</span>
 </div>
 
 **Purpose.** Defines each governance role in enough detail that it can be put in a job description, recruited for, and assessed against — rather than assumed.

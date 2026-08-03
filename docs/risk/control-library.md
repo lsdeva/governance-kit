@@ -5,12 +5,13 @@
 
 # Control Library & Assurance Map
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/control-library.docx){ .md-button .gk-dl download }
-[:material-file-excel: Excel](../downloads/control-library.xlsx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/control-library.md.txt){ .md-button .gk-dl download="control-library.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/control-library.docx){ .md-button .gk-dl download } [:material-file-excel: Excel](../downloads/control-library.xlsx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/control-library.md.txt){ .md-button .gk-dl download="control-library.md" }
+</span>
 </div>
 
 **Purpose.** Maps obligations to the controls that satisfy them, names an owner for each, and records how you would evidence the control is operating. It turns "we have a policy" into "here is what we do and how you can check".

@@ -5,11 +5,13 @@
 
 # Third-Party AI Risk Policy
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/third-party-ai-risk-policy.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/third-party-ai-risk-policy.md.txt){ .md-button .gk-dl download="third-party-ai-risk-policy.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/third-party-ai-risk-policy.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/third-party-ai-risk-policy.md.txt){ .md-button .gk-dl download="third-party-ai-risk-policy.md" }
+</span>
 </div>
 
 **Purpose.** How you assess, contract for, and monitor AI you did not build — including AI features that appear inside software you already licence. For most organisations this is the majority of their AI exposure.

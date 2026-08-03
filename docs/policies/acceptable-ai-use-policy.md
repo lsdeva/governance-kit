@@ -5,11 +5,13 @@
 
 # Acceptable AI Use Policy
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/acceptable-ai-use-policy.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/acceptable-ai-use-policy.md.txt){ .md-button .gk-dl download="acceptable-ai-use-policy.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/acceptable-ai-use-policy.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/acceptable-ai-use-policy.md.txt){ .md-button .gk-dl download="acceptable-ai-use-policy.md" }
+</span>
 </div>
 
 **Purpose.** The staff-facing rules for using AI at work: what is encouraged, what needs approval, and what is never allowed. This is the most-read document in the kit, and usually the one that prevents the most damage.

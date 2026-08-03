@@ -5,12 +5,13 @@
 
 # AI Risk Assessment
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/ai-risk-assessment.docx){ .md-button .gk-dl download }
-[:material-file-excel: Excel](../downloads/ai-risk-assessment.xlsx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/ai-risk-assessment.md.txt){ .md-button .gk-dl download="ai-risk-assessment.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/ai-risk-assessment.docx){ .md-button .gk-dl download } [:material-file-excel: Excel](../downloads/ai-risk-assessment.xlsx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/ai-risk-assessment.md.txt){ .md-button .gk-dl download="ai-risk-assessment.md" }
+</span>
 </div>
 
 !!! example "See this filled in"

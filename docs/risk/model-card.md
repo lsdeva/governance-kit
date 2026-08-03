@@ -5,11 +5,13 @@
 
 # Model Card / Model Risk Documentation
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/model-card.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/model-card.md.txt){ .md-button .gk-dl download="model-card.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/model-card.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/model-card.md.txt){ .md-button .gk-dl download="model-card.md" }
+</span>
 </div>
 
 **Purpose.** Standard documentation for a model: what it is for, what it was trained on, how well it performs and for whom, and where it should not be used. Feeds both AI Act technical documentation and the instructions deployers rely on.

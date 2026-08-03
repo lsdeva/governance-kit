@@ -5,11 +5,13 @@
 
 # Data Governance Policy
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/data-governance-policy.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/data-governance-policy.md.txt){ .md-button .gk-dl download="data-governance-policy.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/data-governance-policy.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/data-governance-policy.md.txt){ .md-button .gk-dl download="data-governance-policy.md" }
+</span>
 </div>
 
 **Purpose.** The mandatory rules for handling data. Where the framework explains how governance works, this policy states what people must and must not do, in language you can hold someone to.

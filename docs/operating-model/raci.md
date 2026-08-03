@@ -5,11 +5,13 @@
 
 # RACI Matrix
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/raci.docx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/raci.md.txt){ .md-button .gk-dl download="raci.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/raci.docx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/raci.md.txt){ .md-button .gk-dl download="raci.md" }
+</span>
 </div>
 
 !!! example "See this filled in"

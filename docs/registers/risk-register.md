@@ -5,12 +5,13 @@
 
 # Risk Register
 
+<div class="gk-dochead" markdown>
+<span class="gk-dochead-meta" markdown>
 <span class="pill ready">Ready</span>
-
-<div class="gk-downloads" markdown>
-[:material-file-word: Word](../downloads/risk-register.docx){ .md-button .gk-dl download }
-[:material-file-excel: Excel](../downloads/risk-register.xlsx){ .md-button .gk-dl download }
-[:material-language-markdown: Markdown](../downloads/risk-register.md.txt){ .md-button .gk-dl download="risk-register.md" }
+</span>
+<span class="gk-dochead-dl" markdown>
+[:material-file-word: Word](../downloads/risk-register.docx){ .md-button .gk-dl download } [:material-file-excel: Excel](../downloads/risk-register.xlsx){ .md-button .gk-dl download } [:material-language-markdown: Markdown](../downloads/risk-register.md.txt){ .md-button .gk-dl download="risk-register.md" }
+</span>
 </div>
 
 **Purpose.** The live record of data and AI risks: what could go wrong, how likely and how bad, what you are doing about it, and who owns it.
