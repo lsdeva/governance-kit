@@ -51,6 +51,15 @@ jobs:
 
       - name: Build site
         run: mkdocs build --strict
+
+      # Checks the ARTEFACT, not the sources. A defect once reached production
+      # that every source-level check passed: /decide/ rendered its YAML front
+      # matter as visible text, because MkDocs silently declines to parse a
+      # block that does not start at byte 0. This also catches mixed branding
+      # or navigation across pages, and any external asset reference.
+      - name: Smoke-test the built site
+        run: python tools/smoke_site.py
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
