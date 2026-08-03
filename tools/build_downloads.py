@@ -257,7 +257,7 @@ def build_docx(t: dict, checklist_items=None) -> Document:
     r.font.color.rgb = ACCENT
 
     add_body(doc,
-             "Open Data & AI Governance Kit  ·  "
+             "GovKit  ·  "
              "Licensed CC BY 4.0  ·  https://lsdeva.github.io/governance-kit/",
              italic=True, size=8.5, color=GREY, space_after=12)
 
@@ -461,7 +461,7 @@ def build_xlsx(tid: str, spec: dict, template: dict) -> Workbook:
         ("Columns carry a comment explaining what belongs in them — hover the header.", False),
         ("Grey dropdown columns are constrained to the listed values.", False),
         ("", False),
-        ("From the Open Data & AI Governance Kit — https://lsdeva.github.io/governance-kit/", False),
+        ("From GovKit — https://govkit.soa.team/", False),
         ("Licensed CC BY 4.0. Free to use, adapt, and share with attribution.", False),
         ("", False),
         ("Not legal advice. Adapt to your jurisdiction, sector, and risk appetite, "

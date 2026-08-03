@@ -310,7 +310,7 @@ Dual-licensed, the standard pattern for open content-plus-code projects:
 
 Suggested attribution:
 
-> Based on the [Open Data &amp; AI Governance Kit](https://govkit.soa.team/), CC BY 4.0.
+> Based on [GovKit](https://govkit.soa.team/), CC BY 4.0.
 
 <div align="center">
 <br>

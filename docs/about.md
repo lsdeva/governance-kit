@@ -1,5 +1,7 @@
 # About
 
+**GovKit** — the open data & AI governance kit.
+
 ## Why this exists
 
 Every time someone stands up data & AI governance in a new organisation, the

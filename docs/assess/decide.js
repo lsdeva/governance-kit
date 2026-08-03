@@ -967,7 +967,7 @@
 
   function logMarkdown(entries) {
     var L = ["# AI governance decision log", "",
-      "Generated " + todayISO() + " with the Open Data & AI Governance Kit.",
+      "Generated " + todayISO() + " with GovKit.",
       "Self-assessed; these are recorded judgements, not legal determinations.",
       ""];
     entries.forEach(function (e) {

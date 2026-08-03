@@ -1,5 +1,5 @@
 /*
- * Open Data & AI Governance Kit — role-based readiness assessment.
+ * GovKit — role-based readiness assessment.
  *
  * Entirely client-side. No network calls beyond fetching assessment-data.json
  * from this same site, and no analytics. Answers live in memory and, if the
@@ -653,7 +653,7 @@
         " sets out the method and its limitations."
       ]),
       el("p", { class: "gk-muted" }, [
-        "Generated " + todayISO() + " with the Open Data & AI Governance Kit. " +
+        "Generated " + todayISO() + " with GovKit. " +
         "Self-assessed; answers were not verified."
       ])
     ]));
@@ -1053,7 +1053,7 @@
       "controls behind them work. See " +
       absoluteUrl("../scoring/") + " for the method and its limitations.");
     L.push("");
-    L.push("Generated " + todayISO() + " with the Open Data & AI Governance Kit. " +
+    L.push("Generated " + todayISO() + " with GovKit. " +
       "Self-assessed; answers were not verified.");
     return L.join("\n") + "\n";
   }
@@ -1189,7 +1189,7 @@
       "the controls behind them work. See <a href='" +
       esc(absoluteUrl("../scoring/")) + "'>how scoring works</a> for the method " +
       "and its limitations.</p>");
-    H.push("<p>Generated " + todayISO() + " with the Open Data &amp; AI Governance Kit. " +
+    H.push("<p>Generated " + todayISO() + " with GovKit. " +
       "Self-assessed; answers were not verified.</p></footer>");
     H.push("</body></html>");
     return H.join("\n");

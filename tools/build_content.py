@@ -806,7 +806,7 @@ def render_markdown_download(t: dict, by_id: dict, questions: list) -> str:
     out.append("")
     out.append("---\n")
     out.append(
-        "*From the [Open Data & AI Governance Kit]"
+        "*From [GovKit]"
         "(https://lsdeva.github.io/governance-kit/). Licensed "
         "[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — free to use, "
         "adapt, and share with attribution.*\n"
@@ -912,33 +912,73 @@ def build_assessment_json(roles, questions, templates, sections) -> dict:
     }
 
 
-def build_nav(sections, templates, examples, tasks, plans, crosswalk, workspace, decisions) -> str:
-    lines = [NAV_START, "nav:", "  - Home: index.md", "  - Get started: getting-started.md",
-             "  - Assessment: assess/index.md"]
+def build_nav(sections, templates, examples, tasks, plans, crosswalk, workspace,
+              decisions, glossary=False) -> str:
+    """Five top-level items, so the tab bar never needs horizontal scrolling.
+
+    Grouping only — no page changes path, so every published URL survives and
+    no redirects are needed. About and Contributing leave the tab bar for the
+    footer; Contributing is still reachable under Learn.
+    """
+    lines = [NAV_START, "nav:"]
+
+    # 1. START — where a visitor decides what they are here to do.
+    lines.append("  - Start:")
+    lines.append("      - Home: index.md")
+    if tasks:
+        lines.append("      - I've been asked to…: tasks.md")
+    lines.append("      - How to use the kit: getting-started.md")
+    lines.append("      - Readiness assessment: assess/index.md")
+
+    # 2. WORKSPACE — the things you fill in and keep.
     if workspace:
-        lines.append("  - Workspace: workspace.md")
+        lines.append("  - Workspace:")
+        lines.append("      - Your workspace: workspace.md")
+        lines.append("      - Registers:")
+        lines.append("          - Overview: registers/index.md")
+        for t_ in templates:
+            if t_["section"] == "registers":
+                lines.append(f"          - {t_.get('nav', t_['title'])}: {t_['path']}")
+
+    # 3. DECIDE — the guided decisions.
     if decisions:
         lines.append("  - Decide: decide.md")
-    lines.append("  - How scoring works: scoring.md")
-    if tasks:
-        lines.append("  - I've been asked to…: tasks.md")
-    if plans:
-        lines.append("  - 30/60/90-day plans: plans.md")
-    if crosswalk:
-        lines.append("  - Standards crosswalk: crosswalk.md")
+
+    # 4. TEMPLATES — the six content sections, as subsections.
+    lines.append("  - Templates:")
     for s in sections:
-        lines.append(f"  - {s['nav']}:")
-        lines.append(f"      - Overview: {s['id']}/index.md")
-        for t in templates:
-            if t["section"] == s["id"]:
-                lines.append(f"      - {t.get('nav', t['title'])}: {t['path']}")
+        if s["id"] in ("registers", "eu-ai-act"):
+            continue          # registers live under Workspace, EU AI Act under Learn
+        lines.append(f"      - {s['nav']}:")
+        lines.append(f"          - Overview: {s['id']}/index.md")
+        for t_ in templates:
+            if t_["section"] == s["id"]:
+                lines.append(f"          - {t_.get('nav', t_['title'])}: {t_['path']}")
+
+    # 5. LEARN — reference material and the reasoning behind the kit.
+    lines.append("  - Learn:")
+    eu = [s for s in sections if s["id"] == "eu-ai-act"]
+    if eu:
+        lines.append("      - EU AI Act:")
+        lines.append("          - Overview: eu-ai-act/index.md")
+        for t_ in templates:
+            if t_["section"] == "eu-ai-act":
+                lines.append(f"          - {t_.get('nav', t_['title'])}: {t_['path']}")
+    if crosswalk:
+        lines.append("      - Standards crosswalk: crosswalk.md")
+    lines.append("      - How scoring works: scoring.md")
+    if plans:
+        lines.append("      - 30/60/90-day plans: plans.md")
     if examples:
-        lines.append("  - Worked examples:")
-        lines.append("      - Overview: examples/index.md")
+        lines.append("      - Worked examples:")
+        lines.append("          - Overview: examples/index.md")
         for e in examples:
-            lines.append(f"      - {e.get('nav', e['title'])}: {e['path']}")
-    lines.append("  - Contributing: contributing.md")
-    lines.append("  - About: about.md")
+            lines.append(f"          - {e.get('nav', e['title'])}: {e['path']}")
+    if glossary:
+        lines.append("      - Glossary: glossary.md")
+    lines.append("      - About: about.md")
+    lines.append("      - Contributing: contributing.md")
+
     lines.append(NAV_END)
     return "\n".join(lines)
 
