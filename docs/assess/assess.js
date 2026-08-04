@@ -15,19 +15,25 @@
 
   var STORAGE_KEY = "gk-assessment-v1";
   var SNAPSHOT_KEY = "gk-snapshots-v1";
-  var root = document.getElementById("gk-assess");
-  if (!root) return;
 
+  // Resolved per mount, not at parse time: with Material's instant
+  // navigation the script runs once but the page element is replaced on
+  // every internal link.
+  var root = null;
   var DATA = null;
-  var state = {
-    step: "roles", // roles | questions | report
-    roles: [],
-    answers: {}, // qid -> {value: 'yes'|'partial'|'no'|'na', note: string}
-    audience: "board",
-    category: null, // active category filter in the questionnaire
-    section: 0,     // index into the section list; one category per screen
-    viewAll: false  // expert escape hatch: the whole questionnaire at once
-  };
+  var state = null;
+
+  function freshState() {
+    return {
+      step: "roles", // roles | questions | report
+      roles: [],
+      answers: {}, // qid -> {value: 'yes'|'partial'|'no'|'na', note: string}
+      audience: "board",
+      category: null, // active category filter in the questionnaire
+      section: 0,     // index into the section list; one category per screen
+      viewAll: false  // expert escape hatch: the whole questionnaire at once
+    };
+  }
 
   var ANSWERS = [
     { value: "yes", label: "Yes — fully in place",
@@ -1494,18 +1500,60 @@
     render();
   }
 
-  var src = root.getAttribute("data-src") || "assessment-data.json";
-  fetch(src, { credentials: "omit" })
-    .then(function (r) {
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      return r.json();
-    })
-    .then(init)
-    .catch(function (err) {
-      root.innerHTML =
-        "<h1>Assessment unavailable</h1>" +
-        "<p>The question data could not be loaded (" + esc(err.message) + ").</p>" +
-        "<p>The <a href='../eu-ai-act/readiness-checklist/'>25-point checklist</a> " +
-        "covers the same ground as a static page.</p>";
-    });
+  /*
+   * Mount into whatever #gk-assess is on the page right now.
+   *
+   * Called once per navigation. Everything the previous visit left behind —
+   * the element reference, the parsed question bank, the working state — is
+   * re-derived here, so navigating away and back cannot render stale answers
+   * into a fresh element or bind a second copy of anything.
+   */
+  function mount() {
+    var host = document.getElementById("gk-assess");
+    root = host;
+    if (!host) return;          // not this page
+
+    // Idempotent: instant navigation can fire document$ for the same
+    // document, and re-fetching would flash the app away and back.
+    if (host.getAttribute("data-gk-mounted") === "1" && DATA) {
+      state = state || freshState();
+      render();
+      return;
+    }
+
+    state = freshState();
+    DATA = null;
+    host.innerHTML = "";
+
+    var src = host.getAttribute("data-src") || "assessment-data.json";
+    fetch(src, { credentials: "omit" })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        // The user may have navigated on while the fetch was in flight;
+        // writing into a detached element would be a silent no-op that looks
+        // like a blank page.
+        if (root !== host || !host.isConnected) return;
+        host.setAttribute("data-gk-mounted", "1");
+        init(data);
+      })
+      .catch(function (err) {
+        if (root !== host || !host.isConnected) return;
+        host.innerHTML =
+          "<h1>Assessment unavailable</h1>" +
+          "<p>The question data could not be loaded (" + esc(err.message) + ").</p>" +
+          "<p>The <a href='../eu-ai-act/readiness-checklist/'>25-point checklist</a> " +
+          "covers the same ground as a static page.</p>";
+      });
+  }
+
+  if (window.document$ && typeof window.document$.subscribe === "function") {
+    window.document$.subscribe(mount);
+  } else if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mount);
+  } else {
+    mount();
+  }
 })();
