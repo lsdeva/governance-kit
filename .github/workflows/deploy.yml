@@ -60,6 +60,21 @@ jobs:
       - name: Smoke-test the built site
         run: python tools/smoke_site.py
 
+      # Drives a real browser because the defect it guards against only exists
+      # in one. Material's navigation.instant swaps page content without
+      # re-running page scripts, so an app that initialises at parse time
+      # renders nothing when a visitor arrives through a link. That shipped
+      # once on /assess/, and no static check could have seen it — including
+      # a local browser test, since instant navigation is inert unless the
+      # site is served from the origin in <link rel="canonical">.
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Check every app mounts on instant navigation
+        run: python tools/smoke_instant_nav.py
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

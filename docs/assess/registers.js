@@ -1057,10 +1057,15 @@
           window.GK_QUESTIONS = {};
           qjson.questions.forEach(function (q) { window.GK_QUESTIONS[q.id] = q; });
         }
-        Array.prototype.forEach.call(hosts, mount);
+        // Skip hosts the visitor has navigated away from: with instant
+        // navigation the fetch can outlive the page it was started for.
+        Array.prototype.forEach.call(hosts, function (h) {
+          if (h.isConnected) mount(h);
+        });
       })
       .catch(function (err) {
         Array.prototype.forEach.call(hosts, function (h) {
+          if (!h.isConnected) return;
           h.innerHTML = '<p class="gk-muted">The editable register could not ' +
             "load (" + err.message + "). The Excel download above still works.</p>";
         });

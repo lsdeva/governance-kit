@@ -295,9 +295,16 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (j && j.questions) QUESTIONS = j.questions;
+        // The visitor may have navigated on mid-fetch; the element is then
+        // detached and rendering into it is wasted work that can also clobber
+        // a newer mount.
+        if (!host.isConnected) return;
         render(host);
       })
-      .catch(function () { render(host); });
+      .catch(function () {
+        if (!host.isConnected) return;
+        render(host);
+      });
   }
 
   if (window.document$ && typeof window.document$.subscribe === "function") {

@@ -23,18 +23,25 @@
   var REGISTER_DEF = null;   // lazily fetched column definitions
   var host = null;
 
-  var state = {
-    flash: null,       // one-shot confirmation after writing to the register
-    primary: null,     // a settled tier while stacked duties are still asked
-    annex: null,       // the specific Annex III point the user selected
-    purpose: "",       // one-line description, for the inventory's Purpose column
-    recorded: null,    // the log entry just created, so follow-ups stay here
-    decisionId: null,
-    subject: "",
-    path: [],        // [{qid, question, answer, label}]
-    current: null,
-    outcome: null
-  };
+  /* Rebuilt on every mount: with instant navigation the script runs once but
+     the page is replaced on each internal link, and a half-finished flow from
+     a previous visit must not be what a fresh arrival sees. */
+  function freshState() {
+    return {
+      flash: null,       // one-shot confirmation after writing to the register
+      primary: null,     // a settled tier while stacked duties are still asked
+      annex: null,       // the specific Annex III point the user selected
+      purpose: "",       // one-line description, for the inventory's Purpose column
+      recorded: null,    // the log entry just created, so follow-ups stay here
+      decisionId: null,
+      subject: "",
+      path: [],        // [{qid, question, answer, label}]
+      current: null,
+      outcome: null
+    };
+  }
+
+  var state = freshState();
 
   // ---------------------------------------------------------------- helpers
 
@@ -1013,8 +1020,13 @@
   // ------------------------------------------------------------------ boot
 
   function init() {
-    host = document.getElementById("gk-decide");
-    if (!host) return;
+    var el = document.getElementById("gk-decide");
+    host = el;
+    if (!el) return;
+
+    // A fresh arrival gets the flow index, not the screen the last visit
+    // happened to be on. Recorded decisions live in localStorage, not here.
+    state = freshState();
 
     if (DATA) { render(); return; }
 
@@ -1040,10 +1052,14 @@
         if (rjson && rjson.registers) {
           REGISTER_DEF = rjson.registers["ai-system-inventory"] || null;
         }
+        // The user may have navigated on mid-fetch; writing into a detached
+        // element is a silent no-op that looks like a blank page.
+        if (host !== el || !el.isConnected) return;
         render();
       })
       .catch(function (err) {
-        host.innerHTML = "<p>The guided decisions could not load (" +
+        if (host !== el || !el.isConnected) return;
+        el.innerHTML = "<p>The guided decisions could not load (" +
           esc(err.message) + ").</p>";
       });
   }
