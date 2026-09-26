@@ -17,10 +17,16 @@ import * as formView from './views/form.js';
 import * as gateView from './views/gate.js';
 import * as tools from './views/tools.js';
 import * as help from './views/help.js';
+import * as services from './views/services.js';
+import * as tower from './views/tower.js';
+import { installPalette, openPalette } from './cmdk.js';
 
 const ROUTES = [
   [/^$/, home.render],
   [/^guide$/, guide.render],
+  [/^services$/, services.renderIndex],
+  [/^services\/([\w-]+)$/, services.renderService],
+  [/^tower$/, tower.render],
   [/^roles$/, roles.renderIndex],
   [/^roles\/([A-Z]+)$/, roles.renderRole],
   [/^work$/, work.render],
@@ -40,14 +46,17 @@ const ROUTES = [
 ];
 
 const NAV = [
-  { label: 'Start', items: [
+  { label: 'Workspace', items: [
     ['', 'home', 'Home'],
-    ['guide', 'compass', 'How it works'],
-    ['roles', 'users', 'Roles & playbooks'],
-  ] },
-  { label: 'Decide', items: [
+    ['services', 'spark', 'Services'],
+    ['tower', 'gauge', 'Control tower'],
     ['work', 'inbox', 'My work', 'queue'],
     ['tools', 'scale', 'Decision tools'],
+  ] },
+  { label: 'Learn', items: [
+    ['guide', 'compass', 'How it works'],
+    ['roles', 'users', 'Roles & playbooks'],
+    ['help', 'help', 'Glossary & FAQ'],
   ] },
   { label: 'Operating model', items: [
     ['model', 'map', 'SDLC map'],
@@ -59,10 +68,6 @@ const NAV = [
     ['model/platform', 'server', 'Evidence platform'],
     ['model/roadmap', 'flag', 'Roadmap & maturity'],
     ['model/references', 'book', 'References'],
-  ] },
-  { label: 'Help', items: [
-    ['help', 'help', 'Glossary & FAQ'],
-    ['about', 'lock', 'Privacy & data'],
   ] },
 ];
 
@@ -82,13 +87,14 @@ function renderSide() {
   const active = (href) => href === '' ? p === '' : (p === href || (p.startsWith(href + '/') && !NAV.some((g) => g.items.some(([h]) => h !== href && h.startsWith(href + '/') && (p === h || p.startsWith(h + '/'))))));
   const agentsActive = p.startsWith('agents/');
   document.getElementById('side').innerHTML = `
-    <a class="brand" href="#/"><span class="brand-mark">G<span>k</span></span><span><b>GovKit</b><small>Agentic SDLC operating model</small></span></a>
+    <a class="brand" href="#/"><span class="brand-mark">${icon('shield')}</span><span><b>GovKit</b><small>Assurance for AI agents</small></span></a>
+    <a class="cta-new" href="#/agents/new">${icon('plus')} Register an agent</a>
     <nav class="nav" aria-label="Main">
       ${NAV.map((g) => `<div class="nav-group"><div class="nav-label">${g.label}</div>
         ${g.items.map(([href, ic, label, badge]) => `<a href="#/${href}" ${active(href) || (href === 'work' && agentsActive) ? 'aria-current="page"' : ''}>${icon(ic)}<span>${label}</span>${badge === 'queue' && q ? `<span class="count" title="Items waiting for you">${q}</span>` : ''}</a>`).join('')}
       </div>`).join('')}
     </nav>
-    <div class="side-foot">Draft 0.2 of the operating model · references checked 23 Sep 2026.<br>Runs in your browser. Nothing is uploaded. <a href="#/about">Details</a></div>`;
+    <div class="side-foot">${icon('lock', 'sm-ic')} Runs in your browser. Nothing is uploaded. <a href="#/about">Privacy</a><br>Operating model draft 0.2 · refs checked 23 Sep 2026</div>`;
 }
 
 function renderTop(crumbs) {
@@ -98,9 +104,10 @@ function renderTop(crumbs) {
   const dark = theme ? theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
   document.getElementById('top').innerHTML = `
     <button class="icon-btn menu" data-action="open-nav" aria-label="Open menu">${icon('menu')}</button>
-    <a class="brand-sm" href="#/"><span class="brand-mark">G<span>k</span></span>GovKit</a>
+    <a class="brand-sm" href="#/"><span class="brand-mark">${icon('shield')}</span>GovKit</a>
     <nav class="crumbs" aria-label="Breadcrumb">${(crumbs || []).map(([l, h], i, arr) => i === arr.length - 1 ? `<span>${esc(l)}</span>` : `<a href="${h}">${esc(l)}</a><span class="sep">/</span>`).join('')}</nav>
     <div class="top-right">
+      <button class="search-btn" data-action="palette" aria-label="Search and jump (Ctrl K)">${icon('search')}<span>Search or jump to…</span><kbd>Ctrl K</kbd></button>
       <button class="role-btn ${r ? '' : 'none'}" data-action="role-menu" aria-haspopup="true" aria-expanded="false" title="The role you are acting as">
         ${r ? av(r.id) : `<span class="av">?</span>`}<span class="rl">${r ? `Acting as <b>${esc(r.name)}</b>` : 'Choose your role'}</span>
       </button>
@@ -150,6 +157,7 @@ function route({ keepScroll = false } = {}) {
   const y = window.scrollY;
   const changed = current.path !== p;
   app.innerHTML = `<div class="${changed ? 'fade-in' : ''}">${out.html}</div>`;
+  document.getElementById('content').classList.toggle('wide', !!out.wide);
   current = { path: p, view: out };
   document.title = out.title ? `${out.title} · GovKit` : 'GovKit · Agentic SDLC Operating Model';
   renderSide();
@@ -174,6 +182,7 @@ function globalClicks(e) {
   const act = a.dataset.action;
   if (act === 'open-nav') document.body.classList.add('nav-open');
   else if (act === 'close-nav') document.body.classList.remove('nav-open');
+  else if (act === 'palette') openPalette();
   else if (act === 'role-menu') { if (document.getElementById('role-pop')) closePopover(); else openRoleMenu(a); }
   else if (act === 'theme') {
     const cur = document.documentElement.getAttribute('data-theme');
@@ -193,6 +202,7 @@ async function boot() {
     return;
   }
   document.addEventListener('click', globalClicks);
+  installPalette();
   window.addEventListener('hashchange', () => route());
   // Role changes and imports re-render the current page; form typing saves silently.
   onChange(() => route({ keepScroll: true }));

@@ -65,7 +65,7 @@ export function render(agentId, gid) {
     html: `
     <header class="page-head">
       <div class="row g8"><span class="aid-box g">${gid}</span><div class="stack"><span class="eyebrow accent">${esc(agentName(a))} · gate review${(e.rec.cycle || 1) > 1 ? ` · round ${e.rec.cycle}` : ''}</span><span class="row g8 mt4"><span class="badge ${gate.type.startsWith('Automated') ? 'process' : 'line'}">${esc(gate.type)}</span><span class="badge line">${esc(gate.ceremony)}</span></span></div></div>
-      <h1>${esc(gate.name)}</h1>
+      <div class="row g16" style="justify-content:space-between;align-items:flex-end"><h1 class="grow">${esc(gate.name)}</h1><button class="btn" id="meet">${icon('users')} Meeting mode</button></div>
       <p class="lede">${esc(G.purpose)}</p>
     </header>
     ${!role ? `<div style="margin-bottom:16px">${rolePrompt('confirm checks or sign this gate')}</div>` : ''}
@@ -90,6 +90,7 @@ export function render(agentId, gid) {
     mount(root) {
       const person = () => S().person || '';
       const ensure = () => (a.gates[gid] ||= { checks: {}, signoffs: {}, checkedBy: {}, history: [], cycle: 1 });
+      root.querySelector('#meet').addEventListener('click', () => meeting(a, gid));
       root.querySelector('#checks').addEventListener('change', (ev) => {
         const cb = ev.target.closest('[data-check]'); if (!cb) return;
         update(() => {
@@ -155,3 +156,63 @@ async function onPassed(a, gid) {
   }
 }
 
+
+// Meeting mode: run the gate in the room (ARB, CAB, risk forum) one slide at
+// a time — purpose, artefacts, each check with its owner, then the decision.
+function meeting(a, gid) {
+  const role = S().role;
+  const build = () => {
+    const e = evalGate(a, gid);
+    const slides = [
+      { k: `${gid} · ${esc(e.gate.ceremony)}`, h: esc(e.gate.name), p: esc(e.G.purpose), facts: [[esc(agentName(a)), ''], [`Tier ${tierOf(a)}`, ''], [`Approver: ${e.approvers.join(' + ')}`, ''], [e.status === 'passed' ? 'Passed' : e.ready ? 'Ready for decision' : 'Not ready', e.status === 'passed' || e.ready ? 'ok' : 'warn']] },
+      { k: 'Artefacts that must exist', h: `${e.arts.filter((x) => x.met).length} of ${e.arts.length} in place`, p: 'A gate with missing artefacts is a failed gate, not one passed with conditions.', facts: e.arts.map((x) => [`${x.id} ${esc(D.art[x.id].name)} · ${x.applicable ? (x.met ? 'met' : 'missing') : 'n/a'}`, !x.applicable ? '' : x.met ? 'ok' : 'bad']) },
+      ...e.checks.map((c, i) => ({ k: `Check ${i + 1} of ${e.checks.length} · ${esc(roleName(c.who))}`, h: esc(c.label), p: linkIds(c.help), facts: c.auto ? [[c.na ? 'Not applicable' : `GovKit suggests: ${c.auto.v ? 'yes' : 'not yet'}`, c.na ? '' : c.auto.v ? 'ok' : 'warn'], [esc(c.auto.why), '']] : [], check: c })),
+      { k: 'Decision', h: `Pass when: ${esc(e.gate.pass_condition)}`, p: e.ready ? `Everything is in place. ${e.approvers.map(roleName).join(' and ')} now sign.` : `${e.arts.filter((x) => !x.met).length} artefact(s) and ${e.checks.filter((x) => !x.met).length} check(s) outstanding. The gate fails if it is decided today.`, facts: e.approvers.map((r) => [`${r}: ${e.rec.signoffs?.[r] ? e.rec.signoffs[r].decision : 'not signed'}`, e.rec.signoffs?.[r]?.decision === 'pass' ? 'ok' : e.rec.signoffs?.[r] ? 'bad' : '']), last: true },
+    ];
+    return { e, slides };
+  };
+  let i = 0;
+  const el = document.createElement('div');
+  el.className = 'present';
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-modal', 'true');
+  el.setAttribute('aria-label', `${gid} meeting mode`);
+  document.body.appendChild(el);
+  const draw = () => {
+    const { e, slides } = build();
+    i = Math.max(0, Math.min(i, slides.length - 1));
+    const s = slides[i];
+    const c = s.check;
+    const canTick = c && !c.na && role && (role === c.who || e.approvers.includes(role)) && e.status === 'open';
+    el.innerHTML = `<div class="present-top"><span class="aid-box g" style="background:#1B3350">${gid}</span><b>${esc(agentName(a))} · ${esc(e.gate.name)}</b><span class="grow"></span><span class="xs" style="color:#8499B3">← → to move · Esc to close</span><button class="btn sm" data-x>${icon('x')} Close</button></div>
+      <div class="present-body"><div class="slide"><div class="k">${s.k}</div><h2>${s.h}</h2><p>${s.p}</p>
+        ${s.facts.length ? `<div class="facts">${s.facts.map(([t, cls]) => `<span class="${cls}">${t}</span>`).join('')}</div>` : ''}
+        ${c ? `<label class="check"><input type="checkbox" data-tick ${c.ticked || c.na ? 'checked' : ''} ${canTick ? '' : 'disabled'}><span>${c.na ? 'Not applicable' : c.ticked ? 'Confirmed' : 'Confirm this check'}${canTick ? '' : ` <span style="color:#8499B3;font-size:14px">(confirmed by ${esc(c.who)} or an approver)</span>`}</span></label>` : ''}
+        ${s.last ? `<div class="row g8 mt24"><button class="btn primary lg" data-x>Close and record the decision ${icon('arrowRight')}</button></div>` : ''}
+      </div></div>
+      <div class="present-foot"><button class="btn" data-prev ${i === 0 ? 'disabled' : ''}>${icon('arrowLeft')} Back</button><span class="dots">${slides.map((_, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('')}</span><button class="btn primary" data-next ${i === slides.length - 1 ? 'disabled' : ''}>Next ${icon('arrowRight')}</button></div>`;
+    el.querySelector('[data-tick]')?.addEventListener('change', (ev) => {
+      update(() => {
+        const g = (a.gates[gid] ||= { checks: {}, signoffs: {}, checkedBy: {}, history: [], cycle: 1 });
+        g.checks[c.id] = ev.target.checked;
+        g.checkedBy = g.checkedBy || {};
+        if (ev.target.checked) g.checkedBy[c.id] = { role, by: S().person || '', at: Date.now() }; else delete g.checkedBy[c.id];
+        g.history.push({ at: Date.now(), role, by: S().person || '', action: `${ev.target.checked ? 'Confirmed' : 'Unconfirmed'} in meeting: ${c.label}` });
+      }, { silent: true });
+      draw();
+    });
+    el.querySelector('.present-foot [data-next]')?.focus();
+  };
+  const close = () => { el.remove(); document.removeEventListener('keydown', key); window.dispatchEvent(new HashChangeEvent('hashchange')); };
+  const key = (ev) => {
+    if (ev.target.matches?.('input')) return;
+    if (ev.key === 'ArrowRight') { i++; draw(); } else if (ev.key === 'ArrowLeft') { i--; draw(); } else if (ev.key === 'Escape') close();
+  };
+  el.addEventListener('click', (ev) => {
+    if (ev.target.closest('[data-x]')) close();
+    else if (ev.target.closest('[data-next]')) { i++; draw(); }
+    else if (ev.target.closest('[data-prev]')) { i--; draw(); }
+  });
+  document.addEventListener('keydown', key);
+  draw();
+}

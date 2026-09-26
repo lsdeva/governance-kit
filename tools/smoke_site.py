@@ -67,13 +67,14 @@ with sync_playwright() as p:
         pg.route("**/data/*.json", lambda route: (time.sleep(0.4), route.continue_()))
     pg.goto(BASE)
     wait_booted(pg)
-    pg.wait_for_selector(".hero")
+    pg.wait_for_selector(".land-hero")
     pg.click("[data-demo]")
     pg.wait_for_function("location.hash.startsWith('#/agents/')")
     aid = pg.evaluate("location.hash").split("/")[2]
 
     routes = ["", "guide", "roles", "work", "agents/new", f"agents/{aid}", f"agents/{aid}/report", "tools", "model",
               "artefacts", "help", "about"]
+    routes += ["services", "tower"] + [f"services/{x}" for x in ["intake", "design", "build", "golive", "monthly", "promotion", "change", "audit", "retire"]]
     routes += [f"roles/{r}" for r in ["AE", "SP", "AOW", "PO", "ENG", "SEC", "DO", "RC", "PLE", "IRV", "OPS", "IA"]]
     routes += [f"tools/{t}" for t in ["tier", "change", "sampling", "promotion", "calibration", "maturity"]]
     routes += [f"model/{s}" for s in ["gates", "tiers", "raci", "metrics", "platform", "roadmap", "references"]]
@@ -88,6 +89,21 @@ with sync_playwright() as p:
             text = pg.inner_text("#app")
             if "Loading the operating model" in text or "doesn't exist" in text or len(text) < 60:
                 problems.append(f"route renders nothing: #/{r} as {role}")
+
+    # Command palette opens, filters and navigates.
+    pg.goto(BASE + "#/")
+    pg.keyboard.press("Control+k")
+    pg.fill(".cmdk-in input", "G3")
+    pg.keyboard.press("Enter")
+    if "g/G3" not in pg.evaluate("location.hash") and "gates" not in pg.evaluate("location.hash"):
+        problems.append("command palette did not navigate to G3")
+    # Meeting mode opens and steps through a gate.
+    pg.goto(BASE + f"#/agents/{aid}/g/G4")
+    pg.click("#meet")
+    pg.keyboard.press("ArrowRight")
+    if not pg.locator(".present .slide").count():
+        problems.append("meeting mode did not open")
+    pg.keyboard.press("Escape")
 
     # One form through its lifecycle: the IRV-owned 10 is a draft in the example.
     set_role(pg, "IRV")

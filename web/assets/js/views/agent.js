@@ -7,6 +7,7 @@ import {
 } from '../logic.js';
 import { aidBox, reqBadge, statusPill, myRaci, rolePrompt, av, roleName } from '../components.js';
 import { go } from '../app.js';
+import { recommended, evalService } from '../services.js';
 
 export const focus = { agent: null };
 
@@ -79,6 +80,30 @@ function stagePanel(a, i, role) {
   </div>${extra}`;
 }
 
+function recBanner(a) {
+  const s = recommended(a);
+  if (!s) return '';
+  const e = evalService(s, a);
+  const next = e.next;
+  return `<div class="card mt16 row g16" style="border-left:4px solid ${s.color};padding:16px 20px">
+    <span class="aid-box" style="background:color-mix(in srgb,${s.color} 14%,transparent);color:${s.color}">${icon(s.icon)}</span>
+    <div class="grow"><div class="xs faint">Recommended service · ${e.done} of ${e.total} steps done</div><b style="font-size:16px">${esc(s.name)}</b>${next ? `<div class="small muted">Next: ${esc(next.title)}</div>` : ''}</div>
+    <a class="btn primary" href="#/services/${s.id}">Continue ${icon('arrowRight')}</a></div>`;
+}
+
+const LANES = [['not_started', 'Not started'], ['progress', 'In progress'], ['submitted', 'In review'], ['approved', 'Approved']];
+function board(a, role) {
+  const ids = D.order.filter((id) => { const r = requirement(id, a); return isNeeded(r) || statusOf(a, id) !== 'not_started'; });
+  const lane = (id) => { const s = statusOf(a, id); return s === 'draft' || s === 'returned' ? 'progress' : s; };
+  return `<div class="board">${LANES.map(([k, l]) => {
+    const items = ids.filter((id) => lane(id) === k);
+    return `<div class="lane"><h4>${statusPill(k === 'progress' ? 'draft' : k).replace(/>[^<]*</, `>${l}<`)}<span class="badge line">${items.length}</span></h4>
+      ${items.map((id) => { const A = D.art[id]; const c = completeness(a, id); const f = formOf(a, id); return `<a class="kcard" href="#/agents/${a.id}/a/${id}"><span class="aid ${A.outcome_evidence ? 'o' : ''}">${id}</span> ${f.status === 'returned' ? '<span class="badge bad">Returned</span>' : ''}${f.flag ? '<span class="badge bad">Flagged</span>' : ''}<b>${esc(A.name)}</b>
+        <div class="foot"><span class="avs">${A.raci.responsible.map((r) => av(r)).join('')}</span>${k === 'progress' ? `<span class="xs faint">${c.done}/${c.need}</span>` : ''}${myRaci(id, role) ? `<span class="row g4">${myRaci(id, role)}</span>` : ''}</div></a>`; }).join('') || '<p class="xs faint" style="padding:6px">Nothing here.</p>'}
+    </div>`;
+  }).join('')}</div>`;
+}
+
 export function render(id) {
   const a = getAgent(id);
   if (!a) return notFound();
@@ -117,6 +142,7 @@ export function render(id) {
       }).join('')}</div>
     </div>
 
+    ${recBanner(a)}
     <div class="form-layout mt24">
       <div>
         <div class="card">
@@ -127,8 +153,10 @@ export function render(id) {
           ${others.length ? `<div class="mt16" style="border-top:1px solid var(--rule);padding-top:12px"><div class="eyebrow">Waiting with other roles</div><div class="row g8 mt8">${others.map(([r, n]) => `<button class="chip" data-switch="${r}" title="Act as ${esc(roleName(r))}">${r} <b>${n}</b></button>`).join('')}</div><p class="xs faint mt8">Select a role to act as it, for example to play a gate through in a workshop.</p></div>` : ''}
         </div>
 
-        <nav class="tabs mt24" role="tablist" aria-label="Lifecycle stages">${STAGES.map((s2, i) => `<button role="tab" data-tab="${i}" aria-selected="${i === tab}">${i + 1}. ${esc(s2.name)}</button>`).join('')}</nav>
-        <div id="stage-panel">${stagePanel(a, tab, role)}</div>
+        <div class="row g12 mt24" style="justify-content:space-between"><h2>Artefacts &amp; gates</h2><div class="seg" id="view-seg"><button data-v="stages" aria-pressed="true">${icon('layers')} By stage</button><button data-v="board" aria-pressed="false">${icon('grid')} Board</button></div></div>
+        <div id="v-stages"><nav class="tabs mt12" role="tablist" aria-label="Lifecycle stages">${STAGES.map((s2, i) => `<button role="tab" data-tab="${i}" aria-selected="${i === tab}">${i + 1}. ${esc(s2.name)}</button>`).join('')}</nav>
+        <div id="stage-panel">${stagePanel(a, tab, role)}</div></div>
+        <div id="v-board" hidden class="mt16">${board(a, role)}</div>
         ${st.idx >= 4 && !a.retiring && !st.done ? `<div class="row g8 mt16"><button class="btn sm ghost" id="retire">${icon('flag')} Start retirement (stage 6)</button></div>` : ''}
       </div>
 
@@ -160,6 +188,12 @@ export function render(id) {
       </aside>
     </div>`,
     mount(root) {
+      root.querySelector('#view-seg').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-v]'); if (!b) return;
+        root.querySelectorAll('#view-seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        root.querySelector('#v-stages').hidden = b.dataset.v !== 'stages';
+        root.querySelector('#v-board').hidden = b.dataset.v !== 'board';
+      });
       root.querySelector('.tabs').addEventListener('click', (e) => {
         const b = e.target.closest('[data-tab]'); if (!b) return;
         tab = +b.dataset.tab;
@@ -271,8 +305,9 @@ export function renderReport(id) {
     ${body}
     ${(a.decisions || []).length ? `<section class="card mt16"><h3>Decision log</h3><ul class="hist mt8">${a.decisions.map((d) => `<li><b>${esc(d.title)}</b> · ${esc(d.summary)} <span class="xs">(${fmtDateTime(d.at)} · ${esc(d.role || '')} ${esc(d.by || '')})</span></li>`).join('')}</ul></section>` : ''}`,
     mount(root) {
-      root.querySelector('#print').addEventListener('click', () => window.print());
-      root.querySelector('#md').addEventListener('click', () => { download(`${slug(agentName(a))}-evidence-pack.md`, reportMarkdown(a), 'text/markdown'); toast('Markdown downloaded'); });
+      const stamp = () => update(() => { a.lastPackAt = Date.now(); }, { silent: true });
+      root.querySelector('#print').addEventListener('click', () => { stamp(); window.print(); });
+      root.querySelector('#md').addEventListener('click', () => { stamp(); download(`${slug(agentName(a))}-evidence-pack.md`, reportMarkdown(a), 'text/markdown'); toast('Markdown downloaded'); });
     },
   };
 }

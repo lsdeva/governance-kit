@@ -40,6 +40,17 @@ export function render() {
       </div>
     </section>
 
+    <section class="section">
+      <h2>Four ways to work</h2>
+      <p class="muted mt8 prose">The same forms and gates, reached the way that suits the moment.</p>
+      <div class="grid cols-2 mt16">
+        <a class="card" href="#/services"><h3>${icon('spark')} Services</h3><p class="muted small mt8">Pick an outcome, such as go-live readiness, a model change or a regulator pack. The service lists every step in order, who owns it, and what is next for your agent.</p></a>
+        <a class="card" href="#/tower"><h3>${icon('gauge')} Control tower</h3><p class="muted small mt8">Every agent against every gate, the latest outcome evidence, and computed alerts: overdue drills, missing sampling rounds, revalidation deadlines, sunsets.</p></a>
+        <div class="card"><h3>${icon('search')} Command palette</h3><p class="muted small mt8">Press <kbd>Ctrl</kbd> <kbd>K</kbd> anywhere, then type "02", "G3", "promotion" or a role to jump straight there, or to act as another role.</p></div>
+        <div class="card"><h3>${icon('users')} Meeting mode</h3><p class="muted small mt8">On any gate, open <b>Meeting mode</b> to run the review in the room: purpose, artefacts, then each check with its owner, one slide at a time, ending at the decision.</p></div>
+      </div>
+    </section>
+
     <section class="section grid cols-2">
       <div class="card">
         <h3>Form statuses</h3>
