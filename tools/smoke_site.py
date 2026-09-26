@@ -8,6 +8,8 @@ several roles, and plays one form through draft → submit → approve.
 Run: python tools/smoke_site.py   (needs: pip install playwright; playwright install chromium)
 """
 import functools
+import os
+import time
 import http.server
 import pathlib
 import sys
@@ -34,6 +36,22 @@ def set_role(pg, role):
         "r => { const s = JSON.parse(localStorage.getItem('govkit.om.v1')); s.role = r; s.person = 'CI';"
         " localStorage.setItem('govkit.om.v1', JSON.stringify(s)); }", role)
     pg.reload()
+    wait_booted(pg)
+
+
+def wait_text(pg, selector, text):
+    # Dialog results and saves resolve asynchronously; poll instead of reading once.
+    try:
+        pg.wait_for_function("([s, t]) => document.querySelector(s)?.innerText.includes(t)", arg=[selector, text], timeout=10000)
+        return True
+    except Exception:
+        return False
+
+
+def wait_booted(pg):
+    # The app fetches its data before the first render; wait for it rather
+    # than racing it (CI runners are slower than a laptop).
+    pg.wait_for_function("document.querySelector('#side a') !== null", timeout=30000)
 
 
 with sync_playwright() as p:
@@ -44,7 +62,11 @@ with sync_playwright() as p:
     pg.on("requestfailed", lambda r: problems.append(f"request failed: {r.url}"))
     pg.on("request", lambda r: problems.append(f"external request: {r.url}") if not r.url.startswith(BASE) and not r.url.startswith("data:") and not r.url.startswith("blob:") else None)
 
+    if os.environ.get("SMOKE_SLOW"):
+        # Simulate a slow runner: delay every data fetch.
+        pg.route("**/data/*.json", lambda route: (time.sleep(0.4), route.continue_()))
     pg.goto(BASE)
+    wait_booted(pg)
     pg.wait_for_selector(".hero")
     pg.click("[data-demo]")
     pg.wait_for_function("location.hash.startsWith('#/agents/')")
@@ -78,7 +100,7 @@ with sync_playwright() as p:
         pg.click("[data-add-row=band_verdicts]")
         pg.locator("#f-band_verdicts .trow input.input").first.fill("0.95–1.00")
     pg.click("#submit")
-    if "In review" not in pg.inner_text("#st-pill"):
+    if not wait_text(pg, "#st-pill", "In review"):
         problems.append("form 10 did not move to In review on submit")
     set_role(pg, "RC")
     pg.goto(BASE + f"#/agents/{aid}/a/10")
@@ -86,7 +108,7 @@ with sync_playwright() as p:
     for c in pg.locator("dialog input[type=checkbox]").all():
         c.check()
     pg.click("dialog button[value=ok]")
-    if "Approved" not in pg.inner_text("#st-pill"):
+    if not wait_text(pg, "#st-pill", "Approved"):
         problems.append("form 10 was not approved")
     browser.close()
 
