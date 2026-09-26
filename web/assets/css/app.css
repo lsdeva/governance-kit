@@ -711,3 +711,9 @@ dialog.modal::backdrop{background:rgba(20,20,20,.5)}
   a{color:#000;text-decoration:none}
   pre{white-space:pre-wrap}
 }
+
+/* Read-only forms say so, and offer the way out, where the eye lands. */
+.lockbar{position:sticky;top:var(--top);z-index:6;display:flex;gap:12px 16px;align-items:center;flex-wrap:wrap;padding:14px 22px;background:var(--warn-bg);border-bottom:1px solid var(--rule);border-left:4px solid var(--warn);font-size:15px}
+.lockbar>svg{color:var(--warn);width:20px;height:20px}
+.is-locked .input:disabled,.is-locked input:disabled,.is-locked input:disabled+span{cursor:not-allowed}
+.is-locked .opt input:disabled+span{opacity:.7}

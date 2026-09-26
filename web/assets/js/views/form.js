@@ -9,6 +9,9 @@ import { aidBox, reqBadge, statusPill, myRaci, rolePrompt, av, roleName, raciInl
 import { linkIds } from './model.js';
 import { focus } from './agent.js';
 
+// Forms where the user chose "Edit anyway" while not the responsible role.
+const OVERRIDE = new Set();
+
 const optVal = (o) => (typeof o === 'string' ? o : o.value);
 const optLabel = (o) => (typeof o === 'string' ? o : o.label);
 
@@ -128,7 +131,8 @@ export function render(agentId, artId) {
   const req = requirement(artId, a);
   const letters = role ? raciOf(artId, role) : [];
   const isR = letters.includes('R'), isA = letters.includes('A'), isC = letters.includes('C'), isI = letters.includes('I');
-  let override = false;
+  const okey = `${a.id}:${artId}`;
+  const override = OVERRIDE.has(okey);
   const editable = () => (isR || override) && (st === 'not_started' || st === 'draft' || st === 'returned');
   const locked = !editable();
   const cycle = f.cycle || 1;
@@ -137,7 +141,7 @@ export function render(agentId, artId) {
   const heard = new Set((f.comments || []).filter((c) => c.cycle === cycle).map((c) => c.role));
 
   let banner;
-  if (!role) banner = rolePrompt('draft, review or approve this form');
+  if (!role) banner = '';
   else if (isR && st === 'approved') banner = `<div class="callout ok">${icon('checkCircle')}<div class="grow"><b>Approved.</b> The content is locked. If it needs to change, for example after a material change, reopen it as a new revision. It will need approval again.</div></div>`;
   else if (isR && st === 'submitted') banner = `<div class="callout info">${icon('clock')}<div class="grow"><b>In review with ${esc(A.raci.accountable)}.</b> Consulted roles can now record their view. You can withdraw it to make changes.</div></div>`;
   else if (isR) banner = `<div class="callout info">${icon('pen')}<div class="grow"><b>You're responsible for this artefact.</b> Fill in the fields${req === 'light' ? ' marked <b>core</b> (light template at ' + tierOf(a) + ')' : ' marked *'} and submit it for review. Your work saves automatically in this browser.</div></div>`;
@@ -145,7 +149,7 @@ export function render(agentId, artId) {
   else if (isA) banner = `<div class="callout info">${icon('shield')}<div class="grow"><b>You're accountable for this artefact.</b> You approve it once ${A.raci.responsible.join(' and ')} submit${A.raci.responsible.length > 1 ? '' : 's'} it. Current status: ${STATUS[st]}.</div></div>`;
   else if (isC) banner = `<div class="callout info">${icon('message')}<div class="grow"><b>You must be consulted before approval.</b> ${st === 'submitted' ? (heard.has(role) ? 'You have recorded your view for this revision.' : 'Record your view below.') : `You can comment once it is submitted. Current status: ${STATUS[st]}.`}</div></div>`;
   else if (isI) banner = `<div class="callout info">${icon('info')}<div class="grow"><b>You're informed.</b> ${st === 'approved' ? 'Acknowledge once you have read it.' : `You'll receive it once approved. Current status: ${STATUS[st]}.`}</div></div>`;
-  else banner = `<div class="callout">${icon('lock')}<div class="grow"><b>${esc(roleName(role))} has no RACI part in this artefact.</b> It's drafted by ${A.raci.responsible.map(roleName).join(' and ')}. ${st === 'not_started' || st === 'draft' || st === 'returned' ? '<button class="btn sm" id="override">Edit anyway</button> <span class="xs faint">The edit is recorded in the history.</span>' : ''}</div></div>`;
+  else banner = `<div class="callout">${icon('lock')}<div class="grow"><b>${esc(roleName(role))} has no RACI part in this artefact.</b> It's drafted by ${A.raci.responsible.map(roleName).join(' and ')}. </div></div>`;
 
   const actions = () => {
     const b = [];
@@ -159,6 +163,20 @@ export function render(agentId, artId) {
     if (isI && st === 'approved' && !(f.acks || []).some((x) => x.role === role && x.cycle === cycle)) b.push(`<button class="btn" id="ack">${icon('check')} Acknowledge</button>`);
     return b.join('');
   };
+
+  const rRoles = A.raci.responsible;
+  const actAs = rRoles.map((r) => `<button type="button" class="btn sm primary" data-act-as="${r}">Act as ${esc(roleName(r))}</button>`).join('');
+  let lockbar = '';
+  if (locked) {
+    const editableStatus = st === 'not_started' || st === 'draft' || st === 'returned';
+    let msg;
+    if (st === 'approved') msg = isR ? '<b>Approved, so the content is locked.</b> Use <i>Reopen as new revision</i> below to change it.' : `<b>Approved, so the content is locked.</b> Only ${rRoles.map(roleName).join(' or ')} can reopen it as a new revision.`;
+    else if (st === 'submitted') msg = isR ? `<b>In review, so the content is locked.</b> Use <i>Withdraw to draft</i> below to make changes.` : `<b>In review with ${esc(roleName(A.raci.accountable))}, so the content is locked.</b>`;
+    else if (!role) msg = `<b>Read-only: choose who you are acting as.</b> This form is drafted by ${rRoles.map(roleName).join(' and ')}.`;
+    else msg = `<b>Read-only: you are acting as ${esc(roleName(role))}.</b> This form is drafted by ${rRoles.map(roleName).join(' and ')}.`;
+    const showAct = !isR && !(st === 'submitted' && (isA || isC));
+    lockbar = `<div class="lockbar" role="note">${icon('lock')}<div class="grow">${msg}</div><div class="row g8">${showAct ? actAs : ''}${!isR && editableStatus && role ? '<button type="button" class="btn sm" id="override">Edit anyway</button>' : ''}${!role ? '<button type="button" class="btn sm" data-action="role-menu">Choose a role</button>' : ''}</div></div>`;
+  }
 
   const sections = F.sections.map((sec, i) => `<div class="fsec"><h3><span class="n">${String(i + 1).padStart(2, '0')}</span>${esc(sec.title)}</h3>${sec.fields.map((fl) => fieldBlock(fl, f.values?.[fl.id], locked, req, artId, a)).join('')}</div>`).join('');
 
@@ -174,10 +192,10 @@ export function render(agentId, artId) {
   <div class="form-layout">
     <div>
       <div class="callout" style="margin-bottom:16px">${icon('compass')}<div>${linkIds(F.intro)}</div></div>
-      <form class="card" style="padding:0" id="art-form" novalidate autocomplete="off">${sections}</form>
+      <form class="card ${locked ? 'is-locked' : ''}" style="padding:0" id="art-form" novalidate autocomplete="off">${lockbar}${sections}</form>
       <div class="savebar no-print">
         <div class="grow stack g4" style="min-width:180px"><span class="small"><b id="c-done">${comp.done}</b> of ${comp.need} ${req === 'light' ? 'core' : 'required'} fields</span><div class="progress" style="max-width:260px"><span id="c-bar" style="width:${Math.round(comp.pct * 100)}%"></span></div></div>
-        <span class="xs faint" id="saved">${locked ? (editable() ? '' : 'Read-only for your role') : 'Saved in this browser'}</span>
+        <span class="xs faint" id="saved">${locked ? `${icon('lock', 'sm-ic')} Read-only` : 'Saved in this browser'}</span>
         ${actions()}
       </div>
     </div>
@@ -203,7 +221,7 @@ export function render(agentId, artId) {
     title: `${artId} · ${A.name} · ${agentName(a)}`,
     crumbs: [['My work', '#/work'], [agentName(a), `#/agents/${a.id}`], [`${artId} · ${A.name}`]],
     html,
-    mount(root) { mountForm(root, { a, artId, A, F, role, st, req, cycle, consulted, heard, isR, setOverride: () => { override = true; } }); },
+    mount(root) { mountForm(root, { a, artId, A, F, role, st, req, cycle, consulted, heard, isR, setOverride: () => { OVERRIDE.add(okey); } }); },
   };
 }
 
@@ -304,7 +322,8 @@ function mountForm(root, ctx) {
     box?.querySelector('input,select,textarea,button')?.focus({ preventScroll: true });
   });
 
-  root.querySelector('#override')?.addEventListener('click', () => { ctx.setOverride(); root.querySelectorAll('#art-form [disabled]').forEach((x) => { x.disabled = false; }); toast('Editing enabled. Edits are recorded as outside RACI.'); });
+  root.querySelector('#override')?.addEventListener('click', () => { ctx.setOverride(); toast('Editing enabled. Your edits are recorded as made outside the RACI.'); window.dispatchEvent(new HashChangeEvent('hashchange')); });
+  root.querySelectorAll('[data-act-as]').forEach((b) => b.addEventListener('click', () => { update((st) => { st.role = b.dataset.actAs; }); toast(`Now acting as ${roleName(b.dataset.actAs)}`); }));
 
   const askName = () => (S().person ? '' : `<label class="field"><span class="lbl">Your name for the record</span><input class="input" name="person" required placeholder="e.g. A. Rahman"></label>`);
   const saveName = (d) => { if (d?.person) update((st) => { st.person = d.person.trim(); }, { silent: true }); };

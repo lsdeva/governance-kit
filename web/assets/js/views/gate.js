@@ -44,6 +44,7 @@ export function render(agentId, gid) {
       <label class="check" style="${canTick ? '' : 'cursor:default'}"><input type="checkbox" data-check="${c.id}" ${c.ticked || c.na ? 'checked' : ''} ${canTick && !c.na ? '' : 'disabled'}>
         <span class="grow"><b>${esc(c.label)}</b> <span class="row g6" style="display:inline-flex;margin-left:4px">${av(c.who)}${sug}</span><br><span class="small muted">${linkIds(c.help)}</span>
         ${c.auto && !c.na ? `<br><span class="xs faint">${icon('info', 'sm-ic')} ${esc(c.auto.why)}</span>` : ''}
+        ${!canTick && !c.na && !c.ticked && status === 'open' ? `<br><button type="button" class="btn sm mt8" data-act-as="${c.who}">Act as ${esc(roleName(c.who))} to confirm</button>` : ''}
         ${e.rec.checkedBy?.[c.id] ? `<br><span class="xs faint">Confirmed by ${esc(e.rec.checkedBy[c.id].role)} ${esc(e.rec.checkedBy[c.id].by || '')} · ${fmtDateTime(e.rec.checkedBy[c.id].at)}</span>` : ''}</span></label>
     </div>`;
   }).join('');
@@ -55,6 +56,7 @@ export function render(agentId, gid) {
       <div class="row g12">${av(r)}<div class="grow"><b>${esc(roleName(r))}</b><div class="xs faint">${gid === 'G5' ? `Approver at ${tierOf(a)}` : 'Approver'}</div></div>
       ${x ? `<span class="badge ${x.decision === 'pass' ? 'ok' : 'bad'}">${x.decision === 'pass' ? 'Passed' : 'Failed'}</span>` : '<span class="badge line">Not signed</span>'}</div>
       ${x ? `<p class="small mt8">${esc(x.rationale)}</p><p class="xs faint mt4">${esc(x.by || '')} · ${fmtDateTime(x.at)}${x.evidence ? ` · evidence: ${esc(x.evidence)}` : ''}</p>` : ''}
+      ${!mine && !x && status === 'open' ? `<div class="mt12"><button type="button" class="btn sm" data-act-as="${r}">Act as ${esc(roleName(r))} to sign</button></div>` : ''}
       ${mine && !x && status === 'open' ? `<div class="row g8 mt12"><button class="btn ok" id="pass" ${e.ready ? '' : 'aria-disabled="true"'}>${icon('check')} Pass</button><button class="btn bad" id="fail">${icon('x')} Fail</button>${e.ready ? '' : '<span class="xs faint">Pass unlocks when everything above is met.</span>'}</div>` : ''}
     </div>`;
   }).join('');
@@ -91,6 +93,7 @@ export function render(agentId, gid) {
       const person = () => S().person || '';
       const ensure = () => (a.gates[gid] ||= { checks: {}, signoffs: {}, checkedBy: {}, history: [], cycle: 1 });
       root.querySelector('#meet').addEventListener('click', () => meeting(a, gid));
+      root.querySelectorAll('[data-act-as]').forEach((b) => b.addEventListener('click', (ev) => { ev.preventDefault(); update((st) => { st.role = b.dataset.actAs; }); toast(`Now acting as ${roleName(b.dataset.actAs)}`); }));
       root.querySelector('#checks').addEventListener('change', (ev) => {
         const cb = ev.target.closest('[data-check]'); if (!cb) return;
         update(() => {

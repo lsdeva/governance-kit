@@ -105,6 +105,18 @@ with sync_playwright() as p:
         problems.append("meeting mode did not open")
     pg.keyboard.press("Escape")
 
+    # A read-only form must say why and offer a one-click way to edit it.
+    pg.evaluate("() => { const s = JSON.parse(localStorage.getItem('govkit.om.v1')); s.role = null; localStorage.setItem('govkit.om.v1', JSON.stringify(s)); }")
+    pg.reload()
+    wait_booted(pg)
+    pg.goto(BASE + f"#/agents/{aid}/a/10")
+    if not pg.locator(".lockbar [data-act-as]").count():
+        problems.append("read-only form shows no way to start editing")
+    else:
+        pg.locator(".lockbar [data-act-as]").first.click()
+        if not wait_text(pg, "#saved", "Saved") or pg.locator("#art-form [disabled]").count():
+            problems.append("'Act as' on a read-only form did not enable editing")
+
     # One form through its lifecycle: the IRV-owned 10 is a draft in the example.
     set_role(pg, "IRV")
     pg.goto(BASE + f"#/agents/{aid}/a/10")
