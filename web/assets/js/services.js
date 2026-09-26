@@ -22,7 +22,7 @@ const neededAt = (id) => (a) => isNeeded(requirement(id, a));
 
 export const SERVICES = [
   {
-    id: 'intake', group: 'Stand up', icon: 'flag', color: '#0EA5E9', gate: 'G0', effort: '1–2 weeks',
+    id: 'intake', group: 'Stand up', icon: 'flag', color: 'var(--brand)', gate: 'G0', effort: '1–2 weeks',
     name: 'Intake & funding decision',
     tagline: 'Register the agent, choose its tier, and get a funded, justified yes at G0.',
     outcome: 'An inventory entry that drives the pipeline, a justification with the sampling cost on the benefit line, and a signed intake decision.',
@@ -36,7 +36,7 @@ export const SERVICES = [
     ],
   },
   {
-    id: 'design', group: 'Stand up', icon: 'layers', color: '#6366F1', gate: 'G1', effort: '2–4 weeks',
+    id: 'design', group: 'Stand up', icon: 'layers', color: 'var(--brand)', gate: 'G1', effort: '2–4 weeks',
     name: 'Design approval',
     tagline: 'Write the mandate, analyse hazards before requirements, and pass the architecture review.',
     outcome: 'An approved delegation policy the gate compiles from, a hazard register with interaction hazards, and provenance for everything the agent reads.',
@@ -50,7 +50,7 @@ export const SERVICES = [
     ],
   },
   {
-    id: 'build', group: 'Stand up', icon: 'grid', color: '#8B5CF6', gate: 'G2', effort: 'Every sprint',
+    id: 'build', group: 'Stand up', icon: 'grid', color: 'var(--brand)', gate: 'G2', effort: 'Every sprint',
     name: 'Build to Definition of Done',
     tagline: 'Controls as backlog items with tests, and a tier profile the pipeline selects by itself.',
     outcome: 'Control stories demoed next to features and a pipeline that fails closed on any block_deploy control.',
@@ -62,7 +62,7 @@ export const SERVICES = [
     ],
   },
   {
-    id: 'golive', group: 'Stand up', icon: 'shield', color: '#0F766E', gate: 'G3', effort: '2–3 weeks',
+    id: 'golive', group: 'Stand up', icon: 'shield', color: 'var(--brand)', gate: 'G3', effort: '2–3 weeks',
     name: 'Go-live readiness',
     tagline: 'Evaluate, attest, drill the kill switch and sign the tile register, then go live at T2.',
     outcome: 'An approval to operate that rests on a passed evaluation, a signed build, a drilled kill switch and an audit-agreed oversight pack.',
@@ -78,7 +78,7 @@ export const SERVICES = [
     ],
   },
   {
-    id: 'monthly', group: 'Run', icon: 'chart', color: '#D97706', effort: 'Monthly', repeat: true,
+    id: 'monthly', group: 'Run', icon: 'chart', color: 'var(--brand)', effort: 'Monthly', repeat: true,
     name: 'Monthly oversight review',
     tagline: 'Blind re-performance, a disagreement rate with its interval, and a pack you can sign.',
     outcome: "This month's outcome evidence: overall rate, worst stratum and verdict against tolerance, with the drill and maturity current.",
@@ -94,7 +94,7 @@ export const SERVICES = [
     ],
   },
   {
-    id: 'promotion', group: 'Run', icon: 'arrowRight', color: '#7C3AED', gate: 'G4', effort: 'After 4+ rounds',
+    id: 'promotion', group: 'Run', icon: 'arrowRight', color: 'var(--brand)', gate: 'G4', effort: 'After 4+ rounds',
     name: 'Tier promotion',
     tagline: 'Earn more autonomy on sampling evidence, never by a configuration change.',
     outcome: 'A signed promotion with four consecutive in-tolerance rounds, a calibrated threshold where confidence routes, and a revised mandate.',
@@ -110,7 +110,7 @@ export const SERVICES = [
     ],
   },
   {
-    id: 'change', group: 'Run', icon: 'refresh', color: '#DC2626', gate: 'G5', effort: 'Per change · ≤ 30 days',
+    id: 'change', group: 'Run', icon: 'refresh', color: 'var(--brand)', gate: 'G5', effort: 'Per change · ≤ 30 days',
     name: 'Model, prompt or tool change',
     tagline: 'Decide whether a change is material and revalidate within 30 days.',
     outcome: 'A re-attested build, a hazard delta, a regression run, voided calibration and a full sampling round, signed at G5.',
@@ -127,7 +127,7 @@ export const SERVICES = [
     ],
   },
   {
-    id: 'audit', group: 'Assure', icon: 'printer', color: '#475569', effort: 'On request',
+    id: 'audit', group: 'Assure', icon: 'printer', color: 'var(--brand)', effort: 'On request',
     name: 'Audit & regulator pack',
     tagline: 'Answer "show me" in one pack, with signatures, rationale and the Unknowns stated.',
     outcome: 'An evidence pack: every artefact and its approver, every gate and its reasoning, outcome evidence with intervals, and the decision log.',
@@ -140,7 +140,7 @@ export const SERVICES = [
     ],
   },
   {
-    id: 'retire', group: 'Assure', icon: 'trash', color: '#64748B', gate: 'G6', effort: '1 week',
+    id: 'retire', group: 'Assure', icon: 'trash', color: 'var(--brand)', gate: 'G6', effort: '1 week',
     name: 'Retirement',
     tagline: 'Decommission cleanly: revoke identity, disable tools, keep the records.',
     outcome: 'A retired agent that can no longer act, with records retained and the inventory closed.',
@@ -191,3 +191,17 @@ export function recommended(a) {
   if (!evalService(svc('monthly'), a).complete) return svc('monthly');
   return svc('promotion');
 }
+
+// What each engagement hands over, and what it needs from the organisation.
+const ENGAGEMENT = {
+  intake: { deliverables: ['Agent inventory entry (00)', 'Justification record with the sampling cost on the benefit line (01)', 'Signed intake decision (G0)'], needs: 'A named accountable executive and agent owner, the decision being delegated, and its monthly volume.' },
+  design: { deliverables: ['Delegation policy, the mandate (02)', 'Hazard and failure-mode register (03)', 'Data and context provenance record (14)', 'Third-party evidence pack, opened (16)', 'Signed design approval (G1)'], needs: 'Architecture, security and data owners in the room, and the tolerance the accountable executive will accept.' },
+  build: { deliverables: ['Control stories in the team backlog (04)', 'Machine-readable control profile by tier (05)', 'Definition of Done in CI (G2)'], needs: 'A backlog tool and a CI pipeline the controls can live in.' },
+  golive: { deliverables: ['Pre-deployment evaluation report (13)', 'Signed build attestation (06)', 'Transparency notice and operator guide (15)', 'Tile register agreed with internal audit (11)', 'Kill switch drilled inside the limit (12)', 'Approval to operate (G3)'], needs: 'A realistic staging environment, the operators who will run it, and time from internal audit.' },
+  monthly: { deliverables: ['Sampling round with a Wilson interval (09)', 'Worst-stratum finding', 'Drill and maturity status', 'An oversight pack the accountable executive can sign (11)'], needs: 'Reviewers independent of the agent owner, blind to the agent\'s answer. Budget about twelve minutes a case.' },
+  promotion: { deliverables: ['Promotion evidence: four rounds, at least 1,000 cases', 'Calibration record where confidence routes (10)', 'Mandate revised for the new tier (02)', 'Signed tier promotion (G4)'], needs: 'At least four months of full-rate sampling since go-live.' },
+  change: { deliverables: ['A recorded material-change decision', 'Re-attested build (06)', 'Hazard analysis delta (03)', 'Regression evaluation (13)', 'Full sampling round', 'Signed change (G5)'], needs: 'The version triple of the changed build: model, prompt hash and tool manifest.' },
+  audit: { deliverables: ['Evidence pack as PDF or Markdown', 'Every gate with its signatures and rationale', 'Outcome evidence with intervals', 'The Unknowns, stated'], needs: 'Nothing new. The pack is generated from the workspace.' },
+  retire: { deliverables: ['Decommissioning record (12)', 'Identity revoked, tools disabled at the gateway', 'Decision and control records retained', 'Inventory entry closed (G6)'], needs: 'Security and platform engineering for the revocation.' },
+};
+for (const s of SERVICES) Object.assign(s, ENGAGEMENT[s.id]);

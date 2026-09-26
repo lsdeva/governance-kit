@@ -99,7 +99,7 @@ export function render() {
         const r = recommended(a);
         return `<tr><td><a href="#/agents/${a.id}" style="color:inherit"><b>${esc(agentName(a))}</b></a><div class="xs faint">${esc(agentCode(a))}</div></td><td><span class="badge ink">${tierOf(a)}</span></td>${gates.map((g) => `<td>${cell(a, g)}</td>`).join('')}
           <td>${l ? `<span class="badge ${l.vd.tone}" title="${esc(l.period)}">${pct(l.p)} · ${esc(l.vd.label)}</span>` : '<span class="badge unknown">Unknown</span>'}</td>
-          <td>${r ? `<a class="chip" href="#/services/${r.id}" style="border-color:${r.color}55">${esc(r.name)}</a>` : ''}</td></tr>`;
+          <td>${r ? `<a class="chip" href="#/services/${r.id}">${esc(r.name)}</a>` : ''}</td></tr>`;
       }).join('')}
       </tbody></table></div>
     </section>

@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>GovKit · Assurance for decisioning AI agents</title>
 <meta name="description" content="A free, role-based decision environment for governing decisioning AI agents across the SDLC you already run: 17 artefacts, 7 gates, 12 roles, autonomy tiers, and quantified outcome evidence.">
-<meta name="theme-color" content="#0B1A2C">
+<meta name="theme-color" content="#7A1631">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plex-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/serif.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/app.css">
 <script>
   // Apply the saved theme before first paint so the page never flashes.
@@ -17,19 +18,15 @@
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
-<div class="shell">
-  <aside class="side" id="side" aria-label="Primary"></aside>
-  <div class="scrim" data-action="close-nav"></div>
-  <div class="main">
-    <header class="top" id="top"></header>
-    <main class="content" id="content" tabindex="-1">
-      <noscript>
-        <div class="callout warn"><div><b>JavaScript is needed.</b> GovKit is an interactive workspace that runs entirely in your browser. Nothing is sent to a server. Enable JavaScript to use it.</div></div>
-      </noscript>
-      <div id="app" aria-live="polite"><p class="faint">Loading the operating model…</p></div>
-    </main>
-  </div>
-</div>
+<header class="mast" id="top"></header>
+<div class="subbar" id="subbar" hidden></div>
+<main class="content" id="content" tabindex="-1">
+  <noscript>
+    <div class="callout warn"><div><b>JavaScript is needed.</b> GovKit is an interactive workspace that runs entirely in your browser. Nothing is sent to a server. Enable JavaScript to use it.</div></div>
+  </noscript>
+  <div id="app" aria-live="polite"><p class="faint">Loading the operating model…</p></div>
+</main>
+<footer class="foot" id="foot"></footer>
 <div class="toast-wrap" id="toasts" role="status" aria-live="polite"></div>
 </body>
 </html>

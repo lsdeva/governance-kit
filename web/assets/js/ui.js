@@ -55,6 +55,7 @@ const P = {
   message: '<path d="M4 5h16v11H9l-5 4z"/>',
   pen: '<path d="M4 20l1.5-5L16 4.5 19.5 8 9 18.5z"/><path d="M4 20h16"/>',
   external: '<path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  chevron: '<path d="m6 9 6 6 6-6"/>',
   copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/>',
 };
 export function icon(name, cls = '') {

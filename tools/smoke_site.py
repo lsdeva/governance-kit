@@ -51,7 +51,7 @@ def wait_text(pg, selector, text):
 def wait_booted(pg):
     # The app fetches its data before the first render; wait for it rather
     # than racing it (CI runners are slower than a laptop).
-    pg.wait_for_function("document.querySelector('#side a') !== null", timeout=30000)
+    pg.wait_for_function("document.querySelector('#top .wordmark') !== null", timeout=30000)
 
 
 with sync_playwright() as p:
@@ -67,7 +67,7 @@ with sync_playwright() as p:
         pg.route("**/data/*.json", lambda route: (time.sleep(0.4), route.continue_()))
     pg.goto(BASE)
     wait_booted(pg)
-    pg.wait_for_selector(".land-hero")
+    pg.wait_for_selector(".hero-ed")
     pg.click("[data-demo]")
     pg.wait_for_function("location.hash.startsWith('#/agents/')")
     aid = pg.evaluate("location.hash").split("/")[2]

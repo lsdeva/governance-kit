@@ -45,31 +45,28 @@ const ROUTES = [
   [/^about$/, help.renderAbout],
 ];
 
-const NAV = [
-  { label: 'Workspace', items: [
-    ['', 'home', 'Home'],
-    ['services', 'spark', 'Services'],
-    ['tower', 'gauge', 'Control tower'],
-    ['work', 'inbox', 'My work', 'queue'],
-    ['tools', 'scale', 'Decision tools'],
+// Masthead navigation. Top-level items link directly; the two groups open a
+// menu panel with a one-line description per page.
+const MENUS = {
+  model: { label: 'Operating model', intro: 'The model itself: where each artefact sits in the SDLC, who owns it, which gate needs it.', items: [
+    ['model', 'SDLC map', 'Seventeen artefacts on the nine phases you already run'],
+    ['model/gates', 'Gates G0–G6', 'What must exist to pass, and who signs'],
+    ['model/tiers', 'Autonomy tiers', 'How T1–T4 decides what is mandatory'],
+    ['model/raci', 'RACI matrix', 'Who creates, approves, is consulted, is informed'],
+    ['artefacts', 'Artefacts 00–16', 'Purpose, fields, done test and references'],
+    ['model/metrics', 'Metric register', 'Process, Outcome and Unknown, with the sampling method'],
+    ['model/platform', 'Evidence platform', 'What platform engineering builds once'],
+    ['model/roadmap', 'Roadmap & maturity', 'Twelve months to evidenced; L1–L5'],
+    ['model/references', 'References', 'Every source, clause and verification status'],
   ] },
-  { label: 'Learn', items: [
-    ['guide', 'compass', 'How it works'],
-    ['roles', 'users', 'Roles & playbooks'],
-    ['help', 'help', 'Glossary & FAQ'],
+  learn: { label: 'Learn', intro: 'How to use GovKit, and the playbook for every role.', items: [
+    ['guide', 'How it works', 'The five-step workflow in five minutes'],
+    ['roles', 'Roles & playbooks', 'What each of the twelve roles decides and does'],
+    ['help', 'Glossary & FAQ', 'The vocabulary, and the questions teams ask first'],
+    ['about', 'Privacy & data', 'Where your work lives, and the licence'],
   ] },
-  { label: 'Operating model', items: [
-    ['model', 'map', 'SDLC map'],
-    ['model/gates', 'shield', 'Gates G0–G6'],
-    ['model/tiers', 'layers', 'Autonomy tiers'],
-    ['model/raci', 'grid', 'RACI matrix'],
-    ['artefacts', 'file', 'Artefacts 00–16'],
-    ['model/metrics', 'chart', 'Metric register'],
-    ['model/platform', 'server', 'Evidence platform'],
-    ['model/roadmap', 'flag', 'Roadmap & maturity'],
-    ['model/references', 'book', 'References'],
-  ] },
-];
+};
+const PRIMARY = [['services', 'Services'], ['tower', 'Control tower'], ['work', 'My work'], ['tools', 'Decision tools']];
 
 let current = { path: null, view: null };
 
@@ -80,39 +77,91 @@ const anchor = () => rawHash().split('#')[1] || '';
 export function go(p) { location.hash = '#/' + p; }
 export function rerender({ keepScroll = true } = {}) { route({ keepScroll }); }
 
-function renderSide() {
+const WORDMARK = '<a class="wordmark" href="#/" aria-label="GovKit home">Gov<span>Kit</span></a>';
+
+function isActive(href) {
   const p = path();
-  const role = S().role;
-  const q = role ? queue(S().agents, role).filter((x) => x.kind !== 'read' && x.kind !== 'optional').length : 0;
-  const active = (href) => href === '' ? p === '' : (p === href || (p.startsWith(href + '/') && !NAV.some((g) => g.items.some(([h]) => h !== href && h.startsWith(href + '/') && (p === h || p.startsWith(h + '/'))))));
-  const agentsActive = p.startsWith('agents/');
-  document.getElementById('side').innerHTML = `
-    <a class="brand" href="#/"><span class="brand-mark">${icon('shield')}</span><span><b>GovKit</b><small>Assurance for AI agents</small></span></a>
-    <a class="cta-new" href="#/agents/new">${icon('plus')} Register an agent</a>
-    <nav class="nav" aria-label="Main">
-      ${NAV.map((g) => `<div class="nav-group"><div class="nav-label">${g.label}</div>
-        ${g.items.map(([href, ic, label, badge]) => `<a href="#/${href}" ${active(href) || (href === 'work' && agentsActive) ? 'aria-current="page"' : ''}>${icon(ic)}<span>${label}</span>${badge === 'queue' && q ? `<span class="count" title="Items waiting for you">${q}</span>` : ''}</a>`).join('')}
-      </div>`).join('')}
-    </nav>
-    <div class="side-foot">${icon('lock', 'sm-ic')} Runs in your browser. Nothing is uploaded. <a href="#/about">Privacy</a><br>Operating model draft 0.2 · refs checked 23 Sep 2026</div>`;
+  if (href === 'work') return p === 'work' || p.startsWith('agents/');
+  return p === href || p.startsWith(href + '/');
 }
 
 function renderTop(crumbs) {
   const s = S();
   const r = s.role ? D.role[s.role] : null;
+  const q = r ? queue(s.agents, r.id).filter((x) => x.kind !== 'read' && x.kind !== 'optional').length : 0;
   const theme = document.documentElement.getAttribute('data-theme');
   const dark = theme ? theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const menuOn = (k) => MENUS[k].items.some(([h]) => isActive(h));
   document.getElementById('top').innerHTML = `
-    <button class="icon-btn menu" data-action="open-nav" aria-label="Open menu">${icon('menu')}</button>
-    <a class="brand-sm" href="#/"><span class="brand-mark">${icon('shield')}</span>GovKit</a>
-    <nav class="crumbs" aria-label="Breadcrumb">${(crumbs || []).map(([l, h], i, arr) => i === arr.length - 1 ? `<span>${esc(l)}</span>` : `<a href="${h}">${esc(l)}</a><span class="sep">/</span>`).join('')}</nav>
-    <div class="top-right">
-      <button class="search-btn" data-action="palette" aria-label="Search and jump (Ctrl K)">${icon('search')}<span>Search or jump to…</span><kbd>Ctrl K</kbd></button>
-      <button class="role-btn ${r ? '' : 'none'}" data-action="role-menu" aria-haspopup="true" aria-expanded="false" title="The role you are acting as">
-        ${r ? av(r.id) : `<span class="av">?</span>`}<span class="rl">${r ? `Acting as <b>${esc(r.name)}</b>` : 'Choose your role'}</span>
-      </button>
-      <button class="icon-btn" data-action="theme" aria-label="Switch to ${dark ? 'light' : 'dark'} theme" title="Switch theme">${icon(dark ? 'sun' : 'moon')}</button>
-    </div>`;
+    <div class="mast-in">
+      ${WORDMARK}
+      <nav class="primary" aria-label="Main">
+        ${PRIMARY.map(([h, l]) => `<a href="#/${h}" ${isActive(h) ? 'aria-current="page"' : ''}>${l}${h === 'work' && q ? `<sup title="Items waiting for you">${q}</sup>` : ''}</a>`).join('')}
+        ${Object.entries(MENUS).map(([k, m]) => `<button class="dd-btn ${menuOn(k) ? 'on' : ''}" data-action="menu" data-menu="${k}" aria-expanded="false" aria-controls="menu-panel">${m.label} ${icon('chevron')}</button>`).join('')}
+      </nav>
+      <div class="mast-right">
+        <button class="icon-btn" data-action="palette" aria-label="Search and jump (Ctrl K)" title="Search (Ctrl K)">${icon('search')}</button>
+        <button class="role-link ${r ? '' : 'none'}" data-action="role-menu" aria-haspopup="true" aria-expanded="false" title="The role you are acting as">${r ? `${av(r.id)}<span>${esc(r.name)}</span>` : '<span>Choose your role</span>'}</button>
+        <button class="icon-btn" data-action="theme" aria-label="Switch to ${dark ? 'light' : 'dark'} theme" title="Switch theme">${icon(dark ? 'sun' : 'moon')}</button>
+        <a class="btn primary mast-cta" href="#/agents/new">Register an agent</a>
+        <button class="icon-btn burger" data-action="open-nav" aria-label="Open menu">${icon('menu')}</button>
+      </div>
+    </div>
+    <div class="menu-panel" id="menu-panel" hidden></div>`;
+  const sub = document.getElementById('subbar');
+  sub.hidden = !crumbs || crumbs.length < 2;
+  sub.innerHTML = `<nav class="crumbs" aria-label="Breadcrumb">${(crumbs || []).map(([l, h], i, arr) => i === arr.length - 1 ? `<span aria-current="page">${esc(l)}</span>` : `<a href="${h}">${esc(l)}</a><span class="sep">/</span>`).join('')}</nav>`;
+}
+
+function openMenu(key, btn) {
+  const panel = document.getElementById('menu-panel');
+  const wasOpen = !panel.hidden && panel.dataset.menu === key;
+  closeMenus();
+  if (wasOpen) return;
+  const m = MENUS[key];
+  panel.dataset.menu = key;
+  panel.innerHTML = `<div class="menu-in"><div class="menu-intro"><h3>${m.label}</h3><p>${m.intro}</p></div>
+    <div class="menu-links">${m.items.map(([h, l, d]) => `<a href="#/${h}" ${isActive(h) ? 'aria-current="page"' : ''}><b>${l}</b><span>${d}</span></a>`).join('')}</div></div>`;
+  panel.hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+}
+function closeMenus() {
+  const panel = document.getElementById('menu-panel');
+  if (panel) panel.hidden = true;
+  document.querySelectorAll('[data-action="menu"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+}
+
+// Full-screen navigation for small screens.
+function openMobileNav() {
+  const s = S();
+  const el = document.createElement('div');
+  el.className = 'mobile-nav';
+  el.innerHTML = `<div class="mobile-nav-top">${WORDMARK}<button class="icon-btn" data-action="close-nav" aria-label="Close menu">${icon('x')}</button></div>
+    <nav aria-label="Main">
+      <a href="#/">Home</a>${PRIMARY.map(([h, l]) => `<a href="#/${h}">${l}</a>`).join('')}
+      ${Object.values(MENUS).map((m) => `<h4>${m.label}</h4>${m.items.map(([h, l]) => `<a class="sub" href="#/${h}">${l}</a>`).join('')}`).join('')}
+    </nav>
+    <div class="mobile-nav-foot"><a class="btn primary" href="#/agents/new">Register an agent</a><button class="btn" data-action="role-menu">${s.role ? `Acting as ${esc(D.role[s.role].name)}` : 'Choose your role'}</button></div>`;
+  document.body.appendChild(el);
+  document.body.classList.add('nav-open');
+}
+function closeMobileNav() {
+  document.querySelector('.mobile-nav')?.remove();
+  document.body.classList.remove('nav-open');
+}
+
+let footDone = false;
+function renderFoot() {
+  if (footDone) return;
+  footDone = true;
+  const col = (t, items) => `<div><h4>${t}</h4>${items.map(([h, l]) => `<a href="#/${h}">${l}</a>`).join('')}</div>`;
+  document.getElementById('foot').innerHTML = `<div class="foot-in">
+    <div class="foot-brand">${WORDMARK}<p>Assurance for AI agents that decide, act and close cases nobody revisits. An open operating model for the SDLC you already run.</p></div>
+    ${col('Services', [['services/intake', 'Intake & funding'], ['services/golive', 'Go-live readiness'], ['services/monthly', 'Monthly oversight'], ['services/change', 'Model or prompt change'], ['services/audit', 'Audit & regulator pack']])}
+    ${col('Operating model', [['model', 'SDLC map'], ['model/gates', 'Gates'], ['model/tiers', 'Autonomy tiers'], ['artefacts', 'Artefacts'], ['model/references', 'References']])}
+    ${col('Workspace', [['tower', 'Control tower'], ['work', 'My work'], ['tools', 'Decision tools'], ['roles', 'Roles & playbooks'], ['help', 'Glossary & FAQ']])}
+  </div>
+  <div class="foot-base"><span>Operating model draft 0.2 · references checked 23 Sep 2026 · guidance, not legal advice</span><span>Runs entirely in your browser. Nothing is uploaded. <a href="#/about">Privacy &amp; data</a> · Content CC BY 4.0 · Code MIT</span></div>`;
 }
 
 export function openRoleMenu(anchor) {
@@ -159,9 +208,10 @@ function route({ keepScroll = false } = {}) {
   app.innerHTML = `<div class="${changed ? 'fade-in' : ''}">${out.html}</div>`;
   document.getElementById('content').classList.toggle('wide', !!out.wide);
   current = { path: p, view: out };
-  document.title = out.title ? `${out.title} · GovKit` : 'GovKit · Agentic SDLC Operating Model';
-  renderSide();
+  document.title = out.title ? `${out.title} · GovKit` : 'GovKit · Assurance for decisioning AI agents';
   renderTop(out.crumbs);
+  renderFoot();
+  closeMobileNav();
   if (out.mount) out.mount(app);
   const target = anchor() && document.getElementById(anchor());
   if (target && !keepScroll) {
@@ -178,12 +228,14 @@ function route({ keepScroll = false } = {}) {
 function globalClicks(e) {
   const a = e.target.closest('[data-action]');
   if (!e.target.closest('#role-pop') && !e.target.closest('[data-action="role-menu"]')) closePopover();
+  if (!e.target.closest('#menu-panel') && (!a || a.dataset.action !== 'menu')) closeMenus();
   if (!a) return;
   const act = a.dataset.action;
-  if (act === 'open-nav') document.body.classList.add('nav-open');
-  else if (act === 'close-nav') document.body.classList.remove('nav-open');
+  if (act === 'open-nav') openMobileNav();
+  else if (act === 'close-nav') closeMobileNav();
+  else if (act === 'menu') openMenu(a.dataset.menu, a);
   else if (act === 'palette') openPalette();
-  else if (act === 'role-menu') { if (document.getElementById('role-pop')) closePopover(); else openRoleMenu(a); }
+  else if (act === 'role-menu') { if (a.closest('.mobile-nav')) closeMobileNav(); if (document.getElementById('role-pop')) closePopover(); else openRoleMenu(a); }
   else if (act === 'theme') {
     const cur = document.documentElement.getAttribute('data-theme');
     const dark = cur ? cur === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
@@ -203,6 +255,7 @@ async function boot() {
   }
   document.addEventListener('click', globalClicks);
   installPalette();
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMenus(); closeMobileNav(); } });
   window.addEventListener('hashchange', () => route());
   // Role changes and imports re-render the current page; form typing saves silently.
   onChange(() => route({ keepScroll: true }));
