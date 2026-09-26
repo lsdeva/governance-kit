@@ -70,6 +70,7 @@ export function render() {
     crumbs: [['Home']],
     wide: true,
     html: `
+    <div class="hero-dark">
     <section class="hero-ed">
       <div>
         <span class="eyebrow accent">Agentic SDLC operating model</span>
@@ -88,6 +89,7 @@ export function render() {
         <div><b>0</b><span>Accounts or uploads. It runs in your browser</span></div>
       </div>
     </section>
+    </div>
 
     ${desk}
 
