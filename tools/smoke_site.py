@@ -1,175 +1,97 @@
-#!/usr/bin/env python3
-"""Smoke-test the BUILT site in site/.
+"""Drive the built site in a real browser and fail on any script error.
 
-The generator validates its own inputs; this checks the artefact that actually
-ships. It exists because a defect reached production that every source-level
-check passed: /decide/ rendered its YAML front matter as visible text, because
-MkDocs silently declines to parse a block that does not start at byte 0.
+The site is a client-rendered app, so a static check can't see a broken view:
+a typo in one module leaves that route blank. This serves web/, loads the
+worked example, visits every route (all 17 forms and 7 gates included) as
+several roles, and plays one form through draft → submit → approve.
 
-Checks:
-  1. No page leaks YAML front matter into the rendered body.
-  2. Every page carries the same site name — no mixed old/new branding.
-  3. Every page carries the same top-level navigation.
-  4. No internal link 404s.
-  5. No external asset references (the privacy guarantee).
-
-Usage:
-    python tools/smoke_site.py            # after mkdocs build
+Run: python tools/smoke_site.py   (needs: pip install playwright; playwright install chromium)
 """
-
-from __future__ import annotations
-
-import re
+import functools
+import http.server
+import pathlib
 import sys
-from collections import Counter
-from pathlib import Path
-from urllib.parse import urljoin, urlparse, unquote
+import threading
 
-ROOT = Path(__file__).resolve().parent.parent
-SITE = ROOT / "site"
+from playwright.sync_api import sync_playwright
 
-# Keys the generator actually emits in front matter. A page rendering any of
-# these as body text means the block was not parsed.
-FRONT_MATTER_KEYS = ("title:", "hide:", "template:", "description:")
-
-failures: list[str] = []
+WEB = pathlib.Path(__file__).resolve().parent.parent / "web"
+class QuietHandler(http.server.SimpleHTTPRequestHandler):
+    def log_message(self, *args):
+        pass
 
 
-def fail(msg: str) -> None:
-    failures.append(msg)
-    print("FAIL  " + msg)
+handler = functools.partial(QuietHandler, directory=str(WEB))
+server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+threading.Thread(target=server.serve_forever, daemon=True).start()
+BASE = f"http://127.0.0.1:{server.server_address[1]}/"
+
+problems = []
 
 
-def ok(msg: str) -> None:
-    print("PASS  " + msg)
+def set_role(pg, role):
+    pg.evaluate(
+        "r => { const s = JSON.parse(localStorage.getItem('govkit.om.v1')); s.role = r; s.person = 'CI';"
+        " localStorage.setItem('govkit.om.v1', JSON.stringify(s)); }", role)
+    pg.reload()
 
 
-def body_of(html: str) -> str:
-    """The rendered article only — front matter leaks show up here."""
-    m = re.search(r'<article[^>]*class="[^"]*md-content__inner.*?</article>',
-                  html, re.S)
-    return m.group(0) if m else html
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    pg = browser.new_page()
+    pg.on("pageerror", lambda e: problems.append(f"script error: {e}"))
+    pg.on("console", lambda m: problems.append(f"console error: {m.text}") if m.type == "error" else None)
+    pg.on("requestfailed", lambda r: problems.append(f"request failed: {r.url}"))
+    pg.on("request", lambda r: problems.append(f"external request: {r.url}") if not r.url.startswith(BASE) and not r.url.startswith("data:") and not r.url.startswith("blob:") else None)
 
+    pg.goto(BASE)
+    pg.wait_for_selector(".hero")
+    pg.click("[data-demo]")
+    pg.wait_for_function("location.hash.startsWith('#/agents/')")
+    aid = pg.evaluate("location.hash").split("/")[2]
 
-def main() -> int:
-    if not SITE.exists():
-        print("ERROR: site/ not found. Run `mkdocs build --strict` first.")
-        return 1
+    routes = ["", "guide", "roles", "work", "agents/new", f"agents/{aid}", f"agents/{aid}/report", "tools", "model",
+              "artefacts", "help", "about"]
+    routes += [f"roles/{r}" for r in ["AE", "SP", "AOW", "PO", "ENG", "SEC", "DO", "RC", "PLE", "IRV", "OPS", "IA"]]
+    routes += [f"tools/{t}" for t in ["tier", "change", "sampling", "promotion", "calibration", "maturity"]]
+    routes += [f"model/{s}" for s in ["gates", "tiers", "raci", "metrics", "platform", "roadmap", "references"]]
+    routes += [f"artefacts/{i:02d}" for i in range(17)]
+    routes += [f"agents/{aid}/a/{i:02d}" for i in range(17)]
+    routes += [f"agents/{aid}/g/G{i}" for i in range(7)]
 
-    pages = sorted(SITE.rglob("*.html"))
-    if not pages:
-        print("ERROR: site/ contains no HTML.")
-        return 1
+    for role in ["AOW", "AE", "RC", "IRV"]:
+        set_role(pg, role)
+        for r in routes:
+            pg.goto(BASE + "#/" + r)
+            text = pg.inner_text("#app")
+            if "Loading the operating model" in text or "doesn't exist" in text or len(text) < 60:
+                problems.append(f"route renders nothing: #/{r} as {role}")
 
-    # ---- 1. front matter must never reach the rendered body ---------------
-    leaked = []
-    for f in pages:
-        html = f.read_text(encoding="utf-8", errors="replace")
-        body = body_of(html)
-        # Strip tags so we test visible text, not attributes that legitimately
-        # contain the word "title:".
-        text = re.sub(r"<[^>]+>", " ", body)
-        for key in FRONT_MATTER_KEYS:
-            # A leak looks like a line starting with the key at the very top of
-            # the visible text — e.g. "title: Decide hide: - toc".
-            if re.search(r"(?:^|\s)" + re.escape(key) + r"\s*\S", text[:400]):
-                leaked.append((f.relative_to(SITE).as_posix(), key))
-                break
-    if leaked:
-        for p, k in leaked[:8]:
-            fail(f"front matter leaked into the page body: /{p} ({k})")
-    else:
-        ok(f"no front matter leaked into any of {len(pages)} pages")
+    # One form through its lifecycle: the IRV-owned 10 is a draft in the example.
+    set_role(pg, "IRV")
+    pg.goto(BASE + f"#/agents/{aid}/a/10")
+    pg.fill("#in-routing_threshold", "0.95")
+    for fid in ["band_definitions", "threshold_justification"]:
+        if not pg.input_value(f"#in-{fid}"):
+            pg.fill(f"#in-{fid}", "CI")
+    if pg.locator("#f-band_verdicts .trow").count() == 0:
+        pg.click("[data-add-row=band_verdicts]")
+        pg.locator("#f-band_verdicts .trow input.input").first.fill("0.95–1.00")
+    pg.click("#submit")
+    if "In review" not in pg.inner_text("#st-pill"):
+        problems.append("form 10 did not move to In review on submit")
+    set_role(pg, "RC")
+    pg.goto(BASE + f"#/agents/{aid}/a/10")
+    pg.click("#approve")
+    for c in pg.locator("dialog input[type=checkbox]").all():
+        c.check()
+    pg.click("dialog button[value=ok]")
+    if "Approved" not in pg.inner_text("#st-pill"):
+        problems.append("form 10 was not approved")
+    browser.close()
 
-    # ---- 2. one site name across every page -------------------------------
-    names = Counter()
-    for f in pages:
-        html = f.read_text(encoding="utf-8", errors="replace")
-        m = re.search(r"<title>(.*?)</title>", html, re.S)
-        if not m:
-            continue
-        title = re.sub(r"\s+", " ", m.group(1)).strip()
-        # Titles are "Page - SiteName"; take the trailing site name.
-        names[title.rsplit(" - ", 1)[-1]] += 1
-    if len(names) > 1:
-        fail(f"pages disagree on the site name: {dict(names)}")
-    else:
-        ok(f"one site name across all pages: {list(names) or ['(none)']}")
-
-    # ---- 3. one navigation across every page ------------------------------
-    navs = Counter()
-    for f in pages:
-        html = f.read_text(encoding="utf-8", errors="replace")
-        m = re.search(r'<nav class="md-tabs".*?</nav>', html, re.S)
-        if not m:
-            continue
-        items = tuple(
-            re.sub(r"\s+", " ", x).strip()
-            for x in re.findall(r'class="md-tabs__link"[^>]*>(.*?)</a>',
-                                m.group(0), re.S)
-        )
-        navs[items] += 1
-    if len(navs) > 1:
-        fail(f"pages disagree on the navigation: {len(navs)} variants")
-        for n, c in navs.items():
-            print("        %d pages: %s" % (c, list(n)))
-    else:
-        ok("one navigation across all pages: "
-           + str(list(list(navs)[0]) if navs else []))
-
-    # ---- 4. internal links resolve ----------------------------------------
-    pat = re.compile(r'(?:href|src|data-src)="([^"]+)"')
-    broken, checked = [], 0
-    for f in pages:
-        rel = f.relative_to(SITE).as_posix()
-        if rel == "404.html":
-            continue
-        for m in pat.finditer(f.read_text(encoding="utf-8", errors="replace")):
-            u = m.group(1)
-            if u.startswith(("http://", "https://", "mailto:", "data:", "#",
-                             "javascript:")):
-                continue
-            checked += 1
-            target = SITE / unquote(urlparse(urljoin("/" + rel, u)).path).lstrip("/")
-            if target.is_dir():
-                target = target / "index.html"
-            if not target.exists():
-                broken.append((rel, u))
-    if broken:
-        for p, u in broken[:8]:
-            fail(f"broken link on /{p} -> {u}")
-    else:
-        ok(f"all {checked} internal references resolve")
-
-    # ---- 5. no external assets (the privacy guarantee) --------------------
-    ext = set()
-    for f in pages:
-        html = f.read_text(encoding="utf-8", errors="replace")
-        # Match the whole tag rather than looking backwards from the URL: a
-        # nearby <img> upstream would otherwise misattribute an ordinary <a>.
-        # Only FETCHED assets break the privacy guarantee — a link the user
-        # clicks, a canonical URL and an og:url never hit the network.
-        for m in re.finditer(r"<(script|img|iframe|link)\b[^>]*>", html, re.I):
-            tag = m.group(0)
-            name = m.group(1).lower()
-            if name == "link" and not re.search(
-                    r'rel="[^"]*\b(?:stylesheet|icon|preload|prefetch)\b', tag, re.I):
-                continue          # metadata, not a request
-            for a in re.finditer(r'(?:src|href)="(https?://[^"]+)"', tag):
-                ext.add(a.group(1))
-    if ext:
-        for u in sorted(ext)[:6]:
-            fail(f"external asset would be fetched at runtime: {u}")
-    else:
-        ok("no external assets referenced — privacy guarantee intact")
-
-    print()
-    if failures:
-        print(f"SMOKE TEST FAILED — {len(failures)} problem(s)")
-        return 1
-    print(f"SMOKE TEST PASSED — {len(pages)} pages")
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+server.shutdown()
+if problems:
+    print("\n".join(sorted(set(problems))))
+    sys.exit(1)
+print(f"Smoke test passed: {len(routes)} routes x 4 roles, form lifecycle OK.")

@@ -1,0 +1,130 @@
+[
+  {
+    "reference": "IMDA Model AI Governance Framework for Agentic AI",
+    "version": "Jan 2026; updated May 2026",
+    "used_for": "Tier spectrum, risk factors, checkpoints, testing, monitoring, end-user transparency",
+    "clauses": "§2.1.1–2.1.2 · §2.2.1–2.2.2 · §2.3.1–2.3.3 · §2.4.1–2.4.3",
+    "status": "verified_2026-09-23",
+    "url": "https://www.imda.gov.sg/-/media/imda/files/about/emerging-tech-and-research/artificial-intelligence/mgf-for-agentic-ai.pdf"
+  },
+  {
+    "reference": "CSA Singapore, Securing Agentic AI: Addendum to Guidelines & Companion Guide on Securing AI Systems",
+    "version": "Final 17 Jun 2026 (consultation Oct–Dec 2025); base guidelines Oct 2024",
+    "used_for": "Lifecycle approach; autonomy-level assessment, threat modelling, capability analysis; rogue actions and data disclosure",
+    "clauses": "03, 13, 14",
+    "status": "verified_2026-09-23",
+    "url": "https://www.csa.gov.sg/resources/publications/addendum-on-securing-ai-systems/"
+  },
+  {
+    "reference": "Singapore Government ICT&SS Policy Reform, Generative AI SSP",
+    "version": "Current",
+    "used_for": "Public-sector baseline controls imported as a profile",
+    "clauses": "DP-8 · GA-1 to GA-8",
+    "status": "verified_2026-09-23",
+    "url": "https://info.standards.tech.gov.sg/ssp/gen-ai/"
+  },
+  {
+    "reference": "GovTech AI Guardian (Litmus, Sentinel)",
+    "version": "Current",
+    "used_for": "Pre-deployment testing and runtime guardrails for government AI",
+    "clauses": "13 · platform",
+    "status": "verified_2026-09-23",
+    "url": "https://www.aiguardian.gov.sg/"
+  },
+  {
+    "reference": "MAS, Safeguards for Agentic Finance at Runtime (SAFR) v1.0",
+    "version": "Jul 2026; information paper, not guidance",
+    "used_for": "Authorisation → runtime assessment → recordkeeping; a checkpoint between every agent decision and its execution",
+    "clauses": "02 · gate · 07",
+    "status": "verified_2026-09-23",
+    "url": "https://www.mas.gov.sg/publications/monographs-or-information-paper/2026/safeguards-for-agentic-finance-at-runtime"
+  },
+  {
+    "reference": "ISO/IEC 42001:2023",
+    "version": "Annex A, 38 controls",
+    "used_for": "Management-system controls cited per artefact",
+    "clauses": "A.3.2 · A.4.2 · A.5.2–5.5 · A.6.2.2–6.2.8 · A.7.2–7.6 · A.8.2 · A.8.4 · A.9.2–9.4 · A.10.2–10.3",
+    "status": "verified_2026-09-23",
+    "url": "https://www.iso.org/standard/81230.html"
+  },
+  {
+    "reference": "NIST AI RMF 1.0 (AI 100-1) and GenAI Profile (AI 600-1)",
+    "version": "2023 / 2024",
+    "used_for": "Subcategories cited per artefact",
+    "clauses": "GOVERN 1.5–1.7, 3.2, 6.1 · MAP 1.1, 3.1–3.4, 5.1 · MEASURE 2.3, 2.4, 2.7, 3.1 · MANAGE 2.4, 3.1, 4.1, 4.3",
+    "status": "verified_2026-09-23",
+    "url": "https://www.nist.gov/itl/ai-risk-management-framework"
+  },
+  {
+    "reference": "CSA AI Controls Matrix v1.1",
+    "version": "14 Jul 2026",
+    "used_for": "Seed catalogue: 247 objectives across 18 domains, with mappings to ISO 42001, EU AI Act, NIST AI RMF & 600-1, BSI AIC4, AIUC-1",
+    "clauses": "05",
+    "status": "verified_2026-09-23",
+    "url": "https://cloudsecurityalliance.org/artifacts/ai-controls-matrix-v1-1"
+  },
+  {
+    "reference": "OWASP Top 10 for Agentic Applications",
+    "version": "2026",
+    "used_for": "Hazard prompts and red-team scope",
+    "clauses": "ASI01–ASI10",
+    "status": "verified_2026-09-23",
+    "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+  },
+  {
+    "reference": "OSCAL",
+    "version": "v1.2.3 current (reference cited v1.2.2)",
+    "used_for": "Controls as data; component definitions; assessment results; mappings",
+    "clauses": "catalog · profile · component-definition · assessment-results · mapping",
+    "status": "verified_2026-09-23",
+    "url": "https://pages.nist.gov/OSCAL-Reference/models/latest/"
+  },
+  {
+    "reference": "IETF draft-sharif-agent-audit-trail",
+    "version": "-04, 15 Sep 2026; individual draft",
+    "used_for": "Decision record format and integrity",
+    "clauses": "record fields · prev_hash · RFC 8785 · optional RFC 6962",
+    "status": "verified_2026-09-23",
+    "url": "https://datatracker.ietf.org/doc/draft-sharif-agent-audit-trail/"
+  },
+  {
+    "reference": "OpenTelemetry GenAI semantic conventions",
+    "version": "Development status",
+    "used_for": "Trajectory telemetry",
+    "clauses": "invoke_agent · execute_tool",
+    "status": "verified_2026-09-23",
+    "url": "https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-agent-spans.md"
+  },
+  {
+    "reference": "IOSCO, Supervisory Toolkit for AI Use in Capital Markets",
+    "version": "FR/02/2026, May 2026",
+    "used_for": "Governance, third-party, recordkeeping expectations; firms retain responsibility",
+    "clauses": "Cross-sector anchor",
+    "status": "verified_2026-09-23",
+    "url": "https://www.iosco.org/library/pubdocs/pdf/IOSCOPD823.pdf"
+  },
+  {
+    "reference": "EU AI Act (Reg 2024/1689) as amended by Digital Omnibus",
+    "version": "Annex III high-risk from 2 Dec 2027 (per reference)",
+    "used_for": "Logging, oversight, transparency, incident reporting",
+    "clauses": "Art 9, 12, 13, 14, 26, 73",
+    "status": "per_source_reference",
+    "url": null
+  },
+  {
+    "reference": "US SR 26-2 / OCC Bulletin 2026-13 · UK PRA SS1/23 · FCA Mills Review · FSB sound practices (consultation) · COSO GenAI internal control (Feb 2026)",
+    "version": "2024–2026",
+    "used_for": "The regulatory gap: accountability intact, method absent",
+    "clauses": "Section 4 of source reference",
+    "status": "per_source_reference",
+    "url": null
+  },
+  {
+    "reference": "Academic sources: arXiv 2607.17225 (delegation policy) · 2506.01782 (STPA for frontier AI) · 2604.13767 (continuous OSCAL) · Arora, Vogelsang & Sharma (Jul 2026) · Eckhardt et al. ICSE 2016 · Porter, Votta & Basili",
+    "version": "Various",
+    "used_for": "Method sources for 01, 02, 03, 04, 08",
+    "clauses": "—",
+    "status": "per_source_reference",
+    "url": null
+  }
+]

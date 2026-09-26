@@ -1,0 +1,146 @@
+[
+  {
+    "name": "Inventory coverage",
+    "kind": "process",
+    "formula": "agents with identity ∩ inventory ÷ agents with identity",
+    "source": "00",
+    "owner": "AOW",
+    "cadence": "Weekly",
+    "threshold": "100%"
+  },
+  {
+    "name": "Control-test coverage",
+    "kind": "process",
+    "formula": "applicable controls with deterministic test ÷ applicable controls",
+    "source": "05, 04",
+    "owner": "RC",
+    "cadence": "Per build",
+    "threshold": "100% for block_deploy"
+  },
+  {
+    "name": "Record completeness",
+    "kind": "process",
+    "formula": "actions with chain-verified 07 and all grounds fields ÷ actions (worst day)",
+    "source": "07, 08",
+    "owner": "PLE",
+    "cadence": "Nightly",
+    "threshold": "≥ 99.9%"
+  },
+  {
+    "name": "Chain verification",
+    "kind": "process",
+    "formula": "records re-hashed and verified ÷ records",
+    "source": "07",
+    "owner": "PLE",
+    "cadence": "Nightly",
+    "threshold": "100%"
+  },
+  {
+    "name": "Gateway bypass attempts",
+    "kind": "process",
+    "formula": "calls reaching core systems not via gateway",
+    "source": "gateway logs",
+    "owner": "PLE",
+    "cadence": "Continuous",
+    "threshold": "0, and any > 0 is red"
+  },
+  {
+    "name": "Version drift",
+    "kind": "process",
+    "formula": "records whose triple ≠ attested build",
+    "source": "06, 07",
+    "owner": "ENG",
+    "cadence": "Nightly",
+    "threshold": "0"
+  },
+  {
+    "name": "Gate block rate",
+    "kind": "process",
+    "formula": "proposed actions blocked ÷ proposed, by reason",
+    "source": "gate log",
+    "owner": "AOW",
+    "cadence": "Daily",
+    "threshold": "Trend and spikes"
+  },
+  {
+    "name": "Escalation rate",
+    "kind": "process",
+    "formula": "cases escalated ÷ cases, by type, with tail",
+    "source": "07",
+    "owner": "AOW",
+    "cadence": "Weekly",
+    "threshold": "Set in 02"
+  },
+  {
+    "name": "Override rate",
+    "kind": "process",
+    "formula": "human reversals of agent closures where a human looked, by reviewer, with tail",
+    "source": "core system + 07",
+    "owner": "OPS",
+    "cadence": "Monthly",
+    "threshold": "Stable"
+  },
+  {
+    "name": "Inherited controls unevidenced",
+    "kind": "process",
+    "formula": "controls marked platform-inherited without 16 evidence",
+    "source": "06, 16",
+    "owner": "RC",
+    "cadence": "Per release",
+    "threshold": "0"
+  },
+  {
+    "name": "Time to halt",
+    "kind": "process",
+    "formula": "minutes from kill-switch decision to zero actions, last drill",
+    "source": "12",
+    "owner": "OPS",
+    "cadence": "Quarterly",
+    "threshold": "≤ limit in 12"
+  },
+  {
+    "name": "Change-to-revalidation",
+    "kind": "process",
+    "formula": "days from material change to completed full 09 round",
+    "source": "G5, 09",
+    "owner": "AOW",
+    "cadence": "Per change",
+    "threshold": "≤ 30 days"
+  },
+  {
+    "name": "Disagreement rate",
+    "kind": "outcome",
+    "formula": "agent-wrong disagreements ÷ n, Wilson 95%, overall + worst stratum",
+    "source": "09",
+    "owner": "IRV",
+    "cadence": "Monthly",
+    "threshold": "≤ tolerance in 02"
+  },
+  {
+    "name": "Calibration status",
+    "kind": "outcome",
+    "formula": "per band: calibrated / not / void, with rounds held",
+    "source": "10",
+    "owner": "IRV",
+    "cadence": "Monthly",
+    "threshold": "Threshold points to calibrated band"
+  },
+  {
+    "name": "Canary catch rate",
+    "kind": "outcome",
+    "formula": "seeded known-wrong outputs caught by on-the-loop operators ÷ seeded",
+    "source": "09, 15",
+    "owner": "IRV",
+    "cadence": "Monthly",
+    "threshold": "Set in 02"
+  },
+  {
+    "name": "Outcome coverage",
+    "kind": "unknown",
+    "formula": "closures in strata with no 09 sample this quarter ÷ closures, strata named",
+    "source": "09 vs 07",
+    "owner": "IRV",
+    "cadence": "Quarterly",
+    "threshold": "Always shown"
+  }
+]

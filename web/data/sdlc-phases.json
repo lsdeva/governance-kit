@@ -1,0 +1,203 @@
+[
+  {
+    "id": "P1",
+    "name": "Initiate",
+    "ceremony": "business case · funding",
+    "artefacts": [
+      {
+        "id": "00",
+        "note": null
+      },
+      {
+        "id": "01",
+        "note": null
+      },
+      {
+        "id": "16",
+        "note": "opened"
+      }
+    ],
+    "gate": {
+      "id": "G0",
+      "name": "Intake decision"
+    }
+  },
+  {
+    "id": "P2",
+    "name": "Requirements",
+    "ceremony": "discovery · backlog",
+    "artefacts": [
+      {
+        "id": "04",
+        "note": "first cut from catalogue"
+      }
+    ],
+    "gate": null
+  },
+  {
+    "id": "P3",
+    "name": "Design",
+    "ceremony": "architecture review board",
+    "artefacts": [
+      {
+        "id": "02",
+        "note": null
+      },
+      {
+        "id": "03",
+        "note": null
+      },
+      {
+        "id": "14",
+        "note": null
+      }
+    ],
+    "gate": {
+      "id": "G1",
+      "name": "Design approval"
+    }
+  },
+  {
+    "id": "P4",
+    "name": "Build",
+    "ceremony": "sprints · CI",
+    "artefacts": [
+      {
+        "id": "04",
+        "note": "demoed at sprint review"
+      },
+      {
+        "id": "05",
+        "note": "profile by tier"
+      }
+    ],
+    "gate": {
+      "id": "G2",
+      "name": "Definition of Done"
+    }
+  },
+  {
+    "id": "P5",
+    "name": "Test",
+    "ceremony": "SIT · UAT · red team",
+    "artefacts": [
+      {
+        "id": "13",
+        "note": null
+      }
+    ],
+    "gate": null
+  },
+  {
+    "id": "P6",
+    "name": "Release",
+    "ceremony": "change advisory · approval to operate",
+    "artefacts": [
+      {
+        "id": "06",
+        "note": null
+      },
+      {
+        "id": "11",
+        "note": "register signed"
+      },
+      {
+        "id": "12",
+        "note": "kill switch drilled"
+      },
+      {
+        "id": "15",
+        "note": null
+      },
+      {
+        "id": "16",
+        "note": "complete"
+      }
+    ],
+    "gate": {
+      "id": "G3",
+      "name": "Go-live"
+    }
+  },
+  {
+    "id": "P7",
+    "name": "Operate",
+    "ceremony": "ops review · monthly risk",
+    "artefacts": [
+      {
+        "id": "07",
+        "note": "per action"
+      },
+      {
+        "id": "08",
+        "note": "per control run"
+      },
+      {
+        "id": "09",
+        "note": "monthly"
+      },
+      {
+        "id": "10",
+        "note": "after 4 rounds"
+      },
+      {
+        "id": "11",
+        "note": "monthly pack"
+      }
+    ],
+    "gate": {
+      "id": "G4",
+      "name": "Tier promotion"
+    }
+  },
+  {
+    "id": "P8",
+    "name": "Change",
+    "ceremony": "change advisory",
+    "artefacts": [
+      {
+        "id": "06",
+        "note": "re-attest"
+      },
+      {
+        "id": "03",
+        "note": "delta"
+      },
+      {
+        "id": "13",
+        "note": "regression"
+      },
+      {
+        "id": "10",
+        "note": "voided"
+      },
+      {
+        "id": "09",
+        "note": "full round"
+      }
+    ],
+    "gate": {
+      "id": "G5",
+      "name": "Material change"
+    }
+  },
+  {
+    "id": "P9",
+    "name": "Retire",
+    "ceremony": "decommission",
+    "artefacts": [
+      {
+        "id": "12",
+        "note": "decommission path"
+      },
+      {
+        "id": "00",
+        "note": "closed"
+      }
+    ],
+    "gate": {
+      "id": "G6",
+      "name": "Retirement"
+    }
+  }
+]

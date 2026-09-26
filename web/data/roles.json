@@ -1,0 +1,62 @@
+[
+  {
+    "id": "AE",
+    "name": "Accountable executive",
+    "description": "Senior officer or system owner personally accountable for the agent's decisions. Sets risk appetite and tolerance, signs go-live, tier promotion and the oversight pack."
+  },
+  {
+    "id": "SP",
+    "name": "Business sponsor",
+    "description": "Funds the agent and owns the benefit case."
+  },
+  {
+    "id": "AOW",
+    "name": "Agent owner",
+    "description": "New role. Day-to-day accountable for one agent: mandate, inventory, change, the oversight pack. Usually the product lead of the business process."
+  },
+  {
+    "id": "PO",
+    "name": "Product owner",
+    "description": "Owns the backlog, including control stories, and user-facing artefacts."
+  },
+  {
+    "id": "ENG",
+    "name": "Delivery engineering",
+    "description": "Builds the agent, evaluation harness and release attestations."
+  },
+  {
+    "id": "SEC",
+    "name": "Security",
+    "description": "Threat modelling, identity, red-teaming, supplier security review."
+  },
+  {
+    "id": "DO",
+    "name": "Data owner / DPO",
+    "description": "Approves what data and context the agent may read and remember."
+  },
+  {
+    "id": "RC",
+    "name": "Risk & compliance (2nd line)",
+    "description": "Embedded in the delivery team. Runs hazard analysis, owns the control catalogue, approves mandates."
+  },
+  {
+    "id": "PLE",
+    "name": "Platform engineering",
+    "description": "Builds and runs the evidence infrastructure. Records are emitted by the platform automatically."
+  },
+  {
+    "id": "IRV",
+    "name": "Independent review & validation",
+    "description": "Independent of the agent owner. Runs the sampling loop and calibration, evaluates T3+ agents before release."
+  },
+  {
+    "id": "OPS",
+    "name": "Operations",
+    "description": "Runs the process today, holds the kill switch, first-line QA."
+  },
+  {
+    "id": "IA",
+    "name": "Internal audit (3rd line)",
+    "description": "Agrees the tile register before go-live. Relies on records rather than re-collecting evidence."
+  }
+]

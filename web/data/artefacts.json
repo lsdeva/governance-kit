@@ -1,0 +1,1350 @@
+[
+  {
+    "id": "00",
+    "name": "Agent inventory entry",
+    "phase": "Initiate",
+    "purpose": "One record per agent in a dedicated agent inventory, separate from the model inventory. The underlying model is registered there as a vendor model with a version. This entry is the source of truth for the autonomy tier, and the tier drives everything downstream.",
+    "when": "At intake. Updated on any change of tier, owner, model or status.",
+    "where": "Inventory service with an API. The CI pipeline and identity issuer read it.",
+    "raci": {
+      "responsible": [
+        "AOW"
+      ],
+      "accountable": "RC",
+      "consulted": [
+        "SEC"
+      ],
+      "informed": [
+        "AE",
+        "IA"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "agent_id",
+      "name",
+      "business unit / agency",
+      "accountable executive",
+      "agent owner",
+      "autonomy tier T1–T4",
+      "consequence class",
+      "reversibility",
+      "highest data classification",
+      "model(s) + vendor + version",
+      "hosting",
+      "status: proposed | pilot | live | suspended | retired",
+      "links: 01 02 06 11",
+      "next review",
+      "sunset date"
+    ],
+    "done_when": "The pipeline selects the control profile from this tier, and an agent with no inventory entry cannot be issued a workload identity.",
+    "metric": "Inventory coverage = agents holding a live identity that are also in the inventory ÷ all agents holding a live identity (target 100%)",
+    "warning": null,
+    "note": "Tier vocabulary from IMDA §2.1.1 autonomy spectrum.",
+    "example": null,
+    "references": [
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "GOVERN 1.6",
+        "why": "Mechanisms to inventory AI systems",
+        "status": "verified"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.1.1",
+        "why": "Risk from impact factors (domain, data, external access, scope, reversibility) × likelihood factors (autonomy, task complexity, exposure)",
+        "status": "verified"
+      },
+      {
+        "source": "CSA SG Agentic Addendum",
+        "clause": "Risk assessment",
+        "why": "Autonomy-level assessment and capability analysis",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.4.2",
+        "why": "Resource documentation for AI systems",
+        "status": "verified"
+      },
+      {
+        "source": "Source reference",
+        "clause": "R3",
+        "why": "Autonomy tier per agent in a dedicated inventory; promotion as a governed event",
+        "status": "per_source_reference"
+      }
+    ]
+  },
+  {
+    "id": "01",
+    "name": "Agent justification record",
+    "phase": "Initiate",
+    "purpose": "Explains why this needs an agent rather than a rules engine, a process fix or a scorecard. It is written before funding, in the terms the benefit will later be measured in, and includes the permanent cost of outcome sampling.",
+    "when": "Before funding. Revisited whenever the benefit case changes.",
+    "where": "Business case template, as a mandatory section.",
+    "raci": {
+      "responsible": [
+        "SP"
+      ],
+      "accountable": "AE",
+      "consulted": [
+        "AOW",
+        "RC",
+        "OPS"
+      ],
+      "informed": [
+        "IA"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "decision being delegated",
+      "population & monthly volume",
+      "alternatives: deterministic rule · process change · scorecard, and why rejected",
+      "benefit in analyst hours & cycle time",
+      "cost of sampling loop (09) per year",
+      "consequence class of a wrong decision",
+      "reversibility",
+      "exit / sunset metric"
+    ],
+    "done_when": "Someone who disagrees with using an agent can see which alternative was rejected and on what numbers, and the sampling cost is on the benefit line rather than discovered in year two.",
+    "metric": "Sampling cost present in business case (Y/N). Realised vs claimed benefit at 12 months.",
+    "warning": null,
+    "note": "Renamed from 'agency justification record' to avoid the banking and government sense of 'agency'.",
+    "example": null,
+    "references": [
+      {
+        "source": "Arora, Vogelsang & Sharma (Jul 2026)",
+        "clause": "Delegated-autonomy boundary method",
+        "why": "Structure of the justification",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.1.1",
+        "why": "Determine suitable use cases for agent deployment",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "MAP 1.1 · MAP 3.1 · MAP 3.2",
+        "why": "Intended purpose and context; potential benefits; potential costs",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.9.3 · A.9.4",
+        "why": "Objectives for responsible use; intended use",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "16",
+    "name": "Third-party evidence pack",
+    "phase": "Initiate → Release",
+    "purpose": "Collects the evidence behind every control a model vendor or agent platform claims to handle. A claim is an assertion until evidence is attached. Per the source reference, a 2026 index of 30 deployed agentic systems found only 4 publish a safety system card and 25 disclose no internal safety results.",
+    "when": "Opened at intake, complete before G3, refreshed on vendor change.",
+    "where": "Supplier file, linked from 06 component definitions.",
+    "raci": {
+      "responsible": [
+        "AOW"
+      ],
+      "accountable": "RC",
+      "consulted": [
+        "SEC"
+      ],
+      "informed": [
+        "IA"
+      ]
+    },
+    "tiers": {
+      "T1": "if_vendor",
+      "T2": "if_vendor",
+      "T3": "if_vendor",
+      "T4": "if_vendor"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "vendor & component",
+      "controls claimed (by 05 id)",
+      "evidence per claim: test report | attestation | certification + scope",
+      "contract: no training on data · log export · audit rights · incident notice",
+      "record export the organisation can chain & sample (SaaS)",
+      "exit plan"
+    ],
+    "done_when": "No control in 06 is marked 'inherited from platform' without evidence attached.",
+    "metric": "Inherited controls without evidence (target 0).",
+    "warning": null,
+    "note": "Open question: where the gate lives when the agent is vendor SaaS.",
+    "example": null,
+    "references": [
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.10.2 · A.10.3",
+        "why": "Allocating responsibilities; suppliers",
+        "status": "verified"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.2.1",
+        "why": "Responsibilities outside the organisation: model providers, platforms, tool hosts",
+        "status": "verified"
+      },
+      {
+        "source": "OWASP ASI 2026",
+        "clause": "ASI04",
+        "why": "Agentic supply chain vulnerabilities",
+        "status": "verified"
+      },
+      {
+        "source": "SG Govt ICT&SS Policy, GenAI SSP",
+        "clause": "GA-3",
+        "why": "Legally binding commitment that the provider doesn't log, store or train on data",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "GOVERN 6.1 · MANAGE 3.1",
+        "why": "Third-party policies; third-party risks monitored",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "02",
+    "name": "Delegation policy (the mandate)",
+    "phase": "Design",
+    "purpose": "The most important document in the set. It states what the agent may decide alone, what it must escalate, whose authority it acts under, what it may read and touch, how it is assured, and what ends it. It expresses authority as a tier, not a yes or no. The accountable executive countersigns the tier and the tolerance.",
+    "when": "Before build. Re-approved on every tier change and every material change.",
+    "where": "YAML in the agent's repository. The policy gate is compiled from it, with no hand configuration.",
+    "raci": {
+      "responsible": [
+        "AOW"
+      ],
+      "accountable": "RC",
+      "consulted": [
+        "SEC",
+        "ENG",
+        "OPS",
+        "DO"
+      ],
+      "informed": [
+        "AE",
+        "IRV",
+        "IA"
+      ]
+    },
+    "tiers": {
+      "T1": "light",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": true,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "purpose",
+      "authority.tier",
+      "auto-decide scope: case types, value limits, jurisdictions",
+      "must_escalate conditions",
+      "may_read / may_not_read",
+      "tools & permissions",
+      "coordination with other agents / humans",
+      "assurance: control profile, sampling rate & floor, tolerance",
+      "evolution: material-change list, re-approver",
+      "sunset"
+    ],
+    "done_when": "The policy gate can be configured from this document with no interpretation, and a supervisor can read it and say which tier the agent sits at.",
+    "metric": "Gate-config drift = diff(compiled 02, running gate policy). Must be 0.",
+    "warning": null,
+    "note": "Field structure from arXiv 2607.17225. Tier from IMDA §2.1.1.",
+    "example": "# 02 · delegation policy · illustrative\nagent: sanctions-triage-l1\npurpose: dispose first-line name-screening alerts\nauthority:\n  tier: T3                      # agent operates, human approves exceptions\n  auto_close:\n    alert_types: [name_match]\n    max_match_score: 0.82\n    excluded_jurisdictions: [comprehensive-sanctions programmes]\n    excluded_list_entries: [PEP, adverse-media]\n  must_escalate:\n    - list_version_changed_since_last_calibration\n    - any_field_missing_in_grounds\n    - confidence < 0.90          # must point to a row in 10\ninformation:\n  may_read: [alert, kyc_record, payment, list_entry]\n  may_not_read: [SAR_filings, investigator_notes]\ntools: [kyc.read, payment.read, list.read, alert.close, alert.escalate]\nassurance:\n  controls_profile: tier-3\n  sampling: {rate: 3%/month, floor: 300, by: independent-review, blind: true}\n  tolerance: {disagreement_max: 2.0%, set_by: accountable_executive}\nevolution:\n  material_change: [model_version, prompt_hash, tool_manifest_hash, list_format]\n  on_material_change: full_sample; calibration_void\nsunset: 2027-09-30 unless re-approved",
+    "references": [
+      {
+        "source": "Six-dimension Agentic Delegation Policy",
+        "clause": "arXiv 2607.17225",
+        "why": "Field structure",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.1.2 · §2.2.2",
+        "why": "Bound risks through design (limits, identity, authorisation); significant checkpoints for high-stakes or irreversible actions",
+        "status": "verified"
+      },
+      {
+        "source": "MAS SAFR (Jul 2026)",
+        "clause": "Authorisation",
+        "why": "Declare what an agent may do before runtime assessment",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.3.2 · A.9.2 · A.9.4",
+        "why": "Roles and responsibilities; processes for responsible use; intended use",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "GOVERN 3.2",
+        "why": "Roles for human-AI configurations and oversight",
+        "status": "verified"
+      },
+      {
+        "source": "OWASP ASI 2026",
+        "clause": "ASI02 · ASI03",
+        "why": "Tool misuse; identity and privilege abuse, bounded by tools and permissions",
+        "status": "verified"
+      },
+      {
+        "source": "EU AI Act",
+        "clause": "Art 14",
+        "why": "Human oversight able to override and stop",
+        "status": "per_source_reference"
+      }
+    ]
+  },
+  {
+    "id": "03",
+    "name": "Hazard analysis & failure-mode register",
+    "phase": "Design",
+    "purpose": "Records what can go wrong, including failures that emerge from parts interacting rather than parts breaking. Specialists produce it and hand it to the business to challenge. It is not elicited from the business in a workshop.",
+    "when": "Before requirements. Re-run as a delta on every material change.",
+    "where": "Risk register, with every hazard linked to control stories (04) and controls (05).",
+    "raci": {
+      "responsible": [
+        "RC",
+        "SEC"
+      ],
+      "accountable": "AOW",
+      "consulted": [
+        "ENG",
+        "OPS",
+        "PO"
+      ],
+      "informed": [
+        "AE",
+        "IA"
+      ]
+    },
+    "tiers": {
+      "T1": "light",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "hazard_id",
+      "loss",
+      "unsafe control action",
+      "causal scenario",
+      "interaction involved",
+      "consequence class",
+      "control(s) assigned → 04/05",
+      "residual risk owner"
+    ],
+    "done_when": "At least one registered hazard needs two simultaneous conditions to occur. That is the sign the analysis looked at interactions, not just components.",
+    "metric": "Hazards linked to ≥ 1 tested control ÷ all hazards (target 100%). Count of interaction hazards (≥ 1).",
+    "warning": null,
+    "note": "Read from four perspectives: the attacker, a supervisor two years from now, operations at 3am, and the person who was wronged.",
+    "example": null,
+    "references": [
+      {
+        "source": "Mylius, STPA for frontier AI",
+        "clause": "arXiv 2506.01782",
+        "why": "Method: control structure, unsafe control actions, loss scenarios",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "OWASP ASI 2026",
+        "clause": "ASI01–ASI10",
+        "why": "Prompts: goal hijack, tool misuse, identity & privilege abuse, supply chain, unexpected code execution, memory & context poisoning, insecure inter-agent comms, cascading failures, human-agent trust exploitation, rogue agents",
+        "status": "verified"
+      },
+      {
+        "source": "CSA SG Agentic Addendum",
+        "clause": "Threat modelling · capability analysis",
+        "why": "Map workflows to exploitation points; rogue actions and sensitive-data disclosure as primary risks",
+        "status": "verified"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.1.1",
+        "why": "Threat modelling and taint tracing",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.5.2–A.5.5",
+        "why": "Impact assessment process, documentation, individuals and groups, society",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "MAP 5.1",
+        "why": "Likelihood and magnitude of impacts",
+        "status": "verified"
+      },
+      {
+        "source": "Microsoft AI Red Team",
+        "clause": "Agentic failure-mode taxonomy",
+        "why": "Prompt set",
+        "status": "per_source_reference"
+      }
+    ]
+  },
+  {
+    "id": "14",
+    "name": "Data & context provenance record",
+    "phase": "Design → Build",
+    "purpose": "Records what the agent reads, retrieves and remembers: every source, corpus and memory store with its classification, owner and version. Memory and retrieval corpora are attack surface as well as data.",
+    "when": "Design. Updated when any source, corpus or memory store changes (material change).",
+    "where": "Data register, linked from 02 may_read.",
+    "raci": {
+      "responsible": [
+        "ENG"
+      ],
+      "accountable": "DO",
+      "consulted": [
+        "SEC",
+        "RC"
+      ],
+      "informed": [
+        "AOW"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "source / corpus / memory store",
+      "owner",
+      "classification",
+      "hosting location",
+      "version / snapshot",
+      "retention",
+      "PII handling",
+      "write paths into memory",
+      "poisoning controls"
+    ],
+    "done_when": "Every item in 02 may_read resolves to a row here with an owner and a classification the hosting is authorised for.",
+    "metric": "may_read items without a provenance row (target 0).",
+    "warning": null,
+    "note": null,
+    "example": null,
+    "references": [
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.7.2–A.7.6",
+        "why": "Data for development, acquisition, quality, provenance, preparation",
+        "status": "verified"
+      },
+      {
+        "source": "OWASP ASI 2026",
+        "clause": "ASI06",
+        "why": "Memory and context poisoning",
+        "status": "verified"
+      },
+      {
+        "source": "SG Govt ICT&SS Policy, GenAI SSP",
+        "clause": "DP-8 · GA-1 · GA-2 · GA-4",
+        "why": "Permitted classification by hosting; self-hosted environment authorisation",
+        "status": "verified"
+      },
+      {
+        "source": "CSA SG Agentic Addendum",
+        "clause": "Sensitive data disclosure",
+        "why": "Primary risk category",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "04",
+    "name": "Control requirements as backlog items",
+    "phase": "Requirements → Build",
+    "purpose": "Each control is written as behaviour with acceptance criteria, in the same backlog as the feature work. Controls are derived from the hazard register and the catalogue, not invented per project. Requirements in a non-functional annex have no owner, estimate, test or demo, and they are the first thing dropped when a date slips.",
+    "when": "Continuously, in normal refinement. Control stories are demonstrated at sprint review.",
+    "where": "The team's backlog tool (e.g. Jira), labelled with the control ID and linked to the 03 hazard.",
+    "raci": {
+      "responsible": [
+        "PO"
+      ],
+      "accountable": "AOW",
+      "consulted": [
+        "RC",
+        "SEC",
+        "ENG"
+      ],
+      "informed": [
+        "IRV"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "control_id (from 05)",
+      "trigger",
+      "observable behaviour",
+      "evidence emitted (record + field)",
+      "acceptance test the pipeline runs",
+      "linked hazard_id"
+    ],
+    "done_when": "No control lives in a document the pipeline can't read, and sprint review shows control stories alongside feature stories.",
+    "metric": "Control stories with an automated acceptance test ÷ all control stories. Control stories deferred vs feature stories deferred per release.",
+    "warning": null,
+    "note": "Stories tailored per tier from 05.",
+    "example": "AGT-014  Every autonomous closure carries a decision record\n  Given  the agent proposes alert.close\n  When   the gate allows it\n  Then   a decision record exists before the core system is called,\n         with grounds.matched_fields, grounds.dob_delta_days,\n         grounds.list_version, grounds.rule_id populated\n  Evidence  decision_record_id on the closure event\n  Test      count(records) == count(closures), nightly; any gap fails the build",
+    "references": [
+      {
+        "source": "CSA AICM v1.1",
+        "clause": "247 objectives · 18 domains",
+        "why": "Source of control statements",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.6.2.2",
+        "why": "AI system requirements and specification",
+        "status": "verified"
+      },
+      {
+        "source": "Eckhardt et al., ICSE 2016",
+        "clause": "Quality requirements",
+        "why": "Why annexed requirements fail: a filing problem, not an elicitation problem",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "Porter, Votta & Basili",
+        "clause": "Perspective-based reading",
+        "why": "Review method",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.3.1",
+        "why": "Technical controls during design and development",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "05",
+    "name": "Machine-readable control specification",
+    "phase": "Build",
+    "purpose": "The controls expressed as data. Each control carries its applicability, a deterministic test, the evidence it emits and its on-fail action, with one tailored profile per tier so selection becomes a lookup. This is the reusable, organisation-wide asset.",
+    "when": "Built once, then versioned like code. The profile is selected per agent at every build.",
+    "where": "OSCAL repository: catalog → profile per tier → mappings.",
+    "raci": {
+      "responsible": [
+        "RC",
+        "PLE"
+      ],
+      "accountable": "RC",
+      "consulted": [
+        "SEC",
+        "IA"
+      ],
+      "informed": [
+        "AOW",
+        "ENG"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": true,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "id",
+      "statement",
+      "applies_to: tier, data class, consequence class",
+      "test (deterministic)",
+      "evidence: record type + field",
+      "on_fail: block_deploy | block_action | alert",
+      "maps_to: AICM · ISO 42001 · IMDA · IM8/SSP · AI Act"
+    ],
+    "done_when": "The CI/CD pipeline selects the applicable profile from the inventory tier and runs every test without a human interpreting anything.",
+    "metric": "Applicable controls with a deterministic test (%). Controls passing per agent per build (%).",
+    "warning": null,
+    "note": "Don't write a house catalogue. The mappings are the asset, and a house catalogue throws them away.",
+    "example": "- id: AGT-014\n  title: Decision record per autonomous action\n  applies_to: {tier: \">=T3\"}\n  test: records.count(agent, period) == actions.count(agent, period)\n  evidence: {record: decision_record, field: record_id}\n  on_fail: block_deploy\n  maps_to: [AICM GOV-07, ISO42001 A.6.2.8, AIAct Art.12]\n- id: AGT-022\n  title: Grounds stated in structured fields\n  applies_to: {tier: \">=T2\", decision_class: closure}\n  test: all(record.grounds[f] is not null for f in required_fields)\n  evidence: {record: decision_record, field: grounds}\n  on_fail: block_action",
+    "references": [
+      {
+        "source": "OSCAL v1.2.3",
+        "clause": "catalog · profile · mapping models",
+        "why": "Format. Mappings come free",
+        "status": "verified"
+      },
+      {
+        "source": "CSA AICM v1.1 (14 Jul 2026)",
+        "clause": "247 objectives, 18 domains; mappings to ISO 42001, EU AI Act, NIST AI RMF & 600-1, BSI AIC4, AIUC-1",
+        "why": "Seed catalogue",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "Annex A (38 controls)",
+        "why": "Seed catalogue",
+        "status": "verified"
+      },
+      {
+        "source": "SG Govt ICT&SS Policy, GenAI SSP",
+        "clause": "DP-8 · GA-1 to GA-8",
+        "why": "Import as a profile for public-sector deployments",
+        "status": "verified"
+      },
+      {
+        "source": "CSA agentic profile · OWASP Agent Control Standard",
+        "clause": "AG- subcategories · runtime form",
+        "why": "Agent-specific additions",
+        "status": "per_source_reference"
+      }
+    ]
+  },
+  {
+    "id": "13",
+    "name": "Pre-deployment evaluation report",
+    "phase": "Test",
+    "purpose": "Evidence that the agent behaves as the mandate says before real cases reach it. Tests cover whole workflows, not just final outputs, and every escalation condition has a test proving the agent escalates. For T3 and T4, independent review runs or witnesses the evaluation.",
+    "when": "Before G3, and as a regression suite on every material change.",
+    "where": "Evaluation harness in CI; report attached to 06. For government, Litmus run IDs are recorded here.",
+    "raci": {
+      "responsible": [
+        "ENG",
+        "IRV"
+      ],
+      "accountable": "AOW",
+      "consulted": [
+        "SEC",
+        "RC"
+      ],
+      "informed": [
+        "AE"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "scope: task execution · policy compliance · tool-calling accuracy · robustness",
+      "workflow-level tests",
+      "multi-agent tests",
+      "environment realism",
+      "datasets & repeat count",
+      "red-team results by ASI01–ASI10",
+      "pass criteria (from 02)",
+      "results with intervals",
+      "known limitations"
+    ],
+    "done_when": "Every must_escalate condition in 02 has a passing test that proves escalation, and every red-team finding is fixed, accepted by the AOW, or linked to a control.",
+    "metric": "Escalation conditions with a passing test ÷ all escalation conditions (target 100%).",
+    "warning": "A test set isn't the production population. 13 is necessary but it can't substitute for 09.",
+    "note": null,
+    "example": null,
+    "references": [
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.3.2",
+        "why": "Test task execution, policy compliance, tool calling, robustness; whole workflows; realistic environments; repeatedly",
+        "status": "verified"
+      },
+      {
+        "source": "GovTech AI Guardian",
+        "clause": "Litmus",
+        "why": "Pre-deployment safety testing for government AI",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.6.2.4",
+        "why": "Verification and validation",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "MEASURE 2.3 · MEASURE 2.7",
+        "why": "Performance; security and resilience",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "06",
+    "name": "Agent definition & build attestation",
+    "phase": "Release",
+    "purpose": "Describes what this agent is in a form a machine can check, signed at every release, including prompt-only releases. It lets any decision record be resolved to the exact build that made it.",
+    "when": "Every release.",
+    "where": "Artefact registry, signed. Components expressed as OSCAL component-definitions.",
+    "raci": {
+      "responsible": [
+        "ENG"
+      ],
+      "accountable": "AOW",
+      "consulted": [
+        "SEC",
+        "PLE"
+      ],
+      "informed": [
+        "RC"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "agent_id",
+      "model {vendor, version}",
+      "prompt_hash",
+      "tool_manifest_hash + manifest",
+      "identity (SPIFFE id)",
+      "gateway endpoint",
+      "controls satisfied by component",
+      "SBOM",
+      "provenance signature",
+      "13 report ref",
+      "16 evidence refs"
+    ],
+    "done_when": "For any decision record you can name the exact model, prompt and tool set in force, and prove the running build is the approved build.",
+    "metric": "Version drift = decision records whose triple ≠ attested build (any > 0 is red).",
+    "warning": null,
+    "note": null,
+    "example": null,
+    "references": [
+      {
+        "source": "OSCAL v1.2.3",
+        "clause": "component-definition",
+        "why": "Format",
+        "status": "verified"
+      },
+      {
+        "source": "SLSA · in-toto",
+        "clause": "Provenance",
+        "why": "Build signature",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "MCP",
+        "clause": "Tool manifests",
+        "why": "Manifest hash",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.6.2.7 · A.6.2.5",
+        "why": "Technical documentation; deployment",
+        "status": "verified"
+      },
+      {
+        "source": "OWASP ASI 2026",
+        "clause": "ASI04",
+        "why": "Supply chain",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "15",
+    "name": "Transparency notice & operator guide",
+    "phase": "Release",
+    "purpose": "Has two audiences. People affected by the agent are told they are dealing with one, what it can decide, and how to reach a human. Operators get training on the agent's failure modes and on how to approve, override and halt it, because oversight that isn't trained is a rubber stamp.",
+    "when": "Before G3. Refreshed on material change, and operator refreshers run on a schedule.",
+    "where": "Published notice; operator guide and training records in the LMS.",
+    "raci": {
+      "responsible": [
+        "PO"
+      ],
+      "accountable": "AOW",
+      "consulted": [
+        "RC",
+        "OPS"
+      ],
+      "informed": [
+        "IA"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "declares agent interaction",
+      "range of actions & decisions",
+      "data handling",
+      "human escalation points",
+      "user responsibilities",
+      "operator: failure modes · approve / override / halt · automation-bias training · refresher cadence"
+    ],
+    "done_when": "A user can find out, in the channel they are using, that an agent acted and how to reach a person. Every on-the-loop operator's training is current.",
+    "metric": "Operators with current training (%). Canary catch rate (see §6).",
+    "warning": null,
+    "note": null,
+    "example": null,
+    "references": [
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.4.1–§2.4.3 · §2.2.2",
+        "why": "End-user transparency; users who integrate agents; train humans on failure modes, audit oversight",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.8.2 · A.9.2",
+        "why": "Information for users; responsible use",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "MAP 3.4",
+        "why": "Operator and practitioner proficiency",
+        "status": "verified"
+      },
+      {
+        "source": "SG Govt ICT&SS Policy, GenAI SSP",
+        "clause": "GA-8",
+        "why": "User acknowledgement of hallucination risk",
+        "status": "verified"
+      },
+      {
+        "source": "EU AI Act",
+        "clause": "Art 13 · Art 14(4)",
+        "why": "Transparency to deployers; oversight persons aware of automation bias",
+        "status": "per_source_reference"
+      }
+    ]
+  },
+  {
+    "id": "11",
+    "name": "Oversight pack & tile register",
+    "phase": "Release (spec) · Operate (monthly)",
+    "purpose": "The written specification for the dashboard, not the dashboard itself. It is a register of tiles, each labelled Process, Outcome or Unknown, each traced to source records. It is agreed with internal and external audit before go-live and signed by the accountable executive. The monthly pack is generated from it by query.",
+    "when": "Specified before G3. Generated monthly. Re-signed after every full sampling round.",
+    "where": "Tile register (versioned document) plus a generated dashboard.",
+    "raci": {
+      "responsible": [
+        "AOW",
+        "PLE"
+      ],
+      "accountable": "AE",
+      "consulted": [
+        "IA",
+        "RC"
+      ],
+      "informed": [
+        "OPS",
+        "IRV"
+      ]
+    },
+    "tiers": {
+      "T1": "light",
+      "T2": "light",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": true,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "tile id",
+      "kind: process | outcome | unknown",
+      "definition",
+      "source record (07/08/09/10)",
+      "provenance (outcome tiles): population, n, who, period, interval",
+      "aggregation: tail, not mean",
+      "threshold & owner",
+      "audience: business | technical"
+    ],
+    "done_when": "No tile can be read as a safety number without saying so, and the accountable executive has signed the register, not just the dashboard.",
+    "metric": "Pack generated by query without manual steps (Y/N). An Unknown tile is present (Y/N).",
+    "warning": null,
+    "note": "Rules: every tile states its kind · every outcome tile shows its provenance · tails not means · an Unknown tile is mandatory · business and technical views reconcile to the same records.",
+    "example": null,
+    "references": [
+      {
+        "source": "SR 11-7 vocabulary",
+        "clause": "Process verification vs outcomes analysis",
+        "why": "Tile kinds",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "COSO (Feb 2026)",
+        "clause": "Internal control over generative AI",
+        "why": "Sufficient, appropriate evidence; agree with audit first",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "BCBS 239 / ECB RDARR guide",
+        "clause": "Traceability",
+        "why": "Every number traces to source",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.6.2.6",
+        "why": "Operation and monitoring",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "GOVERN 1.5",
+        "why": "Ongoing monitoring and periodic review",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "12",
+    "name": "Change, incident & decommissioning playbook",
+    "phase": "Release · Change · Retire",
+    "purpose": "Treats prompt, tool and model changes as material. Incident response is written for actions, not outages. It names a kill-switch owner and a maximum time to halt, and it includes a decommissioning path.",
+    "when": "Before G3. Drilled on a schedule (quarterly for T3 and T4).",
+    "where": "Operations runbook, with drill records feeding 11.",
+    "raci": {
+      "responsible": [
+        "AOW",
+        "OPS"
+      ],
+      "accountable": "AE",
+      "consulted": [
+        "SEC",
+        "RC"
+      ],
+      "informed": [
+        "IA",
+        "IRV"
+      ]
+    },
+    "tiers": {
+      "T1": "required",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": false,
+    "outcome_evidence": false,
+    "fields": [
+      "material-change definition & approval path",
+      "revalidation trigger: full 09 round, 10 void",
+      "incident classes: wrong action · compromise · drift",
+      "containment: revoke identity → disable tools at gateway → halt",
+      "reversal & customer / citizen remediation",
+      "regulator notification decision tree",
+      "kill-switch owner, deputy, max time-to-halt, last drill",
+      "decommission: records retained, permissions revoked, inventory closed"
+    ],
+    "done_when": "The last drill halted the agent inside the stated time, and the record of it is in the oversight pack.",
+    "metric": "Time to halt (last drill). Drill age. Change-to-revalidation days.",
+    "warning": null,
+    "note": null,
+    "example": null,
+    "references": [
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "MANAGE 2.4 · MANAGE 4.3 · GOVERN 1.7",
+        "why": "Supersede, disengage, deactivate; incidents communicated; decommissioning",
+        "status": "verified"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.3.3",
+        "why": "Define interventions per alert type, from scheduled review to immediate halt; gradual rollout",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.8.4",
+        "why": "Communication of incidents",
+        "status": "verified"
+      },
+      {
+        "source": "PRA SS1/23 · DORA · FSB sound practices",
+        "clause": "Change & incident expectations",
+        "why": "Cross-sector anchors",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "EU AI Act",
+        "clause": "Art 73",
+        "why": "Serious incident reporting",
+        "status": "per_source_reference"
+      }
+    ]
+  },
+  {
+    "id": "07",
+    "name": "Decision record",
+    "phase": "Operate",
+    "purpose": "One record per action, sealed before execution: inputs read, tools called, action proposed, structured grounds, gate verdict and version triple. It is the direct equivalent of the case file that has to survive inspection years later. A record written afterwards is a different and lesser thing.",
+    "when": "At the moment of decision, emitted by the platform. Never by a person.",
+    "where": "Append-only store. JSON canonicalised (RFC 8785), SHA-256 chained, signed, optionally Merkle-anchored per batch.",
+    "raci": {
+      "responsible": [
+        "PLE"
+      ],
+      "accountable": "AOW",
+      "consulted": [
+        "SEC"
+      ],
+      "informed": [
+        "IRV",
+        "IA"
+      ]
+    },
+    "tiers": {
+      "T1": "recommended",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": true,
+    "no_published_source": false,
+    "platform_emitted": true,
+    "outcome_evidence": false,
+    "fields": [
+      "record_id",
+      "prev_hash",
+      "agent_id",
+      "principal {human, act}",
+      "versions {model, prompt_hash, tool_manifest_hash}",
+      "inputs_read[]",
+      "tool_calls[]",
+      "proposed_action",
+      "grounds {structured fields, rule_id, confidence}",
+      "rationale_text (kept, not relied on)",
+      "gate {decision, policy_version, checks}",
+      "outcome",
+      "hash",
+      "sig"
+    ],
+    "done_when": "A record from eighteen months ago can be pulled, its chain verified, its version triple resolved to the exact artefacts, and its grounds re-checked by a script, with nobody who built the agent in the room.",
+    "metric": "Record completeness (worst day). Chain verification (records verified ÷ records).",
+    "warning": null,
+    "note": null,
+    "example": "{\n  \"record_id\": \"dr_2026-09-16T10:41:07Z_000318\",\n  \"prev_hash\": \"3f9c…a1\",\n  \"agent_id\": \"sanctions-triage-l1\",\n  \"principal\": {\"human\": \"ops.fincrime.queue\", \"act\": \"spiffe://org/agent/sanctions-triage-l1\"},\n  \"versions\": {\"model\": \"vendor-x-4.2\", \"prompt_hash\": \"9b12…\", \"tool_manifest_hash\": \"e71a…\"},\n  \"inputs_read\": [\"alert:A-7781902\", \"kyc:C-4431\", \"list:OFAC#1227\"],\n  \"proposed_action\": \"alert.close\",\n  \"grounds\": {\n    \"matched_fields\": [\"surname\"],\n    \"unmatched_fields\": [\"forename\", \"dob\", \"nationality\"],\n    \"dob_delta_days\": 4117, \"match_score\": 0.71,\n    \"rule_id\": \"CLOSE-R3\", \"confidence\": 0.94\n  },\n  \"gate\": {\"decision\": \"allow\", \"policy_version\": \"dp-2026-08-01\"},\n  \"outcome\": {\"executed\": true},\n  \"hash\": \"c04d…7e\", \"sig\": \"…\"\n}",
+    "references": [
+      {
+        "source": "IETF draft-sharif-agent-audit-trail-04 (15 Sep 2026)",
+        "clause": "Record, hash chain, trust_level, signer_kid, optional ML-DSA-65 & RFC 6962 anchoring",
+        "why": "Format (individual draft, not IETF-endorsed)",
+        "status": "verified"
+      },
+      {
+        "source": "OpenTelemetry GenAI semconv",
+        "clause": "invoke_agent · execute_tool spans",
+        "why": "Trajectory telemetry (development status: pin attribute names)",
+        "status": "verified"
+      },
+      {
+        "source": "MAS SAFR (Jul 2026)",
+        "clause": "Recordkeeping",
+        "why": "Records for review, accountability and remediation",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.6.2.8",
+        "why": "Recording of event logs",
+        "status": "verified"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.3.3",
+        "why": "What to log: prioritise high-risk actions",
+        "status": "verified"
+      },
+      {
+        "source": "EU AI Act",
+        "clause": "Art 12",
+        "why": "Automatic recording of events",
+        "status": "per_source_reference"
+      }
+    ]
+  },
+  {
+    "id": "08",
+    "name": "Control outcome record",
+    "phase": "Operate",
+    "purpose": "One record shape emitted by every control run. It is dull on purpose, and it is why a single query can answer \"every agent in the organisation, status today\".",
+    "when": "Continuously, per control run.",
+    "where": "OSCAL assessment-results store.",
+    "raci": {
+      "responsible": [
+        "PLE"
+      ],
+      "accountable": "RC",
+      "consulted": [],
+      "informed": [
+        "AE",
+        "IA",
+        "AOW"
+      ]
+    },
+    "tiers": {
+      "T1": "recommended",
+      "T2": "required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": false,
+    "platform_emitted": true,
+    "outcome_evidence": false,
+    "fields": [
+      "control_id",
+      "agent_id",
+      "period",
+      "result: pass | fail | not-applicable",
+      "population tested",
+      "exceptions count",
+      "evidence pointer(s)",
+      "run_id",
+      "hash"
+    ],
+    "done_when": "The oversight pack is generated by query, not assembled by hand, and two teams' agents appear in the same table without translation.",
+    "metric": "Evidence freshness (age of latest passing result, worst control). Pass rate by agent.",
+    "warning": null,
+    "note": null,
+    "example": null,
+    "references": [
+      {
+        "source": "OSCAL v1.2.3",
+        "clause": "assessment-results",
+        "why": "Findings, observations, evidence",
+        "status": "verified"
+      },
+      {
+        "source": "Continuous OSCAL emission",
+        "clause": "arXiv 2604.13767",
+        "why": "Proof of continuous use",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.6.2.6",
+        "why": "Operation and monitoring",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "MEASURE 3.1",
+        "why": "Approaches to track existing and emergent risks",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "09",
+    "name": "Outcome sampling plan & results",
+    "phase": "Operate (monthly)",
+    "purpose": "The only artefact that says anything about whether decisions were right. Reviewers independent of the agent's owner re-perform a stratified random sample of closures, blind to the agent's answer. The result is a disagreement rate with an interval. The method is fixed before the results are known.",
+    "when": "Monthly. A full round after every material change and before every tier promotion.",
+    "where": "Sampling tool reading the 07 store. Results emitted as OSCAL assessment-results observations.",
+    "raci": {
+      "responsible": [
+        "IRV"
+      ],
+      "accountable": "RC",
+      "consulted": [
+        "OPS"
+      ],
+      "informed": [
+        "AE",
+        "AOW",
+        "IA"
+      ]
+    },
+    "tiers": {
+      "T1": "not_required",
+      "T2": "recommended",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": true,
+    "no_published_source": true,
+    "platform_emitted": false,
+    "outcome_evidence": true,
+    "fields": [
+      "sampling frame (from 07)",
+      "strata: confidence band · case type · risk category · jurisdiction",
+      "sample size & rule",
+      "selection seed (logged)",
+      "reviewer roster & competence",
+      "independence: blind to agent output",
+      "disagreement definition (pre-set)",
+      "classification: agent wrong · reviewer wrong · both defensible",
+      "results: rate + Wilson 95% overall & by stratum, worst stratum",
+      "re-baseline triggers fired"
+    ],
+    "done_when": "An examiner can be told the disagreement rate, its interval, its worst category and who found it, and be shown the method was fixed before the results were known.",
+    "metric": "Disagreement rate (Wilson 95%), overall and worst stratum. Unknown coverage.",
+    "warning": null,
+    "note": "At T2, human approval of every action already reviews 100%. Still sample the approvals, to detect rubber-stamping.",
+    "example": null,
+    "references": [
+      {
+        "source": "No published agent-specific method",
+        "clause": "—",
+        "why": "This model's contribution; see §6",
+        "status": "verified"
+      },
+      {
+        "source": "AML above/below-the-line testing",
+        "clause": "Transplanted method",
+        "why": "Same logic, pointed at the agent's closures",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "SR 11-7",
+        "clause": "Outcomes analysis",
+        "why": "The distinction this artefact restores",
+        "status": "per_source_reference"
+      },
+      {
+        "source": "IMDA MGF Agentic AI",
+        "clause": "§2.2.2",
+        "why": "Audit oversight regularly; address automation bias",
+        "status": "verified"
+      },
+      {
+        "source": "ISO/IEC 42001",
+        "clause": "A.6.2.4 · A.6.2.6",
+        "why": "V&V; operation and monitoring",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "MEASURE 2.4 · MANAGE 4.1",
+        "why": "Production monitoring; post-deployment monitoring plans",
+        "status": "verified"
+      }
+    ]
+  },
+  {
+    "id": "10",
+    "name": "Calibration record",
+    "phase": "Operate (after ≥ 4 rounds)",
+    "purpose": "Required wherever the agent's own confidence decides what is auto-closed. It shows whether the confidence bands mean what they claim, using the 09 results per band. Without it, the routing threshold is an engineer's feel.",
+    "when": "After a minimum number of sampling rounds (four). Void on any material change.",
+    "where": "Validation record, referenced by 02's routing threshold.",
+    "raci": {
+      "responsible": [
+        "IRV"
+      ],
+      "accountable": "RC",
+      "consulted": [
+        "AOW"
+      ],
+      "informed": [
+        "AE"
+      ]
+    },
+    "tiers": {
+      "T1": "not_required",
+      "T2": "not_required",
+      "T3": "required",
+      "T4": "required"
+    },
+    "go_live_minimum": false,
+    "no_published_source": true,
+    "platform_emitted": false,
+    "outcome_evidence": true,
+    "fields": [
+      "confidence bands",
+      "per band: closures, sampled, disagreements, observed rate + interval",
+      "verdict per band",
+      "routing threshold justified",
+      "rounds held",
+      "date voided"
+    ],
+    "done_when": "The auto-close threshold in the mandate (02) points at a row in this record rather than at an engineer's judgement.",
+    "metric": "Bands calibrated / not calibrated / void. Rounds held.",
+    "warning": null,
+    "note": "Reduction rule: four consecutive in-tolerance rounds, then a reduced rate with a floor of 300 per band per quarter, reset on material change.",
+    "example": null,
+    "references": [
+      {
+        "source": "No published agent-specific method",
+        "clause": "—",
+        "why": "Standard calibration statistics",
+        "status": "verified"
+      },
+      {
+        "source": "NIST AI RMF 1.0",
+        "clause": "MEASURE 2.3",
+        "why": "Performance measured in conditions similar to deployment",
+        "status": "verified"
+      }
+    ]
+  }
+]

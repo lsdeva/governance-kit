@@ -1,0 +1,3126 @@
+{
+  "version": 1,
+  "artefacts": {
+    "00": {
+      "intro": "You are registering one agent in the agent inventory, the record that is the source of truth for its autonomy tier. The tier you set here drives everything downstream: the CI pipeline reads it to select the control profile (05), the identity issuer refuses a workload identity to any agent without an entry, and G0 checks that risk and compliance concur with the proposed tier.",
+      "tips": [
+        "Keep this separate from the model inventory: the underlying model is registered there as a vendor model with a version, and this entry points to it.",
+        "Propose the tier from impact (domain, data, external access, scope, reversibility) and likelihood (autonomy, task complexity, exposure), per IMDA §2.1.1.",
+        "A first go-live is at T2 or below unless G4 evidence already exists, so an intake proposal of T3 or T4 needs a stated route to get there.",
+        "Update this entry on any change of tier, owner, model or status; a tier change is only valid after the G4 signature, never as a configuration edit.",
+        "An agent that holds a live identity but has no entry here breaks the inventory coverage metric, which targets 100%."
+      ],
+      "sections": [
+        {
+          "title": "Identity",
+          "fields": [
+            {
+              "id": "agent_id",
+              "label": "Agent ID",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "A stable, machine-readable identifier used in every decision record (07), the build attestation (06) and the workload identity. Lower-case with hyphens; never reuse an ID from a retired agent.",
+              "placeholder": "sanctions-triage-l1",
+              "source_field": "agent_id"
+            },
+            {
+              "id": "name",
+              "label": "Name",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "A plain-English name a supervisor would recognise, describing the decision the agent makes rather than the technology.",
+              "placeholder": "Sanctions alert triage, level 1",
+              "source_field": "name"
+            },
+            {
+              "id": "business_unit",
+              "label": "Business unit / agency",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The unit or agency whose process the agent runs and whose risk appetite applies.",
+              "placeholder": "Financial Crime Operations",
+              "source_field": "business unit / agency"
+            },
+            {
+              "id": "status",
+              "label": "Status",
+              "type": "select",
+              "required": true,
+              "core": true,
+              "help": "Proposed at intake; pilot while limited to test or shadow traffic; live after G3; suspended when halted by the kill switch or a gate; retired after G6.",
+              "options": [
+                "proposed",
+                "pilot",
+                "live",
+                "suspended",
+                "retired"
+              ],
+              "source_field": "status: proposed | pilot | live | suspended | retired"
+            }
+          ]
+        },
+        {
+          "title": "Accountability",
+          "fields": [
+            {
+              "id": "accountable_executive",
+              "label": "Accountable executive",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The named senior officer or system owner personally accountable for the agent's decisions. They set the tolerance, sign go-live, tier promotion and the oversight pack. Name a person, not a committee.",
+              "placeholder": "Jane Tan, Head of Financial Crime",
+              "source_field": "accountable executive"
+            },
+            {
+              "id": "agent_owner",
+              "label": "Agent owner",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The named person accountable day to day for this one agent: mandate, inventory, change and the oversight pack. Usually the product lead of the business process.",
+              "source_field": "agent owner"
+            }
+          ]
+        },
+        {
+          "title": "Risk classification",
+          "fields": [
+            {
+              "id": "tier",
+              "label": "Autonomy tier",
+              "type": "select",
+              "required": true,
+              "core": true,
+              "help": "T1 agent proposes, human operates; T2 agent acts, human approves every significant step; T3 agent closes alone within its mandate and escalates exceptions; T4 no human in the path, oversight after the fact. RC must concur at G0.",
+              "options": [
+                "T1",
+                "T2",
+                "T3",
+                "T4"
+              ],
+              "source_field": "autonomy tier T1–T4"
+            },
+            {
+              "id": "tier_rationale",
+              "label": "Why this tier",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Two or three sentences on the impact and likelihood factors behind the tier, so RC can concur or challenge at G0 and a supervisor can follow the reasoning.",
+              "placeholder": "High volume, reversible closures; agent closes only name-match alerts below 0.82 score; all others escalate."
+            },
+            {
+              "id": "consequence_class",
+              "label": "Consequence class",
+              "type": "select",
+              "required": true,
+              "core": true,
+              "help": "The worst realistic harm of a single wrong decision to the person affected, the organisation or the public. Use the same scale as the hazard register (03).",
+              "options": [
+                "Low",
+                "Medium",
+                "High",
+                "Severe"
+              ],
+              "source_field": "consequence class"
+            },
+            {
+              "id": "reversibility",
+              "label": "Reversibility",
+              "type": "select",
+              "required": true,
+              "core": true,
+              "help": "Whether a wrong decision can be undone after it executes. Irreversible actions need significant human checkpoints (IMDA §2.2.2) and weigh heavily on the tier.",
+              "options": [
+                "Fully reversible",
+                "Reversible with effort",
+                "Irreversible"
+              ],
+              "source_field": "reversibility"
+            },
+            {
+              "id": "data_classification",
+              "label": "Highest data classification",
+              "type": "text",
+              "required": true,
+              "core": false,
+              "help": "The highest classification of any data the agent reads, retrieves or remembers, taken from the provenance record (14). The hosting must be authorised for it.",
+              "placeholder": "Confidential (Cloud-Eligible)",
+              "source_field": "highest data classification"
+            }
+          ]
+        },
+        {
+          "title": "Technology",
+          "fields": [
+            {
+              "id": "models",
+              "label": "Model(s), vendor and version",
+              "type": "table",
+              "required": true,
+              "core": false,
+              "help": "One row per model the agent calls. Each model should also be registered in the model inventory as a vendor model with a version; a version change is a material change (G5).",
+              "columns": [
+                {
+                  "id": "model",
+                  "label": "Model",
+                  "type": "text"
+                },
+                {
+                  "id": "vendor",
+                  "label": "Vendor",
+                  "type": "text"
+                },
+                {
+                  "id": "version",
+                  "label": "Version",
+                  "type": "text"
+                },
+                {
+                  "id": "in_model_inventory",
+                  "label": "In model inventory",
+                  "type": "yesno"
+                }
+              ],
+              "source_field": "model(s) + vendor + version"
+            },
+            {
+              "id": "uses_vendor",
+              "label": "Any third-party model, platform or tool is used",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Answer yes if any model, agent platform, hosted tool or SaaS component comes from a third party. Yes makes the third-party evidence pack (16) required, opened now and complete before G3."
+            },
+            {
+              "id": "confidence_routing",
+              "label": "The agent's own confidence decides what is auto-closed",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Answer yes if a confidence score the agent produces decides whether a case is closed or escalated. Yes makes the calibration record (10) required once four sampling rounds exist."
+            },
+            {
+              "id": "hosting",
+              "label": "Hosting",
+              "type": "text",
+              "required": true,
+              "core": false,
+              "help": "Where the agent and its model run (on-premises, private cloud, government cloud, vendor SaaS) and in which region. It must be authorised for the highest data classification above.",
+              "placeholder": "Private cloud, SG region; model via vendor API",
+              "source_field": "hosting"
+            }
+          ]
+        },
+        {
+          "title": "Links and review",
+          "fields": [
+            {
+              "id": "link_01",
+              "label": "Justification record (01)",
+              "type": "text",
+              "required": true,
+              "core": false,
+              "help": "Reference or URL of the agent justification record. Required at G0.",
+              "placeholder": "BC-2026-114 §4",
+              "source_field": "links: 01 02 06 11"
+            },
+            {
+              "id": "link_02",
+              "label": "Delegation policy (02)",
+              "type": "text",
+              "required": false,
+              "core": false,
+              "help": "Path to the mandate YAML in the agent's repository. Leave blank at intake; it must exist before G1.",
+              "placeholder": "repo/sanctions-triage-l1/policy/02-delegation.yaml",
+              "source_field": "links: 01 02 06 11"
+            },
+            {
+              "id": "link_06",
+              "label": "Build attestation (06)",
+              "type": "text",
+              "required": false,
+              "core": false,
+              "help": "Registry reference of the current signed build attestation. Filled at first release and updated each release.",
+              "source_field": "links: 01 02 06 11"
+            },
+            {
+              "id": "link_11",
+              "label": "Oversight pack (11)",
+              "type": "text",
+              "required": false,
+              "core": false,
+              "help": "Reference of the tile register and generated dashboard. Must exist before G3.",
+              "source_field": "links: 01 02 06 11"
+            },
+            {
+              "id": "next_review",
+              "label": "Next review",
+              "type": "date",
+              "required": true,
+              "core": true,
+              "help": "The date this entry, the tier and the owners will next be reviewed. At most a year out; sooner for T3 and T4.",
+              "source_field": "next review"
+            },
+            {
+              "id": "sunset_date",
+              "label": "Sunset date",
+              "type": "date",
+              "required": true,
+              "core": true,
+              "help": "The date the agent stops unless re-approved. It should match the sunset in the mandate (02) and the exit metric in the justification (01).",
+              "source_field": "sunset date"
+            }
+          ]
+        }
+      ]
+    },
+    "01": {
+      "intro": "You are making the case for why this decision needs an agent rather than a rules engine, a process fix or a scorecard, in the terms the benefit will later be measured in. The accountable executive decides on it at G0, and the permanent cost of outcome sampling (09) must appear here as a line against the benefit, not be discovered in year two.",
+      "tips": [
+        "Write the alternatives honestly: someone who disagrees with using an agent should be able to see which alternative was rejected and on what numbers.",
+        "Put the benefit in units you will measure at 12 months (analyst hours, cycle time), because realised versus claimed benefit is the metric for this record.",
+        "Cost sampling at the floor you expect to run permanently: at 10,000 closures a month, a 300-case floor is 3% of the work the agent removed, done by experienced reviewers.",
+        "The loop shrinks under the reduction rule but never closes, so do not assume the sampling cost falls to zero after year one."
+      ],
+      "sections": [
+        {
+          "title": "The decision",
+          "fields": [
+            {
+              "id": "decision_delegated",
+              "label": "Decision being delegated",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The single decision the agent will take, stated as a verb and an object (for example 'close or escalate first-line name-screening alerts'), and who takes it today.",
+              "source_field": "decision being delegated"
+            },
+            {
+              "id": "population",
+              "label": "Population",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "Which cases reach the agent: case types, channels, jurisdictions and any exclusions. This becomes the sampling frame for 09.",
+              "source_field": "population & monthly volume"
+            },
+            {
+              "id": "monthly_volume",
+              "label": "Monthly volume",
+              "type": "number",
+              "required": true,
+              "core": true,
+              "help": "Expected cases per month the agent will decide. Use current operational data; it sizes both the benefit and the sampling cost.",
+              "placeholder": "10000",
+              "unit": "cases per month",
+              "source_field": "population & monthly volume"
+            }
+          ]
+        },
+        {
+          "title": "Alternatives considered",
+          "fields": [
+            {
+              "id": "alternatives",
+              "label": "Alternatives and why rejected",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row each for a deterministic rule, a process change and a scorecard at minimum. State the numbers that decided it (coverage, error rate, cost), not a preference.",
+              "columns": [
+                {
+                  "id": "alternative",
+                  "label": "Alternative",
+                  "type": "select",
+                  "options": [
+                    "Deterministic rule",
+                    "Process change",
+                    "Scorecard",
+                    "Other"
+                  ]
+                },
+                {
+                  "id": "description",
+                  "label": "What it would be",
+                  "type": "text"
+                },
+                {
+                  "id": "why_rejected",
+                  "label": "Why rejected, with numbers",
+                  "type": "text"
+                }
+              ],
+              "source_field": "alternatives: deterministic rule · process change · scorecard, and why rejected"
+            }
+          ]
+        },
+        {
+          "title": "Benefit and cost",
+          "fields": [
+            {
+              "id": "benefit_hours",
+              "label": "Benefit in analyst hours",
+              "type": "number",
+              "required": true,
+              "core": true,
+              "help": "Analyst hours per month the agent is expected to remove, net of the human time it still needs for escalations and approvals.",
+              "unit": "hours per month",
+              "source_field": "benefit in analyst hours & cycle time"
+            },
+            {
+              "id": "benefit_cycle_time",
+              "label": "Benefit in cycle time",
+              "type": "text",
+              "required": true,
+              "core": false,
+              "help": "Current and expected cycle time for the decision, in the unit operations already reports.",
+              "placeholder": "4.2 days → same day",
+              "source_field": "benefit in analyst hours & cycle time"
+            },
+            {
+              "id": "sampling_cost_per_year",
+              "label": "Cost of the sampling loop (09) per year",
+              "type": "number",
+              "required": true,
+              "core": true,
+              "help": "The permanent annual cost of independent reviewers re-performing the sample. G0 checks that it is present and sits on the benefit line.",
+              "unit": "currency per year",
+              "source_field": "cost of sampling loop (09) per year"
+            },
+            {
+              "id": "sampling_cost_basis",
+              "label": "How the sampling cost was calculated",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Show the arithmetic: cases per month (at least the floor you expect in 02) × reviewer minutes per case × loaded hourly rate × 12, plus the full-rate rounds needed after material changes and before promotion.",
+              "placeholder": "300 cases × 20 min × 12 months = 1,200 reviewer hours × 95/h",
+              "source_field": "cost of sampling loop (09) per year"
+            }
+          ]
+        },
+        {
+          "title": "Risk and exit",
+          "fields": [
+            {
+              "id": "consequence_class",
+              "label": "Consequence class of a wrong decision",
+              "type": "select",
+              "required": true,
+              "core": true,
+              "help": "The worst realistic harm of one wrong decision. It should match the class recorded in the inventory (00).",
+              "options": [
+                "Low",
+                "Medium",
+                "High",
+                "Severe"
+              ],
+              "source_field": "consequence class of a wrong decision"
+            },
+            {
+              "id": "reversibility",
+              "label": "Reversibility",
+              "type": "select",
+              "required": true,
+              "core": false,
+              "help": "Whether a wrong decision can be undone once executed, and at what effort.",
+              "options": [
+                "Fully reversible",
+                "Reversible with effort",
+                "Irreversible"
+              ],
+              "source_field": "reversibility"
+            },
+            {
+              "id": "exit_metric",
+              "label": "Exit / sunset metric",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The measurable condition under which the agent is switched off or not renewed, for example realised benefit below a stated share of the claim at 12 months, or disagreement above tolerance for a set number of rounds.",
+              "source_field": "exit / sunset metric"
+            },
+            {
+              "id": "benefit_review_date",
+              "label": "Benefit review date",
+              "type": "date",
+              "required": false,
+              "core": false,
+              "help": "When realised benefit will be compared with the claim, normally 12 months after go-live."
+            }
+          ]
+        }
+      ]
+    },
+    "02": {
+      "intro": "You are writing the mandate: what the agent may decide alone, what it must escalate, whose authority it acts under, what it may read and touch, how it is assured and what ends it. It is the most important document in the set: the policy gate is compiled from it with no hand configuration, G1 checks that tolerance and sampling rate are written in, and 09, 10, 13 and 14 all test against it.",
+      "tips": [
+        "Write it so the gate can be configured with no interpretation and a supervisor can read it and say which tier the agent sits at.",
+        "The accountable executive sets the tolerance and countersigns the tier; the framework insists a number is written down but never proposes one.",
+        "Every must_escalate condition becomes a test in 13, so phrase each one as something a test can trigger.",
+        "If confidence decides auto-closure, the threshold must point to a calibrated row in 10, not an engineer's feel.",
+        "Re-approve on every tier change and every material change; gate-config drift between this file and the running gate must be 0."
+      ],
+      "sections": [
+        {
+          "title": "Purpose and authority",
+          "fields": [
+            {
+              "id": "purpose",
+              "label": "Purpose",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "One sentence stating the decision the agent disposes of, matching the justification (01).",
+              "placeholder": "Dispose first-line name-screening alerts",
+              "source_field": "purpose"
+            },
+            {
+              "id": "tier",
+              "label": "Authority tier",
+              "type": "select",
+              "required": true,
+              "core": true,
+              "help": "The tier the agent operates at, which must match the inventory (00). A change of tier needs G4 and a revised mandate.",
+              "options": [
+                "T1",
+                "T2",
+                "T3",
+                "T4"
+              ],
+              "source_field": "authority.tier"
+            },
+            {
+              "id": "acts_on_behalf_of",
+              "label": "Acts under whose authority",
+              "type": "text",
+              "required": true,
+              "core": false,
+              "help": "The human principal or queue whose authority the agent exercises; it is carried in the identity token's delegation chain and in every decision record.",
+              "placeholder": "ops.fincrime.queue"
+            }
+          ]
+        },
+        {
+          "title": "Auto-decide scope",
+          "fields": [
+            {
+              "id": "auto_case_types",
+              "label": "Case types the agent may decide alone",
+              "type": "list",
+              "required": true,
+              "core": true,
+              "help": "Only the case or alert types in scope for autonomous decision. Anything not listed escalates by default.",
+              "placeholder": "name_match",
+              "source_field": "auto-decide scope: case types, value limits, jurisdictions"
+            },
+            {
+              "id": "auto_value_limits",
+              "label": "Value and score limits",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Numeric limits on autonomous decisions: amounts, match scores, counts. Each must be something the gate can check on a record field.",
+              "placeholder": "max_match_score: 0.82",
+              "source_field": "auto-decide scope: case types, value limits, jurisdictions"
+            },
+            {
+              "id": "auto_jurisdictions",
+              "label": "Jurisdictions and exclusions",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Jurisdictions, programmes or list entries in and out of scope for autonomous decision.",
+              "placeholder": "Excluded: comprehensive-sanctions programmes; PEP and adverse-media entries",
+              "source_field": "auto-decide scope: case types, value limits, jurisdictions"
+            },
+            {
+              "id": "must_escalate",
+              "label": "Must-escalate conditions",
+              "type": "list",
+              "required": true,
+              "core": true,
+              "help": "Each condition that forces escalation to a human regardless of confidence, phrased so a test can trigger it. Every one needs a passing escalation test in 13.",
+              "placeholder": "any_field_missing_in_grounds",
+              "source_field": "must_escalate conditions"
+            },
+            {
+              "id": "routing_threshold",
+              "label": "Confidence routing threshold",
+              "type": "text",
+              "required": false,
+              "core": false,
+              "help": "Only if the agent's confidence decides auto-closure: the threshold, and the 10 band it points to. Before 10 exists, state the provisional value and that it is uncalibrated.",
+              "placeholder": "confidence < 0.90 escalates (10, band 0.90–0.95)"
+            }
+          ]
+        },
+        {
+          "title": "Information and tools",
+          "fields": [
+            {
+              "id": "may_read",
+              "label": "May read",
+              "type": "list",
+              "required": true,
+              "core": true,
+              "help": "Every data source, corpus or memory store the agent may read. Each must resolve to a row in the provenance record (14).",
+              "placeholder": "kyc_record",
+              "source_field": "may_read / may_not_read"
+            },
+            {
+              "id": "may_not_read",
+              "label": "May not read",
+              "type": "list",
+              "required": true,
+              "core": true,
+              "help": "Sources the agent is explicitly denied, even if technically reachable, such as investigator notes or suspicious-activity filings.",
+              "placeholder": "SAR_filings",
+              "source_field": "may_read / may_not_read"
+            },
+            {
+              "id": "tools",
+              "label": "Tools and permissions",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "Every tool the agent may call through the gateway, with the permission and any rate or spend limit. The tool manifest hash in 06 must match this list.",
+              "columns": [
+                {
+                  "id": "tool",
+                  "label": "Tool",
+                  "type": "text"
+                },
+                {
+                  "id": "permission",
+                  "label": "Permission",
+                  "type": "select",
+                  "options": [
+                    "read",
+                    "write",
+                    "act"
+                  ]
+                },
+                {
+                  "id": "limits",
+                  "label": "Rate / spend / scope limits",
+                  "type": "text"
+                }
+              ],
+              "source_field": "tools & permissions"
+            },
+            {
+              "id": "coordination",
+              "label": "Coordination with other agents / humans",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Which agents or human teams it hands off to or receives from, over what channel, and what it may and may not accept from another agent.",
+              "source_field": "coordination with other agents / humans"
+            }
+          ]
+        },
+        {
+          "title": "Assurance",
+          "fields": [
+            {
+              "id": "control_profile",
+              "label": "Control profile",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The 05 profile selected for this tier. It must be the profile the pipeline actually runs.",
+              "placeholder": "tier-3",
+              "source_field": "assurance: control profile, sampling rate & floor, tolerance"
+            },
+            {
+              "id": "sampling_rate_pct",
+              "label": "Sampling rate",
+              "type": "percent",
+              "required": true,
+              "core": false,
+              "help": "Share of closures independently re-performed each month by IRV, blind to the agent's answer. Required at G1 for T2 and above.",
+              "placeholder": "3.0",
+              "unit": "% per month",
+              "source_field": "assurance: control profile, sampling rate & floor, tolerance"
+            },
+            {
+              "id": "sampling_floor",
+              "label": "Sampling floor",
+              "type": "number",
+              "required": true,
+              "core": false,
+              "help": "Minimum cases re-performed per month whatever the rate gives. 300 with zero disagreements bounds the rate at 1.0% (rule of three), the model's monthly floor for T3.",
+              "placeholder": "300",
+              "unit": "cases per month",
+              "source_field": "assurance: control profile, sampling rate & floor, tolerance"
+            },
+            {
+              "id": "tolerance_pct",
+              "label": "Tolerance (disagreement_max)",
+              "type": "percent",
+              "required": true,
+              "core": false,
+              "help": "The maximum agent-wrong disagreement rate the accountable executive will accept, compared against the Wilson interval in 09. Set by the AE; the framework never proposes a number.",
+              "placeholder": "2.0",
+              "unit": "%",
+              "source_field": "assurance: control profile, sampling rate & floor, tolerance"
+            },
+            {
+              "id": "canary_target",
+              "label": "Canary catch-rate target",
+              "type": "percent",
+              "required": false,
+              "core": false,
+              "help": "Where operators are on the loop: the share of seeded known-wrong outputs they must catch. Set here, measured monthly.",
+              "unit": "%"
+            }
+          ]
+        },
+        {
+          "title": "Evolution and sunset",
+          "fields": [
+            {
+              "id": "material_change",
+              "label": "Material-change list",
+              "type": "list",
+              "required": true,
+              "core": true,
+              "help": "Everything whose change triggers G5: at least model version, prompt hash, tool manifest hash, rules or list version, and population shift.",
+              "placeholder": "model_version",
+              "source_field": "evolution: material-change list, re-approver"
+            },
+            {
+              "id": "on_material_change",
+              "label": "On material change",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "What happens automatically: full 09 round, 10 voided, 13 regression, 03 delta, 06 re-attest.",
+              "placeholder": "full_sample; calibration_void",
+              "source_field": "evolution: material-change list, re-approver"
+            },
+            {
+              "id": "reapprover",
+              "label": "Re-approver",
+              "type": "role",
+              "required": true,
+              "core": false,
+              "help": "Who re-approves on material change: the agent owner for T1–T2, risk & compliance for T3–T4 (G5).",
+              "source_field": "evolution: material-change list, re-approver"
+            },
+            {
+              "id": "sunset",
+              "label": "Sunset",
+              "type": "date",
+              "required": true,
+              "core": true,
+              "help": "Date the mandate lapses unless re-approved; match 00.",
+              "source_field": "sunset"
+            },
+            {
+              "id": "policy_yaml",
+              "label": "Mandate as YAML",
+              "type": "code",
+              "required": false,
+              "core": false,
+              "help": "Optional: the full mandate in the repository's YAML, which the gate compiles from. Follow the structure agent, purpose, authority (tier, auto_close, must_escalate), information (may_read, may_not_read), tools, assurance (controls_profile, sampling, tolerance), evolution, sunset, as in the illustrative example.",
+              "lang": "yaml"
+            }
+          ]
+        }
+      ]
+    },
+    "03": {
+      "intro": "You are recording what can go wrong with this agent, including failures that only emerge when parts interact rather than when a part breaks. Specialists produce this register and hand it to the business to challenge; each hazard is linked to control stories (04) and controls (05), and G1 fails if any hazard has no assigned control.",
+      "tips": [
+        "Do not elicit hazards from the business in a workshop; build the control structure and unsafe control actions first (STPA), then let the business challenge the result.",
+        "Read the draft from four perspectives: the attacker, a supervisor two years from now, operations at 3am, and the person who was wronged.",
+        "It is not done until at least one hazard needs two simultaneous conditions to occur; that is the sign you looked at interactions, not just components.",
+        "Use OWASP ASI01–ASI10 as prompts so goal hijack, memory poisoning and human-agent trust exploitation are not missed.",
+        "On every material change, re-run as a delta and record only what changed."
+      ],
+      "sections": [
+        {
+          "title": "Method",
+          "fields": [
+            {
+              "id": "control_structure",
+              "label": "Control structure",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The controllers (agent, gate, gateway, operators, reviewers) and the control actions and feedback between them. This is the STPA starting point that the unsafe control actions come from."
+            },
+            {
+              "id": "perspectives_read",
+              "label": "Perspectives read",
+              "type": "multiselect",
+              "required": true,
+              "core": false,
+              "help": "Tick each perspective the draft has been read from before it goes to the business.",
+              "options": [
+                "The attacker",
+                "A supervisor two years from now",
+                "Operations at 3am",
+                "The person who was wronged"
+              ]
+            },
+            {
+              "id": "asi_prompts",
+              "label": "ASI categories considered",
+              "type": "multiselect",
+              "required": false,
+              "core": false,
+              "help": "The OWASP ASI 2026 categories used as prompts. A category left unticked should be explained in a hazard or a note.",
+              "options": [
+                {
+                  "value": "ASI01",
+                  "label": "ASI01 Goal hijack"
+                },
+                {
+                  "value": "ASI02",
+                  "label": "ASI02 Tool misuse"
+                },
+                {
+                  "value": "ASI03",
+                  "label": "ASI03 Identity & privilege abuse"
+                },
+                {
+                  "value": "ASI04",
+                  "label": "ASI04 Supply chain"
+                },
+                {
+                  "value": "ASI05",
+                  "label": "ASI05 Unexpected code execution"
+                },
+                {
+                  "value": "ASI06",
+                  "label": "ASI06 Memory & context poisoning"
+                },
+                {
+                  "value": "ASI07",
+                  "label": "ASI07 Insecure inter-agent comms"
+                },
+                {
+                  "value": "ASI08",
+                  "label": "ASI08 Cascading failures"
+                },
+                {
+                  "value": "ASI09",
+                  "label": "ASI09 Human-agent trust exploitation"
+                },
+                {
+                  "value": "ASI10",
+                  "label": "ASI10 Rogue agents"
+                }
+              ]
+            },
+            {
+              "id": "delta_of",
+              "label": "Delta against",
+              "type": "text",
+              "required": false,
+              "core": false,
+              "help": "For a re-run after material change: the change and the previous register version this is a delta against.",
+              "placeholder": "G5 model_version 4.1 → 4.2; register v3"
+            }
+          ]
+        },
+        {
+          "title": "Hazards",
+          "fields": [
+            {
+              "id": "hazards",
+              "label": "Hazard register",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per hazard. Loss is what is harmed; the unsafe control action is what the agent or a controller does or fails to do; the causal scenario is how it happens. Tick interaction when two or more simultaneous conditions are needed.",
+              "columns": [
+                {
+                  "id": "hazard_id",
+                  "label": "Hazard ID",
+                  "type": "text",
+                  "source_field": "hazard_id"
+                },
+                {
+                  "id": "loss",
+                  "label": "Loss",
+                  "type": "text",
+                  "source_field": "loss"
+                },
+                {
+                  "id": "unsafe_control_action",
+                  "label": "Unsafe control action",
+                  "type": "text",
+                  "source_field": "unsafe control action"
+                },
+                {
+                  "id": "causal_scenario",
+                  "label": "Causal scenario",
+                  "type": "text",
+                  "source_field": "causal scenario"
+                },
+                {
+                  "id": "interaction",
+                  "label": "Needs two or more simultaneous conditions",
+                  "type": "yesno",
+                  "source_field": "interaction involved"
+                },
+                {
+                  "id": "consequence_class",
+                  "label": "Consequence class",
+                  "type": "select",
+                  "options": [
+                    "Low",
+                    "Medium",
+                    "High",
+                    "Severe"
+                  ],
+                  "source_field": "consequence class"
+                },
+                {
+                  "id": "controls",
+                  "label": "Controls assigned (04/05 ids)",
+                  "type": "text",
+                  "source_field": "control(s) assigned → 04/05"
+                },
+                {
+                  "id": "residual_owner",
+                  "label": "Residual risk owner",
+                  "type": "text",
+                  "source_field": "residual risk owner"
+                }
+              ],
+              "source_field": "hazard_id"
+            }
+          ]
+        }
+      ]
+    },
+    "04": {
+      "intro": "You are writing each control as a backlog story with acceptance criteria, in the same backlog, estimate and demo as the feature work. Stories are derived from the hazard register (03) and the control catalogue (05), labelled with the control ID; G2 checks they are accepted and the pipeline tests are green.",
+      "tips": [
+        "Don't invent controls per project: start from the tier profile in 05 and the controls assigned in 03.",
+        "Requirements in a non-functional annex have no owner, estimate, test or demo, and they are the first thing dropped when a date slips.",
+        "Write the observable behaviour as Given / When / Then so the acceptance test follows directly from it.",
+        "Demonstrate control stories at sprint review alongside feature stories, and track how many of each are deferred per release."
+      ],
+      "sections": [
+        {
+          "title": "Control stories",
+          "fields": [
+            {
+              "id": "stories",
+              "label": "Control stories",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per control story. The acceptance test must be one the pipeline runs, and the evidence must name the record and field that proves the control ran.",
+              "columns": [
+                {
+                  "id": "control_id",
+                  "label": "Control ID (05)",
+                  "type": "text",
+                  "source_field": "control_id (from 05)"
+                },
+                {
+                  "id": "story_key",
+                  "label": "Backlog key",
+                  "type": "text"
+                },
+                {
+                  "id": "trigger",
+                  "label": "Trigger",
+                  "type": "text",
+                  "source_field": "trigger"
+                },
+                {
+                  "id": "behaviour",
+                  "label": "Observable behaviour",
+                  "type": "text",
+                  "source_field": "observable behaviour"
+                },
+                {
+                  "id": "evidence",
+                  "label": "Evidence (record + field)",
+                  "type": "text",
+                  "source_field": "evidence emitted (record + field)"
+                },
+                {
+                  "id": "acceptance_test",
+                  "label": "Acceptance test the pipeline runs",
+                  "type": "text",
+                  "source_field": "acceptance test the pipeline runs"
+                },
+                {
+                  "id": "automated",
+                  "label": "Test automated",
+                  "type": "yesno"
+                },
+                {
+                  "id": "hazard_id",
+                  "label": "Linked hazard ID (03)",
+                  "type": "text",
+                  "source_field": "linked hazard_id"
+                },
+                {
+                  "id": "demoed",
+                  "label": "Demoed at sprint review",
+                  "type": "yesno"
+                }
+              ],
+              "source_field": "control_id (from 05)"
+            },
+            {
+              "id": "story_text",
+              "label": "Story detail (Gherkin)",
+              "type": "code",
+              "required": false,
+              "core": false,
+              "help": "Optional: the full text of one or more stories in Given / When / Then form, with Evidence and Test lines, as in the AGT-014 example.",
+              "lang": "gherkin"
+            }
+          ]
+        },
+        {
+          "title": "Release tracking",
+          "fields": [
+            {
+              "id": "control_deferred",
+              "label": "Control stories deferred this release",
+              "type": "number",
+              "required": true,
+              "core": true,
+              "help": "Count of control stories moved out of the release. Compared with feature stories deferred, it shows whether controls are the first thing dropped.",
+              "unit": "stories"
+            },
+            {
+              "id": "feature_deferred",
+              "label": "Feature stories deferred this release",
+              "type": "number",
+              "required": true,
+              "core": false,
+              "help": "Count of feature stories moved out of the same release.",
+              "unit": "stories"
+            }
+          ]
+        }
+      ]
+    },
+    "05": {
+      "intro": "You are maintaining the controls as data: each with its applicability, a deterministic test, the evidence it emits and its on-fail action, cut into one profile per tier. This is the reusable, organisation-wide asset: the CI pipeline selects the profile from the inventory tier (00) and runs every test, control stories (04) reference its IDs, and G2 fails closed on any block_deploy control.",
+      "tips": [
+        "Don't write a house catalogue: seed from CSA AICM v1.1 and ISO 42001 Annex A, because the mappings are the asset and a house catalogue throws them away.",
+        "A test is deterministic only if it runs without a human interpreting anything; a checker that reasons probabilistically is itself an ungoverned model.",
+        "Use block_deploy for controls whose absence makes the agent unsafe to ship, block_action for per-action checks at the gate, and alert only where a human follow-up is enough.",
+        "Version the catalogue like code; the profile is selected per agent at every build."
+      ],
+      "sections": [
+        {
+          "title": "Catalogue and profile",
+          "fields": [
+            {
+              "id": "catalogue_sources",
+              "label": "Seed catalogues",
+              "type": "multiselect",
+              "required": true,
+              "core": false,
+              "help": "The published catalogues imported. For public-sector deployments, import the GenAI SSP as a profile.",
+              "options": [
+                "CSA AICM v1.1",
+                "ISO/IEC 42001 Annex A",
+                "SG GenAI SSP (DP-8, GA-1 to GA-8)",
+                "CSA agentic profile",
+                "OWASP Agent Control Standard"
+              ]
+            },
+            {
+              "id": "catalogue_version",
+              "label": "Catalogue version",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The version tag of the catalogue repository this profile is cut from.",
+              "placeholder": "catalogue v1.4.0"
+            },
+            {
+              "id": "profile_tier",
+              "label": "Profile tier",
+              "type": "select",
+              "required": true,
+              "core": true,
+              "help": "The tier this profile serves. One profile per tier, so selection is a lookup from the inventory tier.",
+              "options": [
+                "T1",
+                "T2",
+                "T3",
+                "T4"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Controls",
+          "fields": [
+            {
+              "id": "controls",
+              "label": "Controls",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per control in the profile. applies_to states tier, data class and consequence class; test is an expression the pipeline evaluates; evidence names record type and field.",
+              "columns": [
+                {
+                  "id": "id",
+                  "label": "Control ID",
+                  "type": "text",
+                  "source_field": "id"
+                },
+                {
+                  "id": "statement",
+                  "label": "Statement",
+                  "type": "text",
+                  "source_field": "statement"
+                },
+                {
+                  "id": "applies_to",
+                  "label": "Applies to (tier, data class, consequence class)",
+                  "type": "text",
+                  "source_field": "applies_to: tier, data class, consequence class"
+                },
+                {
+                  "id": "test",
+                  "label": "Deterministic test",
+                  "type": "text",
+                  "source_field": "test (deterministic)"
+                },
+                {
+                  "id": "evidence",
+                  "label": "Evidence (record type + field)",
+                  "type": "text",
+                  "source_field": "evidence: record type + field"
+                },
+                {
+                  "id": "on_fail",
+                  "label": "On fail",
+                  "type": "select",
+                  "options": [
+                    "block_deploy",
+                    "block_action",
+                    "alert"
+                  ],
+                  "source_field": "on_fail: block_deploy | block_action | alert"
+                },
+                {
+                  "id": "maps_to",
+                  "label": "Maps to",
+                  "type": "text",
+                  "source_field": "maps_to: AICM · ISO 42001 · IMDA · IM8/SSP · AI Act"
+                }
+              ],
+              "source_field": "id"
+            },
+            {
+              "id": "controls_yaml",
+              "label": "Controls as YAML / OSCAL",
+              "type": "code",
+              "required": false,
+              "core": false,
+              "help": "Optional: the profile as it sits in the OSCAL repository, one entry per control with id, title, applies_to, test, evidence, on_fail and maps_to.",
+              "lang": "yaml"
+            }
+          ]
+        }
+      ]
+    },
+    "06": {
+      "intro": "You are describing exactly what this release of the agent is, in a form a machine can check, and signing it; this applies to every release, including prompt-only ones. It lets any decision record (07) be resolved to the exact build that made it, feeds the version-drift check and G5 change detection, and is required at G3 alongside the 13 report and 16 evidence it references.",
+      "tips": [
+        "A prompt-only change is still a release and still changes the prompt hash, so it needs a new attestation.",
+        "The version triple here (model version, prompt hash, tool manifest hash) must match what appears on every 07 record; any mismatch is version drift and is red.",
+        "Only mark a control inherited from platform when the matching 16 row carries evidence.",
+        "Express components as OSCAL component-definitions so the controls they satisfy map straight to 05."
+      ],
+      "sections": [
+        {
+          "title": "Release identity",
+          "fields": [
+            {
+              "id": "agent_id",
+              "label": "Agent ID",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "Must match the inventory (00).",
+              "source_field": "agent_id"
+            },
+            {
+              "id": "release_version",
+              "label": "Release version",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The release tag this attestation signs.",
+              "placeholder": "2026.09.2"
+            },
+            {
+              "id": "prompt_only",
+              "label": "Prompt-only release",
+              "type": "yesno",
+              "required": false,
+              "core": false,
+              "help": "Yes if only the prompt changed. It still needs attestation and still triggers G5."
+            }
+          ]
+        },
+        {
+          "title": "Version triple",
+          "fields": [
+            {
+              "id": "model_vendor",
+              "label": "Model vendor",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "Vendor of the model in force for this release.",
+              "source_field": "model {vendor, version}"
+            },
+            {
+              "id": "model_version",
+              "label": "Model version",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "Exact model version string as recorded on 07 records.",
+              "placeholder": "vendor-x-4.2",
+              "source_field": "model {vendor, version}"
+            },
+            {
+              "id": "prompt_hash",
+              "label": "Prompt hash",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "Hash of the full system prompt and templates as deployed.",
+              "source_field": "prompt_hash"
+            },
+            {
+              "id": "tool_manifest_hash",
+              "label": "Tool manifest hash",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "Hash of the tool manifest below.",
+              "source_field": "tool_manifest_hash + manifest"
+            },
+            {
+              "id": "tool_manifest",
+              "label": "Tool manifest",
+              "type": "code",
+              "required": true,
+              "core": false,
+              "help": "The manifest (for example MCP tool manifests) listing every tool, matching 02 tools & permissions.",
+              "lang": "json",
+              "source_field": "tool_manifest_hash + manifest"
+            }
+          ]
+        },
+        {
+          "title": "Runtime binding",
+          "fields": [
+            {
+              "id": "spiffe_id",
+              "label": "Identity (SPIFFE ID)",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The agent's workload identity. Issued only if an inventory entry exists.",
+              "placeholder": "spiffe://org/agent/sanctions-triage-l1",
+              "source_field": "identity (SPIFFE id)"
+            },
+            {
+              "id": "gateway_endpoint",
+              "label": "Gateway endpoint",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The tool gateway endpoint all external calls go through; there must be no other path.",
+              "source_field": "gateway endpoint"
+            },
+            {
+              "id": "controls_by_component",
+              "label": "Controls satisfied by component",
+              "type": "table",
+              "required": true,
+              "core": false,
+              "help": "One row per component and control it satisfies. Inherited-from-platform rows need a 16 evidence reference.",
+              "columns": [
+                {
+                  "id": "component",
+                  "label": "Component",
+                  "type": "text"
+                },
+                {
+                  "id": "control_id",
+                  "label": "Control ID (05)",
+                  "type": "text"
+                },
+                {
+                  "id": "how",
+                  "label": "How satisfied",
+                  "type": "select",
+                  "options": [
+                    "Implemented",
+                    "Inherited from platform"
+                  ]
+                },
+                {
+                  "id": "evidence_16",
+                  "label": "16 evidence ref",
+                  "type": "text"
+                }
+              ],
+              "source_field": "controls satisfied by component"
+            }
+          ]
+        },
+        {
+          "title": "Supply chain and evidence",
+          "fields": [
+            {
+              "id": "sbom",
+              "label": "SBOM reference",
+              "type": "text",
+              "required": true,
+              "core": false,
+              "help": "Location of the software bill of materials for this build.",
+              "source_field": "SBOM"
+            },
+            {
+              "id": "provenance_signature",
+              "label": "Provenance signature",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "Reference to the SLSA / in-toto provenance signature proving the running build is this build.",
+              "source_field": "provenance signature"
+            },
+            {
+              "id": "report_13_ref",
+              "label": "13 report reference",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The pre-deployment evaluation or regression report for this release.",
+              "source_field": "13 report ref"
+            },
+            {
+              "id": "evidence_16_refs",
+              "label": "16 evidence references",
+              "type": "list",
+              "required": false,
+              "core": false,
+              "help": "References to third-party evidence rows relied on by this release. Leave empty only if no third party is used.",
+              "source_field": "16 evidence refs"
+            }
+          ]
+        }
+      ]
+    },
+    "07": {
+      "intro": "You are confirming the platform emits a conformant decision record for every action: one record per action, sealed before execution, with inputs, tool calls, structured grounds, gate verdict and version triple. Records are never written by a person; this form attests that the emitter does it. The records feed sampling (09), the version-drift check against 06, the oversight pack (11) and G3, which requires 07 emitting.",
+      "tips": [
+        "A record written after the action is a different and lesser thing; confirm it is sealed before the core system is called.",
+        "Grounds must be structured fields a script can re-check; the free-text rationale is kept but nothing relies on it.",
+        "The test is whether a record from eighteen months ago can be pulled, its chain verified, its version triple resolved and its grounds re-checked with nobody who built the agent in the room.",
+        "Pin OpenTelemetry GenAI attribute names, since the conventions are still in development status."
+      ],
+      "sections": [
+        {
+          "title": "Store",
+          "fields": [
+            {
+              "id": "store_location",
+              "label": "Record store",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The append-only store the records go to."
+            },
+            {
+              "id": "sealed_before_execution",
+              "label": "Sealed before execution",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Yes only if the record is written and sealed before the tool gateway calls the core system."
+            },
+            {
+              "id": "merkle_anchoring",
+              "label": "Merkle anchoring per batch",
+              "type": "yesno",
+              "required": false,
+              "core": false,
+              "help": "Optional anchoring of record batches (RFC 6962)."
+            }
+          ]
+        },
+        {
+          "title": "Record fields emitted",
+          "fields": [
+            {
+              "id": "f_record_id",
+              "label": "record_id",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Unique ID per action.",
+              "source_field": "record_id"
+            },
+            {
+              "id": "f_prev_hash",
+              "label": "prev_hash",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Hash of the previous record, forming the chain.",
+              "source_field": "prev_hash"
+            },
+            {
+              "id": "f_agent_id",
+              "label": "agent_id",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Matches the inventory (00).",
+              "source_field": "agent_id"
+            },
+            {
+              "id": "f_principal",
+              "label": "principal {human, act}",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "The human principal and the agent's identity acting on their behalf (act claim).",
+              "source_field": "principal {human, act}"
+            },
+            {
+              "id": "f_versions",
+              "label": "versions {model, prompt_hash, tool_manifest_hash}",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "The version triple, which must match the 06 attestation.",
+              "source_field": "versions {model, prompt_hash, tool_manifest_hash}"
+            },
+            {
+              "id": "f_inputs_read",
+              "label": "inputs_read[]",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Every input the agent read, by identifier.",
+              "source_field": "inputs_read[]"
+            },
+            {
+              "id": "f_tool_calls",
+              "label": "tool_calls[]",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Every tool call made.",
+              "source_field": "tool_calls[]"
+            },
+            {
+              "id": "f_proposed_action",
+              "label": "proposed_action",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "The action the agent proposed to the gate.",
+              "source_field": "proposed_action"
+            },
+            {
+              "id": "f_grounds",
+              "label": "grounds {structured fields, rule_id, confidence}",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Matched and unmatched fields, deltas, rule ID and confidence as structured fields.",
+              "source_field": "grounds {structured fields, rule_id, confidence}"
+            },
+            {
+              "id": "f_rationale",
+              "label": "rationale_text (kept, not relied on)",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Free-text rationale, stored but never used by any check.",
+              "source_field": "rationale_text (kept, not relied on)"
+            },
+            {
+              "id": "f_gate",
+              "label": "gate {decision, policy_version, checks}",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "The gate's allow / block / escalate verdict and the 02 policy version.",
+              "source_field": "gate {decision, policy_version, checks}"
+            },
+            {
+              "id": "f_outcome",
+              "label": "outcome",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Whether and how the action executed.",
+              "source_field": "outcome"
+            },
+            {
+              "id": "f_hash",
+              "label": "hash",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "SHA-256 over the RFC 8785 canonicalised record.",
+              "source_field": "hash"
+            },
+            {
+              "id": "f_sig",
+              "label": "sig",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Signature over the record by the emitter's key.",
+              "source_field": "sig"
+            }
+          ]
+        },
+        {
+          "title": "Verification",
+          "fields": [
+            {
+              "id": "sample_record",
+              "label": "Sample record",
+              "type": "code",
+              "required": true,
+              "core": false,
+              "help": "Paste one real (redacted) record so reviewers can see the fields populated.",
+              "lang": "json"
+            },
+            {
+              "id": "record_completeness_pct",
+              "label": "Record completeness (worst day)",
+              "type": "percent",
+              "required": true,
+              "core": false,
+              "help": "Actions with a chain-verified record and all grounds fields, divided by actions, on the worst day of the period. Threshold ≥ 99.9%.",
+              "unit": "%"
+            },
+            {
+              "id": "chain_verified_pct",
+              "label": "Chain verification",
+              "type": "percent",
+              "required": true,
+              "core": false,
+              "help": "Records re-hashed and verified divided by records, nightly. Threshold 100%.",
+              "unit": "%"
+            }
+          ]
+        }
+      ]
+    },
+    "08": {
+      "intro": "You are confirming the platform emits one dull, identical record shape for every control run, stored as OSCAL assessment-results. This is what lets one query answer 'every agent in the organisation, status today': the oversight pack (11) is generated from these records, and control-test coverage and evidence freshness are computed from them.",
+      "tips": [
+        "Keep the shape identical across teams; two teams' agents should appear in the same table without translation.",
+        "Population tested and exceptions count matter as much as pass or fail; a pass over an empty population is not evidence.",
+        "Evidence pointers should resolve to 07 records or pipeline artefacts, not to documents."
+      ],
+      "sections": [
+        {
+          "title": "Store",
+          "fields": [
+            {
+              "id": "store_location",
+              "label": "Assessment-results store",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "Where the OSCAL assessment-results are written."
+            }
+          ]
+        },
+        {
+          "title": "Record fields emitted",
+          "fields": [
+            {
+              "id": "f_control_id",
+              "label": "control_id",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "The 05 control ID.",
+              "source_field": "control_id"
+            },
+            {
+              "id": "f_agent_id",
+              "label": "agent_id",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Matches the inventory (00).",
+              "source_field": "agent_id"
+            },
+            {
+              "id": "f_period",
+              "label": "period",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "The period or build the run covers.",
+              "source_field": "period"
+            },
+            {
+              "id": "f_result",
+              "label": "result: pass | fail | not-applicable",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "One of the three values only.",
+              "source_field": "result: pass | fail | not-applicable"
+            },
+            {
+              "id": "f_population",
+              "label": "population tested",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "How many items the test ran over.",
+              "source_field": "population tested"
+            },
+            {
+              "id": "f_exceptions",
+              "label": "exceptions count",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Items that failed within the population.",
+              "source_field": "exceptions count"
+            },
+            {
+              "id": "f_evidence",
+              "label": "evidence pointer(s)",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Pointers to the 07 records or artefacts examined.",
+              "source_field": "evidence pointer(s)"
+            },
+            {
+              "id": "f_run_id",
+              "label": "run_id",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Unique ID of the control run.",
+              "source_field": "run_id"
+            },
+            {
+              "id": "f_hash",
+              "label": "hash",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Hash of the record for integrity.",
+              "source_field": "hash"
+            }
+          ]
+        },
+        {
+          "title": "Verification",
+          "fields": [
+            {
+              "id": "sample_record",
+              "label": "Sample record",
+              "type": "code",
+              "required": true,
+              "core": false,
+              "help": "Paste one real record.",
+              "lang": "json"
+            },
+            {
+              "id": "evidence_freshness_days",
+              "label": "Evidence freshness (worst control)",
+              "type": "number",
+              "required": true,
+              "core": false,
+              "help": "Age in days of the latest passing result for the stalest control.",
+              "unit": "days"
+            },
+            {
+              "id": "pack_by_query",
+              "label": "Oversight pack generated by query",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Yes if 11 is produced from these records without hand assembly."
+            }
+          ]
+        }
+      ]
+    },
+    "09": {
+      "intro": "You are fixing the sampling method and recording the results of independent reviewers re-performing a stratified random sample of the agent's closures, blind to its answer. It is the only artefact that says anything about whether decisions were right: the disagreement rate and its Wilson interval are compared to the tolerance in 02, feed the Outcome tiles in 11, the calibration record (10), and four consecutive in-tolerance full-rate rounds are required for G4.",
+      "tips": [
+        "Fix the method (frame, strata, sample rule, disagreement definition) before any results are known, and log the selection seed.",
+        "Always report the worst stratum with the overall rate: a 1% overall rate that is 9% in one stratum is a 9% problem.",
+        "Only agent-wrong counts against the agent; reviewer-wrong is a competence finding and both-defensible goes back to the mandate (02).",
+        "Never use an LLM judge for the outcome number; judges share the agent's blind spots and may only triage which records a human sees first.",
+        "At T2, human approval already reviews 100% of actions, but still sample the approvals to detect rubber-stamping."
+      ],
+      "sections": [
+        {
+          "title": "Method (fixed before results)",
+          "fields": [
+            {
+              "id": "method_fixed_date",
+              "label": "Date method fixed",
+              "type": "date",
+              "required": true,
+              "core": true,
+              "help": "The date this plan was locked. It must precede the first result it governs."
+            },
+            {
+              "id": "sampling_frame",
+              "label": "Sampling frame (from 07)",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "Every closure in the period, drawn from the 07 store, so the frame is itself evidenced. State the query or filter.",
+              "source_field": "sampling frame (from 07)"
+            },
+            {
+              "id": "strata",
+              "label": "Strata",
+              "type": "multiselect",
+              "required": true,
+              "core": true,
+              "help": "Stratify by stated confidence band, case type and the category where systematic error is most likely; add jurisdiction or channel where volumes justify it.",
+              "options": [
+                "Confidence band",
+                "Case type",
+                "Risk category",
+                "Jurisdiction",
+                "Channel"
+              ],
+              "source_field": "strata: confidence band · case type · risk category · jurisdiction"
+            },
+            {
+              "id": "strata_detail",
+              "label": "Risk category and stratum definitions",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Name the category where systematic error is most likely (for example transliteration or script class, or self-employed income) and define each stratum's boundaries.",
+              "source_field": "strata: confidence band · case type · risk category · jurisdiction"
+            },
+            {
+              "id": "sample_rule",
+              "label": "Sample size and rule",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The rate and floor from 02 and how n is allocated to strata. For reference, zero disagreements in 300 bounds the rate at 1.0%; 1,000 bounds it at 0.3%, the size for post-change and promotion rounds.",
+              "source_field": "sample size & rule"
+            },
+            {
+              "id": "seed",
+              "label": "Selection seed (logged)",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The random seed and where it is logged. Independent review makes the selection from the record store.",
+              "source_field": "selection seed (logged)"
+            }
+          ]
+        },
+        {
+          "title": "Reviewers and independence",
+          "fields": [
+            {
+              "id": "reviewers",
+              "label": "Reviewer roster and competence",
+              "type": "table",
+              "required": true,
+              "core": false,
+              "help": "Everyone who re-performs cases, with their competence and confirmation they are independent of the agent owner.",
+              "columns": [
+                {
+                  "id": "reviewer",
+                  "label": "Reviewer",
+                  "type": "text"
+                },
+                {
+                  "id": "competence",
+                  "label": "Competence / experience",
+                  "type": "text"
+                },
+                {
+                  "id": "independent",
+                  "label": "Independent of agent owner",
+                  "type": "yesno"
+                }
+              ],
+              "source_field": "reviewer roster & competence"
+            },
+            {
+              "id": "blind",
+              "label": "Reviewers are blind to agent output",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Yes only if reviewers cannot see the agent's decision, grounds or confidence while re-performing.",
+              "source_field": "independence: blind to agent output"
+            },
+            {
+              "id": "disagreement_definition",
+              "label": "Disagreement definition (pre-set)",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "Set before the round. The model's definition: the reviewer would not have closed, or would have closed on grounds that change the risk class.",
+              "source_field": "disagreement definition (pre-set)"
+            },
+            {
+              "id": "classification_rules",
+              "label": "Classification rules",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "How each disagreement is classified as agent wrong, reviewer wrong or both defensible, and who adjudicates.",
+              "source_field": "classification: agent wrong · reviewer wrong · both defensible"
+            }
+          ]
+        },
+        {
+          "title": "Results",
+          "fields": [
+            {
+              "id": "rounds",
+              "label": "Sampling rounds",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per round. Enter counts; the app computes the rate and Wilson 95% interval overall and for the worst stratum. Full rate is required after material change and before promotion.",
+              "columns": [
+                {
+                  "id": "period",
+                  "label": "Period",
+                  "type": "text"
+                },
+                {
+                  "id": "rate_type",
+                  "label": "Rate",
+                  "type": "select",
+                  "options": [
+                    "Full",
+                    "Reduced"
+                  ]
+                },
+                {
+                  "id": "n",
+                  "label": "n",
+                  "type": "number"
+                },
+                {
+                  "id": "agent_wrong",
+                  "label": "Agent wrong",
+                  "type": "number",
+                  "source_field": "classification: agent wrong · reviewer wrong · both defensible"
+                },
+                {
+                  "id": "reviewer_wrong",
+                  "label": "Reviewer wrong",
+                  "type": "number",
+                  "source_field": "classification: agent wrong · reviewer wrong · both defensible"
+                },
+                {
+                  "id": "both_defensible",
+                  "label": "Both defensible",
+                  "type": "number",
+                  "source_field": "classification: agent wrong · reviewer wrong · both defensible"
+                },
+                {
+                  "id": "worst_stratum",
+                  "label": "Worst stratum",
+                  "type": "text"
+                },
+                {
+                  "id": "worst_stratum_n",
+                  "label": "Worst stratum n",
+                  "type": "number"
+                },
+                {
+                  "id": "worst_stratum_agent_wrong",
+                  "label": "Worst stratum agent wrong",
+                  "type": "number"
+                }
+              ],
+              "source_field": "results: rate + Wilson 95% overall & by stratum, worst stratum"
+            },
+            {
+              "id": "rebaseline_triggers",
+              "label": "Re-baseline triggers fired",
+              "type": "list",
+              "required": true,
+              "core": true,
+              "help": "Material changes or population shifts in the period that forced a full-rate round or reset. Write 'none' if none.",
+              "source_field": "re-baseline triggers fired"
+            },
+            {
+              "id": "unsampled_strata",
+              "label": "Strata with no sample this quarter",
+              "type": "list",
+              "required": false,
+              "core": false,
+              "help": "Strata with closures but no 09 sample; they feed the Unknown tile in 11."
+            }
+          ]
+        }
+      ]
+    },
+    "10": {
+      "intro": "You are showing whether the agent's confidence bands mean what they claim, using the 09 results per band. Wherever the agent's own confidence decides what is auto-closed, the routing threshold in the mandate (02) must point at a calibrated row here rather than an engineer's feel; it is opened after four sampling rounds, supports G4, and is voided by any material change (G5).",
+      "tips": [
+        "Open it only after at least four sampling rounds; fewer rounds cannot show a band is stable.",
+        "Judge each band on its interval, not its point estimate, against the tolerance in 02.",
+        "A band moves to a reduced rate only after four consecutive in-tolerance rounds at the full rate, with a floor of 300 per band per quarter.",
+        "Any material change voids calibration and returns every band to the full rate; the loop shrinks but never closes."
+      ],
+      "sections": [
+        {
+          "title": "Bands",
+          "fields": [
+            {
+              "id": "band_definitions",
+              "label": "Confidence bands",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "How the confidence range is cut into bands, and which band is never auto-closed.",
+              "placeholder": "0.95–1.00 · 0.90–0.95 · 0.80–0.90 · < 0.80 (never auto-closed)",
+              "source_field": "confidence bands"
+            },
+            {
+              "id": "bands",
+              "label": "Per-band results",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per band, cumulative over the rounds held. The app computes the observed rate and Wilson interval from sampled and disagreements.",
+              "columns": [
+                {
+                  "id": "band",
+                  "label": "Band",
+                  "type": "text"
+                },
+                {
+                  "id": "closures",
+                  "label": "Closures",
+                  "type": "number"
+                },
+                {
+                  "id": "sampled",
+                  "label": "Sampled",
+                  "type": "number"
+                },
+                {
+                  "id": "disagreements",
+                  "label": "Disagreements",
+                  "type": "number"
+                }
+              ],
+              "source_field": "per band: closures, sampled, disagreements, observed rate + interval"
+            },
+            {
+              "id": "band_verdicts",
+              "label": "Verdict per band",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "The verdict and routing consequence for each band.",
+              "columns": [
+                {
+                  "id": "band",
+                  "label": "Band",
+                  "type": "text"
+                },
+                {
+                  "id": "verdict",
+                  "label": "Verdict",
+                  "type": "select",
+                  "options": [
+                    "Calibrated",
+                    "In tolerance",
+                    "Not calibrated",
+                    "Never auto-closed",
+                    "Void"
+                  ]
+                },
+                {
+                  "id": "routing",
+                  "label": "Routing",
+                  "type": "select",
+                  "options": [
+                    "Auto-close",
+                    "Escalate"
+                  ]
+                },
+                {
+                  "id": "sampling_rate",
+                  "label": "Sampling rate",
+                  "type": "select",
+                  "options": [
+                    "Full",
+                    "Reduced"
+                  ]
+                }
+              ],
+              "source_field": "verdict per band"
+            }
+          ]
+        },
+        {
+          "title": "Threshold",
+          "fields": [
+            {
+              "id": "routing_threshold",
+              "label": "Routing threshold",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The confidence threshold for auto-closure that 02 will reference.",
+              "placeholder": "≥ 0.90",
+              "source_field": "routing threshold justified"
+            },
+            {
+              "id": "threshold_justification",
+              "label": "Threshold justification",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Which band rows support the threshold and why the band below it escalates.",
+              "source_field": "routing threshold justified"
+            },
+            {
+              "id": "rounds_held",
+              "label": "Rounds held",
+              "type": "number",
+              "required": true,
+              "core": true,
+              "help": "Number of 09 rounds the per-band figures cover. Minimum four.",
+              "unit": "rounds",
+              "source_field": "rounds held"
+            },
+            {
+              "id": "date_voided",
+              "label": "Date voided",
+              "type": "date",
+              "required": false,
+              "core": false,
+              "help": "Set when a material change voids this record. Leave blank while valid.",
+              "source_field": "date voided"
+            }
+          ]
+        }
+      ]
+    },
+    "11": {
+      "intro": "You are writing the specification for the oversight dashboard, not the dashboard itself: a register of tiles, each labelled Process, Outcome or Unknown and traced to source records. It is agreed with internal and external audit and signed by the accountable executive before G3; the monthly pack is then generated from it by query and re-signed after every full sampling round (09).",
+      "tips": [
+        "Every tile states its kind; a Process tile says the control ran, an Outcome tile says the decision was right, and neither may be read as a safety number without saying so.",
+        "An Unknown tile is mandatory: name the strata and closures with no 09 sample this period.",
+        "Show tails, not means; an average hides the worst day and the worst stratum.",
+        "Every outcome tile shows its provenance: population, n, who reviewed, period and interval.",
+        "Business and technical views must reconcile to the same records; at maturity L3, the pack should say it has no outcome evidence yet."
+      ],
+      "sections": [
+        {
+          "title": "Register",
+          "fields": [
+            {
+              "id": "register_version",
+              "label": "Register version",
+              "type": "text",
+              "required": true,
+              "core": false,
+              "help": "The version of this tile register being signed.",
+              "placeholder": "v1.0"
+            },
+            {
+              "id": "audit_agreed_date",
+              "label": "Date agreed with audit",
+              "type": "date",
+              "required": true,
+              "core": true,
+              "help": "When internal (and, where relevant, external) audit agreed the register. Must precede G3."
+            },
+            {
+              "id": "tiles",
+              "label": "Tiles",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per tile. Source record must be 07, 08, 09 or 10; provenance is mandatory for outcome tiles; aggregation states the tail used.",
+              "columns": [
+                {
+                  "id": "tile_id",
+                  "label": "Tile ID",
+                  "type": "text",
+                  "source_field": "tile id"
+                },
+                {
+                  "id": "kind",
+                  "label": "Kind",
+                  "type": "select",
+                  "options": [
+                    "Process",
+                    "Outcome",
+                    "Unknown"
+                  ],
+                  "source_field": "kind: process | outcome | unknown"
+                },
+                {
+                  "id": "definition",
+                  "label": "Definition",
+                  "type": "text",
+                  "source_field": "definition"
+                },
+                {
+                  "id": "source_record",
+                  "label": "Source record",
+                  "type": "select",
+                  "options": [
+                    "07",
+                    "08",
+                    "09",
+                    "10"
+                  ],
+                  "source_field": "source record (07/08/09/10)"
+                },
+                {
+                  "id": "provenance",
+                  "label": "Provenance (outcome tiles)",
+                  "type": "text",
+                  "source_field": "provenance (outcome tiles): population, n, who, period, interval"
+                },
+                {
+                  "id": "aggregation",
+                  "label": "Aggregation (tail)",
+                  "type": "text",
+                  "source_field": "aggregation: tail, not mean"
+                },
+                {
+                  "id": "threshold",
+                  "label": "Threshold",
+                  "type": "text",
+                  "source_field": "threshold & owner"
+                },
+                {
+                  "id": "owner",
+                  "label": "Owner",
+                  "type": "text",
+                  "source_field": "threshold & owner"
+                },
+                {
+                  "id": "audience",
+                  "label": "Audience",
+                  "type": "select",
+                  "options": [
+                    "Business",
+                    "Technical",
+                    "Both"
+                  ],
+                  "source_field": "audience: business | technical"
+                }
+              ],
+              "source_field": "tile id"
+            }
+          ]
+        },
+        {
+          "title": "Pack checks",
+          "fields": [
+            {
+              "id": "unknown_tile_present",
+              "label": "An Unknown tile is present",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Yes only if at least one tile reports what has not been tested."
+            },
+            {
+              "id": "generated_by_query",
+              "label": "Pack generated by query without manual steps",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Yes if the monthly pack is produced from 07/08/09/10 by query with no hand assembly."
+            },
+            {
+              "id": "views_reconcile",
+              "label": "Business and technical views reconcile",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Yes if both views are computed from the same records."
+            }
+          ]
+        }
+      ]
+    },
+    "12": {
+      "intro": "You are writing the runbook for when things change or go wrong: what counts as a material change, how incidents that are wrong actions (not outages) are contained, who holds the kill switch and how fast it must work, and how the agent is retired. It is required at G3 with a drill inside the time limit, drives G5 revalidation and G6 decommissioning, and drill records feed the oversight pack (11).",
+      "tips": [
+        "Write incident response for actions, not outages: the agent may be perfectly available while closing the wrong cases.",
+        "Containment order is revoke identity, disable tools at the gateway, then halt; a dashboard is not a kill switch.",
+        "The last drill must have halted the agent inside the stated time, and the drill record must be in the oversight pack.",
+        "Drill quarterly for T3 and T4; track change-to-revalidation days against the 30-day threshold."
+      ],
+      "sections": [
+        {
+          "title": "Change",
+          "fields": [
+            {
+              "id": "material_changes",
+              "label": "Material-change definition",
+              "type": "list",
+              "required": true,
+              "core": true,
+              "help": "What counts as material, matching the 02 evolution list: model version, prompt hash, tool manifest, rules or list version, population shift, and any 14 source change.",
+              "source_field": "material-change definition & approval path"
+            },
+            {
+              "id": "approval_path",
+              "label": "Approval path",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Who approves a material change at G5: the agent owner for T1–T2, risk & compliance for T3–T4, and how drift on 07 triggers it automatically.",
+              "source_field": "material-change definition & approval path"
+            },
+            {
+              "id": "revalidation",
+              "label": "Revalidation trigger",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "What runs after a material change: full 09 round, 10 voided, 13 regression, 03 delta, 06 re-attest.",
+              "source_field": "revalidation trigger: full 09 round, 10 void"
+            },
+            {
+              "id": "revalidation_days",
+              "label": "Maximum days to completed revalidation",
+              "type": "number",
+              "required": true,
+              "core": false,
+              "help": "Days from material change to a completed full 09 round. The metric threshold is 30 days or fewer.",
+              "placeholder": "30",
+              "unit": "days",
+              "source_field": "revalidation trigger: full 09 round, 10 void"
+            }
+          ]
+        },
+        {
+          "title": "Incidents",
+          "fields": [
+            {
+              "id": "incident_classes",
+              "label": "Incident classes",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "At least one row each for wrong action, compromise and drift, with how it is detected and the first response.",
+              "columns": [
+                {
+                  "id": "class",
+                  "label": "Class",
+                  "type": "select",
+                  "options": [
+                    "Wrong action",
+                    "Compromise",
+                    "Drift"
+                  ]
+                },
+                {
+                  "id": "detection",
+                  "label": "How detected",
+                  "type": "text"
+                },
+                {
+                  "id": "first_response",
+                  "label": "First response",
+                  "type": "text"
+                },
+                {
+                  "id": "owner",
+                  "label": "Owner",
+                  "type": "text"
+                }
+              ],
+              "source_field": "incident classes: wrong action · compromise · drift"
+            },
+            {
+              "id": "containment",
+              "label": "Containment steps",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The ordered steps, with who performs each and the system used.",
+              "placeholder": "1. Revoke workload identity  2. Disable tools at gateway  3. Halt and drain queue",
+              "source_field": "containment: revoke identity → disable tools at gateway → halt"
+            },
+            {
+              "id": "remediation",
+              "label": "Reversal and customer / citizen remediation",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "How wrong actions are found from 07, reversed, and the affected people told and put right.",
+              "source_field": "reversal & customer / citizen remediation"
+            },
+            {
+              "id": "regulator_tree",
+              "label": "Regulator notification decision tree",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Which incidents are notified to whom, by when, and who decides.",
+              "source_field": "regulator notification decision tree"
+            }
+          ]
+        },
+        {
+          "title": "Kill switch",
+          "fields": [
+            {
+              "id": "kill_switch_owner",
+              "label": "Kill-switch owner",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The named person who can stop the agent, not merely watch it.",
+              "source_field": "kill-switch owner, deputy, max time-to-halt, last drill"
+            },
+            {
+              "id": "kill_switch_deputy",
+              "label": "Kill-switch deputy",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The named deputy when the owner is unavailable.",
+              "source_field": "kill-switch owner, deputy, max time-to-halt, last drill"
+            },
+            {
+              "id": "max_time_to_halt_min",
+              "label": "Maximum time to halt",
+              "type": "number",
+              "required": true,
+              "core": true,
+              "help": "Minutes from the kill-switch decision to zero actions. The organisation sets the limit; the drill must beat it.",
+              "unit": "minutes",
+              "source_field": "kill-switch owner, deputy, max time-to-halt, last drill"
+            },
+            {
+              "id": "drill_cadence",
+              "label": "Drill cadence",
+              "type": "select",
+              "required": true,
+              "core": false,
+              "help": "Quarterly for T3 and T4.",
+              "options": [
+                "Monthly",
+                "Quarterly",
+                "Six-monthly",
+                "Annually"
+              ]
+            },
+            {
+              "id": "drills",
+              "label": "Drills",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per drill, most recent last. Passed means zero actions within the maximum time to halt.",
+              "columns": [
+                {
+                  "id": "date",
+                  "label": "Date",
+                  "type": "date"
+                },
+                {
+                  "id": "minutes_to_halt",
+                  "label": "Minutes to halt",
+                  "type": "number"
+                },
+                {
+                  "id": "passed",
+                  "label": "Passed",
+                  "type": "yesno"
+                },
+                {
+                  "id": "notes",
+                  "label": "Notes",
+                  "type": "text"
+                }
+              ],
+              "source_field": "kill-switch owner, deputy, max time-to-halt, last drill"
+            }
+          ]
+        },
+        {
+          "title": "Decommission",
+          "fields": [
+            {
+              "id": "records_retained",
+              "label": "Records retained",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Which records (07, 08, 09, attestations) are retained, where, and for how long.",
+              "source_field": "decommission: records retained, permissions revoked, inventory closed"
+            },
+            {
+              "id": "permissions_revoked",
+              "label": "Permissions revoked",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Identity revoked and tools disabled at the gateway, with who confirms each.",
+              "source_field": "decommission: records retained, permissions revoked, inventory closed"
+            },
+            {
+              "id": "inventory_closed",
+              "label": "Inventory closed",
+              "type": "textarea",
+              "required": false,
+              "core": false,
+              "help": "How the 00 entry is set to retired and linked to the decommission record at G6.",
+              "source_field": "decommission: records retained, permissions revoked, inventory closed"
+            }
+          ]
+        }
+      ]
+    },
+    "13": {
+      "intro": "You are reporting the evidence that the agent behaves as the mandate (02) says before real cases reach it: whole workflows, tool calls, robustness and red-team results. The report is attached to the build attestation (06), is required at G3 and is re-run as a regression suite on every material change; for T3 and T4, independent review runs or witnesses it.",
+      "tips": [
+        "Every must_escalate condition in 02 needs a passing test proving the agent escalates; the target is 100%.",
+        "Test whole workflows, not just final outputs, in an environment as close to production as you can get, and repeat runs to see variance.",
+        "Every red-team finding must end fixed, accepted by the agent owner, or linked to a control.",
+        "A test set isn't the production population: 13 is necessary but it can't substitute for outcome sampling (09)."
+      ],
+      "sections": [
+        {
+          "title": "Scope and set-up",
+          "fields": [
+            {
+              "id": "scope",
+              "label": "Scope",
+              "type": "multiselect",
+              "required": true,
+              "core": true,
+              "help": "The IMDA §2.3.2 dimensions covered. All four are expected; explain any gap under known limitations.",
+              "options": [
+                "Task execution",
+                "Policy compliance",
+                "Tool-calling accuracy",
+                "Robustness"
+              ],
+              "source_field": "scope: task execution · policy compliance · tool-calling accuracy · robustness"
+            },
+            {
+              "id": "workflow_tests",
+              "label": "Workflow-level tests",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The end-to-end workflows tested, from input through tool calls to the action and its decision record.",
+              "source_field": "workflow-level tests"
+            },
+            {
+              "id": "multi_agent_tests",
+              "label": "Multi-agent tests",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Tests of hand-offs to and from other agents, including malformed or hostile messages. Write 'not applicable' with a reason if the agent works alone.",
+              "source_field": "multi-agent tests"
+            },
+            {
+              "id": "environment_realism",
+              "label": "Environment realism",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "How the test environment differs from production (data, tools, latency, permissions) and why the results still hold.",
+              "source_field": "environment realism"
+            },
+            {
+              "id": "datasets",
+              "label": "Datasets",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "Datasets used, their size, how they were built and how they differ from the production population.",
+              "source_field": "datasets & repeat count"
+            },
+            {
+              "id": "repeat_count",
+              "label": "Repeat count",
+              "type": "number",
+              "required": true,
+              "core": false,
+              "help": "How many times each test was run, so non-determinism is visible in the intervals.",
+              "unit": "runs",
+              "source_field": "datasets & repeat count"
+            },
+            {
+              "id": "independent_review",
+              "label": "Independent review ran or witnessed the evaluation",
+              "type": "yesno",
+              "required": false,
+              "core": false,
+              "help": "Required yes for T3 and T4."
+            },
+            {
+              "id": "litmus_run_ids",
+              "label": "Litmus run IDs",
+              "type": "list",
+              "required": false,
+              "core": false,
+              "help": "Government deployments: the GovTech Litmus run IDs for this evaluation."
+            }
+          ]
+        },
+        {
+          "title": "Pass criteria and escalation",
+          "fields": [
+            {
+              "id": "pass_criteria",
+              "label": "Pass criteria (from 02)",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The thresholds the agent must meet, taken from the mandate, stated before the results are run.",
+              "source_field": "pass criteria (from 02)"
+            },
+            {
+              "id": "escalation_tests",
+              "label": "Escalation-condition tests",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per must_escalate condition in 02, with the test that proves the agent escalates and whether it passed.",
+              "columns": [
+                {
+                  "id": "condition",
+                  "label": "Must-escalate condition (02)",
+                  "type": "text"
+                },
+                {
+                  "id": "test_id",
+                  "label": "Test ID",
+                  "type": "text"
+                },
+                {
+                  "id": "passed",
+                  "label": "Passed",
+                  "type": "yesno"
+                },
+                {
+                  "id": "run_ref",
+                  "label": "Run reference",
+                  "type": "text"
+                }
+              ],
+              "source_field": "pass criteria (from 02)"
+            }
+          ]
+        },
+        {
+          "title": "Results",
+          "fields": [
+            {
+              "id": "results",
+              "label": "Results with intervals",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per measure. Always give n and an interval, not a point estimate.",
+              "columns": [
+                {
+                  "id": "measure",
+                  "label": "Measure",
+                  "type": "text"
+                },
+                {
+                  "id": "n",
+                  "label": "n",
+                  "type": "number"
+                },
+                {
+                  "id": "value",
+                  "label": "Result",
+                  "type": "percent"
+                },
+                {
+                  "id": "interval",
+                  "label": "95% interval",
+                  "type": "text"
+                },
+                {
+                  "id": "meets_criteria",
+                  "label": "Meets pass criteria",
+                  "type": "yesno"
+                }
+              ],
+              "source_field": "results with intervals"
+            },
+            {
+              "id": "red_team",
+              "label": "Red-team results by ASI01–ASI10",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per finding, grouped by ASI category. Disposition must be fixed, accepted by the AOW, or linked to a control.",
+              "columns": [
+                {
+                  "id": "asi",
+                  "label": "ASI category",
+                  "type": "select",
+                  "options": [
+                    {
+                      "value": "ASI01",
+                      "label": "ASI01 Goal hijack"
+                    },
+                    {
+                      "value": "ASI02",
+                      "label": "ASI02 Tool misuse"
+                    },
+                    {
+                      "value": "ASI03",
+                      "label": "ASI03 Identity & privilege abuse"
+                    },
+                    {
+                      "value": "ASI04",
+                      "label": "ASI04 Supply chain"
+                    },
+                    {
+                      "value": "ASI05",
+                      "label": "ASI05 Unexpected code execution"
+                    },
+                    {
+                      "value": "ASI06",
+                      "label": "ASI06 Memory & context poisoning"
+                    },
+                    {
+                      "value": "ASI07",
+                      "label": "ASI07 Insecure inter-agent comms"
+                    },
+                    {
+                      "value": "ASI08",
+                      "label": "ASI08 Cascading failures"
+                    },
+                    {
+                      "value": "ASI09",
+                      "label": "ASI09 Human-agent trust exploitation"
+                    },
+                    {
+                      "value": "ASI10",
+                      "label": "ASI10 Rogue agents"
+                    }
+                  ]
+                },
+                {
+                  "id": "finding",
+                  "label": "Finding",
+                  "type": "text"
+                },
+                {
+                  "id": "disposition",
+                  "label": "Disposition",
+                  "type": "select",
+                  "options": [
+                    "Fixed",
+                    "Accepted by AOW",
+                    "Linked to control"
+                  ]
+                },
+                {
+                  "id": "control_id",
+                  "label": "Control ID (if linked)",
+                  "type": "text"
+                }
+              ],
+              "source_field": "red-team results by ASI01–ASI10"
+            },
+            {
+              "id": "known_limitations",
+              "label": "Known limitations",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "What this evaluation cannot show, including where the test population differs from production. These feed the Unknown tile in 11.",
+              "source_field": "known limitations"
+            }
+          ]
+        }
+      ]
+    },
+    "14": {
+      "intro": "You are recording everything the agent reads, retrieves and remembers: every source, corpus and memory store, with its classification, owner and version. The data owner approves it; every item in the mandate's may_read (02) must resolve to a row here, and the highest classification feeds the inventory (00). Memory and retrieval corpora are attack surface as well as data.",
+      "tips": [
+        "Start from 02 may_read and add a row for each item; any may_read item without a row fails the metric, whose target is 0.",
+        "Check each classification against what the hosting location is authorised for, not just what the data owner would like.",
+        "Name every path by which content is written into memory or a corpus; those are the poisoning routes (ASI06).",
+        "A change to any source, corpus version or memory store is a material change, so version and snapshot identifiers matter."
+      ],
+      "sections": [
+        {
+          "title": "Provenance",
+          "fields": [
+            {
+              "id": "provenance",
+              "label": "Sources, corpora and memory stores",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per item. Version / snapshot should be an identifier that appears in 06 or 07, so a decision can be tied to the data it saw.",
+              "columns": [
+                {
+                  "id": "source",
+                  "label": "Source / corpus / memory store",
+                  "type": "text",
+                  "source_field": "source / corpus / memory store"
+                },
+                {
+                  "id": "kind",
+                  "label": "Kind",
+                  "type": "select",
+                  "options": [
+                    "Source system",
+                    "Retrieval corpus",
+                    "Memory store",
+                    "Other"
+                  ]
+                },
+                {
+                  "id": "owner",
+                  "label": "Owner",
+                  "type": "text",
+                  "source_field": "owner"
+                },
+                {
+                  "id": "classification",
+                  "label": "Classification",
+                  "type": "text",
+                  "source_field": "classification"
+                },
+                {
+                  "id": "hosting",
+                  "label": "Hosting location",
+                  "type": "text",
+                  "source_field": "hosting location"
+                },
+                {
+                  "id": "version",
+                  "label": "Version / snapshot",
+                  "type": "text",
+                  "source_field": "version / snapshot"
+                },
+                {
+                  "id": "retention",
+                  "label": "Retention",
+                  "type": "text",
+                  "source_field": "retention"
+                },
+                {
+                  "id": "pii",
+                  "label": "PII handling",
+                  "type": "text",
+                  "source_field": "PII handling"
+                },
+                {
+                  "id": "write_paths",
+                  "label": "Write paths into memory",
+                  "type": "text",
+                  "source_field": "write paths into memory"
+                },
+                {
+                  "id": "poisoning_controls",
+                  "label": "Poisoning controls",
+                  "type": "text",
+                  "source_field": "poisoning controls"
+                }
+              ],
+              "source_field": "source / corpus / memory store"
+            },
+            {
+              "id": "may_read_resolved",
+              "label": "Every 02 may_read item has a row here",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Yes only when every entry in 02 may_read resolves to a row with an owner and a classification the hosting is authorised for."
+            },
+            {
+              "id": "hosting_authorisation",
+              "label": "Hosting authorisation reference",
+              "type": "text",
+              "required": false,
+              "core": false,
+              "help": "The authorisation that permits the hosting for the highest classification here (for government, the relevant GenAI SSP DP-8 / GA environment authorisation)."
+            }
+          ]
+        }
+      ]
+    },
+    "15": {
+      "intro": "You are writing for two audiences: the people affected by the agent, who must be told they are dealing with one, what it can decide and how to reach a human; and the operators, who must be trained on its failure modes and on how to approve, override and halt it. It is required at G3, and operator training currency and the canary catch rate feed the oversight pack (11).",
+      "tips": [
+        "Test the notice in the channel the user actually uses: can they find out an agent acted and how to reach a person there?",
+        "Oversight that isn't trained is a rubber stamp; cover automation bias explicitly, not just the mechanics of the screen.",
+        "Derive the failure modes for operators from the hazard register (03) and known limitations in 13.",
+        "Refresh on material change and run refreshers on the stated cadence; lapsed training lowers the operators-trained figure."
+      ],
+      "sections": [
+        {
+          "title": "Transparency notice",
+          "fields": [
+            {
+              "id": "notice_location",
+              "label": "Where the notice is published",
+              "type": "text",
+              "required": true,
+              "core": true,
+              "help": "The channel(s) and URL or screen where affected people see the notice."
+            },
+            {
+              "id": "declares_agent",
+              "label": "Declares agent interaction",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The exact wording telling people they are dealing with an agent, and at which point in the journey it appears.",
+              "source_field": "declares agent interaction"
+            },
+            {
+              "id": "range_of_actions",
+              "label": "Range of actions & decisions",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "In plain language, what the agent can decide or do for them, consistent with 02 auto-decide scope.",
+              "source_field": "range of actions & decisions"
+            },
+            {
+              "id": "data_handling",
+              "label": "Data handling",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "What data the agent uses about them and how it is kept, consistent with 14.",
+              "source_field": "data handling"
+            },
+            {
+              "id": "human_escalation",
+              "label": "Human escalation points",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "How a person reaches a human, and when the agent hands over automatically.",
+              "source_field": "human escalation points"
+            },
+            {
+              "id": "user_responsibilities",
+              "label": "User responsibilities",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "What users must do or check themselves, including acknowledging the risk of wrong or invented output where relevant (GenAI SSP GA-8).",
+              "source_field": "user responsibilities"
+            }
+          ]
+        },
+        {
+          "title": "Operator guide and training",
+          "fields": [
+            {
+              "id": "operator_failure_modes",
+              "label": "Failure modes operators must recognise",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "The ways this agent goes wrong that an operator can spot, with an example of each.",
+              "source_field": "operator: failure modes · approve / override / halt · automation-bias training · refresher cadence"
+            },
+            {
+              "id": "operator_controls",
+              "label": "How to approve, override and halt",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "Step-by-step for each, including who may pull the kill switch and the time-to-halt limit in 12.",
+              "source_field": "operator: failure modes · approve / override / halt · automation-bias training · refresher cadence"
+            },
+            {
+              "id": "automation_bias",
+              "label": "Automation-bias training",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "What the training does to counter over-reliance on the agent, such as seeded known-wrong cases (canaries).",
+              "source_field": "operator: failure modes · approve / override / halt · automation-bias training · refresher cadence"
+            },
+            {
+              "id": "refresher_cadence",
+              "label": "Refresher cadence",
+              "type": "select",
+              "required": true,
+              "core": false,
+              "help": "How often operators repeat training. Also refresh on every material change.",
+              "options": [
+                "Monthly",
+                "Quarterly",
+                "Six-monthly",
+                "Annually"
+              ],
+              "source_field": "operator: failure modes · approve / override / halt · automation-bias training · refresher cadence"
+            },
+            {
+              "id": "operators_in_scope",
+              "label": "Operators in scope",
+              "type": "number",
+              "required": true,
+              "core": false,
+              "help": "Number of on-the-loop or in-the-loop operators who need current training.",
+              "unit": "people"
+            },
+            {
+              "id": "operators_trained_pct",
+              "label": "Operators with current training",
+              "type": "percent",
+              "required": true,
+              "core": true,
+              "help": "Share of operators in scope whose training is current, from LMS records. G3 expects every on-the-loop operator's training to be current.",
+              "unit": "%"
+            }
+          ]
+        }
+      ]
+    },
+    "16": {
+      "intro": "You are collecting the evidence behind every control a model vendor or agent platform claims to handle for this agent. A claim is an assertion until evidence is attached: the build attestation (06) may only mark a control 'inherited from platform' when a row here carries the evidence, and G1 expects this pack opened while G3 expects it complete.",
+      "tips": [
+        "Treat marketing pages and questionnaire answers as claims, not evidence; the source reference found only 4 of 30 deployed agentic systems publish a safety system card.",
+        "Check the scope of each certification or report: a certificate that covers the vendor's hosting but not the model endpoint you call does not evidence the claim.",
+        "For vendor SaaS, confirm you can export records you can chain and sample yourself, otherwise 07 and 09 cannot be run on your terms.",
+        "Where the policy gate lives when the agent is vendor SaaS is an open question in the model; write down your answer rather than leaving it implicit.",
+        "Refresh the pack on any vendor change, which is also a material change under G5."
+      ],
+      "sections": [
+        {
+          "title": "Vendor and component",
+          "fields": [
+            {
+              "id": "vendors",
+              "label": "Vendors and components",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per third-party model, platform, tool host or SaaS component the agent depends on, with the version in use.",
+              "columns": [
+                {
+                  "id": "vendor",
+                  "label": "Vendor",
+                  "type": "text"
+                },
+                {
+                  "id": "component",
+                  "label": "Component",
+                  "type": "text"
+                },
+                {
+                  "id": "component_type",
+                  "label": "Type",
+                  "type": "select",
+                  "options": [
+                    "Model",
+                    "Agent platform",
+                    "Tool / MCP server",
+                    "Hosting",
+                    "Other"
+                  ]
+                },
+                {
+                  "id": "version",
+                  "label": "Version",
+                  "type": "text"
+                }
+              ],
+              "source_field": "vendor & component"
+            }
+          ]
+        },
+        {
+          "title": "Claims and evidence",
+          "fields": [
+            {
+              "id": "controls_claimed",
+              "label": "Controls claimed (by 05 id)",
+              "type": "list",
+              "required": true,
+              "core": true,
+              "help": "Every control in the catalogue (05) the vendor says it satisfies on your behalf, one control ID per line.",
+              "placeholder": "AGT-014",
+              "source_field": "controls claimed (by 05 id)"
+            },
+            {
+              "id": "claims",
+              "label": "Evidence per claim",
+              "type": "table",
+              "required": true,
+              "core": true,
+              "help": "One row per claimed control. 'None yet' is allowed while the pack is open but must be cleared before G3. Scope states exactly what the evidence covers.",
+              "columns": [
+                {
+                  "id": "control_id",
+                  "label": "Control ID (05)",
+                  "type": "text"
+                },
+                {
+                  "id": "claim",
+                  "label": "What the vendor claims",
+                  "type": "text"
+                },
+                {
+                  "id": "evidence_type",
+                  "label": "Evidence type",
+                  "type": "select",
+                  "options": [
+                    "Test report",
+                    "Attestation",
+                    "Certification",
+                    "None yet"
+                  ]
+                },
+                {
+                  "id": "scope",
+                  "label": "Scope covered",
+                  "type": "text"
+                },
+                {
+                  "id": "evidence_ref",
+                  "label": "Evidence reference",
+                  "type": "text"
+                }
+              ],
+              "source_field": "evidence per claim: test report | attestation | certification + scope"
+            }
+          ]
+        },
+        {
+          "title": "Contract",
+          "fields": [
+            {
+              "id": "contract_no_training",
+              "label": "No training on our data",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Yes only if the contract binds the provider not to log, store or train on your data (compare SG GenAI SSP GA-3).",
+              "source_field": "contract: no training on data · log export · audit rights · incident notice"
+            },
+            {
+              "id": "contract_log_export",
+              "label": "Log export",
+              "type": "yesno",
+              "required": true,
+              "core": true,
+              "help": "Yes if the contract gives you export of the logs you need for 07 and incident investigation.",
+              "source_field": "contract: no training on data · log export · audit rights · incident notice"
+            },
+            {
+              "id": "contract_audit_rights",
+              "label": "Audit rights",
+              "type": "yesno",
+              "required": true,
+              "core": false,
+              "help": "Yes if you or your auditors may inspect the provider's controls relevant to the claims above.",
+              "source_field": "contract: no training on data · log export · audit rights · incident notice"
+            },
+            {
+              "id": "contract_incident_notice",
+              "label": "Incident notice",
+              "type": "text",
+              "required": true,
+              "core": false,
+              "help": "The notification period and trigger the provider has committed to for incidents affecting your agent.",
+              "placeholder": "Within 24 hours of detection",
+              "source_field": "contract: no training on data · log export · audit rights · incident notice"
+            },
+            {
+              "id": "contract_ref",
+              "label": "Contract reference",
+              "type": "text",
+              "required": false,
+              "core": false,
+              "help": "Contract or schedule reference where the clauses above live.",
+              "source_field": "contract: no training on data · log export · audit rights · incident notice"
+            }
+          ]
+        },
+        {
+          "title": "Records and exit",
+          "fields": [
+            {
+              "id": "record_export",
+              "label": "Record export you can chain and sample (SaaS)",
+              "type": "textarea",
+              "required": true,
+              "core": false,
+              "help": "How decision-level records leave the vendor platform in a form you can hash-chain (07) and sample (09): format, fields, frequency. Write 'not SaaS' if the agent runs in your own environment.",
+              "source_field": "record export the organisation can chain & sample (SaaS)"
+            },
+            {
+              "id": "gate_location",
+              "label": "Where the policy gate lives",
+              "type": "textarea",
+              "required": false,
+              "core": false,
+              "help": "If the agent runs as vendor SaaS, state where your policy gate and tool gateway sit in the call path. The model leaves this as an open question, so record your design decision."
+            },
+            {
+              "id": "exit_plan",
+              "label": "Exit plan",
+              "type": "textarea",
+              "required": true,
+              "core": true,
+              "help": "How you would move off this vendor or component: data and record retrieval, notice periods, fallback process and how long it would take.",
+              "source_field": "exit plan"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

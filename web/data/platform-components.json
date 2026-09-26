@@ -1,0 +1,72 @@
+[
+  {
+    "component": "Agent identity",
+    "function": "Each agent runs under its own workload identity. The delegation chain to the human principal is carried in the token.",
+    "inherit_from": "SPIFFE/SVID · IETF oauth-ai-agents-on-behalf-of-user (act claim)",
+    "maturity": "Workload identity mature; delegation pre-standard",
+    "feeds_artefacts": "00, 07"
+  },
+  {
+    "component": "Policy gate",
+    "function": "Evaluates each proposed action against 02 and 05 and returns allow, block or escalate. Logs the decision as evidence.",
+    "inherit_from": "OPA/Rego · MAS SAFR runtime assessment · CSA AAGATE",
+    "maturity": "Engines mature; pattern published 2025–26",
+    "feeds_artefacts": "02, 07"
+  },
+  {
+    "component": "Tool gateway",
+    "function": "The single path for every external call. Enforces allowlists, rate and spend limits, and per-call authorisation.",
+    "inherit_from": "CSA AAGATE reference architecture · service-mesh mTLS",
+    "maturity": "Reference published; products vary",
+    "feeds_artefacts": "07, 12"
+  },
+  {
+    "component": "Runtime guardrails",
+    "function": "Input and output filters inline with the gate. Verdicts are recorded in 07.",
+    "inherit_from": "GovTech Sentinel (public sector)",
+    "maturity": "Available to agencies",
+    "feeds_artefacts": "07, 13"
+  },
+  {
+    "component": "Trajectory telemetry",
+    "function": "Spans for agent invocation, each tool call, inputs, tokens.",
+    "inherit_from": "OpenTelemetry GenAI semconv (invoke_agent, execute_tool)",
+    "maturity": "Development status; pin attributes",
+    "feeds_artefacts": "07"
+  },
+  {
+    "component": "Decision record store",
+    "function": "Canonicalised, hash-chained, signed records with optional Merkle anchoring.",
+    "inherit_from": "IETF draft-sharif-agent-audit-trail-04 · RFC 8785 · RFC 6962",
+    "maturity": "Individual draft; implementations exist",
+    "feeds_artefacts": "07"
+  },
+  {
+    "component": "Control catalogue & profiles",
+    "function": "Controls as data with applicability, test, evidence and on-fail action. One profile per tier.",
+    "inherit_from": "OSCAL v1.2.3 catalog / profile / mapping · AICM v1.1 · ISO 42001 Annex A",
+    "maturity": "OSCAL mature; AI catalogues community",
+    "feeds_artefacts": "05"
+  },
+  {
+    "component": "Component definitions",
+    "function": "What each runtime piece is and which controls it satisfies.",
+    "inherit_from": "OSCAL component-definition · SLSA / in-toto · MCP manifests",
+    "maturity": "Format mature",
+    "feeds_artefacts": "06"
+  },
+  {
+    "component": "Assessment results",
+    "function": "A standard findings, observations and evidence record for every control run.",
+    "inherit_from": "OSCAL assessment-results · arXiv 2604.13767",
+    "maturity": "Format mature; continuous use novel",
+    "feeds_artefacts": "08, 09"
+  },
+  {
+    "component": "Sampling tool",
+    "function": "Stratified selection from the 07 store, seed logging, blind review UI, disagreement classification, Wilson intervals.",
+    "inherit_from": "No published source",
+    "maturity": "Build",
+    "feeds_artefacts": "09, 10"
+  }
+]

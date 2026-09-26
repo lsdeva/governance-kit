@@ -1,0 +1,65 @@
+[
+  {
+    "id": "G0",
+    "name": "Intake decision",
+    "ceremony": "Business case / funding approval",
+    "required_artefacts": "00 draft · 01",
+    "type": "Human",
+    "approver": "AE",
+    "pass_condition": "RC concurs with the proposed tier. Sampling cost is on the benefit line."
+  },
+  {
+    "id": "G1",
+    "name": "Design approval",
+    "ceremony": "Architecture review board",
+    "required_artefacts": "02 approved · 03 signed · 14 · 16 opened if vendor",
+    "type": "Human",
+    "approver": "RC (mandate) · AOW",
+    "pass_condition": "Tolerance and sampling rate written into 02. Every hazard has an assigned control."
+  },
+  {
+    "id": "G2",
+    "name": "Definition of Done",
+    "ceremony": "Sprint review + CI",
+    "required_artefacts": "04 accepted · 05 tier-profile tests green",
+    "type": "Automated",
+    "approver": "PO",
+    "pass_condition": "Pipeline fails closed on any block_deploy control."
+  },
+  {
+    "id": "G3",
+    "name": "Go-live (approval to operate)",
+    "ceremony": "Change advisory board",
+    "required_artefacts": "06 signed · 13 passed · 11 register agreed with IA & signed · 12 drilled inside limit · 15 published · 16 complete · 07/08 emitting · bypass test passed",
+    "type": "Automated + human",
+    "approver": "AE",
+    "pass_condition": "First go-live at T2 or below, unless G4 evidence already exists."
+  },
+  {
+    "id": "G4",
+    "name": "Tier promotion",
+    "ceremony": "Monthly risk forum",
+    "required_artefacts": "≥ 4 consecutive 09 rounds in tolerance at full rate (≥ 1,000 cases for promotion) · 10 opened if confidence routing · 02 revised",
+    "type": "Human",
+    "approver": "AE",
+    "pass_condition": "RC concurs. The inventory tier changes only after signature."
+  },
+  {
+    "id": "G5",
+    "name": "Material change",
+    "ceremony": "Change advisory",
+    "required_artefacts": "Trigger: model version · prompt hash · tool manifest · rules / list version · population shift. Requires 06 re-attest · 03 delta · 13 regression · 10 voided · full 09 round scheduled",
+    "type": "Automated trigger + human",
+    "approver": "AOW (T1–T2) · RC (T3–T4)",
+    "pass_condition": "Detected automatically from version drift on 07."
+  },
+  {
+    "id": "G6",
+    "name": "Retirement",
+    "ceremony": "Decommission",
+    "required_artefacts": "12 decommission steps · identity revoked · tools disabled at gateway · records retained · 00 closed",
+    "type": "Human",
+    "approver": "AOW",
+    "pass_condition": "IA and RC informed."
+  }
+]

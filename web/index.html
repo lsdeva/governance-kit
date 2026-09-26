@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GovKit · Agentic SDLC Operating Model</title>
+<meta name="description" content="A free, role-based decision environment for governing decisioning AI agents across the SDLC you already run: 17 artefacts, 7 gates, 12 roles, autonomy tiers, and quantified outcome evidence.">
+<meta name="theme-color" content="#13201B">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/app.css">
+<script>
+  // Apply the saved theme before first paint so the page never flashes.
+  try { var t = localStorage.getItem('govkit.theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+<script type="module" src="assets/js/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<div class="shell">
+  <aside class="side" id="side" aria-label="Primary"></aside>
+  <div class="scrim" data-action="close-nav"></div>
+  <div class="main">
+    <header class="top" id="top"></header>
+    <main class="content" id="content" tabindex="-1">
+      <noscript>
+        <div class="callout warn"><div><b>JavaScript is needed.</b> GovKit is an interactive workspace that runs entirely in your browser. Nothing is sent to a server. Enable JavaScript to use it.</div></div>
+      </noscript>
+      <div id="app" aria-live="polite"><p class="faint">Loading the operating model…</p></div>
+    </main>
+  </div>
+</div>
+<div class="toast-wrap" id="toasts" role="status" aria-live="polite"></div>
+</body>
+</html>

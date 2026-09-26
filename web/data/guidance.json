@@ -1,0 +1,528 @@
+{
+  "version": 1,
+  "principles": [
+    {
+      "title": "Overlay, don't add phases",
+      "body": "Each artefact attaches to a ceremony your teams already hold: the business case, the architecture review board, backlog refinement, CI, UAT, the change advisory board and the ops review. The model adds artefacts and gates, not new phases."
+    },
+    {
+      "title": "Controls are backlog items",
+      "body": "A control nobody can test in the pipeline is a control that slips. Controls go in the same backlog as features, with the same estimate, acceptance test and sprint demo."
+    },
+    {
+      "title": "Records are made at the time, by the platform",
+      "body": "Decision records (07) and control outcome records (08) are emitted automatically as actions happen. They are never written up afterwards, and never by a person."
+    },
+    {
+      "title": "Label every number",
+      "body": "Every metric is Process (the control ran), Outcome (the decision was right) or Unknown (not tested). The dashboard never mixes them unlabelled, and an Unknown tile is always shown."
+    }
+  ],
+  "roles": {
+    "AE": {
+      "headline": "You are personally accountable for the agent's decisions: you set the risk appetite and the tolerance, and your signature is what lets the agent act on real cases.",
+      "you_decide": [
+        "Whether the agent is funded at all, by approving the 01 justification and passing G0.",
+        "The tolerance (maximum disagreement rate) and sampling rate, countersigned with the tier in 02.",
+        "The G3 go-live signature, normally at T2, and the 11 tile register you sign alongside it.",
+        "The G4 tier promotion, signed on 09 sampling evidence with RC concurring."
+      ],
+      "first_steps": [
+        "Read the 01 justification and check the permanent cost of the 09 sampling loop is on the benefit line before you pass G0.",
+        "Decide the tolerance and sampling rate and have them written into 02 before G1; the framework will not propose a number for you.",
+        "Before G3, read the 11 tile register itself, not just the dashboard, and confirm IA has agreed it.",
+        "Check the last 12 kill-switch drill halted the agent inside the stated time, then sign G3 at T2 or below.",
+        "Each month, read the 09 result as a Wilson interval plus the worst stratum, not as a single overall rate."
+      ],
+      "watch_for": [
+        "A dashboard made entirely of Process tiles. At L3 the machinery looks finished, but nothing yet says the decisions were right.",
+        "An overall disagreement rate that hides a bad stratum: 1% overall that is 9% in one stratum is a 9% problem.",
+        "A tier moved by configuration rather than by a signed G4. The inventory tier changes only after your signature.",
+        "Outcome numbers produced by an LLM judge instead of independent human re-performance."
+      ],
+      "questions_to_ask": [
+        "What is the worst stratum's disagreement rate and interval, not just the overall figure?",
+        "Which tiles in this pack are Process, which are Outcome, and what is on the Unknown tile?",
+        "Who re-performed these cases, were they blind to the agent's answer, and was the method fixed before the results were known?",
+        "When was the kill switch last drilled, and how long did it take to reach zero actions?"
+      ],
+      "roadmap": [
+        "Months 1–3 · Tolerance and sampling rate written into 02",
+        "Months 3–6 · G3 go-live at T2",
+        "Months 9–12 · G4 promotion to T3 signed on the sampling evidence"
+      ]
+    },
+    "SP": {
+      "headline": "You fund the agent and own the benefit case, including the permanent cost of proving its decisions are right.",
+      "you_decide": [
+        "The content of the 01 justification: the decision being delegated, the alternatives rejected and the benefit claimed.",
+        "The cost of the 09 sampling loop, entered in 01 as a line against the benefit before G0.",
+        "The exit or sunset metric in 01 that says when the agent is no longer worth running."
+      ],
+      "first_steps": [
+        "Write 01 before funding, in the terms the benefit will later be measured in: analyst hours and cycle time.",
+        "Record why a deterministic rule, a process change or a scorecard was rejected, with the numbers.",
+        "Cost the 09 sampling loop with OPS and IRV and put it on the benefit line.",
+        "Consult AOW, RC and OPS on 01, then submit it to the AE for the G0 intake decision.",
+        "Revisit 01 whenever the benefit case changes, and compare realised with claimed benefit at 12 months."
+      ],
+      "watch_for": [
+        "Sampling cost discovered in year two rather than written into 01. At 10,000 closures a month, a 300-case floor is 3% of the work the agent removed, done permanently by experienced reviewers.",
+        "A justification that never names the alternatives, so nobody who disagrees can see what was rejected and why.",
+        "A benefit case that assumes the sampling loop will eventually close. The reduction rule shrinks it, but it never closes."
+      ],
+      "questions_to_ask": [
+        "Could a rules engine, a process fix or a scorecard do this, and on what numbers did we reject them?",
+        "What does the 09 sampling loop cost per year at our monthly volume?",
+        "How reversible is a wrong decision, and what consequence class does it fall into?",
+        "What metric would tell us to retire the agent?"
+      ],
+      "roadmap": [
+        "Months 1–3 · 01 justification with sampling cost on the benefit line"
+      ]
+    },
+    "AOW": {
+      "headline": "You are day-to-day accountable for one agent: its mandate, its inventory entry, its changes and its oversight pack.",
+      "you_decide": [
+        "The content of the 02 mandate you draft for RC to approve: what the agent may decide alone, what it must escalate, and what it may read and touch.",
+        "Acceptance of the 03 hazard register, 04 control stories, 06 attestation, 13 evaluation and 15 notice, as their accountable owner.",
+        "Material-change approval at G5 for T1–T2 agents, and the G6 retirement decision."
+      ],
+      "first_steps": [
+        "Create the 00 inventory entry at intake with the proposed tier; without it the agent cannot be issued a workload identity.",
+        "Draft 02 at T2, consulting SEC, ENG, OPS and DO, and get RC's approval and the AE's tolerance before G1.",
+        "Challenge the 03 hazard analysis RC and SEC hand you, and check at least one hazard needs two conditions at once.",
+        "Open 16 at intake if any third-party model, platform or tool is involved, and complete it before G3.",
+        "Before G3, agree the 11 tile register with IA and drill the 12 kill switch with OPS."
+      ],
+      "watch_for": [
+        "Gate-config drift: the running policy gate must match the compiled 02 exactly.",
+        "A prompt, tool or model change shipped as routine. Every one is material and goes through G5.",
+        "Controls in 06 marked 'inherited from platform' with no 16 evidence attached.",
+        "A promotion case built on test results (13) rather than production sampling (09)."
+      ],
+      "questions_to_ask": [
+        "Can a supervisor read 02 and say which tier the agent sits at, without asking an engineer?",
+        "Which must_escalate conditions in 02 do not yet have a passing test in 13?",
+        "Does every item in 02 may_read resolve to a 14 row with an owner and classification?",
+        "Which strata have had no 09 sample this quarter?"
+      ],
+      "roadmap": [
+        "Months 1–3 · 00 inventory entry, 02 mandate drafted at T2",
+        "Months 3–6 · 11 tile register agreed with IA; 12 kill switch drilled",
+        "Months 6–9 · Promotion case to T3 prepared against the evidence bar in 02"
+      ]
+    },
+    "PO": {
+      "headline": "You own the backlog, so you make sure every control is a story with an acceptance test, and that users and operators are told what the agent does.",
+      "you_decide": [
+        "How control stories in 04 are written, prioritised and demonstrated alongside feature stories.",
+        "The G2 Definition of Done, which passes only when 04 is accepted and the 05 tier-profile tests are green.",
+        "The content of the 15 transparency notice and operator guide."
+      ],
+      "first_steps": [
+        "Take the first cut of 04 from the 05 catalogue and the 03 hazards, labelling each story with its control ID and hazard.",
+        "Give every control story an acceptance test the pipeline runs, and name the evidence it emits.",
+        "Demonstrate control stories at sprint review next to feature stories.",
+        "Confirm the pipeline fails closed on any block_deploy control before accepting G2.",
+        "Publish 15 before G3, including operator training on approving, overriding and halting the agent."
+      ],
+      "watch_for": [
+        "Controls parked in a non-functional annex. They have no owner, estimate, test or demo, and they are the first thing dropped when a date slips.",
+        "Control stories deferred more often than feature stories in a release.",
+        "Operators on the loop with lapsed training. Oversight that isn't trained is a rubber stamp."
+      ],
+      "questions_to_ask": [
+        "Which control stories have no automated acceptance test?",
+        "How many control stories did we defer this release, compared with feature stories?",
+        "Can a user find out, in the channel they are using, that an agent acted and how to reach a person?"
+      ],
+      "roadmap": [
+        "Months 1–3 · 04 control stories in the backlog",
+        "Months 3–6 · 15 notice and operator guide published"
+      ]
+    },
+    "ENG": {
+      "headline": "You build the agent, its evaluation harness and a signed attestation for every release, so any decision can be traced to the exact build that made it.",
+      "you_decide": [
+        "The content of each 06 build attestation: model version, prompt hash, tool-manifest hash, identity and SBOM.",
+        "The 13 evaluation scope and harness, run with IRV for T3 and T4 agents.",
+        "The 14 provenance record of every source, corpus and memory store the agent reads."
+      ],
+      "first_steps": [
+        "Record every source, corpus and memory store in 14, so each item in 02 may_read resolves to a row.",
+        "Implement 04 control stories with the acceptance tests the pipeline runs for G2.",
+        "Build the 13 harness to test whole workflows, with a test proving escalation for every must_escalate condition in 02.",
+        "Sign a 06 attestation on every release, including prompt-only releases, and link the 13 report and 16 evidence."
+      ],
+      "watch_for": [
+        "Version drift: any decision record whose version triple differs from the attested build is red.",
+        "Treating 13 as proof the agent is right in production. A test set isn't the production population; 13 can't substitute for 09.",
+        "Prompt-only changes released without a new 06 or a G5 review.",
+        "Memory and retrieval corpora treated only as data. They are attack surface too."
+      ],
+      "questions_to_ask": [
+        "For any decision record, can we name the exact model, prompt and tool set in force?",
+        "Which red-team findings are not fixed, accepted by the AOW or linked to a control?",
+        "What are the write paths into the agent's memory, and what controls stop poisoning?"
+      ],
+      "roadmap": [
+        "Months 3–6 · 06 attestation on every release; 13 evaluation passed"
+      ]
+    },
+    "SEC": {
+      "headline": "You make sure the agent can be attacked on paper before it is attacked for real: threat modelling, identity, red-teaming and supplier security.",
+      "you_decide": [
+        "The security hazards in 03, produced with RC and handed to the business to challenge.",
+        "The red-team results by ASI01–ASI10 recorded in 13.",
+        "Your consultation on 16 supplier evidence, and on identity revocation when the agent is retired at G6."
+      ],
+      "first_steps": [
+        "Run 03 with RC before requirements, reading it from the attacker's perspective.",
+        "Review 14 for poisoning controls and write paths into memory.",
+        "Red-team the agent for 13 and link every finding to a fix, an AOW acceptance or a control.",
+        "Review 16 so no vendor claim is accepted without evidence, and check the contract covers log export, audit rights and incident notice."
+      ],
+      "watch_for": [
+        "A path for actions to reach a core system without going through the tool gateway. That refuses deployment.",
+        "Agents sharing an identity. Each agent runs under its own workload identity.",
+        "Vendor security claims accepted as assertions. A claim is an assertion until evidence is attached."
+      ],
+      "questions_to_ask": [
+        "Has the bypass test passed, and is it checked continuously after G3?",
+        "What happens to this agent's identity and tool permissions if we have to contain it now?",
+        "Which vendor-claimed controls in 06 have no evidence in 16?"
+      ],
+      "roadmap": []
+    },
+    "DO": {
+      "headline": "You approve what data and context the agent may read and remember, and where it may be hosted.",
+      "you_decide": [
+        "Approval of the 14 data and context provenance record as its accountable owner.",
+        "Your consultation on the may_read and may_not_read lists in 02."
+      ],
+      "first_steps": [
+        "Review the may_read and may_not_read lists in the 02 draft with the AOW.",
+        "Check every 14 row has an owner, a classification, retention and PII handling.",
+        "Confirm the hosting location is authorised for the highest classification recorded in 00.",
+        "Approve 14 before G1 and treat any later change of source, corpus or memory store as material."
+      ],
+      "watch_for": [
+        "may_read items with no provenance row in 14.",
+        "Memory stores the agent writes to that nobody has classified.",
+        "A new corpus or memory store added without triggering a material change."
+      ],
+      "questions_to_ask": [
+        "What does the agent remember between cases, and who can write to that memory?",
+        "Is the hosting authorised for the classification of every source it reads?",
+        "Does the vendor contract rule out training on our data?"
+      ],
+      "roadmap": []
+    },
+    "RC": {
+      "headline": "You are second line embedded in the delivery team: you run hazard analysis, own the control catalogue, and approve the mandate and the outcome evidence.",
+      "you_decide": [
+        "Concurrence with the proposed tier at G0, and approval of the 02 mandate at G1.",
+        "The 05 control catalogue and tier profiles, and approval of 00, 08, 09, 10 and 16 as accountable owner.",
+        "Concurrence with G4 tier promotion, and material-change approval at G5 for T3–T4 agents."
+      ],
+      "first_steps": [
+        "Review the tier proposed in 00 and concur, or not, before G0.",
+        "Run 03 with SEC before requirements, including at least one interaction hazard, and hand it to the business to challenge.",
+        "Seed 05 from AICM v1.1 and ISO 42001 Annex A and cut one profile per tier, rather than writing a house catalogue.",
+        "Approve 02 only when the tolerance and sampling rate are written in and the policy gate can be configured from it with no interpretation.",
+        "Check the 09 method (strata, disagreement definition, seed) is fixed before the first round runs."
+      ],
+      "watch_for": [
+        "A house catalogue. The mappings are the asset, and a house catalogue throws them away.",
+        "Hazards with no assigned control, or a register that only looks at parts breaking rather than parts interacting.",
+        "A 10 routing threshold that is an engineer's feel rather than a row in the calibration record.",
+        "Both-defensible disagreements piling up without going back to the mandate."
+      ],
+      "questions_to_ask": [
+        "Which hazard needs two conditions at once to occur?",
+        "Which applicable controls lack a deterministic test, and are any of them block_deploy?",
+        "Was the 09 disagreement definition set before the round, and who classified each disagreement?",
+        "Has calibration been voided since the last material change?"
+      ],
+      "roadmap": [
+        "Months 1–3 · 03 hazard analysis run, business challenges it",
+        "Months 1–3 · 05 catalogue seeded from AICM v1.1 and ISO 42001 Annex A, tier profiles cut"
+      ]
+    },
+    "PLE": {
+      "headline": "You build and run the evidence infrastructure once, so decision and control records emit themselves for every agent.",
+      "you_decide": [
+        "The emitters for 07 decision records and 08 control outcome records; you own the emitter, not the content of each record.",
+        "The tool gateway and the policy gate compiled from 02, including the bypass test checked at G3.",
+        "With RC, the machine-readable 05 control specification and the tile register build for 11."
+      ],
+      "first_steps": [
+        "Stand up the tool gateway as the only path to core systems and prove it with a bypass test.",
+        "Compile the policy gate from 02 with no hand configuration.",
+        "Emit 07 sealed before execution, canonicalised, hash-chained and signed, with the version triple and structured grounds.",
+        "Emit 08 for every control run and add chain verification to CI.",
+        "Generate the 11 oversight pack by query, with every tile labelled and the Unknown tile filled."
+      ],
+      "watch_for": [
+        "Grounds held only in free-text rationale. Deterministic checks must run over structured fields.",
+        "A checker that reasons probabilistically; it is itself an ungoverned model.",
+        "Record completeness measured as an average rather than on the worst day.",
+        "Any gateway bypass attempt above zero."
+      ],
+      "questions_to_ask": [
+        "Could a record from eighteen months ago be verified and its grounds re-checked with nobody who built the agent in the room?",
+        "Is the running gate policy identical to the compiled 02?",
+        "Is any step in producing the monthly pack done by hand?"
+      ],
+      "roadmap": [
+        "Months 3–6 · Tool gateway up, bypass test passed, gate compiled from 02",
+        "Months 3–6 · 07 and 08 emitting, chain verification in CI",
+        "Months 6–9 · Dashboard live with labelled tiles and the Unknown tile filled"
+      ]
+    },
+    "IRV": {
+      "headline": "You are independent of the agent owner and produce the only evidence that says whether the agent's decisions were right.",
+      "you_decide": [
+        "The 09 sampling plan: frame, strata, sample size, seed and disagreement definition, fixed before results are known.",
+        "The classification of each disagreement as agent wrong, reviewer wrong or both defensible.",
+        "The 10 calibration verdict per confidence band, and when the reduction rule applies."
+      ],
+      "first_steps": [
+        "Fix the 09 method before the first round: strata by confidence band, case type and the category where systematic error is most likely.",
+        "Draw the sample from the 07 store yourself and log the seed.",
+        "Have reviewers re-perform cases blind to the agent's answer, and report the rate with a Wilson 95% interval, overall and by worst stratum.",
+        "For T3 and T4 agents, run or witness the 13 evaluation before release.",
+        "After four rounds, open 10 and justify the routing threshold band by band."
+      ],
+      "watch_for": [
+        "Using an LLM judge to produce the outcome number. Judges may triage what a human sees first, never the number.",
+        "Reviewers who can see the agent's answer; the review is then not blind.",
+        "At T2, approvers who agree with everything. Sample the approvals to detect rubber-stamping.",
+        "Reducing the sampling rate before four consecutive in-tolerance rounds at the full rate, or after a material change."
+      ],
+      "questions_to_ask": [
+        "Which strata had no sample this quarter, and are they on the Unknown tile?",
+        "How many disagreements were reviewer wrong, and what does that say about reviewer competence?",
+        "Has anything changed since calibration that should have voided it?",
+        "What share of seeded canaries did on-the-loop operators catch?"
+      ],
+      "roadmap": [
+        "Months 6–9 · First three 09 rounds at the full rate, stratified",
+        "Months 6–9 · Disagreement classification calibrated across reviewers",
+        "Months 9–12 · 10 calibration opened after round four, threshold justified",
+        "Months 9–12 · Reduction rule applied; reset tested with a deliberate prompt change (G5)"
+      ]
+    },
+    "OPS": {
+      "headline": "You run the process today, hold the kill switch and do first-line QA, so you are the person who can actually stop the agent.",
+      "you_decide": [
+        "When to pull the kill switch, as the named owner or deputy in 12.",
+        "The containment sequence in 12: revoke identity, disable tools at the gateway, halt.",
+        "Your consultation on 01, 02, 03 and 15, bringing how the work is really done."
+      ],
+      "first_steps": [
+        "Tell the SP and AOW what the process costs today, for the 01 justification and the sampling cost.",
+        "Read the 03 hazards as operations at 3am and add what is missing.",
+        "Write 12 with the AOW: incident classes, containment, reversal and a maximum time to halt.",
+        "Drill the kill switch before G3 and record the time to halt; T3 and T4 agents are drilled quarterly.",
+        "Make sure every on-the-loop operator's 15 training is current."
+      ],
+      "watch_for": [
+        "A kill switch that exists on paper but has never been drilled, or drilled outside the stated limit.",
+        "Watching the agent rather than being able to stop it: interrupt, not dashboard.",
+        "Override rates that drift, or one reviewer who never overrides anything."
+      ],
+      "questions_to_ask": [
+        "Who is the kill-switch deputy when the owner is off, and have they drilled it?",
+        "How do we reverse a wrong closure and put things right for the customer or citizen?",
+        "Which failure modes does the operator guide train us to spot?"
+      ],
+      "roadmap": [
+        "Months 9–12 · 12 drilled again; decommissioning tested on a retired variant (G6)"
+      ]
+    },
+    "IA": {
+      "headline": "You are third line: you agree the tile register before go-live and then rely on the records rather than re-collecting evidence.",
+      "you_decide": [
+        "Agreement of the 11 tile register before G3; without it the gate fails.",
+        "Your consultation on the 05 control catalogue and its mappings."
+      ],
+      "first_steps": [
+        "Review the 11 tile register before G3 and check every tile states its kind and every outcome tile shows its provenance.",
+        "Confirm an Unknown tile is present and names the untested strata.",
+        "Check you can pull a 07 record, verify its chain and resolve its version triple without the build team.",
+        "Review the 05 mappings to the frameworks you audit against."
+      ],
+      "watch_for": [
+        "A dashboard signed instead of the register.",
+        "Business and technical views that don't reconcile to the same records.",
+        "Means where tails should be, and outcome tiles without n, period, reviewer and interval."
+      ],
+      "questions_to_ask": [
+        "Can each tile be traced to its source records by query?",
+        "Was the 09 method fixed before the results were known, and can you show it?",
+        "Is the pack generated without manual steps?"
+      ],
+      "roadmap": []
+    }
+  },
+  "gates": {
+    "G0": {
+      "purpose": "Decides whether the agent is worth funding at all. It exists so the tier is agreed with risk from day one and the permanent cost of sampling is in the business case, not discovered later.",
+      "artefacts": [
+        {"id": "00", "state": "submitted", "label": "00 inventory entry (draft)"},
+        {"id": "01", "state": "approved", "label": "01 justification record"}
+      ],
+      "checks": [
+        {"id": "rc_concurs_tier", "label": "RC concurs with the proposed autonomy tier", "help": "RC reviews the tier in the 00 draft against the consequence class and reversibility and records concurrence.", "who": "RC"},
+        {"id": "sampling_cost_on_benefit_line", "label": "The cost of the 09 sampling loop is on the benefit line in 01", "help": "Look for the 'cost of sampling loop (09) per year' field in 01 and check it is netted against the benefit.", "who": "AE", "auto": "sampling_cost_present"},
+        {"id": "alternatives_rejected", "label": "01 shows which alternatives were rejected and on what numbers", "help": "A deterministic rule, a process change and a scorecard should each be named with the reason it was rejected.", "who": "AE"}
+      ],
+      "on_fail": "Do not fund. Return 01 or 00 to its author with what is missing; a gate with missing artefacts is a failed gate, not one passed with conditions.",
+      "evidence": "The AE's signed intake decision, referencing the 01 version approved, the 00 draft entry and RC's tier concurrence."
+    },
+    "G1": {
+      "purpose": "Approves the design before build. It exists so the mandate, the hazards and the data the agent may touch are settled, with a written tolerance, before anyone writes code against them.",
+      "artefacts": [
+        {"id": "02", "state": "approved", "label": "02 delegation policy (approved)"},
+        {"id": "03", "state": "approved", "label": "03 hazard register (signed)"},
+        {"id": "14", "state": "approved", "label": "14 data & context provenance record"},
+        {"id": "16", "state": "submitted", "label": "16 third-party evidence pack (opened)", "when": "vendor"}
+      ],
+      "checks": [
+        {"id": "tolerance_and_rate_written", "label": "Tolerance and sampling rate are written into 02", "help": "Check the assurance block of 02 has a tolerance set by the AE and a sampling rate and floor. The framework insists a number is written down but never proposes one.", "who": "RC", "auto": "tolerance_written"},
+        {"id": "every_hazard_controlled", "label": "Every hazard in 03 has an assigned control", "help": "Each 03 row should link to at least one control in 04/05 and name a residual risk owner.", "who": "AOW", "auto": "hazards_have_controls"},
+        {"id": "interaction_hazard_present", "label": "At least one hazard needs two simultaneous conditions to occur", "help": "This is the sign the analysis looked at interactions, not just components.", "who": "RC", "auto": "interaction_hazard"},
+        {"id": "may_read_resolves", "label": "Every item in 02 may_read resolves to a 14 row with owner and classification", "help": "Compare the may_read list in 02 with 14; the hosting must be authorised for each classification.", "who": "DO"}
+      ],
+      "on_fail": "Do not start build. Return the missing or unsigned artefact to its owner and re-run G1; a missing artefact means a failed gate, not approval with conditions.",
+      "evidence": "Signatures of RC (mandate) and the AOW, referencing the approved 02 version, the signed 03, the 14 record and, for vendor agents, the opened 16."
+    },
+    "G2": {
+      "purpose": "The Definition of Done, enforced in the pipeline. It exists so an increment cannot ship unless its control stories are accepted and the tests for its tier's control profile pass.",
+      "artefacts": [
+        {"id": "04", "state": "approved", "label": "04 control stories (accepted)"}
+      ],
+      "checks": [
+        {"id": "tier_profile_tests_green", "label": "05 tier-profile tests are green", "help": "The CI run selected the profile from the tier in 00 and every applicable control test passed.", "who": "ENG"},
+        {"id": "fails_closed_block_deploy", "label": "The pipeline fails closed on any block_deploy control", "help": "Confirm a failing block_deploy control stops the deployment rather than raising a warning.", "who": "PLE"},
+        {"id": "control_stories_demoed", "label": "Control stories were demonstrated at sprint review", "help": "Control stories are shown alongside feature stories, each with its automated acceptance test.", "who": "PO"}
+      ],
+      "on_fail": "The build does not deploy. Fix the failing control or story and re-run the pipeline; there is no manual override of an automated gate.",
+      "evidence": "The CI run URL and its 08 control outcome records for the 05 profile, plus the accepted 04 stories."
+    },
+    "G3": {
+      "purpose": "Approval to operate on real cases. It exists so the agent goes live only with a signed build, a proven kill switch, records already flowing and an agreed way of showing whether it is working.",
+      "artefacts": [
+        {"id": "06", "state": "approved", "label": "06 build attestation (signed)"},
+        {"id": "13", "state": "approved", "label": "13 pre-deployment evaluation (passed)"},
+        {"id": "11", "state": "approved", "label": "11 tile register (agreed with IA & signed)"},
+        {"id": "12", "state": "approved", "label": "12 playbook (kill switch drilled)"},
+        {"id": "15", "state": "approved", "label": "15 notice & operator guide (published)"},
+        {"id": "16", "state": "approved", "label": "16 third-party evidence pack (complete)", "when": "vendor"}
+      ],
+      "checks": [
+        {"id": "first_golive_t2_or_below", "label": "First go-live is at T2 or below, or G4 evidence already exists", "help": "Check the tier in 00. Going live at T2 means humans approve every action until 09 evidence supports promotion.", "who": "AE", "auto": "first_golive_tier"},
+        {"id": "drilled_inside_limit", "label": "The last 12 kill-switch drill halted the agent inside the stated time", "help": "Compare the last drill's time to halt with the maximum in 12; the drill record should be in the oversight pack.", "who": "OPS", "auto": "drill_within_limit"},
+        {"id": "escalation_tests_pass", "label": "Every must_escalate condition in 02 has a passing test in 13", "help": "Each escalation condition should have a test that proves the agent escalates.", "who": "ENG", "auto": "escalation_tests_pass"},
+        {"id": "records_emitting", "label": "07 decision records and 08 control outcome records are emitting", "help": "Pull recent records and verify the chain, the version triple and structured grounds are present.", "who": "PLE"},
+        {"id": "bypass_test_passed", "label": "The bypass test passed: no action can reach a core system except through the gateway", "help": "If a bypass exists, deployment is refused. The test is also run continuously after go-live.", "who": "SEC"},
+        {"id": "ia_agreed_register", "label": "Internal audit has agreed the 11 tile register", "help": "IA agrees the register (not the dashboard) before go-live; every tile labelled and an Unknown tile present.", "who": "IA"},
+        {"id": "vendor_claims_evidenced", "label": "Every vendor-claimed control in 16 has evidence attached", "help": "Only applies when a third-party model, platform or tool is used. No control in 06 may be 'inherited from platform' without evidence.", "who": "RC", "auto": "vendor_evidence_complete"}
+      ],
+      "on_fail": "The agent does not go live. List each missing artefact or failed check against its owner and re-present at the next change advisory board; conditions are not a pass.",
+      "evidence": "The AE's signed approval to operate, referencing the 06 attestation, the 13 report, the signed 11 register, the 12 drill record and the bypass test result."
+    },
+    "G4": {
+      "purpose": "Moves the agent up an autonomy tier. It exists because promotion is a governed event decided on production sampling evidence, never a configuration change.",
+      "artefacts": [
+        {"id": "09", "state": "approved", "label": "09 sampling results (≥ 4 rounds in tolerance)"},
+        {"id": "10", "state": "submitted", "label": "10 calibration record (opened)", "when": "confidence_routing"},
+        {"id": "02", "state": "approved", "label": "02 delegation policy (revised for the new tier)"}
+      ],
+      "checks": [
+        {"id": "promotion_rounds", "label": "At least 4 consecutive 09 rounds in tolerance at the full rate, with at least 1,000 cases", "help": "Check each round's rate and Wilson interval against the tolerance in 02, at the full sampling rate. With zero disagreements, 1,000 cases bounds the rate at about 0.3%.", "who": "IRV", "auto": "promotion_rounds"},
+        {"id": "worst_stratum_in_tolerance", "label": "The worst stratum, not just the overall rate, is within tolerance", "help": "A 1% overall rate that is 9% in one stratum is a 9% problem.", "who": "IRV"},
+        {"id": "rc_concurs", "label": "RC concurs with the promotion", "help": "RC records concurrence at the monthly risk forum.", "who": "RC"},
+        {"id": "inventory_after_signature", "label": "The 00 tier will change only after this signature", "help": "Confirm nobody has changed the tier in 00 or the control profile ahead of the signed decision.", "who": "AOW"}
+      ],
+      "on_fail": "The agent stays at its current tier. Keep sampling at the full rate and re-present when the evidence bar in 02 is met.",
+      "evidence": "The AE's signed promotion decision, referencing the 09 rounds (rates, intervals, worst stratum), the revised 02 and, where confidence routes, the 10 record."
+    },
+    "G5": {
+      "purpose": "Catches material changes: a new model version, prompt hash, tool manifest, rules or list version, or a population shift. It exists because a changed agent is a different agent, and its earlier evidence no longer applies.",
+      "artefacts": [
+        {"id": "06", "state": "approved", "label": "06 build attestation (re-attested)"},
+        {"id": "03", "state": "approved", "label": "03 hazard register (delta)"},
+        {"id": "13", "state": "approved", "label": "13 evaluation (regression passed)"}
+      ],
+      "checks": [
+        {"id": "trigger_detected", "label": "The trigger was detected from version drift on 07 and is named", "help": "Record which trigger fired: model version, prompt hash, tool manifest, rules / list version or population shift.", "who": "PLE"},
+        {"id": "calibration_voided", "label": "The 10 calibration record is voided and bands return to the full rate", "help": "Any material change voids calibration; record the date voided in 10.", "who": "IRV"},
+        {"id": "full_round_scheduled", "label": "A full 09 round is scheduled", "help": "The change-to-revalidation target is a completed full round within 30 days of the change.", "who": "IRV"},
+        {"id": "right_approver", "label": "The approver matches the tier: AOW for T1–T2, RC for T3–T4", "help": "Check the tier in 00 and who is signing.", "who": "AOW"}
+      ],
+      "on_fail": "Do not run the changed build on live cases. Roll back to the last attested build, or complete the missing re-attestation, delta and regression first.",
+      "evidence": "The signed change record, referencing the 07 drift that triggered it, the new 06 attestation, the 03 delta, the 13 regression run and the scheduled 09 round."
+    },
+    "G6": {
+      "purpose": "Retires the agent cleanly. It exists so a retired agent cannot act again and its records remain available for inspection years later.",
+      "artefacts": [
+        {"id": "12", "state": "approved", "label": "12 playbook (decommission steps)"}
+      ],
+      "checks": [
+        {"id": "identity_revoked", "label": "The agent's workload identity is revoked", "help": "Confirm the identity issuer no longer issues or honours the agent's identity.", "who": "SEC"},
+        {"id": "tools_disabled", "label": "The agent's tools are disabled at the gateway", "help": "Confirm the gateway rejects any call from the agent.", "who": "PLE"},
+        {"id": "records_retained", "label": "Decision and control records are retained", "help": "07 and 08 records stay in the store for the retention period and can still be chain-verified.", "who": "PLE"},
+        {"id": "inventory_closed", "label": "The 00 inventory entry is closed with status retired", "help": "Set status to retired in 00.", "who": "AOW"},
+        {"id": "ia_rc_informed", "label": "IA and RC are informed", "help": "Send the decommission record to internal audit and risk & compliance.", "who": "AOW"}
+      ],
+      "on_fail": "Treat the agent as still live: it keeps its oversight obligations until every step is done and recorded.",
+      "evidence": "The AOW's signed decommission record, referencing the 12 steps completed, identity revocation, gateway configuration change and the closed 00 entry."
+    }
+  },
+  "glossary": [
+    {"term": "T1 · Agent proposes, human operates", "definition": "Drafts and recommendations only. A person takes every action. Equivalent to 'in control'."},
+    {"term": "T2 · Agent and human collaborate", "definition": "The agent acts, but a person approves every significant step before it executes. Equivalent to 'in the loop'. The recommended first go-live tier."},
+    {"term": "T3 · Agent operates, human approves exceptions", "definition": "The agent closes cases alone within its mandate and escalates the rest. A person can intervene. Equivalent to 'on the loop'."},
+    {"term": "T4 · Agent operates, human observes", "definition": "No human in the path. Oversight happens after the fact, through records and sampling. Equivalent to 'out of the loop'."},
+    {"term": "RACI", "definition": "R creates the artefact. A approves it, and there is exactly one A per artefact. C must be consulted before approval. I receives it. Where platform engineering is R, the artefact is emitted by software."},
+    {"term": "Process metric", "definition": "Shows a control ran. Computed by query from 07 and 08. Says nothing about whether decisions were right."},
+    {"term": "Outcome metric", "definition": "Shows decisions were right. Can only come from 09 sampling and 10 calibration."},
+    {"term": "Unknown", "definition": "What has not been tested, such as closures in strata with no sample this quarter. An Unknown tile is mandatory in the oversight pack."},
+    {"term": "Mandate", "definition": "The delegation policy (02): what the agent may decide alone, what it must escalate, whose authority it acts under, what it may read and touch, how it is assured and what ends it."},
+    {"term": "Tile register", "definition": "The written specification of the oversight pack (11): every tile labelled Process, Outcome or Unknown and traced to source records. Agreed with audit and signed by the AE before go-live."},
+    {"term": "Decision record", "definition": "07: one record per action, sealed before execution, hash-chained and signed, with inputs, tool calls, structured grounds, gate verdict and version triple."},
+    {"term": "Version triple", "definition": "Model version, prompt hash and tool-manifest hash, on every decision record. Without it a decision can't be reconstructed and a change can't be detected."},
+    {"term": "Material change", "definition": "A change to model version, prompt hash, tool manifest, rules or list version, a data source or memory store, or a population shift. It triggers G5, voids calibration and requires a full 09 round."},
+    {"term": "Gate", "definition": "A decision point that closes an SDLC phase. Automated gates run in the pipeline and fail closed; human gates are signed, and the signature is itself evidence."},
+    {"term": "Go-live minimum", "definition": "For T3 and T4, the artefacts that must exist before the agent operates: 02, 05, 07, 09 and 11."},
+    {"term": "Wilson interval", "definition": "The 95% confidence interval reported with every disagreement rate from 09, so a rate is never shown as a bare number."},
+    {"term": "Worst stratum", "definition": "The highest disagreement rate among the sample's strata (confidence band, case type, risk category, jurisdiction). Always reported alongside the overall rate."},
+    {"term": "Rule of three", "definition": "With zero disagreements in n cases, the 95% upper bound on the rate is about 3/n: 1.0% at 300 cases, 0.3% at 1,000."},
+    {"term": "Calibration", "definition": "10: checks whether the agent's confidence bands mean what they claim, using 09 results per band, so the auto-close threshold points to evidence rather than an engineer's feel."},
+    {"term": "Reduction rule", "definition": "A band may move to a reduced sampling rate only after four consecutive in-tolerance rounds at the full rate, with a floor of 300 per band per quarter. Any material change resets it. The loop shrinks but never closes."},
+    {"term": "Kill switch", "definition": "The named ability to stop the agent: revoke identity, disable tools at the gateway, halt. Owner, deputy and maximum time to halt are in 12."},
+    {"term": "Time to halt", "definition": "Minutes from the kill-switch decision to zero actions, measured at the last drill and compared with the limit in 12."},
+    {"term": "On-the-loop", "definition": "Oversight where a person monitors and can intervene but does not approve each action, as at T3. Operators need current training in the agent's failure modes."},
+    {"term": "Rubber-stamping", "definition": "Approving without real review. Oversight that isn't trained is a rubber stamp; at T2, approvals are sampled to detect it."},
+    {"term": "Canary", "definition": "A seeded known-wrong output used to test whether on-the-loop operators catch errors. Reported as the canary catch rate."},
+    {"term": "Control profile", "definition": "The tailored set of 05 controls for one tier. The pipeline selects it from the tier in 00, so control selection is a lookup."},
+    {"term": "OSCAL", "definition": "The Open Security Controls Assessment Language, used for the control catalogue, tier profiles, component definitions and assessment results."},
+    {"term": "Bypass", "definition": "Any route by which an action reaches a core system without going through the tool gateway. If one exists, deployment is refused."}
+  ],
+  "faq": [
+    {"q": "Do we need all 17 artefacts?", "a": "Not always. The autonomy tier decides which are mandatory: some are light or recommended at T1 and T2, 09 and 10 are not required at T1, and 16 applies only when a third-party model, platform or tool is used. For T3 and T4 the go-live minimum is 02, 05, 07, 09 and 11. The app hides artefacts your agent's tier doesn't require."},
+    {"q": "Why can't an LLM judge produce the outcome number?", "a": "A judge shares the agent's training, so it shares the agent's blind spots. The source reference cites a measurement where six judge models converged at 77–82% on hard cases without ground truth, with inter-judge agreement (κ) around 0.42. Judges may triage which records a human sees first; they never produce the outcome number."},
+    {"q": "Can a gate pass with conditions?", "a": "No. A gate with missing artefacts is a failed gate, not one passed with conditions. Fix what is missing and present the gate again."},
+    {"q": "Why go live at T2?", "a": "At T2 a person approves every action, so every decision is effectively reviewed until 09 sampling evidence supports promotion through G4. The approvals are still sampled, to detect rubber-stamping. A first go-live above T2 is allowed only if G4 evidence already exists."},
+    {"q": "Where does the tolerance number come from?", "a": "The accountable executive sets it and writes it into 02. The framework insists a number is written down, but never proposes one."},
+    {"q": "What counts as a material change?", "a": "A new model version, prompt hash, tool manifest, rules or list version, a change of data source, corpus or memory store, or a shift in the case population. Prompt-only changes count. G5 detects them from version drift on 07; they void calibration and require re-attestation, a hazard delta, a regression run and a full 09 round."},
+    {"q": "Our agent is vendor SaaS. What changes?", "a": "16 becomes required: opened at intake, complete before G3, refreshed on vendor change. Every control the vendor claims needs evidence, and the contract should cover no training on your data, log export, audit rights, incident notice, a record export you can chain and sample, and an exit plan. Where the gate lives for vendor SaaS is still an open question in the model."},
+    {"q": "Why isn't the pre-deployment evaluation (13) enough?", "a": "A test set isn't the production population. 13 is necessary before go-live, but only 09 sampling of real closures says whether decisions were right."},
+    {"q": "How big should a sample be?", "a": "With zero disagreements, 300 cases bounds the rate at about 1.0% (the T3 monthly floor) and 1,000 at about 0.3% (post-change and tier promotion). Sizing a non-zero rate needs more: an expected 2% at ±1 point needs 753 cases."},
+    {"q": "Our dashboard is green. Are we done?", "a": "Probably not. At L3 the pipeline is gated and records are sealed, but the dashboard is entirely about machinery. L4 starts when 09 runs monthly, tiles are labelled, tolerance is written and the kill switch is drilled. L3 already looks finished, so the oversight pack should say that it is."},
+    {"q": "Is my data stored anywhere?", "a": "No. Everything you enter stays in this browser's local storage and is not sent anywhere. Export to keep a copy, because clearing browser data will remove it."}
+  ]
+}

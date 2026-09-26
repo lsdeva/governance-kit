@@ -3,6 +3,7 @@ name: Deploy site to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -12,7 +13,7 @@ permissions:
 
 # Allow one concurrent deployment; don't cancel in-progress runs.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -23,64 +24,30 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install dependencies
-        run: pip install -r requirements.txt
 
-      # Pages under docs/ are generated from data/*.yml. Regenerate and fail if
-      # anything changed: that means either a generated file was hand-edited
-      # (the edit would be silently lost on the next build) or the data files
-      # were changed without re-running the generator.
-      - name: Check generated content is up to date
-        run: |
-          python tools/build_content.py
-          if ! git diff --quiet; then
-            echo "::error::Generated content is stale or a generated file was edited by hand."
-            echo "Run 'python tools/build_content.py' and commit the result."
-            git diff --stat
-            exit 1
-          fi
+      # forms.json and guidance.json are joined to the source-pack JSON by id.
+      # A typo there silently breaks a form or a gate, so check the joins.
+      - name: Check the operating-model data
+        run: python tools/check_data.py
 
-      # .docx/.xlsx are binaries: rebuilding them always produces byte
-      # differences (timestamps, zip ordering), so a git-diff check would fail
-      # every run. Verify the expected set exists instead, and rebuild so the
-      # deployed files always match the current data.
-      - name: Build downloads
-        run: |
-          python tools/build_downloads.py
-          python tools/build_downloads.py --check
-
-      - name: Build site
-        run: mkdocs build --strict
-
-      # Checks the ARTEFACT, not the sources. A defect once reached production
-      # that every source-level check passed: /decide/ rendered its YAML front
-      # matter as visible text, because MkDocs silently declines to parse a
-      # block that does not start at byte 0. This also catches mixed branding
-      # or navigation across pages, and any external asset reference.
-      - name: Smoke-test the built site
-        run: python tools/smoke_site.py
-
-      # Drives a real browser because the defect it guards against only exists
-      # in one. Material's navigation.instant swaps page content without
-      # re-running page scripts, so an app that initialises at parse time
-      # renders nothing when a visitor arrives through a link. That shipped
-      # once on /assess/, and no static check could have seen it — including
-      # a local browser test, since instant navigation is inert unless the
-      # site is served from the origin in <link rel="canonical">.
+      # The site renders in the browser, so only a browser can see a broken
+      # view. Visits every route as several roles and plays one form through
+      # its lifecycle; fails on any script error or external request.
       - name: Install Playwright
         run: |
           pip install playwright
           python -m playwright install --with-deps chromium
-
-      - name: Check every app mounts on instant navigation
-        run: python tools/smoke_instant_nav.py
+      - name: Smoke-test every route in a real browser
+        run: python tools/smoke_site.py
 
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: web
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
