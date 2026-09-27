@@ -1,46 +1,14 @@
 import { D } from '../data.js';
 import { S, update } from '../store.js';
 import { esc, icon, toast } from '../ui.js';
-import { queue, agentName, wilson } from '../logic.js';
+import { queue, agentName } from '../logic.js';
+import { heroHtml, mountHero, exhibit } from './hero.js';
 import { av } from '../components.js';
 import { loadDemo } from '../demo.js';
 import { SERVICES } from '../services.js';
 import { offerCard } from './services.js';
 import { alertsFor, alertRow } from './tower.js';
 import { go } from '../app.js';
-
-// Exhibit 1: monthly disagreement rate with its 95% interval against the
-// tolerance written into 02. Figures are the illustrative worked example.
-function exhibit() {
-  const rounds = [['May', 300, 3], ['Jun', 350, 1], ['Jul', 400, 2], ['Aug', 300, 0], ['Sep', 320, 1]];
-  const W = 620, H = 260, L = 44, R = 16, T = 16, B = 34, max = 0.04;
-  const x = (i) => L + (i + 0.5) * ((W - L - R) / rounds.length);
-  const y = (v) => T + (1 - v / max) * (H - T - B);
-  const tol = 0.02;
-  const grid = [0, 0.01, 0.02, 0.03, 0.04].map((v) => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--rule)" /><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--ink-3)">${(v * 100).toFixed(0)}%</text>`).join('');
-  const marks = rounds.map(([m, n, k], i) => {
-    const [lo, hi] = wilson(k, n);
-    const p = k / n;
-    const within = hi <= tol;
-    const c = within ? 'var(--ink)' : 'var(--outcome)';
-    return `<line x1="${x(i)}" x2="${x(i)}" y1="${y(Math.min(hi, max))}" y2="${y(lo)}" stroke="${c}" stroke-width="2"/>
-      <line x1="${x(i) - 7}" x2="${x(i) + 7}" y1="${y(Math.min(hi, max))}" y2="${y(Math.min(hi, max))}" stroke="${c}" stroke-width="2"/>
-      <line x1="${x(i) - 7}" x2="${x(i) + 7}" y1="${y(lo)}" y2="${y(lo)}" stroke="${c}" stroke-width="2"/>
-      <circle cx="${x(i)}" cy="${y(p)}" r="5" fill="${within ? 'var(--ink)' : 'var(--bg)'}" stroke="${c}" stroke-width="2"/>
-      <text x="${x(i)}" y="${H - 12}" text-anchor="middle" font-size="12" fill="var(--ink-2)">${m}</text>
-      <text x="${x(i) + 10}" y="${y(p) + 4}" font-size="11" fill="var(--ink-2)">${(p * 100).toFixed(1)}%</text>`;
-  }).join('');
-  return `<figure class="exhibit" style="margin:0">
-    <div class="cap"><b>Exhibit 1</b><span>Disagreement rate by month, with 95% interval</span></div>
-    <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Monthly disagreement rates: May 1.0% (interval straddles tolerance), June 0.3%, July 0.5%, August 0.0%, September 0.3%, all within a 2% tolerance.">
-      ${grid}
-      <line x1="${L}" x2="${W - R}" y1="${y(tol)}" y2="${y(tol)}" stroke="var(--brand)" stroke-width="2" stroke-dasharray="6 5"/>
-      <text x="${W - R}" y="${y(tol) - 6}" text-anchor="end" font-size="11.5" font-weight="600" fill="var(--brand)">Tolerance set by the accountable executive · 2.0%</text>
-      ${marks}
-    </svg>
-    <div class="src">Filled marks: the whole interval sits below tolerance, so the round counts toward promotion. Hollow: the interval straddles it, so the round is inconclusive. Source: illustrative sanctions-triage example, n = 300–400 a month, blind re-performance.</div>
-  </figure>`;
-}
 
 export function render() {
   const s = S();
@@ -70,26 +38,7 @@ export function render() {
     crumbs: [['Home']],
     wide: true,
     html: `
-    <div class="hero-dark">
-    <section class="hero-ed">
-      <div>
-        <span class="eyebrow accent">Agentic SDLC operating model</span>
-        <h1 class="mt24">Assurance for AI agents that <em>make decisions</em>.</h1>
-        <p class="lede">For any agent that decides, acts and closes a case nobody revisits. GovKit fits governance into the SDLC you already run, with nine engagements, seventeen artefacts and seven signed gates. It also produces the one number most programmes never have: evidence that the decisions were right.</p>
-        <div class="ctas">
-          <a class="btn primary lg" href="#/services">Explore our services</a>
-          <button class="link-arrow" data-demo style="background:none;border:0;font:inherit;font-weight:600;cursor:pointer">See a live engagement ${icon('arrowRight')}</button>
-        </div>
-      </div>
-      <div class="facts">
-        <div><b>9</b><span>Engagements, from intake to retirement</span></div>
-        <div><b>17</b><span>Artefacts, each with an owner, a form and a done test</span></div>
-        <div><b>7</b><span>Gates, signed with the reasoning recorded</span></div>
-        <div><b>12</b><span>Roles, each with a playbook and a queue</span></div>
-        <div><b>0</b><span>Accounts or uploads. It runs in your browser</span></div>
-      </div>
-    </section>
-    </div>
+    ${heroHtml()}
 
     ${desk}
 
@@ -149,6 +98,7 @@ export function render() {
     </section>
     <div style="height:72px"></div>`,
     mount(root) {
+      mountHero(root);
       root.querySelectorAll('[data-demo]').forEach((b) => b.addEventListener('click', () => { const a = loadDemo(); go(`agents/${a.id}`); }));
       const panel = root.querySelector('#role-panel');
       const show = (id) => {
