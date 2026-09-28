@@ -3,7 +3,6 @@ import { S, update } from '../store.js';
 import { esc, icon, toast } from '../ui.js';
 import { queue, agentName } from '../logic.js';
 import { heroHtml, mountHero, exhibit } from './hero.js';
-import { integrationsHtml, mountIntegrations } from './integrations.js';
 import { av } from '../components.js';
 import { loadDemo } from '../demo.js';
 import { SERVICES } from '../services.js';
@@ -51,8 +50,6 @@ export function render() {
         <p class="mt24"><a class="link-arrow" href="#/services">All nine engagements ${icon('arrowRight')}</a></p>
       </section>
     </div>
-
-    ${integrationsHtml()}
 
     <section class="band-brand">
       <div class="wrap">
@@ -102,7 +99,6 @@ export function render() {
     <div style="height:72px"></div>`,
     mount(root) {
       mountHero(root);
-      mountIntegrations(root);
       root.querySelectorAll('[data-demo]').forEach((b) => b.addEventListener('click', () => { const a = loadDemo(); go(`agents/${a.id}`); }));
       const panel = root.querySelector('#role-panel');
       const show = (id) => {

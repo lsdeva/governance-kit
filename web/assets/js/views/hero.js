@@ -8,12 +8,13 @@
 //   6  How to use GovKit
 //   7  Integration with the customer's toolchain
 // Every animation is CSS, triggered when a slide becomes active, and all of
-// it is switched off under prefers-reduced-motion.
+// it is switched off under prefers-reduced-motion (the slides still advance).
 
 import { D, isOutcome } from '../data.js';
 import { esc, icon } from '../ui.js';
 import { wilson } from '../logic.js';
 import { av } from '../components.js';
+import { walkthroughHtml, mountWalkthrough, STEP as INT_STEP } from './integrations.js';
 
 const INTERVAL = 9000;
 
@@ -204,23 +205,7 @@ function slide6() {
 
 
 function slide7() {
-  const chain = [
-    ['Backlog', 'Jira · Azure DevOps · GitHub Issues', '04 control stories'],
-    ['Repository & CI', 'GitLab · GitHub · Jenkins', '02 mandate · 05 profile · G2'],
-    ['Artifact registry', 'Artifactory · Nexus · Sigstore', '06 signed build'],
-    ['Change management', 'ServiceNow · Jira Service Management', 'G3 · G5 as change requests'],
-    ['Risk register / GRC', 'ServiceNow IRM · Archer · Confluence', '03 hazards · 16 vendor pack'],
-    ['Dashboards & telemetry', 'Grafana · Power BI · OpenTelemetry', '11 tiles · 07 08 09 evidence in'],
-  ];
-  return `<div class="hero-ed">
-    <div>
-      <span class="eyebrow accent a-up">06 · Integration service</span>
-      <h2 class="hs-h a-up" style="--i:1">Your tools stay the system of record. <em>GovKit fills them in.</em></h2>
-      <p class="lede a-up" style="--i:2">Bring the SDLC toolchain you already run. Each artefact entry updates the tool where that work lives: a story in the backlog, a policy file in the repo, a change request for the CAB, a signed build in the registry. Evidence flows back the same way.</p>
-      <div class="ctas a-up" style="--i:3"><a class="btn primary lg" href="#/#integrations">See how each artefact lands</a><a class="link-arrow" href="#/services">Integration engagement ${icon('arrowRight')}</a></div>
-    </div>
-    <div class="chain">${chain.map(([t, k, a], i) => `<div class="a-pop" style="--i:${i + 2}"><b>${esc(t)}</b><small>${esc(k)}</small><span class="aid">${esc(a)}</span></div>`).join('')}</div>
-  </div>`;
+  return `<div class="hero-ed hero-int">${walkthroughHtml()}</div>`;
 }
 
 const SLIDES = [
@@ -247,7 +232,12 @@ export function mountHero(root) {
   const slides = [...c.querySelectorAll('.hs')];
   const dots = [...c.querySelectorAll('[data-go]')];
   const playBtn = c.querySelector('[data-play]');
-  let i = 0, timer = null, paused = reduce, hovering = false;
+  let i = 0, timer = null, paused = false, keyboardFocus = false;
+
+  // The toolchain slide runs its own sequence; the hero waits for it.
+  const walkIndex = slides.findIndex((s) => s.querySelector('.int'));
+  const walk = mountWalkthrough(c, { onDone: () => { if (!paused && !keyboardFocus) show(i + 1); start(); } });
+  const durationOf = (n) => (n === walkIndex && walk ? walk.count * INT_STEP : INTERVAL);
 
   const countUp = (slide) => {
     slide.querySelectorAll('[data-count]').forEach((el) => {
@@ -258,21 +248,24 @@ export function mountHero(root) {
       requestAnimationFrame(tick);
     });
   };
-  const show = (n) => {
-    i = (n + slides.length) % slides.length;
-    slides.forEach((s, j) => { s.style.transform = `translateX(${(j - i) * 100}%)`; s.classList.toggle('active', j === i); s.setAttribute('aria-hidden', String(j !== i)); });
-    fit();
-    dots.forEach((d, j) => { d.setAttribute('aria-selected', String(j === i)); d.classList.toggle('running', j === i && !paused && !hovering); });
-    countUp(slides[i]);
-  };
-  // The track is sized to the active slide, so short slides don't sit over
-  // the empty space left by the tallest one.
   const fit = () => { track.style.height = `${slides[i].offsetHeight}px`; };
   window.addEventListener('resize', fit);
   if (document.fonts?.ready) document.fonts.ready.then(fit);
-  const stop = () => { clearInterval(timer); timer = null; };
-  const start = () => { stop(); if (paused || hovering || reduce) return; timer = setInterval(() => show(i + 1), INTERVAL); };
-  const restart = () => { start(); dots.forEach((d, j) => d.classList.toggle('running', j === i && !paused && !hovering)); };
+
+  const active = () => !paused && !keyboardFocus && !document.hidden;
+  const show = (n) => {
+    const prev = i;
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, j) => { s.style.transform = `translateX(${(j - i) * 100}%)`; s.classList.toggle('active', j === i); s.setAttribute('aria-hidden', String(j !== i)); });
+    dots.forEach((d, j) => { d.setAttribute('aria-selected', String(j === i)); d.style.setProperty('--dur', `${durationOf(j)}ms`); d.classList.toggle('running', j === i && active()); });
+    fit();
+    countUp(slides[i]);
+    if (walk) { if (i === walkIndex) { if (active()) walk.start(); } else if (prev === walkIndex) walk.stop(); }
+  };
+  const stop = () => { clearTimeout(timer); timer = null; };
+  // One timeout per slide, so the toolchain slide can take longer.
+  const start = () => { stop(); if (!active()) return; if (i === walkIndex && walk) return; timer = setTimeout(() => { show(i + 1); start(); }, durationOf(i)); };
+  const restart = () => { dots.forEach((d, j) => d.classList.toggle('running', j === i && active())); if (i === walkIndex && walk) { if (active()) walk.start(); else walk.stop(); } start(); };
 
   c.addEventListener('click', (e) => {
     const t = e.target.closest('[data-prev],[data-next],[data-go],[data-play]');
@@ -291,16 +284,13 @@ export function mountHero(root) {
     if (e.target.matches('input,textarea,select')) return;
     if (e.key === 'ArrowRight') { show(i + 1); restart(); } else if (e.key === 'ArrowLeft') { show(i - 1); restart(); }
   });
-  c.addEventListener('mouseenter', () => { hovering = true; restart(); });
-  c.addEventListener('mouseleave', () => { hovering = false; restart(); });
-  c.addEventListener('focusin', () => { hovering = true; restart(); });
-  c.addEventListener('focusout', (e) => { if (!c.contains(e.relatedTarget)) { hovering = false; restart(); } });
-  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-  // Touch swipe.
+  // Pause only for keyboard users moving through the controls, never for a resting mouse.
+  c.addEventListener('focusin', (e) => { if (e.target.matches(':focus-visible')) { keyboardFocus = true; restart(); } });
+  c.addEventListener('focusout', (e) => { if (!c.contains(e.relatedTarget)) { keyboardFocus = false; restart(); } });
+  document.addEventListener('visibilitychange', restart);
   let x0 = null;
   c.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
   c.addEventListener('touchend', (e) => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 48) { show(dx < 0 ? i + 1 : i - 1); restart(); } });
-  if (reduce) { playBtn.innerHTML = icon('play'); playBtn.setAttribute('aria-label', 'Play'); }
   show(0);
   start();
 }

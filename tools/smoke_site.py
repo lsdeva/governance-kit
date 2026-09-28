@@ -90,12 +90,18 @@ with sync_playwright() as p:
             if "Loading the operating model" in text or "doesn't exist" in text or len(text) < 60:
                 problems.append(f"route renders nothing: #/{r} as {role}")
 
-    # Integrations walkthrough renders and its tabs switch slides.
+    # The hero advances on its own, and the toolchain slide's tabs switch mappings.
     pg.goto(BASE + "#/")
-    pg.wait_for_selector("#integrations .int-slide.active")
+    pg.wait_for_selector(".hero-c .hs.active")
+    first = pg.locator(".hero-c .hs.active").get_attribute("aria-label")
+    pg.wait_for_timeout(10500)
+    if pg.locator(".hero-c .hs.active").get_attribute("aria-label") == first:
+        problems.append("hero did not auto-advance within 10s")
+    pg.click('[data-go="6"]')
+    pg.wait_for_selector(".hero-c .int-slide.active")
     pg.click('[data-int="3"]')
-    if pg.locator("#integrations .int-slide.active").get_attribute("aria-label") is None or "Select the control profile" not in pg.locator("#integrations .int-slide.active").get_attribute("aria-label"):
-        problems.append("integrations tab did not switch slide")
+    if "Select the control profile" not in (pg.locator(".hero-c .int-slide.active").get_attribute("aria-label") or ""):
+        problems.append("toolchain tab did not switch mapping")
 
     # Command palette opens, filters and navigates.
     pg.goto(BASE + "#/")
