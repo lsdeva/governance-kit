@@ -90,6 +90,13 @@ with sync_playwright() as p:
             if "Loading the operating model" in text or "doesn't exist" in text or len(text) < 60:
                 problems.append(f"route renders nothing: #/{r} as {role}")
 
+    # Integrations walkthrough renders and its tabs switch slides.
+    pg.goto(BASE + "#/")
+    pg.wait_for_selector("#integrations .int-slide.active")
+    pg.click('[data-int="3"]')
+    if pg.locator("#integrations .int-slide.active").get_attribute("aria-label") is None or "Select the control profile" not in pg.locator("#integrations .int-slide.active").get_attribute("aria-label"):
+        problems.append("integrations tab did not switch slide")
+
     # Command palette opens, filters and navigates.
     pg.goto(BASE + "#/")
     pg.keyboard.press("Control+k")

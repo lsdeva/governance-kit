@@ -6,6 +6,7 @@
 //   4  Anchored to the governance frameworks
 //   5  Evidence that the decisions were right
 //   6  How to use GovKit
+//   7  Integration with the customer's toolchain
 // Every animation is CSS, triggered when a slide becomes active, and all of
 // it is switched off under prefers-reduced-motion.
 
@@ -201,8 +202,29 @@ function slide6() {
   </div>`;
 }
 
+
+function slide7() {
+  const chain = [
+    ['Backlog', 'Jira · Azure DevOps · GitHub Issues', '04 control stories'],
+    ['Repository & CI', 'GitLab · GitHub · Jenkins', '02 mandate · 05 profile · G2'],
+    ['Artifact registry', 'Artifactory · Nexus · Sigstore', '06 signed build'],
+    ['Change management', 'ServiceNow · Jira Service Management', 'G3 · G5 as change requests'],
+    ['Risk register / GRC', 'ServiceNow IRM · Archer · Confluence', '03 hazards · 16 vendor pack'],
+    ['Dashboards & telemetry', 'Grafana · Power BI · OpenTelemetry', '11 tiles · 07 08 09 evidence in'],
+  ];
+  return `<div class="hero-ed">
+    <div>
+      <span class="eyebrow accent a-up">06 · Integration service</span>
+      <h2 class="hs-h a-up" style="--i:1">Your tools stay the system of record. <em>GovKit fills them in.</em></h2>
+      <p class="lede a-up" style="--i:2">Bring the SDLC toolchain you already run. Each artefact entry updates the tool where that work lives: a story in the backlog, a policy file in the repo, a change request for the CAB, a signed build in the registry. Evidence flows back the same way.</p>
+      <div class="ctas a-up" style="--i:3"><a class="btn primary lg" href="#/#integrations">See how each artefact lands</a><a class="link-arrow" href="#/services">Integration engagement ${icon('arrowRight')}</a></div>
+    </div>
+    <div class="chain">${chain.map(([t, k, a], i) => `<div class="a-pop" style="--i:${i + 2}"><b>${esc(t)}</b><small>${esc(k)}</small><span class="aid">${esc(a)}</span></div>`).join('')}</div>
+  </div>`;
+}
+
 const SLIDES = [
-  ['What GovKit is', slide1], ['Inside the SDLC', slide2], ['Roles', slide3], ['Frameworks', slide4], ['Outcome evidence', slide5], ['How to use it', slide6],
+  ['What GovKit is', slide1], ['Inside the SDLC', slide2], ['Roles', slide3], ['Frameworks', slide4], ['Outcome evidence', slide5], ['How to use it', slide6], ['Your toolchain', slide7],
 ];
 
 export function heroHtml() {

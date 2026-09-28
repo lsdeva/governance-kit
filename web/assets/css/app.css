@@ -865,3 +865,92 @@ dialog.modal::backdrop{background:rgba(20,20,20,.5)}
 .mk-tile b{font-size:22px;color:#fff;line-height:1}
 .mk-tile span{font-size:11px;color:#B8B8B8}
 .mk-tile em{grid-column:1/-1;font-style:normal;font-size:11px;color:#7ACB95;font-weight:700}
+
+/* ================= integrations walkthrough ================= */
+.int{display:grid;grid-template-columns:300px minmax(0,1fr);gap:32px;align-items:start}
+@media (max-width: 960px){.int{grid-template-columns:minmax(0,1fr)}}
+.int-list{display:flex;flex-direction:column;border-top:3px solid var(--ink)}
+@media (max-width: 960px){.int-list{flex-direction:row;overflow-x:auto;border-top:0;border-bottom:1px solid var(--rule);scrollbar-width:none}.int-list::-webkit-scrollbar{display:none}}
+.int-list button{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:center;text-align:left;padding:11px 8px 11px 0;border:0;border-bottom:1px solid var(--rule);background:none;font:inherit;color:var(--ink-2);cursor:pointer}
+@media (max-width: 960px){.int-list button{grid-template-columns:auto;padding:10px 12px;white-space:nowrap;border-bottom:0}.int-list button .int-li small{display:none}}
+.int-list button .aid{font-size:13px}
+.int-list button .int-li b{display:block;font-size:14px;font-weight:600;color:var(--ink)}
+.int-list button .int-li small{display:block;font-size:12px;color:var(--ink-3)}
+.int-list button i{position:absolute;left:0;bottom:-1px;height:3px;width:100%;background:transparent;transform-origin:left;transform:scaleX(0)}
+.int-list button[aria-selected="true"]{color:var(--ink)}
+.int-list button[aria-selected="true"] .int-li b{color:var(--brand)}
+.int-list button[aria-selected="true"] i{background:var(--brand);transform:scaleX(1)}
+.int-list button.running i{animation:int-progress 6.5s linear both}
+@keyframes int-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.int-stage{min-height:420px}
+.int-slide[hidden]{display:none}
+.int-blurb{font-size:16px;color:var(--ink-2);max-width:760px;margin-bottom:22px}
+.int-flow{display:grid;grid-template-columns:minmax(0,1fr) 120px minmax(0,1.15fr);gap:0;align-items:stretch}
+@media (max-width: 760px){.int-flow{grid-template-columns:minmax(0,1fr)}.int-wire{height:70px}.int-wire svg{transform:rotate(90deg)}.int-wire small{display:none}}
+.int-card{background:var(--surface);border:1px solid var(--rule-2);display:flex;flex-direction:column;min-width:0}
+.int-from{border-top:4px solid var(--brand)}
+.int-to{border-top:4px solid var(--ink)}
+.int-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--rule);background:var(--surface-2);font-size:13px}
+.int-bar b{color:var(--ink);font-weight:700}
+.int-bar .aid-box{min-width:30px;height:30px;font-size:12px}
+.int-sub{font-size:12px;color:var(--ink-3);margin-left:auto;text-align:right}
+.int-bar.tool i{width:9px;height:9px;border-radius:50%;background:var(--rule-2)}
+.int-bar.tool i:first-child{margin-left:2px}
+.int-head{padding:12px 14px 6px;font-family:var(--mono);font-size:12.5px;color:var(--ink);border-bottom:1px solid var(--rule);word-break:break-all}
+.int-fields{display:flex;flex-direction:column;padding:6px 14px 10px}
+.int-f{display:grid;grid-template-columns:minmax(90px,38%) minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:13.5px}
+.int-f:last-child{border-bottom:0}
+.int-f span{color:var(--ink-3);font-size:12.5px}
+.int-f b{font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.int-f.hi b{position:relative}
+.int-code{margin:10px 14px 0;font-size:11.5px;line-height:1.5;padding:10px 12px;border-left:3px solid var(--rule-2);white-space:pre-wrap}
+.int-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px 14px 0}
+.int-tile{border:1px solid var(--rule);padding:10px;display:flex;flex-direction:column;gap:4px}
+.int-tile small{font-size:11px;color:var(--ink-3)}
+.int-tile b{font-size:15px}
+.int-foot{margin-top:auto;padding:10px 14px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3);display:flex;align-items:center;gap:8px}
+.int-foot svg{width:15px;height:15px;color:var(--brand)}
+.int-foot.ok{color:var(--ok);font-weight:600;background:var(--ok-bg)}
+.int-foot.ok svg{color:var(--ok)}
+.int-wire{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.int-wire svg{width:100%;height:40px;display:block}
+.int-wire small{font-size:11px;color:var(--ink-3);text-align:center;padding:0 6px}
+.int-packet{position:absolute;top:calc(50% - 30px);left:0;width:30px;height:30px;display:grid;place-items:center;background:var(--brand);color:#fff;transform:translateX(-10px);opacity:0}
+.int-packet svg{width:16px;height:16px}
+
+/* Sequence: GovKit fields type in, the packet crosses, tool fields land. */
+.int-slide .a-typed,.int-slide .a-land{opacity:0}
+.int-slide.active .a-typed{animation:h-up .45s ease both;animation-delay:calc(.1s + var(--i,0) * .18s)}
+.int-slide.active .int-packet{animation:int-cross 1.1s cubic-bezier(.4,0,.2,1) both;animation-delay:1.1s}
+.int-slide.active.reverse .int-packet{animation-name:int-cross-back}
+.int-slide.active .a-land{animation:int-land .5s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(2.1s + var(--i,0) * .16s)}
+.int-slide.active .int-f.hi b::after{content:"";position:absolute;inset:-3px -6px;background:var(--brand-bg);z-index:-1;animation:int-flash 1.4s ease both;animation-delay:calc(2.1s + var(--i,0) * .16s)}
+@keyframes int-cross{0%{opacity:0;transform:translateX(-10px)}12%{opacity:1}88%{opacity:1}100%{opacity:0;transform:translateX(100px)}}
+@keyframes int-cross-back{0%{opacity:0;transform:translateX(100px)}12%{opacity:1}88%{opacity:1}100%{opacity:0;transform:translateX(-10px)}}
+@keyframes int-land{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes int-flash{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+@media (max-width: 760px){
+  .int-slide.active .int-packet{animation-name:int-down}
+  .int-slide.active.reverse .int-packet{animation-name:int-up}
+  .int-packet{top:0;left:calc(50% - 15px);transform:translateY(0)}
+  @keyframes int-down{0%{opacity:0;transform:translateY(0)}12%{opacity:1}88%{opacity:1}100%{opacity:0;transform:translateY(40px)}}
+  @keyframes int-up{0%{opacity:0;transform:translateY(40px)}12%{opacity:1}88%{opacity:1}100%{opacity:0;transform:translateY(0)}}
+}
+@media (prefers-reduced-motion: reduce){
+  .int-slide .a-typed,.int-slide .a-land{opacity:1;animation:none!important}
+  .int-slide.active .int-packet{animation:none;opacity:1;transform:translateX(45px)}
+  .int-slide.active .int-f.hi b::after{animation:none;opacity:0}
+  .int-list button.running i{animation:none;transform:scaleX(1)}
+}
+.int-tools{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-top:32px;padding-top:18px;border-top:1px solid var(--rule)}
+.int-tools>span:not(.eyebrow):not(.faint){font-size:13px;font-weight:600;padding:5px 10px;border:1px solid var(--rule-2);color:var(--ink-2)}
+.int-tools .eyebrow{margin-right:6px}
+.int-tools .faint{font-size:13px}
+
+/* Hero slide 7: toolchain */
+.chain{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-self:center}
+.chain div{border:1px solid #333;padding:12px 12px 10px;background:#161616}
+.chain div b{display:block;color:#fff;font-size:13px}
+.chain div small{display:block;color:#8F8F8F;font-size:11px;margin-top:2px}
+.chain div .aid{display:inline-block;margin-top:8px;font-size:11px;color:var(--hi)}
+@media (max-width: 560px){.chain{grid-template-columns:repeat(2,minmax(0,1fr))}}
