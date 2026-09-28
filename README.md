@@ -13,8 +13,7 @@ No accounts, no server, and nothing leaves your browser.
 [SDLC map](https://govkit.soa.team/#/model)
 
 [![Deploy site](https://github.com/lsdeva/governance-kit/actions/workflows/deploy.yml/badge.svg)](https://github.com/lsdeva/governance-kit/actions/workflows/deploy.yml)
-[![Content: CC BY 4.0](https://img.shields.io/badge/content-CC%20BY%204.0-blue.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Code: MIT](https://img.shields.io/badge/code-MIT-green.svg)](LICENSE)
+[![All rights reserved](https://img.shields.io/badge/%C2%A9%202026-all%20rights%20reserved-black.svg)](LICENSE)
 
 </div>
 
@@ -91,6 +90,7 @@ been re-verified, so check them before external use. The sanctions-triage
 worked example and the calibration numbers are illustrative. This is guidance,
 not legal advice.
 
-## Licence
+## Rights
 
-Content: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Code: [MIT](LICENSE).
+© 2026 Lali Devamanthri. All rights reserved. This is proprietary work; no
+licence is granted to copy, adapt or redistribute it. See [LICENSE](LICENSE).

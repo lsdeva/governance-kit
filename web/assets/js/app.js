@@ -63,7 +63,7 @@ const MENUS = {
     ['guide', 'How it works', 'The five-step workflow in five minutes'],
     ['roles', 'Roles & playbooks', 'What each of the twelve roles decides and does'],
     ['help', 'Glossary & FAQ', 'The vocabulary, and the questions teams ask first'],
-    ['about', 'Privacy & data', 'Where your work lives, and the licence'],
+    ['about', 'Privacy & data', 'Where your work lives, and who owns the content'],
   ] },
 };
 const PRIMARY = [['services', 'Services'], ['tower', 'Control tower'], ['work', 'My work'], ['tools', 'Decision tools']];
@@ -156,12 +156,12 @@ function renderFoot() {
   footDone = true;
   const col = (t, items) => `<div><h4>${t}</h4>${items.map(([h, l]) => `<a href="#/${h}">${l}</a>`).join('')}</div>`;
   document.getElementById('foot').innerHTML = `<div class="foot-in">
-    <div class="foot-brand">${WORDMARK}<p>Assurance for AI agents that decide, act and close cases nobody revisits. An open operating model for the SDLC you already run.</p></div>
+    <div class="foot-brand">${WORDMARK}<p>Assurance for AI agents that decide, act and close cases nobody revisits. An operating model for the SDLC you already run.</p></div>
     ${col('Services', [['services/intake', 'Intake & funding'], ['services/golive', 'Go-live readiness'], ['services/monthly', 'Monthly oversight'], ['services/change', 'Model or prompt change'], ['services/audit', 'Audit & regulator pack']])}
     ${col('Operating model', [['model', 'SDLC map'], ['model/gates', 'Gates'], ['model/tiers', 'Autonomy tiers'], ['artefacts', 'Artefacts'], ['model/references', 'References']])}
     ${col('Workspace', [['tower', 'Control tower'], ['work', 'My work'], ['tools', 'Decision tools'], ['roles', 'Roles & playbooks'], ['help', 'Glossary & FAQ']])}
   </div>
-  <div class="foot-base"><span>Operating model draft 0.2 · references checked 23 Sep 2026 · guidance, not legal advice</span><span>Runs entirely in your browser. Nothing is uploaded. <a href="#/about">Privacy &amp; data</a> · Content CC BY 4.0 · Code MIT</span></div>`;
+  <div class="foot-base"><span>Operating model draft 0.2 · references checked 23 Sep 2026 · guidance, not legal advice</span><span>Runs entirely in your browser. Nothing is uploaded. <a href="#/about">Privacy &amp; data</a></span><span>© 2026 Lali Devamanthri. All rights reserved.</span></div>`;
 }
 
 export function openRoleMenu(anchor) {

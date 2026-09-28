@@ -36,7 +36,7 @@ export function renderAbout() {
   return {
     title: 'Privacy & data',
     crumbs: [['Home', '#/'], ['Privacy & data']],
-    html: `${pageHead({ eyebrow: 'About', title: 'Privacy, data and licence', lede: 'GovKit is a static site. There is no server-side code, no account, no analytics and no third-party request. Fonts are served from this site.' })}
+    html: `${pageHead({ eyebrow: 'About', title: 'Privacy, data and rights', lede: 'GovKit is a static site. There is no server-side code, no account, no analytics and no third-party request. Fonts are served from this site.' })}
     <div class="grid cols-2">
       <div class="card">
         <h3>${icon('lock')} Where your work lives</h3>
@@ -53,8 +53,8 @@ export function renderAbout() {
         <p class="muted small mt8">The content is the Agentic SDLC Operating Model, draft 0.2, with references checked on 23 Sep 2026. It builds on the Agentic Assurance Reference draft 0.1. References marked <span class="badge warn">Per source ref</span> have not been re-verified, so check them before external use. The sanctions-triage examples and the calibration numbers are illustrative. This is guidance, not legal advice.</p>
       </div>
       <div class="card">
-        <h3>${icon('file')} Licence</h3>
-        <p class="muted small mt8">Content is licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener noreferrer" target="_blank">CC BY 4.0</a>, and code under MIT. Fork it, adapt it, and run it inside your organisation. <a href="https://github.com/lsdeva/governance-kit" rel="noopener noreferrer" target="_blank">Source on GitHub</a>.</p>
+        <h3>${icon('file')} Rights</h3>
+        <p class="muted small mt8">© 2026 Lali Devamanthri. All rights reserved. The operating model, its artefacts, forms, guidance and this software are proprietary. You may use the site for your own evaluation. Copying, redistributing, adapting or building on the content or code requires written permission from the author.</p>
       </div>
     </div>`,
     mount(root) {
