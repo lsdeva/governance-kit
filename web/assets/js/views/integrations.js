@@ -190,7 +190,7 @@ function fromCard(m) {
 export function walkthroughHtml() {
   return `<div class="int" aria-roledescription="carousel" aria-label="How each artefact updates your tools">
     <div class="int-side">
-      <span class="eyebrow accent a-up">06 · Integration service</span>
+      <span class="eyebrow accent a-up">01 · Integration service</span>
       <h2 class="hs-h a-up" style="--i:1;font-size:clamp(24px,2.6vw,34px)">Your tools stay the system of record. <em>GovKit fills them in.</em></h2>
       <div class="int-list a-up" style="--i:2" role="tablist" aria-label="Artefacts">${MAPPINGS.map((m, i) => `<button role="tab" data-int="${i}" aria-selected="${i === 0}"><span class="aid">${m.art}</span><span class="int-li"><b>${esc(m.title)}</b><small>${m.reverse ? '←' : '→'} ${esc(m.tool)}</small></span><i></i></button>`).join('')}</div>
       <p class="int-cta a-up" style="--i:3">Bring your SDLC process and templates. We map them to the seventeen artefacts, report the gaps and wire the connectors in your tenancy. <a href="mailto:deva@soa.team?subject=GovKit%20integration">Talk to us ${icon('arrowRight', 'sm-ic')}</a></p>

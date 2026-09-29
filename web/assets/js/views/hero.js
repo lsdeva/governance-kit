@@ -1,12 +1,12 @@
 // Home hero: an auto-advancing set of six slides that tell the story of the
 // operating model, drawn from the same data the rest of the site renders.
 //   1  What GovKit is
-//   2  Governance inside the SDLC you already run
-//   3  Twelve roles, one accountable owner
-//   4  Anchored to the governance frameworks
-//   5  Evidence that the decisions were right
-//   6  How to use GovKit
-//   7  Integration with the customer's toolchain
+//   2  Integration with the customer's toolchain
+//   3  Governance inside the SDLC you already run
+//   4  Twelve roles, one accountable owner
+//   5  Anchored to the governance frameworks
+//   6  Evidence that the decisions were right
+//   7  How to use GovKit
 // Every animation is CSS, triggered when a slide becomes active, and all of
 // it is switched off under prefers-reduced-motion (the slides still advance).
 
@@ -98,7 +98,7 @@ function slide2() {
     </div>`).join('');
   return `<div class="hero-ed hero-map" lang="en">
     <div>
-      <span class="eyebrow accent a-up">01 · Inside the SDLC you already run</span>
+      <span class="eyebrow accent a-up">02 · Inside the SDLC you already run</span>
       <h2 class="hs-h a-up" style="--i:1">Seventeen artefacts on nine phases. <em>No new phases.</em></h2>
       <p class="lede a-up" style="--i:2">Each governance artefact attaches to a ceremony teams already hold: business case, architecture review, backlog refinement, CI, UAT, change advisory, ops review. A gate closes each stage, and a gate with anything missing is a failed gate, never one passed with conditions.</p>
       <ul class="hs-list a-up" style="--i:3">
@@ -125,7 +125,7 @@ function slide3() {
   const rows = sample.map((a, ri) => `<tr><td class="art"><span class="aid ${isOutcome(a) ? 'o' : ''}">${a}</span> ${esc(D.art[a].name)}</td>${D.roles.map((r, i) => { const l = letter(a, r.id); return `<td>${l ? `<span class="rc ${l} a-pop" style="--i:${12 + ri * 12 + i}">${l}</span>` : ''}</td>`; }).join('')}</tr>`).join('');
   return `<div class="hero-ed">
     <div>
-      <span class="eyebrow accent a-up">02 · Roles and accountability</span>
+      <span class="eyebrow accent a-up">03 · Roles and accountability</span>
       <h2 class="hs-h a-up" style="--i:1">Twelve roles. <em>Exactly one accountable owner</em> per artefact.</h2>
       <p class="lede a-up" style="--i:2">R creates the artefact. A approves it, and there is only ever one A. C must be consulted before approval. I receives it. Where platform engineering is R, software emits the artefact and the team owns the emitter.</p>
       <div class="hs-roles a-up" style="--i:3">${D.roles.map((r, i) => `<span class="a-pop" style="--i:${i + 4}">${av(r.id)}<b>${esc(r.name)}</b></span>`).join('')}</div>
@@ -155,7 +155,7 @@ function slide4() {
   const total = fw.reduce((n, f) => n + f.ids.length, 0);
   return `<div class="hero-ed">
     <div>
-      <span class="eyebrow accent a-up">03 · Anchored to the frameworks</span>
+      <span class="eyebrow accent a-up">04 · Anchored to the frameworks</span>
       <h2 class="hs-h a-up" style="--i:1">Every artefact cites <em>the clause it satisfies</em>.</h2>
       <p class="lede a-up" style="--i:2">Not a crosswalk written afterwards. Each of the seventeen artefacts names the framework clauses it exists to meet, ${total} citations in all, with a verification status on every reference. Where a published format or method exists, GovKit reuses it rather than writing a house version.</p>
       <ul class="hs-list a-up" style="--i:3">
@@ -171,7 +171,7 @@ function slide4() {
 function slide5() {
   return `<div class="hero-ed">
     <div>
-      <span class="eyebrow accent a-up">04 · Outcome evidence</span>
+      <span class="eyebrow accent a-up">05 · Outcome evidence</span>
       <h2 class="hs-h a-up" style="--i:1">Process proves the control ran. <em>Outcome proves the decision was right.</em></h2>
       <p class="lede a-up" style="--i:2">Every month, reviewers independent of the agent owner re-perform a stratified random sample of its closures, blind to the agent's answer. The result is a disagreement rate with a Wilson 95% interval and the worst stratum, judged against a tolerance the accountable executive wrote down.</p>
       <ul class="hs-list a-up" style="--i:3">
@@ -194,7 +194,7 @@ function slide6() {
   ];
   return `<div class="hero-ed hero-steps">
     <div>
-      <span class="eyebrow accent a-up">05 · How to use GovKit</span>
+      <span class="eyebrow accent a-up">06 · How to use GovKit</span>
       <h2 class="hs-h a-up" style="--i:1">Five steps, <em>the same loop at every stage</em>.</h2>
       <p class="lede a-up" style="--i:2">From the business case to decommissioning, the loop is the same: the right role drafts, the consulted roles comment, the accountable role signs, and the gate opens only when everything it needs exists. Nothing leaves your browser.</p>
       <div class="ctas a-up" style="--i:3"><a class="btn primary lg" href="#/agents/new">Register an agent</a><a class="link-arrow" href="#/guide">Read how it works ${icon('arrowRight')}</a></div>
@@ -209,7 +209,7 @@ function slide7() {
 }
 
 const SLIDES = [
-  ['What GovKit is', slide1], ['Inside the SDLC', slide2], ['Roles', slide3], ['Frameworks', slide4], ['Outcome evidence', slide5], ['How to use it', slide6], ['Your toolchain', slide7],
+  ['What GovKit is', slide1], ['Your toolchain', slide7], ['Inside the SDLC', slide2], ['Roles', slide3], ['Frameworks', slide4], ['Outcome evidence', slide5], ['How to use it', slide6],
 ];
 
 export function heroHtml() {

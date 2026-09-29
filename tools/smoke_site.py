@@ -97,7 +97,7 @@ with sync_playwright() as p:
     pg.wait_for_timeout(10500)
     if pg.locator(".hero-c .hs.active").get_attribute("aria-label") == first:
         problems.append("hero did not auto-advance within 10s")
-    pg.click('[data-go="6"]')
+    pg.click('[data-go="1"]')
     pg.wait_for_selector(".hero-c .int-slide.active")
     pg.click('[data-int="3"]')
     if "Select the control profile" not in (pg.locator(".hero-c .int-slide.active").get_attribute("aria-label") or ""):
